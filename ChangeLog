@@ -1,5 +1,10 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/plot/ContourPlotUtilities.java: Removed,
+	* source/org/jfree/chart/plot/ContourValuePlot.java: Likewise.
+	
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/plot/PiePlot.java
 	(sectionPaint): Removed,
 	(sectionOutlinePaint): Likewise,
