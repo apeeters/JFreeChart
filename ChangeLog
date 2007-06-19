@@ -1,5 +1,11 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/axis/ValueAxis.java
+	(DEFAULT_LOWER_BOUND): Removed, previously deprecated,
+	(DEFAULT_UPPER_BOUND): Likewise.
+
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/axis/ColorBar.java: Removed (previously 
 	deprecated);
 	* source/org/jfree/chart/editor/DefaultColorBarEditor.java: Likewise,
