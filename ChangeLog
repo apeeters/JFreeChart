@@ -1,5 +1,13 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/entity/ContourEntity.java: Removed, previously
+	deprecated,
+	* tests/org/jfree/chart/entity/junit/ContourEntityTests.java: Likewise,
+	* tests/org/jfree/chart/entity/junit/EntityPackageTests.java
+	(suite): Removed ContourEntityTests.
+
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/entity/CategoryItemEntity.java
 	(series): Removed, previously deprecated,
 	(category): Likewise,

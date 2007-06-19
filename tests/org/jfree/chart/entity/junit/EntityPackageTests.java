@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * EntityPackageTests.java
  * -----------------------
- * (C) Copyright 2004, 2005, by Object Refinery Limited.
+ * (C) Copyright 2004-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,6 +38,7 @@
  * --------
  * 19-May-2004 : Version 1 (DG);
  * 19-Jan-2005 : Added main() method to run JUnit in text mode (DG);
+ * 19-Jun-2007 : Removed ContourEntityTests (DG);
  *
  */
 
@@ -62,7 +63,6 @@ public class EntityPackageTests extends TestCase {
     public static Test suite() {
         TestSuite suite = new TestSuite("org.jfree.chart.entity");
         suite.addTestSuite(CategoryItemEntityTests.class);
-        suite.addTestSuite(ContourEntityTests.class);
         suite.addTestSuite(LegendItemEntityTests.class);
         suite.addTestSuite(PieSectionEntityTests.class);
         suite.addTestSuite(StandardEntityCollectionTests.class);
