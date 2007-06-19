@@ -74,9 +74,6 @@ public class LegendItemEntity extends ChartEntity
      * @since 1.0.6
      */
     private Comparable seriesKey;
-    
-    /** The series index. */
-    private int seriesIndex;
 
     /**
      * Creates a legend item entity.
@@ -139,33 +136,6 @@ public class LegendItemEntity extends ChartEntity
     }
     
     /**
-     * Returns the series index.
-     *
-     * @return The series index.
-     * 
-     * @see #setSeriesIndex(int)
-     * 
-     * @deprecated As of 1.0.6, use the {@link #getSeriesKey()} method.
-     */
-    public int getSeriesIndex() {
-        return this.seriesIndex;
-    }
-
-    /**
-     * Sets the series index.
-     *
-     * @param index  the series index.
-     * 
-     * @see #getSeriesIndex()
-     * 
-     * @deprecated As of 1.0.6, use the {@link #setSeriesKey(Comparable)} 
-     *         method.
-     */
-    public void setSeriesIndex(int index) {
-        this.seriesIndex = index;
-    }
-    
-    /**
      * Tests this object for equality with an arbitrary object.
      * 
      * @param obj  the object (<code>null</code> permitted).
@@ -182,9 +152,6 @@ public class LegendItemEntity extends ChartEntity
         LegendItemEntity that = (LegendItemEntity) obj;
         if (!ObjectUtilities.equal(this.seriesKey, that.seriesKey)) {
             return false;
-        }
-        if (this.seriesIndex != that.seriesIndex) {
-            return false;   
         }
         if (!ObjectUtilities.equal(this.dataset, that.dataset)) {
             return false;

@@ -1,5 +1,17 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/entity/LegendItemEntity.java
+	(seriesIndex): Removed,
+	(getSeriesIndex): Likewise,
+	(setSeriesIndex): Likewise,
+	(equals): Updated for removed field,
+	* source/org/jfree/chart/title/LegendItemBlockContainer.java
+	(draw): Updated for removed method in LegendItemEntity,
+	* tests/org/jfree/chart/title/junit/LegendItemEntityTests.java
+	(testEquals): Likewise.
+
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/entity/ContourEntity.java: Removed, previously
 	deprecated,
 	* tests/org/jfree/chart/entity/junit/ContourEntityTests.java: Likewise,
