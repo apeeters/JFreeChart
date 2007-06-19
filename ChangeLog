@@ -1,5 +1,21 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/entity/CategoryItemEntity.java
+	(series): Removed, previously deprecated,
+	(category): Likewise,
+	(categoryIndex): Likewise,
+	(CategoryItemEntity()): Likewise,
+	(getSeries): Likewise,
+	(setSeries): Likewise,
+	(getCategory): Likewise,
+	(setCategory): Likewise,
+	(getCategoryIndex): Likewise,
+	(setCategoryIndex): Likewise,
+	* source/org/jfree/chart/entity/junit/CategoryItemEntityTests.java
+	(testEquals): Updated for removed methods.
+
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/ClipPath.java: Removed,
 	* source/org/jfree/chart/DrawableLegendItem.java: Likewise.
 

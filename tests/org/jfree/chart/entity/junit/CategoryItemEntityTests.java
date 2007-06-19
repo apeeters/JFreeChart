@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 20-May-2004 : Version 1 (DG);
+ * 19-Jun-2007 : Updated for deprecation removals (DG);
  *
  */
 
@@ -90,9 +91,9 @@ public class CategoryItemEntityTests extends TestCase {
         d.addValue(3.0, "R2", "C1");
         d.addValue(4.0, "R2", "C2");
         CategoryItemEntity e1 = new CategoryItemEntity(new Rectangle2D.Double(
-                1.0, 2.0, 3.0, 4.0), "ToolTip", "URL", d, 1, "C2", 1); 
+                1.0, 2.0, 3.0, 4.0), "ToolTip", "URL", d, "R2", "C2"); 
         CategoryItemEntity e2 = new CategoryItemEntity(new Rectangle2D.Double(
-                1.0, 2.0, 3.0, 4.0), "ToolTip", "URL", d, 1, "C2", 1); 
+                1.0, 2.0, 3.0, 4.0), "ToolTip", "URL", d, "R2", "C2"); 
         assertTrue(e1.equals(e2));  
         
         e1.setArea(new Rectangle2D.Double(4.0, 3.0, 2.0, 1.0));
@@ -110,19 +111,14 @@ public class CategoryItemEntityTests extends TestCase {
         e2.setURLText("New URL");
         assertTrue(e1.equals(e2));  
         
-        e1.setCategory("C1");
+        e1.setColumnKey("C1");
         assertFalse(e1.equals(e2));
-        e2.setCategory("C1");
+        e2.setColumnKey("C1");
         assertTrue(e1.equals(e2)); 
         
-        e1.setCategoryIndex(0);
+        e1.setRowKey("R1");
         assertFalse(e1.equals(e2));
-        e2.setCategoryIndex(0);
-        assertTrue(e1.equals(e2)); 
-        
-        e1.setSeries(0);
-        assertFalse(e1.equals(e2));
-        e2.setSeries(0);
+        e2.setRowKey("R1");
         assertTrue(e1.equals(e2)); 
         
     }
@@ -137,7 +133,7 @@ public class CategoryItemEntityTests extends TestCase {
         d.addValue(3.0, "R2", "C1");
         d.addValue(4.0, "R2", "C2");
         CategoryItemEntity e1 = new CategoryItemEntity(new Rectangle2D.Double(
-                1.0, 2.0, 3.0, 4.0), "ToolTip", "URL", d, 1, "C2", 1); 
+                1.0, 2.0, 3.0, 4.0), "ToolTip", "URL", d, "C2", "C2"); 
         CategoryItemEntity e2 = null;
         
         try {
@@ -161,7 +157,7 @@ public class CategoryItemEntityTests extends TestCase {
         d.addValue(3.0, "R2", "C1");
         d.addValue(4.0, "R2", "C2");
         CategoryItemEntity e1 = new CategoryItemEntity(new Rectangle2D.Double(
-                1.0, 2.0, 3.0, 4.0), "ToolTip", "URL", d, 1, "C2", 1); 
+                1.0, 2.0, 3.0, 4.0), "ToolTip", "URL", d, "R2", "C2"); 
         CategoryItemEntity e2 = null;
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -177,7 +173,6 @@ public class CategoryItemEntityTests extends TestCase {
         catch (Exception e) {
             e.printStackTrace();
         }
-        boolean b = e1.equals(e2);
         assertEquals(e1, e2);
     }
 
