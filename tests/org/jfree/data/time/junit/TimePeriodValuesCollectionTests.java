@@ -192,6 +192,8 @@ public class TimePeriodValuesCollectionTests extends TestCase {
         assertTrue(pass);
     }
     
+    private static final double EPSILON = 0.0000000001;
+    
     /**
      * Some checks for the getDomainBounds() method.
      */
@@ -207,14 +209,14 @@ public class TimePeriodValuesCollectionTests extends TestCase {
         s1.add(new SimpleTimePeriod(1000L, 2000L), 1.0);
         dataset.addSeries(s1);
         r = dataset.getDomainBounds(false);
-        assertEquals(1500.0, r.getLowerBound());
-        assertEquals(1500.0, r.getUpperBound());
+        assertEquals(1500.0, r.getLowerBound(), EPSILON);
+        assertEquals(1500.0, r.getUpperBound(), EPSILON);
         
         // check dataset with two time periods
         s1.add(new SimpleTimePeriod(1500L, 3000L), 2.0);
         r = dataset.getDomainBounds(false);
-        assertEquals(1500.0, r.getLowerBound());
-        assertEquals(2250.0, r.getUpperBound());  
+        assertEquals(1500.0, r.getLowerBound(), EPSILON);
+        assertEquals(2250.0, r.getUpperBound(), EPSILON);  
     }
 
     /**
@@ -233,13 +235,13 @@ public class TimePeriodValuesCollectionTests extends TestCase {
         s1.add(new SimpleTimePeriod(1000L, 2000L), 1.0);
         dataset.addSeries(s1);
         r = dataset.getDomainBounds(true);
-        assertEquals(1000.0, r.getLowerBound());
-        assertEquals(2000.0, r.getUpperBound());
+        assertEquals(1000.0, r.getLowerBound(), EPSILON);
+        assertEquals(2000.0, r.getUpperBound(), EPSILON);
         
         // check dataset with two time periods
         s1.add(new SimpleTimePeriod(1500L, 3000L), 2.0);
         r = dataset.getDomainBounds(true);
-        assertEquals(1000.0, r.getLowerBound());
-        assertEquals(3000.0, r.getUpperBound());  
+        assertEquals(1000.0, r.getLowerBound(), EPSILON);
+        assertEquals(3000.0, r.getUpperBound(), EPSILON);  
     }
 }
