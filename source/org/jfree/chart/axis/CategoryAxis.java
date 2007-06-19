@@ -83,6 +83,7 @@
  * 30-Oct-2006 : Updated refreshTicks() method to account for possibility of
  *               multiple domain axes (DG);
  * 07-Mar-2007 : Fixed bug in axis label positioning (DG);
+ * 19-Jun-2007 : Removed deprecated code (DG);
  *
  */
 
@@ -827,34 +828,6 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
         return state;
 
     }
-
-    /**
-     * Draws the category labels and returns the updated axis state.
-     *
-     * @param g2  the graphics device (<code>null</code> not permitted).
-     * @param dataArea  the area inside the axes (<code>null</code> not 
-     *                  permitted).
-     * @param edge  the axis location (<code>null</code> not permitted).
-     * @param state  the axis state (<code>null</code> not permitted).
-     * @param plotState  collects information about the plot (<code>null</code>
-     *                   permitted).
-     * 
-     * @return The updated axis state (never <code>null</code>).
-     * 
-     * @deprecated Use {@link #drawCategoryLabels(Graphics2D, Rectangle2D, 
-     *     Rectangle2D, RectangleEdge, AxisState, PlotRenderingInfo)}.
-     */
-    protected AxisState drawCategoryLabels(Graphics2D g2,
-                                           Rectangle2D dataArea,
-                                           RectangleEdge edge,
-                                           AxisState state,
-                                           PlotRenderingInfo plotState) {
-        
-        // this method is deprecated because we really need the plotArea
-        // when drawing the labels - see bug 1277726
-        return drawCategoryLabels(g2, dataArea, dataArea, edge, state, 
-                plotState);
-    }
     
     /**
      * Draws the category labels and returns the updated axis state.
@@ -869,6 +842,8 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      *                   permitted).
      * 
      * @return The updated axis state (never <code>null</code>).
+     * 
+     * @since 1.0.2
      */
     protected AxisState drawCategoryLabels(Graphics2D g2,
                                            Rectangle2D plotArea,
