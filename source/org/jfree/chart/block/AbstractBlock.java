@@ -45,6 +45,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 16-Mar-2007 : Changed border from BlockBorder to BlockFrame, updated 
  *               equals(), and implemented Cloneable (DG);
+ * 19-Jun-2007 : Removed get/setBorder() methods, previously deprecated (DG);
  * 
  */
 
@@ -225,49 +226,6 @@ public class AbstractBlock implements Cloneable, Serializable {
     public void setMargin(double top, double left, double bottom, 
                           double right) {
         setMargin(new RectangleInsets(top, left, bottom, right));
-    }
-
-    /**
-     * Returns the border.
-     * 
-     * @return The border (never <code>null</code>).
-     * 
-     * @deprecated Use {@link #getFrame()} instead.
-     */
-    public BlockBorder getBorder() {
-        if (this.frame instanceof BlockBorder) {
-            return (BlockBorder) this.frame;
-        }
-        else {
-            return null;
-        }
-    }
-    
-    /**
-     * Sets the border for the block (use {@link BlockBorder#NONE} for
-     * no border).
-     * 
-     * @param border  the border (<code>null</code> not permitted).
-     * 
-     * @see #getBorder()
-     * 
-     * @deprecated Use {@link #setFrame(BlockFrame)} instead.
-     */
-    public void setBorder(BlockBorder border) {
-        setFrame(border);
-    }
-    
-    /**
-     * Sets a black border with the specified line widths.
-     * 
-     * @param top  the top border line width.
-     * @param left  the left border line width.
-     * @param bottom  the bottom border line width.
-     * @param right  the right border line width.
-     */
-    public void setBorder(double top, double left, double bottom, 
-                          double right) {
-        setFrame(new BlockBorder(top, left, bottom, right));
     }
     
     /**

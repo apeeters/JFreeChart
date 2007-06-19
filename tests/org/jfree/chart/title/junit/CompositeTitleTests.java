@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------
  * CompositeTitleTests.java
  * ------------------------
- * (C) Copyright 2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2005, 2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 04-Feb-2005 : Version 1 (DG);
+ * 19-Jun-2007 : Fixed deprecation warnings (DG);
  *
  */
 
@@ -98,10 +99,10 @@ public class CompositeTitleTests extends TestCase {
         t2.setMargin(new RectangleInsets(1.0, 2.0, 3.0, 4.0));
         assertTrue(t1.equals(t2));
         
-        // border
-        t1.setBorder(new BlockBorder(Color.red));
+        // frame
+        t1.setFrame(new BlockBorder(Color.red));
         assertFalse(t1.equals(t2));
-        t2.setBorder(new BlockBorder(Color.red));
+        t2.setFrame(new BlockBorder(Color.red));
         assertTrue(t1.equals(t2));
        
         // padding

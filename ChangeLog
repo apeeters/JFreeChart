@@ -1,5 +1,16 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/block/AbstractBlock.java
+	(getBorder): Removed, previously deprecated,
+	(setBorder(BlockBorder)): Likewise,
+	(setBorder(double, double, double, double)): Likewise,
+	* source/org/jfree/chart/title/PaintScaleLegend.java
+	(draw(Graphics2D, Rectangle2D, Object)): Fixed deprecation warnings,
+	* tests/org/jfree/chart/title/junit/CompositeTitleTests.java
+	(testEquals): Likewise.
+
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/axis/ValueAxis.java
 	(DEFAULT_LOWER_BOUND): Removed, previously deprecated,
 	(DEFAULT_UPPER_BOUND): Likewise.

@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 22-Jan-2007 : Version 1 (DG);
+ * 19-Jun-2007 : Fixed deprecation warnings (DG);
  * 
  */
 
@@ -484,8 +485,8 @@ public class PaintScaleLegend extends Title implements PublicCloneable {
             g2.setPaint(this.backgroundPaint);
             g2.fill(target);
         }
-        getBorder().draw(g2, target);
-        getBorder().getInsets().trim(target);
+        getFrame().draw(g2, target);
+        getFrame().getInsets().trim(target);
         target = trimPadding(target);
         double base = this.axis.getLowerBound();
         double increment = this.axis.getRange().getLength() / SUBDIVISIONS;
