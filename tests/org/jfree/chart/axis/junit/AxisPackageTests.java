@@ -41,6 +41,7 @@
  * 17-Feb-2004 : Added extra tests (DG);
  * 19-Jan-2005 : Added main() method to run JUnit in text mode (DG);
  * 21-Mar-2007 : Added ExtendedCategoryAxisTests (DG);
+ * 19-Jun-2007 : Removed ColorBarTests (DG);
  * 
  */
 
@@ -74,7 +75,6 @@ public class AxisPackageTests extends TestCase {
         suite.addTestSuite(CategoryLabelPositionsTests.class);
         suite.addTestSuite(CategoryLabelWidthTypeTests.class);
         suite.addTestSuite(CategoryTickTests.class);
-        suite.addTestSuite(ColorBarTests.class);
         suite.addTestSuite(CyclicNumberAxisTests.class);
         suite.addTestSuite(DateAxisTests.class);
         suite.addTestSuite(DateTickTests.class);
