@@ -1,5 +1,12 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/plot/CrosshairState.java
+	(updateCrosshairPoint): Removed,
+	(updateCrosshairX(double)): Likewise,
+	(updateCrosshairY(double)): Likewise.
+	
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/plot/JThermometer.java
 	(setShowValueLines): Removed,
 	* source/org/jfree/chart/plot/ThermometerPlot.java
