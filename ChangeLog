@@ -1,5 +1,10 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/ClipPath.java: Removed,
+	* source/org/jfree/chart/DrawableLegendItem.java: Likewise.
+
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/editor/PaletteChooserPanel.java: Removed,
 	* source/org/jfree/chart/editor/PaletteSample.java: Likewise.
 
