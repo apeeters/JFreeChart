@@ -1,5 +1,14 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/plot/ColorPalette.java: Removed,
+	* source/org/jfree/chart/plot/GreyPalette.java: Likewise,
+	* source/org/jfree/chart/plot/RainbowPalette.java: Likewise,
+	* tests/org/jfree/chart/plot/junit/ColorPaletteTests.java: Likewise,
+	* tests/org/jfree/chart/plot/junit/PlotPackageTests.java
+	(suite): Removed ColorPaletteTests.
+
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/labels/ContourToolTipGenerator.java:
 	Removed, previously deprecated,
 	* source/org/jfree/chart/labels/StandardContourToolTipGenerator.java:

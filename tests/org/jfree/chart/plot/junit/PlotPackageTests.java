@@ -43,7 +43,7 @@
  * 16-Jun-2005 : Added MultiplePiePlotTests (DG);
  * 19-Aug-2005 : Added CategoryMarkerTests (DG);
  * 05-Sep-2006 : Added MarkerTests (DG);
- * 19-Jun-2007 : Removed ContourPlotTests (DG);
+ * 19-Jun-2007 : Removed ContourPlotTests and ColorPaletteTests (DG);
  *
  */
 
@@ -69,7 +69,6 @@ public class PlotPackageTests extends TestCase {
         TestSuite suite = new TestSuite("org.jfree.chart.plot");
         suite.addTestSuite(CategoryMarkerTests.class);
         suite.addTestSuite(CategoryPlotTests.class);
-        suite.addTestSuite(ColorPaletteTests.class);
         suite.addTestSuite(CombinedDomainCategoryPlotTests.class);
         suite.addTestSuite(CombinedDomainXYPlotTests.class);
         suite.addTestSuite(CombinedRangeCategoryPlotTests.class);
