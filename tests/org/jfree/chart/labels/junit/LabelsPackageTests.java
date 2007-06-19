@@ -40,6 +40,7 @@
  * 13-Aug-2003 : Renamed class, added tests (DG);
  * 19-Jan-2005 : Added main() method to run JUnit in text mode (DG);
  * 20-Feb-2007 : Added MultipleXYSeriesLabelGeneratorTests (DG);
+ * 19-Jun-2007 : Removed StandardContourToolTipGeneratorTests (DG);
  *
  */
 
@@ -75,7 +76,6 @@ public class LabelsPackageTests extends TestCase {
         suite.addTestSuite(StandardCategoryItemLabelGeneratorTests.class);
         suite.addTestSuite(StandardCategorySeriesLabelGeneratorTests.class);
         suite.addTestSuite(StandardCategoryToolTipGeneratorTests.class);
-        suite.addTestSuite(StandardContourToolTipGeneratorTests.class);
         suite.addTestSuite(StandardPieSectionLabelGeneratorTests.class);
         suite.addTestSuite(StandardPieToolTipGeneratorTests.class);
         suite.addTestSuite(StandardXYItemLabelGeneratorTests.class);
