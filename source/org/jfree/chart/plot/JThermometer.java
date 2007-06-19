@@ -347,15 +347,6 @@ public class JThermometer extends JPanel implements Serializable {
     }
 
     /**
-     * Sets the flag that controls whether or not value lines are displayed.
-     *
-     * @param b  the new flag value.
-     */
-    public void setShowValueLines(boolean b) {
-        this.plot.setShowValueLines(b);
-    }
-
-    /**
      * Sets the location for the axis.
      * 
      * @param location  the location.

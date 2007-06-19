@@ -1,5 +1,22 @@
 2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/plot/JThermometer.java
+	(setShowValueLines): Removed,
+	* source/org/jfree/chart/plot/ThermometerPlot.java
+	(showValueLines): Removed,
+	(setUnits(String)): Removed,
+	(getShowValueLines): Likewise,
+	(setShowValueLines): Likewise,
+	(draw): Updated for removed code,
+	(getMinimumVerticalDataValue): Removed,
+	(getMaximumVerticalDataValue): Likewise,
+	(equals): Updated for removed fields,
+	* tests/org/jfree/chart/plot/junit/ThermometerPlotTests.java
+	(testEquals): Updated for removed fields,
+	(testSetUnits): Removed.
+	
+2007-06-19  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/plot/ContourPlotUtilities.java: Removed,
 	* source/org/jfree/chart/plot/ContourValuePlot.java: Likewise.
 	
