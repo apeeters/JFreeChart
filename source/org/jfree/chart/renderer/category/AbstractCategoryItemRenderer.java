@@ -95,7 +95,7 @@
  *               itemLabelGenerator, toolTipGenerator and itemURLGenerator
  *               override fields (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
- * 20-Jun-2007 : Removed deprecated code (DG);
+ * 20-Jun-2007 : Removed deprecated code and removed JCommon dependencies (DG);
  *
  */
 
@@ -136,11 +136,11 @@ import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.renderer.AbstractRenderer;
 import org.jfree.chart.urls.CategoryURLGenerator;
+import org.jfree.chart.util.GradientPaintTransformer;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.text.TextUtilities;
-import org.jfree.ui.GradientPaintTransformer;
 import org.jfree.ui.LengthAdjustmentType;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.RectangleInsets;

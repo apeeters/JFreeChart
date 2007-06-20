@@ -1,7 +1,7 @@
 /* --------------
  * DialDemo2.java
  * --------------
- * (C) Copyright 2006, by Object Refinery Limited.
+ * (C) Copyright 2006, 2007, by Object Refinery Limited.
  */
 
 package org.jfree.experimental.chart.demo;
@@ -23,6 +23,8 @@ import javax.swing.event.ChangeListener;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.util.GradientPaintTransformType;
+import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.general.DefaultValueDataset;
 import org.jfree.experimental.chart.plot.dial.DialBackground;
 import org.jfree.experimental.chart.plot.dial.DialCap;
@@ -32,8 +34,6 @@ import org.jfree.experimental.chart.plot.dial.DialTextAnnotation;
 import org.jfree.experimental.chart.plot.dial.DialValueIndicator;
 import org.jfree.experimental.chart.plot.dial.SimpleDialFrame;
 import org.jfree.experimental.chart.plot.dial.StandardDialScale;
-import org.jfree.ui.GradientPaintTransformType;
-import org.jfree.ui.StandardGradientPaintTransformer;
 
 /**
  * A sample application showing the use of a {@link DialPlot}.

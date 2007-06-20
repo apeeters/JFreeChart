@@ -40,6 +40,7 @@
  * 22-Oct-2003 : Added hashCode test (DG);
  * 09-Feb-2007 : Added to testCloning() (DG);
  * 17-May-2007 : Added testGetLegendItemSeriesIndex() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -65,12 +66,12 @@ import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.chart.util.GradientPaintTransformType;
+import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.Range;
 import org.jfree.data.xy.XYBarDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.GradientPaintTransformType;
-import org.jfree.ui.StandardGradientPaintTransformer;
 
 /**
  * Tests for the {@link XYBarRenderer} class.

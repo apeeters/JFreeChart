@@ -50,6 +50,7 @@
  * 20-Apr-2005 : Renamed CategoryLabelGenerator 
  *               --> CategoryItemLabelGenerator (DG);
  * 09-Jun-2005 : Use addItemEntity() from superclass (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -74,13 +75,13 @@ import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.AbstractRenderer;
+import org.jfree.chart.util.GradientPaintTransformType;
+import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.GradientPaintTransformType;
 import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.StandardGradientPaintTransformer;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 

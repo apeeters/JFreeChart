@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------
  * IntervalMarker.java
  * -------------------
- * (C) Copyright 2002-2006, by Object Refinery Limited.
+ * (C) Copyright 2002-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -41,6 +41,7 @@
  * 26-Mar-2003 : Implemented Serializable (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 05-Sep-2006 : Added MarkerChangeEvent notification (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -53,7 +54,7 @@ import java.awt.Stroke;
 import java.io.Serializable;
 
 import org.jfree.chart.event.MarkerChangeEvent;
-import org.jfree.ui.GradientPaintTransformer;
+import org.jfree.chart.util.GradientPaintTransformer;
 import org.jfree.ui.LengthAdjustmentType;
 import org.jfree.util.ObjectUtilities;
 

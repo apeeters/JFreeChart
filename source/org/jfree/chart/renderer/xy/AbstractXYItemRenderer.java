@@ -101,7 +101,7 @@
  * 20-Apr-2007 : Updated getLegendItem() for renderer change, and deprecated
  *               itemLabelGenerator and toolTipGenerator override fields (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
- * 20-Jun-2007 : Removed deprecated code (DG);
+ * 20-Jun-2007 : Removed deprecated code and removed JCommon dependencies (DG);
  *
  */
 
@@ -146,11 +146,11 @@ import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.AbstractRenderer;
 import org.jfree.chart.urls.XYURLGenerator;
+import org.jfree.chart.util.GradientPaintTransformer;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.text.TextUtilities;
-import org.jfree.ui.GradientPaintTransformer;
 import org.jfree.ui.Layer;
 import org.jfree.ui.LengthAdjustmentType;
 import org.jfree.ui.RectangleAnchor;

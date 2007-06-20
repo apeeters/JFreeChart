@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * LegendItemTests.java
  * --------------------
- * (C) Copyright 2004-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -40,6 +40,7 @@
  * 10-Dec-2005 : Addded new test to cover bug report 1374328 (DG);
  * 13-Dec-2006 : Extended testEquals() for new fillPaintTransformer 
  *               attribute (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -64,8 +65,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.LegendItem;
-import org.jfree.ui.GradientPaintTransformType;
-import org.jfree.ui.StandardGradientPaintTransformer;
+import org.jfree.chart.util.GradientPaintTransformType;
+import org.jfree.chart.util.StandardGradientPaintTransformer;
 
 /**
  * Tests for the {@link LegendItem} class.

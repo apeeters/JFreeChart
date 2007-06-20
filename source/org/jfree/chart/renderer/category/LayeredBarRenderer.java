@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -47,6 +47,7 @@
  * 18-Aug-2006 : Fixed the bar width calculation to respect the maximum bar 
  *               width setting (thanks to Zoheb Borbora) (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -67,8 +68,8 @@ import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.GradientPaintTransformer;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.ui.GradientPaintTransformer;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.util.ObjectList;
 

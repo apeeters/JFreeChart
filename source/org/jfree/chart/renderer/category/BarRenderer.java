@@ -111,13 +111,13 @@ import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.util.GradientPaintTransformer;
+import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.text.TextUtilities;
-import org.jfree.ui.GradientPaintTransformer;
 import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.StandardGradientPaintTransformer;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
 

@@ -1,7 +1,7 @@
 /* --------------
  * DialDemo1.java
  * --------------
- * (C) Copyright 2006, by Object Refinery Limited.
+ * (C) Copyright 2006, 2007, by Object Refinery Limited.
  */
 
 package org.jfree.experimental.chart.demo;
@@ -12,25 +12,27 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Point;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.experimental.chart.plot.dial.DialPlot;
-import org.jfree.experimental.chart.plot.dial.SimpleDialFrame;
-import org.jfree.experimental.chart.plot.dial.DialTextAnnotation;
-import org.jfree.experimental.chart.plot.dial.StandardDialRange;
-import org.jfree.experimental.chart.plot.dial.StandardDialScale;
+import org.jfree.chart.util.GradientPaintTransformType;
+import org.jfree.chart.util.StandardGradientPaintTransformer;
+import org.jfree.data.general.DefaultValueDataset;
 import org.jfree.experimental.chart.plot.dial.DialBackground;
 import org.jfree.experimental.chart.plot.dial.DialCap;
+import org.jfree.experimental.chart.plot.dial.DialPlot;
 import org.jfree.experimental.chart.plot.dial.DialPointer;
+import org.jfree.experimental.chart.plot.dial.DialTextAnnotation;
 import org.jfree.experimental.chart.plot.dial.DialValueIndicator;
-import org.jfree.data.general.DefaultValueDataset;
-import org.jfree.ui.GradientPaintTransformType;
-import org.jfree.ui.StandardGradientPaintTransformer;
+import org.jfree.experimental.chart.plot.dial.SimpleDialFrame;
+import org.jfree.experimental.chart.plot.dial.StandardDialRange;
+import org.jfree.experimental.chart.plot.dial.StandardDialScale;
 
 /**
  * A sample application showing the use of a {@link DialPlot}.

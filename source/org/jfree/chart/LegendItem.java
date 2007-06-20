@@ -55,6 +55,7 @@
  * 20-Jul-2006 : Added dataset and series index fields (DG);
  * 13-Dec-2006 : Added fillPaintTransformer attribute (DG);
  * 18-May-2007 : Added dataset and seriesKey fields (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -73,10 +74,10 @@ import java.io.Serializable;
 import java.text.AttributedString;
 import java.text.CharacterIterator;
 
+import org.jfree.chart.util.GradientPaintTransformer;
+import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.general.Dataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.GradientPaintTransformer;
-import org.jfree.ui.StandardGradientPaintTransformer;
 import org.jfree.util.AttributedStringUtilities;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.ShapeUtilities;
