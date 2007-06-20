@@ -1,5 +1,14 @@
 2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/title/LegendItemBlockContainer.java
+	(datasetIndex): Removed,
+	(series): Removed,
+	(LegendItemBlockContainer(Arrangement, int, int)): Removed,
+	(getDatasetIndex): Removed,
+	(getSeriesIndex): Removed.
+
+2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/cahrt/renderer/LookupPaintScale.java
 	(add(Number, Paint)): Removed,
 	* tests/org/jfree/chart/renderer/junit/LookupPaintScaleTests.java:

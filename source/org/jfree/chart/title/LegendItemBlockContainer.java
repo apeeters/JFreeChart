@@ -39,6 +39,7 @@
  * 20-Jul-2006 : Version 1 (DG);
  * 06-Oct-2006 : Added tooltip and URL text fields (DG);
  * 18-May-2007 : Added seriesKey and dataset fields (DG);
+ * 20-Jun-2007 : Removed deprecated code (DG);
  * 
  */
 
@@ -79,33 +80,11 @@ public class LegendItemBlockContainer extends BlockContainer {
      */
     private Comparable seriesKey;
     
-    /** The dataset index. */
-    private int datasetIndex;
-    
-    /** The series index. */
-    private int series;
-    
     /** The tool tip text (can be <code>null</code>). */
     private String toolTipText;
     
     /** The URL text (can be <code>null</code>). */
     private String urlText;
-    
-    /**
-     * Creates a new legend item block.
-     * 
-     * @param arrangement  the arrangement.
-     * @param datasetIndex  the dataset index.
-     * @param series  the series index.
-     * 
-     * @deprecated As of 1.0.6, use the other constructor.
-     */
-    public LegendItemBlockContainer(Arrangement arrangement, int datasetIndex,
-            int series) {
-        super(arrangement);
-        this.datasetIndex = datasetIndex;
-        this.series = series;
-    }
     
     /**
      * Creates a new legend item block.
@@ -143,26 +122,6 @@ public class LegendItemBlockContainer extends BlockContainer {
      */
     public Comparable getSeriesKey() {
         return this.seriesKey;
-    }
-    
-    /**
-     * Returns the dataset index.
-     * 
-     * @return The dataset index.
-     * 
-     * @deprecated As of 1.0.6, use the {@link #getDataset()} method.
-     */
-    public int getDatasetIndex() {
-        return this.datasetIndex;
-    }
-   
-    /**
-     * Returns the series index.
-     * 
-     * @return The series index.
-     */
-    public int getSeriesIndex() {
-        return this.series;
     }
     
     /**
