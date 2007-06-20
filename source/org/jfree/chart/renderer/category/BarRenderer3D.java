@@ -92,6 +92,7 @@
  * 07-Dec-2006 : Implemented equals() override (DG);
  * 17-Jan-2007 : Fixed bug in drawDomainGridline() method (DG);
  * 03-Apr-2007 : Fixed bugs in drawBackground() method (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -128,14 +129,14 @@ import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueMarker;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.RectangleAnchor;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.TextUtilities;
 import org.jfree.ui.LengthAdjustmentType;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 

@@ -49,6 +49,7 @@
  *               underlying PiePlot (DG);
  * 17-May-2007 : Added argument check to setPieChart() (DG);
  * 18-May-2007 : Set dataset for LegendItem (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -76,14 +77,14 @@ import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.title.TextTitle;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CategoryToPieDataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.general.PieDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.TableOrder;

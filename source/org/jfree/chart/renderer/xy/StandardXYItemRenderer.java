@@ -103,11 +103,11 @@
  *               method (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 08-Jun-2007 : Fixed bug in entity creation (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
 package org.jfree.chart.renderer.xy;
-
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -134,9 +134,9 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.BooleanList;
 import org.jfree.util.BooleanUtilities;
 import org.jfree.util.ObjectUtilities;

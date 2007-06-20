@@ -147,6 +147,7 @@
  * 18-May-2007 : Set dataset for LegendItem (DG);
  * 14-Jun-2007 : Added label distributor attribute (DG);
  * 19-Jun-2007 : Removed deprecated code (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *          
  */
 
@@ -185,19 +186,19 @@ import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.PieToolTipGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.text.G2TextMeasurer;
+import org.jfree.chart.text.TextBlock;
+import org.jfree.chart.text.TextBox;
+import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.urls.PieURLGenerator;
+import org.jfree.chart.util.RectangleAnchor;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.KeyedValues;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.general.PieDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.G2TextMeasurer;
-import org.jfree.text.TextBlock;
-import org.jfree.text.TextBox;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;

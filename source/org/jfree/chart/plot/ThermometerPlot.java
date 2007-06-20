@@ -82,6 +82,7 @@
  *               getMinimum/MaximumVerticalDataValue(), and fixed serialization 
  *               bug (DG);
  * 19-Jun-2007 : Removed deprecated code (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -113,13 +114,13 @@ import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.event.PlotChangeEvent;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DefaultValueDataset;
 import org.jfree.data.general.ValueDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.UnitType;

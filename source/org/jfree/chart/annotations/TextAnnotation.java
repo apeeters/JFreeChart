@@ -48,6 +48,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 16-Jan-2007 : Added argument checks, fixed hashCode() method and updated
  *               API docs (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -62,8 +63,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.jfree.chart.HashUtilities;
+import org.jfree.chart.text.TextAnchor;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 

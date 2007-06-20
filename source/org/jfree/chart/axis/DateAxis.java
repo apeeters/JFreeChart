@@ -116,6 +116,7 @@
  * 19-Apr-2007 : Fix exceptions in setMinimum/MaximumDate() (DG);
  * 03-May-2007 : Fixed minor bugs in previousStandardDate(), with new JUnit
  *               tests (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -139,14 +140,14 @@ import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueAxisPlot;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.time.DateRange;
 import org.jfree.data.time.Month;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.Year;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.ObjectUtilities;
 
 /**

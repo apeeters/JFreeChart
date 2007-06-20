@@ -77,7 +77,7 @@
  *               negativeItemLabelPosition and createEntities override 
  *               fields (DG);
  * 13-Jun-2007 : Added new autoPopulate flags for core series attributes (DG);
- * 20-Jun-2007 : Removed deprecated code (DG);
+ * 20-Jun-2007 : Removed deprecated code and JCommon dependencies (DG);
  * 
  */
 
@@ -107,8 +107,8 @@ import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.text.TextAnchor;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.BooleanList;
 import org.jfree.util.BooleanUtilities;
 import org.jfree.util.ObjectList;

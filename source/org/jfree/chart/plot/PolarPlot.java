@@ -44,11 +44,11 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 07-Feb-2007 : Fixed bug 1599761, data value less than axis minimum (DG);
  * 21-Mar-2007 : Fixed serialization bug (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
 package org.jfree.chart.plot;
-
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -81,18 +81,17 @@ import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.event.RendererChangeListener;
 import org.jfree.chart.renderer.PolarItemRenderer;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
-
 
 /**
  * Plots data that is in (theta, radius) pairs where

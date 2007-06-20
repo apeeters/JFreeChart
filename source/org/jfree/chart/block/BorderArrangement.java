@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------
  * BorderArrangement.java
  * ----------------------
- * (C) Copyright 2004, 2005, by Object Refinery Limited.
+ * (C) Copyright 2004-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -41,6 +41,7 @@
  * 24-Feb-2005 : Improved arrangeRR() method (DG);
  * 03-May-2005 : Implemented Serializable and added equals() method (DG);
  * 13-May-2005 : Fixed bugs in the arrange() method (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -50,9 +51,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.Size2D;
 import org.jfree.data.Range;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.Size2D;
 import org.jfree.util.ObjectUtilities;
 
 /**

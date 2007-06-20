@@ -60,6 +60,7 @@
  * 11-Oct-2006 : Fixed rendering with horizontal orientation (see bug 1569094),
  *               thanks to Gerald Struck (DG);
  * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -82,8 +83,8 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PublicCloneable;
 
 /**

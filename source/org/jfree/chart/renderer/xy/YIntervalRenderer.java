@@ -44,6 +44,7 @@
  * 25-Feb-2004 : Replaced CrosshairInfo with CrosshairState (DG);
  * 27-Sep-2004 : Access double values from dataset (DG);
  * 11-Nov-2004 : Now uses ShapeUtilities to translate shapes (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -65,9 +66,9 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PublicCloneable;
 import org.jfree.util.ShapeUtilities;
 

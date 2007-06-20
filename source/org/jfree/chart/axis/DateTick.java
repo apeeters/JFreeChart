@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------
  * DateTick.java
  * -------------
- * (C) Copyright 2003, 2004, by Object Refinery Limited.
+ * (C) Copyright 2003-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,6 +38,7 @@
  * -------
  * 07-Nov-2003 : Version 1 (DG);
  * 13-May-2004 : Added equals() method (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -45,7 +46,7 @@ package org.jfree.chart.axis;
 
 import java.util.Date;
 
-import org.jfree.ui.TextAnchor;
+import org.jfree.chart.text.TextAnchor;
 import org.jfree.util.ObjectUtilities;
 
 /**

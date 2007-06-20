@@ -51,8 +51,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.Size2D;
 import org.jfree.chart.util.VerticalAlignment;
-import org.jfree.ui.Size2D;
 
 /**
  * Arranges blocks in a column layout.  This class is immutable.

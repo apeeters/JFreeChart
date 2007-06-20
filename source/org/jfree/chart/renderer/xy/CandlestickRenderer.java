@@ -79,7 +79,8 @@
  *               other data values (DG);
  * 17-Aug-2006 : Corrections to the equals() method (DG);
  * 05-Mar-2007 : Added flag to allow optional use of outline paint (DG);
- * 20-Jun-2007 : Removed deprecated drawVolume() method (DG);
+ * 20-Jun-2007 : Removed deprecated drawVolume() method, and removed JCommon
+ *               dependencies (DG);
  * 
  */
 
@@ -109,11 +110,11 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.OHLCDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 

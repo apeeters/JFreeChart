@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------
  * Axis.java
  * ---------
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Bill Kelemen; Nicolas Brodu
@@ -77,6 +77,7 @@
  * 08-Jun-2005 : Fixed equals() method to handle GradientPaint (DG);
  * ------------- JFREECHART 1.0.0 ---------------------------------------------
  * 22-Aug-2006 : API doc updates (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -107,11 +108,11 @@ import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.event.AxisChangeListener;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 

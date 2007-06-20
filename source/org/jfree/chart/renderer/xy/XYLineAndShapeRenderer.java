@@ -62,6 +62,7 @@
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 08-Jun-2007 : Fix for bug 1731912 where entities are created even for data
  *               items that are not displayed (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -87,9 +88,9 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.BooleanList;
 import org.jfree.util.BooleanUtilities;
 import org.jfree.util.ObjectUtilities;

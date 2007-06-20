@@ -46,7 +46,8 @@
  * 19-Jan-2005 : Now uses only primitives from dataset (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 10-Jul-2006 : Added dotWidth and dotHeight attributes (DG);
- * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG);
+ * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG)
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -62,8 +63,8 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PublicCloneable;
 
 /**

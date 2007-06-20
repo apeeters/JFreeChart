@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------------
  * CombinedRangeCategoryPlot.java
  * ------------------------------
- * (C) Copyright 2003-2006, by Object Refinery Limited.
+ * (C) Copyright 2003-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Nicolas Brodu;
@@ -51,7 +51,7 @@
  * 21-Feb-2005 : The getLegendItems() method now returns the fixed legend
  *               items if set (DG);
  * 05-May-2005 : Updated draw() method parameters (DG);
- * 
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  */
  
 package org.jfree.chart.plot;
@@ -73,9 +73,9 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.PlotChangeListener;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
 

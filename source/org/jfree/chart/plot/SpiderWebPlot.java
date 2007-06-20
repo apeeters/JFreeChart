@@ -64,6 +64,7 @@
  *               1605202 (DG);
  * 05-Mar-2007 : Restore clip region correctly (see bug 1667750) (DG);
  * 18-May-2007 : Set dataset for LegendItem (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -103,11 +104,11 @@ import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.urls.CategoryURLGenerator;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintList;
 import org.jfree.util.PaintUtilities;

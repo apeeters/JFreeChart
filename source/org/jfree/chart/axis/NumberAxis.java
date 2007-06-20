@@ -92,6 +92,7 @@
  * 11-Dec-2006 : Fix bug in auto-tick unit selection with tick format override,
  *               see bug 1608371 (DG);
  * 22-Mar-2007 : Use new defaultAutoRange attribute (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -113,11 +114,11 @@ import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueAxisPlot;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.RangeType;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.ObjectUtilities;
 
 /**
@@ -1216,10 +1217,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
                     }
                 }
 
-                Tick tick = new NumberTick(
-                    new Double(currentTickValue), tickLabel, anchor, 
-                    rotationAnchor, angle
-                );
+                Tick tick = new NumberTick(new Double(currentTickValue), 
+                        tickLabel, anchor, rotationAnchor, angle);
                 result.add(tick);
             }
         }

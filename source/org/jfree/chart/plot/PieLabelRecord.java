@@ -38,6 +38,7 @@
  * -------
  * 08-Mar-2004 : Version 1 (DG);
  * 14-Jun-2007 : Implemented Serializable, updated API docs (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -45,7 +46,7 @@ package org.jfree.chart.plot;
 
 import java.io.Serializable;
 
-import org.jfree.text.TextBox;
+import org.jfree.chart.text.TextBox;
 
 /**
  * A structure that retains information about the label for a section in a pie 

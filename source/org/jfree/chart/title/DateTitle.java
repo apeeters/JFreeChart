@@ -59,9 +59,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.VerticalAlignment;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 
 /**
  * A chart title that displays the date.

@@ -48,6 +48,7 @@
  * ------------- JFREECHART 1.0.x --------------------------------------------
  * 17-Jan-2006 : Set includeBaseInRange flag to false (DG);
  * 20-Mar-2007 : Implemented equals() and fixed serialization (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -72,10 +73,10 @@ import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.gantt.GanttCategoryDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PaintUtilities;
 
 /**

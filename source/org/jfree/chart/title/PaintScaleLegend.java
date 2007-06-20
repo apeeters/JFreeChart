@@ -38,6 +38,7 @@
  * -------
  * 22-Jan-2007 : Version 1 (DG);
  * 19-Jun-2007 : Fixed deprecation warnings (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -62,10 +63,10 @@ import org.jfree.chart.event.TitleChangeEvent;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.PaintScale;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.Size2D;
 import org.jfree.data.Range;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.Size2D;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 

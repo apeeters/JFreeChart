@@ -46,6 +46,7 @@
  * 16-Mar-2007 : Changed border from BlockBorder to BlockFrame, updated 
  *               equals(), and implemented Cloneable (DG);
  * 19-Jun-2007 : Removed get/setBorder() methods, previously deprecated (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -58,10 +59,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.Size2D;
 import org.jfree.data.Range;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.Size2D;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
 import org.jfree.util.ShapeUtilities;

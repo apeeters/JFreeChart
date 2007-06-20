@@ -51,7 +51,8 @@
  * 19-May-2006 : Added support for tooltips and URLs (DG);
  * 12-Jul-2006 : Added support for item labels (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
- *
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 
  */
 
 package org.jfree.chart.renderer.category;
@@ -73,10 +74,10 @@ import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.statistics.StatisticalCategoryDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 

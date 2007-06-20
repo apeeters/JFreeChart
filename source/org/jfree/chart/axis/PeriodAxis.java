@@ -50,6 +50,7 @@
  * 06-Oct-2006 : Updated for deprecations in RegularTimePeriod and 
  *               subclasses (DG);
  * 22-Mar-2007 : Use new defaultAutoRange attribute (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -82,15 +83,15 @@ import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueAxisPlot;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.Range;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Month;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.Year;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.PublicCloneable;
 
 /**

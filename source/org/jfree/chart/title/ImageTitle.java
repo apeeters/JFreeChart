@@ -64,9 +64,9 @@ import java.awt.geom.Rectangle2D;
 
 import org.jfree.chart.event.TitleChangeEvent;
 import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.VerticalAlignment;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.Size2D;
 
 /**

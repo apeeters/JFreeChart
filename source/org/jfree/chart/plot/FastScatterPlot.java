@@ -56,6 +56,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 10-Nov-2006 : Fixed bug 1593150, by not allowing null axes, and added
  *               setDomainAxis() and setRangeAxis() methods (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -86,10 +87,10 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.axis.ValueTick;
 import org.jfree.chart.event.PlotChangeEvent;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ArrayUtilities;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;

@@ -38,6 +38,7 @@
  * --------
  * 02-Oct-2006 : Version 1 (DG);
  * 06-Mar-2007 : Implemented hashCode() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -62,10 +63,10 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
 

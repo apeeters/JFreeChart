@@ -40,6 +40,7 @@
  * --------
  * 24-Nov-2005 : Version 1, based on PlotPropertyEditPanel.java (DG);
  * 19-Jun-2007 : Removed DefaultColorBarEditor which has been deprecated (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -73,9 +74,9 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.layout.LCBLayout;
 import org.jfree.ui.PaintSample;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.StrokeChooserPanel;
 import org.jfree.ui.StrokeSample;
 import org.jfree.util.BooleanUtilities;

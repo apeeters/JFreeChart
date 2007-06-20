@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------
  * CompositeTitle.java
  * -------------------
- * (C) Copyright 2005, by David Gilbert and Contributors.
+ * (C) Copyright 2005, 2007, by David Gilbert and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -41,6 +41,7 @@
  * 04-Feb-2005 : Implemented MAXIMUM_WIDTH in calculateSize (DG);
  * 20-Apr-2005 : Added new draw() method (DG);
  * 03-May-2005 : Implemented equals() method (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -53,7 +54,7 @@ import java.io.Serializable;
 import org.jfree.chart.block.BlockContainer;
 import org.jfree.chart.block.BorderArrangement;
 import org.jfree.chart.block.RectangleConstraint;
-import org.jfree.ui.Size2D;
+import org.jfree.chart.util.Size2D;
 
 /**
  * A title that contains multiple titles within a {@link BlockContainer}.

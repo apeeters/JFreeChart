@@ -97,6 +97,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 10-Oct-2006 : Source reformatting (DG);
  * 22-Mar-2007 : Added new defaultAutoRange attribute (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -120,11 +121,11 @@ import java.util.List;
 
 import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.plot.Plot;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
 

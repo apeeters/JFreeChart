@@ -47,6 +47,7 @@
  *               visible (DG);
  * 14-Jun-2007 : If the dataset is not a StatisticalCategoryDataset, revert
  *               to the drawing behaviour of LineAndShapeRenderer (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -70,10 +71,10 @@ import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.statistics.StatisticalCategoryDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 import org.jfree.util.ShapeUtilities;

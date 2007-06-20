@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -56,6 +56,7 @@
  * 19-Aug-2005 : Changed constructor from public --> protected (DG);
  * ------------- JFREECHART 1.0.0 ---------------------------------------------
  * 05-Sep-2006 : Added MarkerChangeListener support (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -76,11 +77,11 @@ import javax.swing.event.EventListenerList;
 
 import org.jfree.chart.event.MarkerChangeEvent;
 import org.jfree.chart.event.MarkerChangeListener;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.RectangleAnchor;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.io.SerialUtilities;
 import org.jfree.ui.LengthAdjustmentType;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 

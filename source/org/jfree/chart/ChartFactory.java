@@ -184,6 +184,7 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.renderer.xy.XYStepAreaRenderer;
 import org.jfree.chart.renderer.xy.XYStepRenderer;
+import org.jfree.chart.text.TextAnchor;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.urls.PieURLGenerator;
 import org.jfree.chart.urls.StandardCategoryURLGenerator;
@@ -192,6 +193,8 @@ import org.jfree.chart.urls.StandardXYURLGenerator;
 import org.jfree.chart.urls.StandardXYZURLGenerator;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.chart.util.Layer;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.SortOrder;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.IntervalCategoryDataset;
@@ -206,9 +209,6 @@ import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.WindDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYZDataset;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.TableOrder;
 
 /**

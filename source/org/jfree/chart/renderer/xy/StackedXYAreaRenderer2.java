@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------
  * StackedXYAreaRenderer2.java
  * ---------------------------
- * (C) Copyright 2004-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited), based on 
  *                   the StackedXYAreaRenderer class by Richard Atkinson;
@@ -52,6 +52,7 @@
  *               that can result from anti-aliasing (thanks to Doug 
  *               Clayton) (DG);
  * 30-Nov-2006 : Added accessor methods for the roundXCoordinates flag (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -72,10 +73,10 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.Range;
 import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PublicCloneable;
 
 /**

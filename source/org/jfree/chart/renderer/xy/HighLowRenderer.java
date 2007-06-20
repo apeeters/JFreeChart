@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * HighLowRenderer.java
  * --------------------
- * (C) Copyright 2001-2006, by Object Refinery Limited.
+ * (C) Copyright 2001-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard Atkinson;
@@ -62,6 +62,7 @@
  * 01-Nov-2005 : Added optional openTickPaint and closeTickPaint settings (DG);
  * ------------- JFREECHART 1.0.0 ---------------------------------------------
  * 06-Jul-2006 : Replace dataset methods getX() --> getXValue() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -87,10 +88,10 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.OHLCDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 

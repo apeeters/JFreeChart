@@ -70,6 +70,7 @@
  * 05-Feb-2007 : Added event notifications and fixed drawing for horizontal 
  *               plot orientation (DG);
  * 13-Jun-2007 : Replaced deprecated method call (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -104,10 +105,10 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.Outlier;
 import org.jfree.chart.renderer.OutlierList;
 import org.jfree.chart.renderer.OutlierListCollection;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.statistics.BoxAndWhiskerXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 

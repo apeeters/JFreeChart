@@ -57,6 +57,7 @@
  * 20-Apr-2005 : Renamed CategoryLabelGenerator 
  *               --> CategoryItemLabelGenerator (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -76,9 +77,9 @@ import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.IntervalCategoryDataset;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PublicCloneable;
 
 /**

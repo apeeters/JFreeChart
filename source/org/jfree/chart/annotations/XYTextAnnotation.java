@@ -49,6 +49,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 26-Jan-2006 : Fixed equals() method (bug 1415480) (DG);
  * 06-Mar-2007 : Added argument checks, re-implemented hashCode() method (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -71,10 +72,10 @@ import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 

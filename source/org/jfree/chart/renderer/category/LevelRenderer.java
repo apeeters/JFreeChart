@@ -43,6 +43,7 @@
  * ------------- JFREECHART 1.0.0 ---------------------------------------------
  * 23-Jan-2006 : Renamed getMaxItemWidth() --> getMaximumItemWidth() (DG);
  * 19-Jun-2007 : Removed deprecated code (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -65,8 +66,8 @@ import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PublicCloneable;
 
 /**

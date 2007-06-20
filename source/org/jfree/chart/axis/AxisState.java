@@ -45,7 +45,7 @@ package org.jfree.chart.axis;
 
 import java.util.List;
 
-import org.jfree.ui.RectangleEdge;
+import org.jfree.chart.util.RectangleEdge;
 
 /**
  * Instances of this class are used to carry state information for an axis 

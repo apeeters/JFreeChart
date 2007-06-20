@@ -55,6 +55,7 @@
  * 13-Dec-2006 : Added support for GradientPaint in legend items (DG);
  * 16-Mar-2007 : Updated border drawing for changes in AbstractBlock (DG);
  * 18-May-2007 : Pass seriesKey and dataset to legend item block (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -84,11 +85,11 @@ import org.jfree.chart.block.FlowArrangement;
 import org.jfree.chart.block.LabelBlock;
 import org.jfree.chart.block.RectangleConstraint;
 import org.jfree.chart.event.TitleChangeEvent;
+import org.jfree.chart.util.RectangleAnchor;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.Size2D;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.Size2D;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
 

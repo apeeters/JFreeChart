@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------
  * CategoryAxis3D.java
  * -------------------
- * (C) Copyright 2003-2006, by Klaus Rheinwald and Contributors.
+ * (C) Copyright 2003-2007, by Klaus Rheinwald and Contributors.
  *
  * Original Author:  Klaus Rheinwald;
  * Contributor(s):   Tin Luu,
@@ -49,6 +49,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 18-Aug-2006 : Fix for bug drawing category labels, thanks to Adriaan
  *               Joubert (1277726) (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -62,7 +63,7 @@ import org.jfree.chart.Effect3D;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.ui.RectangleEdge;
+import org.jfree.chart.util.RectangleEdge;
 
 /**
  * An axis that displays categories and has a 3D effect.

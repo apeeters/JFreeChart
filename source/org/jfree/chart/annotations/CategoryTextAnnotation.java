@@ -45,6 +45,7 @@
  *               --> TextUtilities (DG);
  * ------------- JFREECHART 1.0.x -------------------------------------------
  * 06-Mar-2007 : Implemented hashCode() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -60,9 +61,9 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleEdge;
 
 /**
  * A text annotation that can be placed on a {@link CategoryPlot}.

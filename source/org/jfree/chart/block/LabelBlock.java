@@ -46,6 +46,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 20-Jul-2006 : Fixed entity area in draw() method (DG);
  * 16-Mar-2007 : Fixed serialization when using GradientPaint (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -63,11 +64,11 @@ import java.io.ObjectOutputStream;
 
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.StandardEntityCollection;
+import org.jfree.chart.text.TextBlock;
+import org.jfree.chart.text.TextBlockAnchor;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.Size2D;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.TextBlock;
-import org.jfree.text.TextBlockAnchor;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.Size2D;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------
  * StackedAreaRenderer.java
  * ------------------------
- * (C) Copyright 2002-2006, by Dan Rivett (d.rivett@ukonline.co.uk) and 
+ * (C) Copyright 2002-2007, by Dan Rivett (d.rivett@ukonline.co.uk) and 
  *                          Contributors.
  *
  * Original Author:  Dan Rivett (adapted from AreaCategoryItemRenderer);
@@ -59,6 +59,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 11-Oct-2006 : Added support for rendering data values as percentages,
  *               and added a second pass for drawing item labels (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -76,11 +77,11 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.DataUtilities;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PublicCloneable;
 
 /**

@@ -64,8 +64,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import org.jfree.chart.util.Size2D;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.Size2D;
 
 /**
  * A text item, with an associated font, that fits on a single line (see 

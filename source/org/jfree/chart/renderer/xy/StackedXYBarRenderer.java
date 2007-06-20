@@ -49,6 +49,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 06-Dec-2006 : Added support for GradientPaint (DG);
  * 15-Mar-2007 : Added renderAsPercentages option (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -69,13 +70,13 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.TextAnchor;
 
 /**
  * A bar renderer that displays the series items stacked.

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------
  * CyclicNumberAxis.java
  * ---------------------
- * (C) Copyright 2003, 2004, by Nicolas Brodu and Contributors.
+ * (C) Copyright 2003-2007, by Nicolas Brodu and Contributors.
  *
  * Original Author:  Nicolas Brodu;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -45,6 +45,7 @@
  *               (for consistency with other classes) and removed unused
  *               parameters (DG);
  * 08-Jun-2005 : Fixed equals() method to handle GradientPaint (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -67,11 +68,11 @@ import java.util.List;
 
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.Range;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.TextAnchor;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 

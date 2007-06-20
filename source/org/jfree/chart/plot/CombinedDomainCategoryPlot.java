@@ -54,6 +54,7 @@
  * 13-Sep-2006 : Updated API docs (DG);
  * 30-Oct-2006 : Added new getCategoriesForAxis() override (DG);
  * 17-Apr-2007 : Added null argument checks to findSubplot() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -73,8 +74,8 @@ import org.jfree.chart.axis.AxisState;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.PlotChangeListener;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
 

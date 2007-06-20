@@ -73,6 +73,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 27-Sep-2006 : Updated draw() method for new lookup methods (DG);
  * 22-Mar-2007 : Added equals() override (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -102,9 +103,9 @@ import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.entity.PieSectionEntity;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.labels.PieToolTipGenerator;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.general.PieDataset;
-import org.jfree.ui.RectangleInsets;
 
 /**
  * A plot that displays data in the form of a 3D pie chart, using data from

@@ -40,6 +40,7 @@
  * 19-Feb-2004 : Moved to org.jfree.chart.labels, updated Javadocs and argument 
  *               checking (DG);
  * 26-Feb-2004 : Added new constructor (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -47,7 +48,8 @@ package org.jfree.chart.labels;
 
 import java.io.Serializable;
 
-import org.jfree.ui.TextAnchor;
+import org.jfree.chart.text.TextAnchor;
+
 
 /**
  * The attributes that control the position of the label for each data item on 

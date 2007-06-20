@@ -187,6 +187,7 @@
  * 24-May-2007 : Fixed bug in render method for an empty series (DG);
  * 07-Jun-2007 : Modified drawBackground() to pass orientation to 
  *               fillBackground() for handling GradientPaint (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -237,14 +238,14 @@ import org.jfree.chart.renderer.xy.AbstractXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRendererState;
 import org.jfree.chart.util.Layer;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectList;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;

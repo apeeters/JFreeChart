@@ -38,6 +38,7 @@
  * -------
  * 21-Feb-2007 : Version 1 (DG);
  * 04-May-2007 : Set processVisibleItemsOnly flag to false (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -57,9 +58,9 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.RectangleEdge;
 
 /**
  * A specialised subclass of the {@link XYLineAndShapeRenderer} that requires

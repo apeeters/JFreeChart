@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------
  * DefaultAxisEditor.java
  * ----------------------
- * (C) Copyright 2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2005, 2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert;
  * Contributor(s):   Andrzej Porebski;
@@ -38,6 +38,7 @@
  * Changes
  * -------
  * 24-Nov-2005 : Version 1, based on AxisPropertyEditPanel.java (DG); 
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -63,11 +64,11 @@ import javax.swing.JTextField;
 
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.layout.LCBLayout;
 import org.jfree.ui.FontChooserPanel;
 import org.jfree.ui.FontDisplayField;
 import org.jfree.ui.PaintSample;
-import org.jfree.ui.RectangleInsets;
 
 /**
  * A panel for editing the properties of an axis.

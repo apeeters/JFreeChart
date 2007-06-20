@@ -44,6 +44,7 @@
  * ------------- JFREECHART 1.0.0 ---------------------------------------------
  * 20-Jul-2006 : Perform translation directly on drawing area, not via 
  *               Graphics2D (DG);
+ * 20-Jul-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -59,7 +60,7 @@ import java.util.List;
 
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.entity.StandardEntityCollection;
-import org.jfree.ui.Size2D;
+import org.jfree.chart.util.Size2D;
 import org.jfree.util.PublicCloneable;
 
 /**

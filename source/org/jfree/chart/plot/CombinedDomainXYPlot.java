@@ -83,6 +83,7 @@
  * 06-Feb-2007 : Fixed bug 1606205, draw shared axis after subplots (DG);
  * 23-Mar-2007 : Reverted previous patch (bug fix 1606205) (DG);
  * 17-Apr-2007 : Added null argument checks to findSubplot() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -104,9 +105,9 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.PlotChangeListener;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
 

@@ -59,6 +59,7 @@
  *               addData() --> addDataset() (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 20-Mar-2007 : Fixed serialization (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -94,10 +95,10 @@ import org.jfree.chart.needle.PlumNeedle;
 import org.jfree.chart.needle.PointerNeedle;
 import org.jfree.chart.needle.ShipNeedle;
 import org.jfree.chart.needle.WindNeedle;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.general.DefaultValueDataset;
 import org.jfree.data.general.ValueDataset;
 import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 

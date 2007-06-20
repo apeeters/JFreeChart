@@ -43,6 +43,7 @@
  * 20-Apr-2005 : Renamed CategoryLabelGenerator 
  *               --> CategoryItemLabelGenerator (DG);
  * 22-Sep-2005 : Renamed getMaxBarWidth() --> getMaximumBarWidth() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
  
@@ -63,11 +64,11 @@ import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.KeyToGroupMap;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.PublicCloneable;
 
 /**

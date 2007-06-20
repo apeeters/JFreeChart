@@ -121,6 +121,7 @@
  * 03-Apr-2007 : Made drawBackgroundImage() public (DG);
  * 07-Jun-2007 : Added new fillBackground() method to handle GradientPaint 
  *               taking into account orientation (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -157,17 +158,17 @@ import org.jfree.chart.event.MarkerChangeEvent;
 import org.jfree.chart.event.MarkerChangeListener;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.PlotChangeListener;
+import org.jfree.chart.text.G2TextMeasurer;
+import org.jfree.chart.text.TextBlock;
+import org.jfree.chart.text.TextBlockAnchor;
+import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.util.Align;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.G2TextMeasurer;
-import org.jfree.text.TextBlock;
-import org.jfree.text.TextBlockAnchor;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
