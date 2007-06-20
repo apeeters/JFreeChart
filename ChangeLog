@@ -1,5 +1,15 @@
 2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/data/time/TimeSeriesCollection.java
+	(domainIsPointsInTime): Removed,
+	(TimeSeriesCollection(TimeSeries, TimeZone)): Updated for removed field,
+	(getDomainIsPointsInTime): Removed,
+	(setDomainIsPointsInTime): Removed,
+	(equals): Updated for removed field,
+	(hashCode): Likewise.
+
+2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/data/time/TimePeriodValuesCollection.java
 	(domainIsPointsInTime): Removed,
 	(getDomainIsPointsInTime): Likewise,
