@@ -40,6 +40,7 @@
  * 24-Oct-2002 : Amendments for changes made to the dataset interface (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 08-Mar-2007 : Added equals() and clone() overrides (DG);
+ * 20-Jun-2007 : Removed deprecated code (DG);
  *
  */
 
@@ -790,44 +791,6 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
             result[i] = copychild;
         }
         return result;
-    }
-
-    /**
-     * Returns a list of the series in the dataset.
-     *
-     * @return A list of the series in the dataset.
-     * 
-     * @deprecated Use {@link #getRowKeys()} instead.
-     */
-    public List getSeries() {
-        if (this.seriesKeys == null) {
-            return new java.util.ArrayList();
-        }
-        else {
-            return Collections.unmodifiableList(Arrays.asList(this.seriesKeys));
-        }
-    }
-
-    /**
-     * Returns a list of the categories in the dataset.
-     *
-     * @return A list of the categories in the dataset.
-     * 
-     * @deprecated Use {@link #getColumnKeys()} instead.
-     */
-    public List getCategories() {
-        return getColumnKeys();
-    }
-
-    /**
-     * Returns the item count.
-     *
-     * @return The item count.
-     * 
-     * @deprecated Use {@link #getCategoryCount()} instead.
-     */
-    public int getItemCount() {
-        return this.categoryKeys.length;
     }
 
 }
