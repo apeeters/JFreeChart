@@ -95,6 +95,7 @@
  *               itemLabelGenerator, toolTipGenerator and itemURLGenerator
  *               override fields (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
+ * 20-Jun-2007 : Removed deprecated code (DG);
  *
  */
 
@@ -162,38 +163,17 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     /** The plot that the renderer is assigned to. */
     private CategoryPlot plot;
 
-    /** 
-     * The item label generator for ALL series. 
-     * 
-     * @deprecated This field is redundant and deprecated as of version 1.0.6.
-     */
-    private CategoryItemLabelGenerator itemLabelGenerator;
-
     /** A list of item label generators (one per series). */
     private ObjectList itemLabelGeneratorList;
 
     /** The base item label generator. */
     private CategoryItemLabelGenerator baseItemLabelGenerator;
 
-    /** 
-     * The tool tip generator for ALL series. 
-     * 
-     * @deprecated This field is redundant and deprecated as of version 1.0.6.
-     */
-    private CategoryToolTipGenerator toolTipGenerator;
-
     /** A list of tool tip generators (one per series). */
     private ObjectList toolTipGeneratorList;
 
     /** The base tool tip generator. */
     private CategoryToolTipGenerator baseToolTipGenerator;
-
-    /** 
-     * The URL generator. 
-     * 
-     * @deprecated This field is redundant and deprecated as of version 1.0.6.
-     */
-    private CategoryURLGenerator itemURLGenerator;
 
     /** A list of item label generators (one per series). */
     private ObjectList itemURLGeneratorList;
@@ -224,11 +204,8 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * generators.
      */
     protected AbstractCategoryItemRenderer() {
-        this.itemLabelGenerator = null;
         this.itemLabelGeneratorList = new ObjectList();
-        this.toolTipGenerator = null;
         this.toolTipGeneratorList = new ObjectList();
-        this.itemURLGenerator = null;
         this.itemURLGeneratorList = new ObjectList();
         this.legendItemLabelGenerator
             = new StandardCategorySeriesLabelGenerator();
@@ -303,12 +280,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      */
     public CategoryItemLabelGenerator getSeriesItemLabelGenerator(int series) {
 
-        // return the generator for ALL series, if there is one...
-        if (this.itemLabelGenerator != null) {
-            return this.itemLabelGenerator;
-        }
-
-        // otherwise look up the generator table
+        // look up the generator table
         CategoryItemLabelGenerator generator = (CategoryItemLabelGenerator)
             this.itemLabelGeneratorList.get(series);
         if (generator == null) {
@@ -316,22 +288,6 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         }
         return generator;
 
-    }
-
-    /**
-     * Sets the item label generator for ALL series and sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param generator  the generator (<code>null</code> permitted).
-     * 
-     * @deprecated This method should no longer be used (as of version 1.0.6). 
-     *     It is sufficient to rely on {@link #setSeriesItemLabelGenerator(int, 
-     *     CategoryItemLabelGenerator)} and 
-     *     {@link #setBaseItemLabelGenerator(CategoryItemLabelGenerator)}.
-     */
-    public void setItemLabelGenerator(CategoryItemLabelGenerator generator) {
-        this.itemLabelGenerator = generator;
-        notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
@@ -391,51 +347,11 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public CategoryToolTipGenerator getToolTipGenerator(int row, int column) {
 
         CategoryToolTipGenerator result = null;
-        if (this.toolTipGenerator != null) {
-            result = this.toolTipGenerator;
-        }
-        else {
-            result = getSeriesToolTipGenerator(row);
-            if (result == null) {
-                result = this.baseToolTipGenerator;
-            }
+        result = getSeriesToolTipGenerator(row);
+        if (result == null) {
+            result = this.baseToolTipGenerator;
         }
         return result;
-    }
-
-    /**
-     * Returns the tool tip generator that will be used for ALL items in the
-     * dataset (the "layer 0" generator).
-     *
-     * @return A tool tip generator (possibly <code>null</code>).
-     *
-     * @see #setToolTipGenerator(CategoryToolTipGenerator)
-     * 
-     * @deprecated This method should no longer be used (as of version 1.0.6). 
-     *     It is sufficient to rely on {@link #getSeriesToolTipGenerator(int)} 
-     *     and {@link #getBaseToolTipGenerator()}.
-     */
-    public CategoryToolTipGenerator getToolTipGenerator() {
-        return this.toolTipGenerator;
-    }
-
-    /**
-     * Sets the tool tip generator for ALL series and sends a
-     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered
-     * listeners.
-     *
-     * @param generator  the generator (<code>null</code> permitted).
-     *
-     * @see #getToolTipGenerator()
-     * 
-     * @deprecated This method should no longer be used (as of version 1.0.6). 
-     *     It is sufficient to rely on {@link #setSeriesToolTipGenerator(int, 
-     *     CategoryToolTipGenerator)} and 
-     *     {@link #setBaseToolTipGenerator(CategoryToolTipGenerator)}.
-     */
-    public void setToolTipGenerator(CategoryToolTipGenerator generator) {
-        this.toolTipGenerator = generator;
-        notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
@@ -519,34 +435,14 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      */
     public CategoryURLGenerator getSeriesItemURLGenerator(int series) {
 
-        // return the generator for ALL series, if there is one...
-        if (this.itemURLGenerator != null) {
-            return this.itemURLGenerator;
-        }
-
-        // otherwise look up the generator table
+        // look up the generator table
         CategoryURLGenerator generator
-            = (CategoryURLGenerator) this.itemURLGeneratorList.get(series);
+                = (CategoryURLGenerator) this.itemURLGeneratorList.get(series);
         if (generator == null) {
             generator = this.baseItemURLGenerator;
         }
         return generator;
 
-    }
-
-    /**
-     * Sets the item URL generator for ALL series.
-     *
-     * @param generator  the generator.
-     * 
-     * @deprecated This method should no longer be used (as of version 1.0.6). 
-     *     It is sufficient to rely on {@link #setSeriesItemURLGenerator(int, 
-     *     CategoryURLGenerator)} and 
-     *     {@link #setBaseItemURLGenerator(CategoryURLGenerator)}.
-     */
-    public void setItemURLGenerator(CategoryURLGenerator generator) {
-        this.itemURLGenerator = generator;
-        notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
@@ -1197,10 +1093,6 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         }
         AbstractCategoryItemRenderer that = (AbstractCategoryItemRenderer) obj;
 
-        if (!ObjectUtilities.equal(this.itemLabelGenerator,
-                that.itemLabelGenerator)) {
-            return false;
-        }
         if (!ObjectUtilities.equal(this.itemLabelGeneratorList,
                 that.itemLabelGeneratorList)) {
             return false;
@@ -1209,20 +1101,12 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                 that.baseItemLabelGenerator)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.toolTipGenerator,
-                that.toolTipGenerator)) {
-            return false;
-        }
         if (!ObjectUtilities.equal(this.toolTipGeneratorList,
                 that.toolTipGeneratorList)) {
             return false;
         }
         if (!ObjectUtilities.equal(this.baseToolTipGenerator,
                 that.baseToolTipGenerator)) {
-            return false;
-        }
-        if (!ObjectUtilities.equal(this.itemURLGenerator,
-                that.itemURLGenerator)) {
             return false;
         }
         if (!ObjectUtilities.equal(this.itemURLGeneratorList,
@@ -1330,19 +1214,8 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public Object clone() throws CloneNotSupportedException {
 
         AbstractCategoryItemRenderer clone
-            = (AbstractCategoryItemRenderer) super.clone();
+                = (AbstractCategoryItemRenderer) super.clone();
 
-        if (this.itemLabelGenerator != null) {
-            if (this.itemLabelGenerator instanceof PublicCloneable) {
-                PublicCloneable pc = (PublicCloneable) this.itemLabelGenerator;
-                clone.itemLabelGenerator
-                        = (CategoryItemLabelGenerator) pc.clone();
-            }
-            else {
-                throw new CloneNotSupportedException(
-                        "ItemLabelGenerator not cloneable.");
-            }
-        }
 
         if (this.itemLabelGeneratorList != null) {
             clone.itemLabelGeneratorList
@@ -1362,17 +1235,6 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             }
         }
 
-        if (this.toolTipGenerator != null) {
-            if (this.toolTipGenerator instanceof PublicCloneable) {
-                PublicCloneable pc = (PublicCloneable) this.toolTipGenerator;
-                clone.toolTipGenerator = (CategoryToolTipGenerator) pc.clone();
-            }
-            else {
-                throw new CloneNotSupportedException(
-                        "Tool tip generator not cloneable.");
-            }
-        }
-
         if (this.toolTipGeneratorList != null) {
             clone.toolTipGeneratorList
                     = (ObjectList) this.toolTipGeneratorList.clone();
@@ -1388,17 +1250,6 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             else {
                 throw new CloneNotSupportedException(
                         "Base tool tip generator not cloneable.");
-            }
-        }
-
-        if (this.itemURLGenerator != null) {
-            if (this.itemURLGenerator instanceof PublicCloneable) {
-                PublicCloneable pc = (PublicCloneable) this.itemURLGenerator;
-                clone.itemURLGenerator = (CategoryURLGenerator) pc.clone();
-            }
-            else {
-                throw new CloneNotSupportedException(
-                        "Item URL generator not cloneable.");
             }
         }
 

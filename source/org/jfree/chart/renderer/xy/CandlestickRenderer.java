@@ -79,6 +79,7 @@
  *               other data values (DG);
  * 17-Aug-2006 : Corrections to the equals() method (DG);
  * 05-Mar-2007 : Added flag to allow optional use of outline paint (DG);
+ * 20-Jun-2007 : Removed deprecated drawVolume() method (DG);
  * 
  */
 
@@ -900,21 +901,6 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         stream.defaultReadObject();
         this.upPaint = SerialUtilities.readPaint(stream);
         this.downPaint = SerialUtilities.readPaint(stream);
-    }
-
-    // --- DEPRECATED CODE ----------------------------------------------------
-    
-    /**
-     * Returns a flag indicating whether or not volume bars are drawn on the
-     * chart.
-     *
-     * @return <code>true</code> if volume bars are drawn on the chart.
-     * 
-     * @deprecated As of 1.0.5, you should use the {@link #getDrawVolume()} 
-     *         method.
-     */
-    public boolean drawVolume() {
-        return this.drawVolume;
     }
 
 }

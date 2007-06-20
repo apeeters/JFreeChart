@@ -42,6 +42,7 @@
  *               --> CategoryItemLabelGenerator (DG);
  * ------------- JFREECHART 1.0.0 ---------------------------------------------
  * 23-Jan-2006 : Renamed getMaxItemWidth() --> getMaximumItemWidth() (DG);
+ * 19-Jun-2007 : Removed deprecated code (DG);
  * 
  */
 
@@ -117,32 +118,6 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
         this.itemMargin = percent;
         notifyListeners(new RendererChangeEvent(this));
     }
-    
-    /**
-     * Returns the maximum width, as a percentage of the available drawing 
-     * space.
-     * 
-     * @return The maximum width.
-     * 
-     * @deprecated Use {@link #getMaximumItemWidth()} instead.
-     */
-    public double getMaxItemWidth() {
-        return this.maxItemWidth;
-    }
-    
-    /**
-     * Sets the maximum item width, which is specified as a percentage of the 
-     * available space for all items, and sends a {@link RendererChangeEvent} 
-     * to all registered listeners.
-     * 
-     * @param percent  the percent.
-     * 
-     * @deprecated Use {@link #setMaximumItemWidth(double)} instead.
-     */
-    public void setMaxItemWidth(double percent) {
-        this.maxItemWidth = percent;
-        notifyListeners(new RendererChangeEvent(this));
-    }
 
     /**
      * Returns the maximum width, as a percentage of the available drawing 
@@ -151,7 +126,7 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      * @return The maximum width.
      */
     public double getMaximumItemWidth() {
-        return getMaxItemWidth();
+        return this.maxItemWidth;
     }
     
     /**
@@ -162,7 +137,8 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      * @param percent  the percent.
      */
     public void setMaximumItemWidth(double percent) {
-        setMaxItemWidth(percent);
+        this.maxItemWidth = percent;
+        notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
@@ -220,7 +196,7 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
             else if (orientation == PlotOrientation.VERTICAL) {
                 space = dataArea.getWidth();
             }
-            double maxWidth = space * getMaxItemWidth();
+            double maxWidth = space * getMaximumItemWidth();
             double categoryMargin = 0.0;
             double currentItemMargin = 0.0;
             if (columns > 1) {

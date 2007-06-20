@@ -76,6 +76,7 @@
  *               change (DG); 
  * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
+ * 20-Jun-2007 : Removed deprecated code (DG);
  *
  */
 
@@ -186,19 +187,6 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
     public void setOutline(boolean show) {
         this.showOutline = show;
         notifyListeners(new RendererChangeEvent(this));
-    }
-
-    /**
-     * This method should not be used.
-     *
-     * @return <code>false</code> always.
-     * 
-     * @deprecated This method was included in the API by mistake and serves
-     *     no useful purpose.  It has always returned <code>false</code>.
-     *   
-     */
-    public boolean getPlotLines() {
-        return false;
     }
 
     /**
@@ -372,20 +360,6 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
         Stroke stroke = getItemStroke(series, item);
         g2.setPaint(paint);
         g2.setStroke(stroke);
-
-        if (getPlotLines()) {
-            if (item > 0) {
-                if (plot.getOrientation() == PlotOrientation.VERTICAL) {
-                    state.workingLine.setLine(transX0, transY0, transX1, 
-                            transY1);
-                }
-                else if (plot.getOrientation() == PlotOrientation.HORIZONTAL) {
-                    state.workingLine.setLine(transY0, transX0, transY1, 
-                            transX1);
-                }
-                g2.draw(state.workingLine);
-            }
-        }
 
         // Check if the item is the last item for the series.
         // and number of items > 0.  We can't draw an area for a single point.
