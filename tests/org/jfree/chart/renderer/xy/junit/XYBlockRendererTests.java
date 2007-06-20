@@ -38,6 +38,7 @@
  * -------
  * 05-Jul-2006 : Version 1 (DG);
  * 09-Mar-2007 : Added independence check to testCloning (DG);
+ * 20-Jun-2007 : Updated for deprecated code removal (DG);
  *
  */
 
@@ -144,10 +145,10 @@ public class XYBlockRendererTests extends TestCase {
         assertTrue(r1.equals(r2));
         
         // check independence
-        scale1.add(new Double(0.5), Color.red);
+        scale1.add(0.5, Color.red);
         assertFalse(r1.equals(r2));
         LookupPaintScale scale2 = (LookupPaintScale) r2.getPaintScale();
-        scale2.add(new Double(0.5), Color.red);
+        scale2.add(0.5, Color.red);
         assertTrue(r1.equals(r2));
     }
 

@@ -1,5 +1,14 @@
 2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/cahrt/renderer/LookupPaintScale.java
+	(add(Number, Paint)): Removed,
+	* tests/org/jfree/chart/renderer/junit/LookupPaintScaleTests.java:
+	Updated for deprecated code removal,
+	* tests/org/jfree/chart/renderer/xy/junit/XYBlockRendererTests.java:
+	Likewise.
+
+2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/renderer/AbstractRenderer.java
 	(seriesVisible): Removed,
 	(seriesVisibleInLegend): Likewise,
@@ -6094,4 +6103,4 @@
 	* source/org/jfree/chart/renderer/category/StackedBarRenderer.java
 	(drawItem): use item outline stroke, not regular stroke.
 
-For changes prior to 30-Sep-2005, please refer to the file CHANGELOG.txt.
+For changes prior to 30-Sep-2005, you'll need to search the archives.
