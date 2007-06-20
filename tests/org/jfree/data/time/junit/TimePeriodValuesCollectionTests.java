@@ -39,6 +39,7 @@
  * 11-Mar-2005 : Version 1 (DG);
  * 08-Mar-2007 : Added testGetSeries() (DG);
  * 11-Jun-2007 : Added tests for getDomainBounds() (DG);
+ * 20-Jun-2007 : Updated for deprecated method removals (DG);
  *
  */
 
@@ -122,11 +123,6 @@ public class TimePeriodValuesCollectionTests extends TestCase {
         TimePeriodValuesCollection c2 = new TimePeriodValuesCollection();
         assertTrue(c1.equals(c2));
         
-        c1.setDomainIsPointsInTime(!c1.getDomainIsPointsInTime());
-        assertFalse(c1.equals(c2));
-        c2.setDomainIsPointsInTime(c1.getDomainIsPointsInTime());
-        assertTrue(c1.equals(c2));
-        
         c1.setXPosition(TimePeriodAnchor.END);
         assertFalse(c1.equals(c2));
         c2.setXPosition(TimePeriodAnchor.END);
@@ -200,7 +196,6 @@ public class TimePeriodValuesCollectionTests extends TestCase {
     public void testGetDomainBoundsWithoutInterval() {
         // check empty dataset
         TimePeriodValuesCollection dataset = new TimePeriodValuesCollection();
-        dataset.setDomainIsPointsInTime(false);
         Range r = dataset.getDomainBounds(false);
         assertNull(r);
         

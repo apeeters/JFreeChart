@@ -1,5 +1,14 @@
 2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/data/time/TimePeriodValuesCollection.java
+	(domainIsPointsInTime): Removed,
+	(getDomainIsPointsInTime): Likewise,
+	(setDomainIsPointsInTime): Likewise,
+	* tests/org/jfree/data/time/junit/TimePeriodValuesCollectionTests.java:
+	Updated for deprecated method removals.
+
+2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/data/time/RegularTimePeriod.java
 	(WORKING_CALENDAR): Removed,
 	(getFirstMillisecond(TimeZone)): Removed,
