@@ -157,6 +157,7 @@ import org.jfree.chart.event.MarkerChangeEvent;
 import org.jfree.chart.event.MarkerChangeListener;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.PlotChangeListener;
+import org.jfree.chart.util.Align;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
@@ -165,7 +166,6 @@ import org.jfree.text.G2TextMeasurer;
 import org.jfree.text.TextBlock;
 import org.jfree.text.TextBlockAnchor;
 import org.jfree.text.TextUtilities;
-import org.jfree.ui.Align;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ObjectUtilities;
@@ -654,8 +654,7 @@ public abstract class Plot implements AxisChangeListener,
 
     /**
      * Returns the background image alignment. Alignment constants are defined 
-     * in the <code>org.jfree.ui.Align</code> class in the JCommon class 
-     * library.
+     * in the {@link Align} class.
      *
      * @return The alignment.
      * 
@@ -668,8 +667,7 @@ public abstract class Plot implements AxisChangeListener,
     /**
      * Sets the alignment for the background image and sends a 
      * {@link PlotChangeEvent} to all registered listeners.  Alignment options 
-     * are defined by the {@link org.jfree.ui.Align} class in the JCommon 
-     * class library.
+     * are defined by the {@link Align} class.
      *
      * @param alignment  the alignment.
      * 

@@ -61,7 +61,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.DefaultDrawingSupplier;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.Plot;
-import org.jfree.ui.Align;
+import org.jfree.chart.util.Align;
 import org.jfree.ui.RectangleInsets;
 
 /**

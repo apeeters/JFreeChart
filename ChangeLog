@@ -1,5 +1,13 @@
 2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/util/Align.java: New class copied from JCommon,
+	* source/org/jfree/chart/JFreeChart.java: Changed import,
+	* source/org/jfree/chart/plot/Plot.java: Likewise,
+	* tests/org/jfree/chart/junit/JFreeChartTests.java: Likewise,
+	* tests/org/jfree/chart/plot/junit/PlotTests.java: Likewise.
+
+2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/data/xy/XYSeries.java
 	(update(int, Number)): Removed.
 
