@@ -323,12 +323,13 @@ public class WeekTests extends TestCase {
     public void testGetFirstMillisecondWithTimeZone() {
         Week w = new Week(47, 1950);
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
-        assertEquals(-603216000000L, w.getFirstMillisecond(zone));
+        Calendar c = new GregorianCalendar(zone);
+        assertEquals(-603216000000L, w.getFirstMillisecond(c));
         
         // try null calendar
         boolean pass = false;
         try {
-            w.getFirstMillisecond((TimeZone) null);
+            w.getFirstMillisecond((Calendar) null);
         }
         catch (NullPointerException e) {
             pass = true;
@@ -372,12 +373,13 @@ public class WeekTests extends TestCase {
     public void testGetLastMillisecondWithTimeZone() {
         Week w = new Week(2, 1950);
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
-        assertEquals(-629827200001L, w.getLastMillisecond(zone));
+        Calendar c = new GregorianCalendar(zone);
+        assertEquals(-629827200001L, w.getLastMillisecond(c));
         
         // try null calendar
         boolean pass = false;
         try {
-            w.getLastMillisecond((TimeZone) null);
+            w.getLastMillisecond((Calendar) null);
         }
         catch (NullPointerException e) {
             pass = true;

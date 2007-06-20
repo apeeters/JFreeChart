@@ -142,14 +142,15 @@ public class MonthTests extends TestCase {
     public void testDateConstructor1() {
 
         TimeZone zone = TimeZone.getTimeZone("GMT");
+        Calendar c = new GregorianCalendar(zone);
         Month m1 = new Month(new Date(951868799999L), zone);
         Month m2 = new Month(new Date(951868800000L), zone);
 
         assertEquals(MonthConstants.FEBRUARY, m1.getMonth());
-        assertEquals(951868799999L, m1.getLastMillisecond(zone));
+        assertEquals(951868799999L, m1.getLastMillisecond(c));
 
         assertEquals(MonthConstants.MARCH, m2.getMonth());
-        assertEquals(951868800000L, m2.getFirstMillisecond(zone));
+        assertEquals(951868800000L, m2.getFirstMillisecond(c));
 
     }
 
@@ -160,14 +161,15 @@ public class MonthTests extends TestCase {
     public void testDateConstructor2() {
 
         TimeZone zone = TimeZone.getTimeZone("Pacific/Auckland");
+        Calendar c = new GregorianCalendar(zone);
         Month m1 = new Month(new Date(951821999999L), zone);
         Month m2 = new Month(new Date(951822000000L), zone);
 
         assertEquals(MonthConstants.FEBRUARY, m1.getMonth());
-        assertEquals(951821999999L, m1.getLastMillisecond(zone));
+        assertEquals(951821999999L, m1.getLastMillisecond(c));
 
         assertEquals(MonthConstants.MARCH, m2.getMonth());
-        assertEquals(951822000000L, m2.getFirstMillisecond(zone));
+        assertEquals(951822000000L, m2.getFirstMillisecond(c));
 
     }
 
@@ -310,12 +312,13 @@ public class MonthTests extends TestCase {
     public void testGetFirstMillisecondWithTimeZone() {
         Month m = new Month(2, 1950);
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
-        assertEquals(-628444800000L, m.getFirstMillisecond(zone));
+        Calendar c = new GregorianCalendar(zone);
+        assertEquals(-628444800000L, m.getFirstMillisecond(c));
         
         // try null calendar
         boolean pass = false;
         try {
-            m.getFirstMillisecond((TimeZone) null);
+            m.getFirstMillisecond((Calendar) null);
         }
         catch (NullPointerException e) {
             pass = true;
@@ -359,12 +362,13 @@ public class MonthTests extends TestCase {
     public void testGetLastMillisecondWithTimeZone() {
         Month m = new Month(2, 1950);
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
-        assertEquals(-626025600001L, m.getLastMillisecond(zone));
+        Calendar c = new GregorianCalendar(zone);
+        assertEquals(-626025600001L, m.getLastMillisecond(c));
         
         // try null calendar
         boolean pass = false;
         try {
-            m.getLastMillisecond((TimeZone) null);
+            m.getLastMillisecond((Calendar) null);
         }
         catch (NullPointerException e) {
             pass = true;
