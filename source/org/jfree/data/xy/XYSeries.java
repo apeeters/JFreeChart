@@ -67,6 +67,7 @@
  * ------------- JFreeChart 1.0.x ---------------------------------------------
  * 11-Jan-2005 : Renamed update(int, Number) --> updateByIndex() (DG);
  * 15-Jan-2007 : Added toArray() method (DG);
+ * 20-Jun-2007 : Removed deprecated code (DG);
  * 
  */
 
@@ -470,22 +471,6 @@ public class XYSeries extends Series implements Cloneable, Serializable {
     /**
      * Updates the value of an item in the series and sends a 
      * {@link SeriesChangeEvent} to all registered listeners.
-     *
-     * @param index  the item (zero based index).
-     * @param y  the new value (<code>null</code> permitted).
-     * 
-     * @deprecated Renamed {@link #updateByIndex(int, Number)} to avoid 
-     *         confusion with the {@link #update(Number, Number)} method.
-     */
-    public void update(int index, Number y) {
-        XYDataItem item = getDataItem(index);
-        item.setY(y);
-        fireSeriesChanged();
-    }
-    
-    /**
-     * Updates the value of an item in the series and sends a 
-     * {@link SeriesChangeEvent} to all registered listeners.
      * 
      * @param index  the item (zero based index).
      * @param y  the new value (<code>null</code> permitted).
@@ -493,7 +478,9 @@ public class XYSeries extends Series implements Cloneable, Serializable {
      * @since 1.0.1
      */
     public void updateByIndex(int index, Number y) {
-        update(index, y);
+        XYDataItem item = getDataItem(index);
+        item.setY(y);
+        fireSeriesChanged();
     }
     
     /**

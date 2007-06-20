@@ -1,5 +1,10 @@
 2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/data/xy/XYSeries.java
+	(update(int, Number)): Removed.
+
+2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/data/time/TimeSeriesCollection.java
 	(domainIsPointsInTime): Removed,
 	(TimeSeriesCollection(TimeSeries, TimeZone)): Updated for removed field,
