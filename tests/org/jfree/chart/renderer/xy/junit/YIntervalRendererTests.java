@@ -65,9 +65,9 @@ import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.YIntervalRenderer;
 import org.jfree.chart.urls.StandardXYURLGenerator;
+import org.jfree.chart.util.Layer;
 import org.jfree.data.xy.YIntervalSeries;
 import org.jfree.data.xy.YIntervalSeriesCollection;
-import org.jfree.ui.Layer;
 
 /**
  * Tests for the {@link YIntervalRenderer} class.

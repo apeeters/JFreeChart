@@ -111,9 +111,9 @@ import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
+import org.jfree.chart.util.Layer;
 import org.jfree.data.Range;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.Layer;
 
 /**
  * Interface for rendering the visual representation of a single (x, y) item on

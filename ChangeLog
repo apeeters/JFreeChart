@@ -1,5 +1,20 @@
 2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/util/Layer.java: New class copied from JCommon,
+	* source/org/jfree/chart/ChartFactory.java: Removed JCommon 
+	dependencies,
+	* source/org/jfree/chart/plot/CategoryPlot.java: Likewise,
+	* source/org/jfree/chart/plot/XYPlot.java: Likewise,
+	* source/org/jfree/chart/renderer/xy/AbstractXYItemRenderer.java: 
+	Likewise,
+	* source/org/jfree/chart/renderer/xy/XYItemRenderer.java: Likewise,
+	* tests/org/jfree/chart/plot/junit/CategoryPlotTests.java: Likewise,
+	* tests/org/jfree/chart/plot/junit/XYPlotTests.java: Likewise,
+	* tests/org/jfree/chart/renderer/xy/junit/YIntervalRendererTests.java:
+	Likewise.
+
+2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* experimental/org/jfree/experimental/chart/demo/DialDemo1.java: 
 	Removed JCommon dependencies,
 	* experimental/org/jfree/experimental/chart/demo/DialDemo2.java: 
