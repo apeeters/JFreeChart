@@ -1,5 +1,11 @@
 2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/data/jdbc/JDBCXYDataset.java
+	(getLegendItemCount): Removed,
+	(getLegendItemLabels): Removed.
+
+2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/data/contour/ContourDataset.java: Removed,
 	* source/org/jfree/data/contour/DefaultContourDataset.java: Removed,
 	* source/org/jfree/data/contour/NonGridContourDataset.java: Removed,
