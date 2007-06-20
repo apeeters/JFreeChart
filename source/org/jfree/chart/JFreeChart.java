@@ -137,6 +137,7 @@
  *               get/setSubtitles(), and added new addSubtitle(int, Title) 
  *               method (DG);
  * 05-Jun-2007 : Add change listener to default legend (DG);
+ * 20-Jun-2007 : Removed JCommon dependency (DG);
  * 
  */
 
@@ -195,14 +196,14 @@ import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.title.Title;
 import org.jfree.chart.util.Align;
+import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.VerticalAlignment;
 import org.jfree.data.Range;
 import org.jfree.io.SerialUtilities;
 import org.jfree.ui.Drawable;
-import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.Size2D;
-import org.jfree.ui.VerticalAlignment;
 import org.jfree.ui.about.Contributor;
 import org.jfree.ui.about.Licences;
 import org.jfree.ui.about.ProjectInfo;

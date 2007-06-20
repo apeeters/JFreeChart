@@ -56,6 +56,7 @@
  *               release (DG);
  * 02-Feb-2005 : Changed Spacer --> RectangleInsets for padding (DG);
  * 03-May-2005 : Fixed problem in equals() method (DG);
+ * 20-Jun-2007 : Removed JCommon dependency (DG);
  * 
  */
 
@@ -74,10 +75,10 @@ import org.jfree.chart.block.AbstractBlock;
 import org.jfree.chart.block.Block;
 import org.jfree.chart.event.TitleChangeEvent;
 import org.jfree.chart.event.TitleChangeListener;
-import org.jfree.ui.HorizontalAlignment;
+import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.VerticalAlignment;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.VerticalAlignment;
 import org.jfree.util.ObjectUtilities;
 
 /**

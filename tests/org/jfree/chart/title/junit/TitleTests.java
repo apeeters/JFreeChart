@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------
  * TitleTests.java
  * ---------------
- * (C) Copyright 2004, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004, 2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -48,9 +48,9 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.title.Title;
-import org.jfree.ui.HorizontalAlignment;
+import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.VerticalAlignment;
 import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.VerticalAlignment;
 
 /**
  * Tests for the abstract {@link Title} class.

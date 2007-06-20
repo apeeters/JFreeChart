@@ -75,6 +75,7 @@
  * ------------- JFREECHART 1.0.x RELEASED ------------------------------------
  * 13-Dec-2005 : Fixed bug 1379331 - incorrect drawing with LEFT or RIGHT 
  *               title placement (DG);
+ * 20-Jun-2007 : Removed JCommon dependency (DG);
  * 
  */
 
@@ -98,17 +99,17 @@ import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.event.TitleChangeEvent;
+import org.jfree.chart.text.G2TextMeasurer;
+import org.jfree.chart.text.TextBlock;
+import org.jfree.chart.text.TextBlockAnchor;
+import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.VerticalAlignment;
 import org.jfree.data.Range;
 import org.jfree.io.SerialUtilities;
-import org.jfree.text.G2TextMeasurer;
-import org.jfree.text.TextBlock;
-import org.jfree.text.TextBlockAnchor;
-import org.jfree.text.TextUtilities;
-import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.Size2D;
-import org.jfree.ui.VerticalAlignment;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;

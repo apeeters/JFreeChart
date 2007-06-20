@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * FlowArrangement.java
  * --------------------
- * (C) Copyright 2004, 2005, by Object Refinery Limited.
+ * (C) Copyright 2004-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -39,6 +39,7 @@
  * 22-Oct-2004 : Version 1 (DG);
  * 04-Feb-2005 : Implemented equals() and made serializable (DG);
  * 08-Feb-2005 : Updated for changes in RectangleConstraint (DG);
+ * 20-Jun-2007 : Removed JCommon dependency (DG);
  * 
  */
 
@@ -50,9 +51,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jfree.ui.HorizontalAlignment;
+import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.VerticalAlignment;
 import org.jfree.ui.Size2D;
-import org.jfree.ui.VerticalAlignment;
 
 /**
  * Arranges blocks in a flow layout.  This class is immutable.

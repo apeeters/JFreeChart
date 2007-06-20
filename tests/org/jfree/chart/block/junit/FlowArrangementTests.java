@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------
  * FlowArrangementTests.java
  * -------------------------
- * (C) Copyright 2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2005, 2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 04-Feb-2005 : Version 1 (DG);
+ * 20-Jun-2007 : Removed JCommon dependency (DG);
  *
  */
 
@@ -54,8 +55,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.block.FlowArrangement;
-import org.jfree.ui.HorizontalAlignment;
-import org.jfree.ui.VerticalAlignment;
+import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.VerticalAlignment;
 
 /**
  * Tests for the {@link FlowArrangement} class.
@@ -84,49 +85,39 @@ public class FlowArrangementTests extends TestCase {
      * Confirm that the equals() method can distinguish all the required fields.
      */
     public void testEquals() {
-        FlowArrangement f1 = new FlowArrangement(
-            HorizontalAlignment.LEFT, VerticalAlignment.TOP, 1.0, 2.0
-        );
-        FlowArrangement f2 = new FlowArrangement(
-            HorizontalAlignment.LEFT, VerticalAlignment.TOP, 1.0, 2.0
-        );
+        FlowArrangement f1 = new FlowArrangement(HorizontalAlignment.LEFT, 
+                VerticalAlignment.TOP, 1.0, 2.0);
+        FlowArrangement f2 = new FlowArrangement(HorizontalAlignment.LEFT, 
+                VerticalAlignment.TOP, 1.0, 2.0);
         assertTrue(f1.equals(f2));
         assertTrue(f2.equals(f1));
 
-        f1 = new FlowArrangement(
-            HorizontalAlignment.RIGHT, VerticalAlignment.TOP, 1.0, 2.0
-        );
+        f1 = new FlowArrangement(HorizontalAlignment.RIGHT, 
+                VerticalAlignment.TOP, 1.0, 2.0);
         assertFalse(f1.equals(f2));
-        f2 = new FlowArrangement(
-            HorizontalAlignment.RIGHT, VerticalAlignment.TOP, 1.0, 2.0
-        );
+        f2 = new FlowArrangement(HorizontalAlignment.RIGHT, 
+                VerticalAlignment.TOP, 1.0, 2.0);
         assertTrue(f1.equals(f2));
 
-        f1 = new FlowArrangement(
-            HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM, 1.0, 2.0
-        );
+        f1 = new FlowArrangement(HorizontalAlignment.RIGHT, 
+                VerticalAlignment.BOTTOM, 1.0, 2.0);
         assertFalse(f1.equals(f2));
-        f2 = new FlowArrangement(
-            HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM, 1.0, 2.0
-        );
+        f2 = new FlowArrangement(HorizontalAlignment.RIGHT, 
+                VerticalAlignment.BOTTOM, 1.0, 2.0);
         assertTrue(f1.equals(f2));
     
-        f1 = new FlowArrangement(
-            HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM, 1.1, 2.0
-        );
+        f1 = new FlowArrangement(HorizontalAlignment.RIGHT, 
+                VerticalAlignment.BOTTOM, 1.1, 2.0);
         assertFalse(f1.equals(f2));
-        f2 = new FlowArrangement(
-            HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM, 1.1, 2.0
-        );
+        f2 = new FlowArrangement(HorizontalAlignment.RIGHT, 
+                VerticalAlignment.BOTTOM, 1.1, 2.0);
         assertTrue(f1.equals(f2));
         
-        f1 = new FlowArrangement(
-            HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM, 1.1, 2.2
-        );
+        f1 = new FlowArrangement(HorizontalAlignment.RIGHT, 
+                VerticalAlignment.BOTTOM, 1.1, 2.2);
         assertFalse(f1.equals(f2));
-        f2 = new FlowArrangement(
-            HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM, 1.1, 2.2
-        );
+        f2 = new FlowArrangement(HorizontalAlignment.RIGHT, 
+                VerticalAlignment.BOTTOM, 1.1, 2.2);
         assertTrue(f1.equals(f2));
         
     }
@@ -143,9 +134,8 @@ public class FlowArrangementTests extends TestCase {
      * Serialize an instance, restore it, and check for equality.
      */
     public void testSerialization() {
-        FlowArrangement f1 = new FlowArrangement(
-            HorizontalAlignment.LEFT, VerticalAlignment.TOP, 1.0, 2.0
-        );
+        FlowArrangement f1 = new FlowArrangement(HorizontalAlignment.LEFT, 
+                VerticalAlignment.TOP, 1.0, 2.0);
         FlowArrangement f2 = null;
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -153,14 +143,13 @@ public class FlowArrangementTests extends TestCase {
             out.writeObject(f1);
             out.close();
 
-            ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+            ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(
+                    buffer.toByteArray()));
             f2 = (FlowArrangement) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(f1, f2);
     }
