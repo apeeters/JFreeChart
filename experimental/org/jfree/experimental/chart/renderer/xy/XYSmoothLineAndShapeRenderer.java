@@ -53,8 +53,8 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRendererState;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.RectangleEdge;
 
 /**
  * A line and shape renderer that performs line smoothing.  See

@@ -38,6 +38,7 @@
  * --------
  * 02-Feb-2007 : Version 1 (DG);
  * 30-Apr-2007 : Fixed equals() method (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -59,11 +60,11 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.Title;
+import org.jfree.chart.util.RectangleAnchor;
+import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.Size2D;
 import org.jfree.data.Range;
 import org.jfree.experimental.chart.util.XYCoordinateType;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.Size2D;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
 

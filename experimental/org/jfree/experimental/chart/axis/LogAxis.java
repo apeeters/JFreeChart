@@ -38,6 +38,7 @@
  * -------
  * 24-Aug-2006 : Version 1 (DG);
  * 22-Mar-2007 : Use defaultAutoArrange attribute (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -59,9 +60,9 @@ import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueAxisPlot;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.Range;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.TextAnchor;
 
 /**
  * A numerical axis that uses a logarithmic scale.  The plan is for this class
