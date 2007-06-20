@@ -44,6 +44,7 @@
  * 03-May-2007 : Replaced the tests for the previousStandardDate() method with
  *               new tests that check that the previousStandardDate and the
  *               next standard date do in fact span the reference date (DG);
+ * 20-Jun-2007 
  *
  */
 
@@ -68,6 +69,7 @@ import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.DateTickMarkPosition;
 import org.jfree.chart.axis.DateTickUnit;
 import org.jfree.chart.axis.SegmentedTimeline;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.time.DateRange;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Hour;
@@ -75,7 +77,6 @@ import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.Month;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.Year;
-import org.jfree.ui.RectangleEdge;
 
 /**
  * Tests for the {@link DateAxis} class.

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------------
  * CategoryLabelPositionTests.java
  * -------------------------------
- * (C) Copyright 2004, 2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,7 +38,8 @@
  * -------
  * 17-Feb-2004 : Version 1 (DG);
  * 07-Jan-2005 : Improved testEquals() code and added hashCode() test (DG);
- *
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 
  */
 
 package org.jfree.chart.axis.junit;
@@ -56,9 +57,9 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.axis.CategoryLabelPosition;
 import org.jfree.chart.axis.CategoryLabelWidthType;
-import org.jfree.text.TextBlockAnchor;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.TextAnchor;
+import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.text.TextBlockAnchor;
+import org.jfree.chart.util.RectangleAnchor;
 
 /**
  * Tests for the {@link CategoryLabelPosition} class.
@@ -88,84 +89,68 @@ public class CategoryLabelPositionTests extends TestCase {
      */
     public void testEquals() {
         CategoryLabelPosition p1 = new CategoryLabelPosition(
-            RectangleAnchor.BOTTOM_LEFT, TextBlockAnchor.CENTER_RIGHT, 
-            TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
-            CategoryLabelWidthType.RANGE, 0.44f
-        );
+                RectangleAnchor.BOTTOM_LEFT, TextBlockAnchor.CENTER_RIGHT, 
+                TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
+                CategoryLabelWidthType.RANGE, 0.44f);
         CategoryLabelPosition p2 = new CategoryLabelPosition(
-            RectangleAnchor.BOTTOM_LEFT, TextBlockAnchor.CENTER_RIGHT, 
-            TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
-            CategoryLabelWidthType.RANGE, 0.44f
-        );
+                RectangleAnchor.BOTTOM_LEFT, TextBlockAnchor.CENTER_RIGHT, 
+                TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
+                CategoryLabelWidthType.RANGE, 0.44f);
         assertTrue(p1.equals(p2));
         assertTrue(p2.equals(p1));
         
-        p1 = new CategoryLabelPosition(
-            RectangleAnchor.TOP, TextBlockAnchor.CENTER_RIGHT, 
-            TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
-            CategoryLabelWidthType.RANGE, 0.44f
-        );
+        p1 = new CategoryLabelPosition(RectangleAnchor.TOP, 
+                TextBlockAnchor.CENTER_RIGHT, TextAnchor.BASELINE_LEFT, 
+                Math.PI / 4.0, CategoryLabelWidthType.RANGE, 0.44f);
         assertFalse(p1.equals(p2));
-        p2 = new CategoryLabelPosition(
-            RectangleAnchor.TOP, TextBlockAnchor.CENTER_RIGHT, 
-            TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
-            CategoryLabelWidthType.RANGE, 0.44f
-        );
+        p2 = new CategoryLabelPosition(RectangleAnchor.TOP, 
+                TextBlockAnchor.CENTER_RIGHT, TextAnchor.BASELINE_LEFT, 
+                Math.PI / 4.0, CategoryLabelWidthType.RANGE, 0.44f);
         assertTrue(p1.equals(p2));
 
         p1 = new CategoryLabelPosition(RectangleAnchor.TOP, 
-            TextBlockAnchor.CENTER, TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
-            CategoryLabelWidthType.RANGE, 0.44f
-        );
+                TextBlockAnchor.CENTER, TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
+                CategoryLabelWidthType.RANGE, 0.44f);
         assertFalse(p1.equals(p2));
         p2 = new CategoryLabelPosition(RectangleAnchor.TOP, 
-            TextBlockAnchor.CENTER, TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
-            CategoryLabelWidthType.RANGE, 0.44f
-        );
+                TextBlockAnchor.CENTER, TextAnchor.BASELINE_LEFT, Math.PI / 4.0, 
+                CategoryLabelWidthType.RANGE, 0.44f);
         assertTrue(p1.equals(p2));
     
         p1 = new CategoryLabelPosition(RectangleAnchor.TOP, 
-            TextBlockAnchor.CENTER, TextAnchor.CENTER, Math.PI / 4.0, 
-            CategoryLabelWidthType.RANGE, 0.44f
-        );
+                TextBlockAnchor.CENTER, TextAnchor.CENTER, Math.PI / 4.0, 
+                CategoryLabelWidthType.RANGE, 0.44f);
         assertFalse(p1.equals(p2));
         p2 = new CategoryLabelPosition(RectangleAnchor.TOP, 
-            TextBlockAnchor.CENTER, TextAnchor.CENTER, Math.PI / 4.0, 
-            CategoryLabelWidthType.RANGE, 0.44f
-        );
+                TextBlockAnchor.CENTER, TextAnchor.CENTER, Math.PI / 4.0, 
+                CategoryLabelWidthType.RANGE, 0.44f);
         assertTrue(p1.equals(p2));
     
-        p1 = new CategoryLabelPosition(
-            RectangleAnchor.TOP, TextBlockAnchor.CENTER, TextAnchor.CENTER, 
-            Math.PI / 6.0, CategoryLabelWidthType.RANGE, 0.44f
-        );
+        p1 = new CategoryLabelPosition(RectangleAnchor.TOP, 
+                TextBlockAnchor.CENTER, TextAnchor.CENTER, Math.PI / 6.0, 
+                CategoryLabelWidthType.RANGE, 0.44f);
         assertFalse(p1.equals(p2));
-        p2 = new CategoryLabelPosition(
-            RectangleAnchor.TOP, TextBlockAnchor.CENTER, TextAnchor.CENTER, 
-            Math.PI / 6.0, CategoryLabelWidthType.RANGE, 0.44f
-        );
+        p2 = new CategoryLabelPosition(RectangleAnchor.TOP, 
+                TextBlockAnchor.CENTER, TextAnchor.CENTER, Math.PI / 6.0, 
+                CategoryLabelWidthType.RANGE, 0.44f);
         assertTrue(p1.equals(p2));
     
-        p1 = new CategoryLabelPosition(
-            RectangleAnchor.TOP, TextBlockAnchor.CENTER, TextAnchor.CENTER, 
-            Math.PI / 6.0, CategoryLabelWidthType.CATEGORY, 0.44f
-        );
+        p1 = new CategoryLabelPosition(RectangleAnchor.TOP, 
+                TextBlockAnchor.CENTER, TextAnchor.CENTER, Math.PI / 6.0, 
+                CategoryLabelWidthType.CATEGORY, 0.44f);
         assertFalse(p1.equals(p2));
-        p2 = new CategoryLabelPosition(
-            RectangleAnchor.TOP, TextBlockAnchor.CENTER, TextAnchor.CENTER, 
-            Math.PI / 6.0, CategoryLabelWidthType.CATEGORY, 0.44f
-        );
+        p2 = new CategoryLabelPosition(RectangleAnchor.TOP, 
+                TextBlockAnchor.CENTER, TextAnchor.CENTER, Math.PI / 6.0, 
+                CategoryLabelWidthType.CATEGORY, 0.44f);
         assertTrue(p1.equals(p2));
     
-        p1 = new CategoryLabelPosition(
-            RectangleAnchor.TOP, TextBlockAnchor.CENTER, TextAnchor.CENTER, 
-            Math.PI / 6.0, CategoryLabelWidthType.CATEGORY, 0.55f
-        );
+        p1 = new CategoryLabelPosition(RectangleAnchor.TOP, 
+                TextBlockAnchor.CENTER, TextAnchor.CENTER,  Math.PI / 6.0, 
+                CategoryLabelWidthType.CATEGORY, 0.55f);
         assertFalse(p1.equals(p2));
-        p2 = new CategoryLabelPosition(
-            RectangleAnchor.TOP, TextBlockAnchor.CENTER, TextAnchor.CENTER, 
-            Math.PI / 6.0, CategoryLabelWidthType.CATEGORY, 0.55f
-        );
+        p2 = new CategoryLabelPosition(RectangleAnchor.TOP, 
+                TextBlockAnchor.CENTER, TextAnchor.CENTER, Math.PI / 6.0, 
+                CategoryLabelWidthType.CATEGORY, 0.55f);
         assertTrue(p1.equals(p2));   
     }
     
@@ -196,13 +181,12 @@ public class CategoryLabelPositionTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             p2 = (CategoryLabelPosition) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(p1, p2);      
     }

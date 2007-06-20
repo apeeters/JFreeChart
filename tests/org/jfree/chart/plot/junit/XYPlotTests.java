@@ -44,6 +44,7 @@
  * 05-Feb-2007 : Added testAddDomainMarker() and testAddRangeMarker() (DG);
  * 07-Feb-2007 : Added test1654215() (DG);
  * 24-May-2007 : Added testDrawSeriesWithZeroItems() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -88,6 +89,7 @@ import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.util.Layer;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -97,7 +99,6 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.date.MonthConstants;
-import org.jfree.ui.RectangleInsets;
 
 /**
  * Tests for the {@link XYPlot} class.

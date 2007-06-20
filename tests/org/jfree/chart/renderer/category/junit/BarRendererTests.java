@@ -70,10 +70,10 @@ import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.junit.RendererChangeDetector;
+import org.jfree.chart.text.TextAnchor;
 import org.jfree.chart.util.GradientPaintTransformType;
 import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.ui.TextAnchor;
 
 /**
  * Tests for the {@link BarRenderer} class.

@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 17-Feb-2004 : Version 1 (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -49,8 +50,8 @@ import junit.framework.TestSuite;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.title.Title;
 import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.VerticalAlignment;
-import org.jfree.ui.RectangleEdge;
 
 /**
  * Tests for the abstract {@link Title} class.

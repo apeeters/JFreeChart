@@ -39,6 +39,7 @@
  * 06-Jun-2005 : Version 1 (DG);
  * 30-Jun-2006 : Extended equals() test to cover new field (DG);
  * 11-May-2007 : Another new field in testEquals() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -62,7 +63,7 @@ import org.jfree.chart.plot.DefaultDrawingSupplier;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.util.Align;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.util.RectangleInsets;
 
 /**
  * Some tests for the {@link Plot} class.

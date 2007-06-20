@@ -40,6 +40,7 @@
  * 30-Apr-2007 : Added new serialization test (DG);
  * 03-May-2007 : Added cloning test (DG);
  * 19-Jun-2007 : Updated for removal of deprecated methods (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -62,7 +63,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.plot.ThermometerPlot;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.util.RectangleInsets;
 
 /**
  * Tests for the {@link ThermometerPlot} class.

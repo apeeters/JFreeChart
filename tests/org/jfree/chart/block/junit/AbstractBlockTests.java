@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 16-Mar-2007 : Version 1 (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -58,7 +59,7 @@ import junit.framework.TestSuite;
 import org.jfree.chart.block.AbstractBlock;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.block.EmptyBlock;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.util.RectangleInsets;
 
 /**
  * Tests for the {@link AbstractBlock} class.

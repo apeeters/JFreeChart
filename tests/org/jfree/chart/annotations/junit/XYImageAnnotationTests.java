@@ -39,6 +39,7 @@
  * 17-May-2004 : Version 1 (DG);
  * 01-Dec-2006 : Updated testEquals() for new field (DG);
  * 09-Jan-2007 : Comment out failing test (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -52,7 +53,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYImageAnnotation;
-import org.jfree.ui.RectangleAnchor;
+import org.jfree.chart.util.RectangleAnchor;
 
 /**
  * Tests for the {@link XYImageAnnotation} class.

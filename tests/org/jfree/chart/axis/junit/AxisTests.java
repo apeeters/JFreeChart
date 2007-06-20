@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------
  * AxisTests.java
  * --------------
- * (C) Copyright 2003-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -39,6 +39,8 @@
  * 13-Aug-2003 : Version 1 (DG);
  * 06-Jan-2004 : Added tests for axis line attributes (DG);
  * 07-Jan-2005 : Added hashCode() test (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 
  */
 
 package org.jfree.chart.axis.junit;
@@ -54,7 +56,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.util.RectangleInsets;
 
 /**
  * Tests for the {@link Axis} class.

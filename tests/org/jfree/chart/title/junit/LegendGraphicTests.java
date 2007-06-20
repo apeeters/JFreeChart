@@ -62,8 +62,8 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.title.LegendGraphic;
 import org.jfree.chart.util.GradientPaintTransformType;
+import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.StandardGradientPaintTransformer;
-import org.jfree.ui.RectangleAnchor;
 
 /**
  * Tests for the {@link LegendGraphic} class.

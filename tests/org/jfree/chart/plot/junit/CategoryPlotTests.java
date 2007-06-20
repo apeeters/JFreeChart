@@ -41,7 +41,8 @@
  *               fixed) (DG);
  * 05-Feb-2007 : Added testAddDomainMarker() and testAddRangeMarker() (DG);
  * 07-Feb-2007 : Added test1654215() (DG);
- *
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 
  */
 
 package org.jfree.chart.plot.junit;
@@ -87,10 +88,10 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.util.Layer;
+import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.SortOrder;
 import org.jfree.data.Range;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.ui.RectangleInsets;
 
 /**
  * Tests for the {@link CategoryPlot} class.

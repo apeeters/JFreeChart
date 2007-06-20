@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------------
  * CategoryLabelPositionsTests.java
  * --------------------------------
- * (C) Copyright 2004, 2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,6 +38,7 @@
  * -------
  * 17-Feb-2004 : Version 1 (DG);
  * 07-Jan-2005 : Added test for hashCode() (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -56,8 +57,8 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.axis.CategoryLabelPosition;
 import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.text.TextBlockAnchor;
-import org.jfree.ui.RectangleAnchor;
+import org.jfree.chart.text.TextBlockAnchor;
+import org.jfree.chart.util.RectangleAnchor;
 
 /**
  * Tests for the {@link CategoryLabelPositions} class.
@@ -201,13 +202,12 @@ public class CategoryLabelPositionsTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             p2 = (CategoryLabelPositions) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(p1, p2);
     }

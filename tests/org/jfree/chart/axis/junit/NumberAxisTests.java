@@ -44,6 +44,7 @@
  * 11-Jan-2006 : Fixed testAutoRange2() and testAutoRange3() following changes 
  *               to BarRenderer (DG);
  * 20-Feb-2006 : Added rangeType field to equals() test (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -70,11 +71,11 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.RangeType;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RectangleEdge;
 
 /**
  * Tests for the {@link NumberAxis} class.

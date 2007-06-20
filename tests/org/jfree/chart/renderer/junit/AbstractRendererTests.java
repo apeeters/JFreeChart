@@ -40,6 +40,7 @@
  * 01-Mar-2004 : Added serialization test (DG);
  * 19-Feb-2007 : Added testCloning (DG);
  * 28-Feb-2007 : Added checks for cloning (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -74,7 +75,7 @@ import org.jfree.chart.plot.DefaultDrawingSupplier;
 import org.jfree.chart.renderer.AbstractRenderer;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.ui.TextAnchor;
+import org.jfree.chart.text.TextAnchor;
 
 /**
  * Tests for the {@link AbstractRenderer} class.
