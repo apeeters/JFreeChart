@@ -53,6 +53,7 @@
  * 31-Jul-2006 : Added a clear() method (DG);
  * 01-Aug-2006 : Added argument check to getIndex() method (DG);
  * 30-Apr-2007 : Added insertValue() methods (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -64,9 +65,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.util.SortOrder;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
-import org.jfree.util.SortOrder;
 
 /**
  * An ordered list of (key, value) items.  This class provides a default 

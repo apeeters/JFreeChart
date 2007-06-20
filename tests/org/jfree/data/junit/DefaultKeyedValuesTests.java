@@ -58,9 +58,9 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.jfree.chart.util.SortOrder;
 import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.UnknownKeyException;
-import org.jfree.util.SortOrder;
 
 /**
  * Tests for the {@link DefaultKeyedValues} class.

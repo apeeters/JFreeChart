@@ -53,6 +53,7 @@
  *               dataset (DG);
  * 28-Sep-2006 : Added sortByKeys() and sortByValues() methods (DG);
  * 30-Apr-2007 : Added new insertValues() methods (DG);
+ * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -62,11 +63,11 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+import org.jfree.chart.util.SortOrder;
 import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.KeyedValues;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.util.PublicCloneable;
-import org.jfree.util.SortOrder;
 
 /**
  * A default implementation of the {@link PieDataset} interface.

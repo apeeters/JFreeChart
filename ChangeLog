@@ -1,5 +1,18 @@
 2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/util/SortOrder.java: New class copied from
+	JCommon,
+	* source/org/jfree/chart/ChartFactory.java: Removed JCommon 
+	dependencies,
+	* source/org/jfree/chart/plot/CategoryPlot.java: Likewise,
+	* source/org/jfree/data/DefaultKeyedValues.java: Likewise,
+	* source/org/jfree/data/KeyedValueComparator.java: Likewise,
+	* source/org/jfree/data/general/DefaultPieDataset.java: Likewise,
+	* tests/org/jfree/chart/plot/junit/CategoryPlotTests.java: Likewise,
+	* tests/org/jfree/data/junit/DefaultKeyedValuesTests.java: Likewise.
+
+2007-06-20  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/JFreeChart: Removed some JCommon dependencies,
 	* source/org/jfree/chart/block/ColumnArrangement.java: Likewise,
 	* source/org/jfree/chart/block/FlowArrangement.java: Likewise,
