@@ -412,14 +412,16 @@ public final class ObjectUtilities {
      *
      * @param className the class name as String, never null.
      * @param source    the source class, from where to get the classloader.
+     * @param type  the type.
+     * 
      * @return the instantiated object or null, if an error occured.
      */
-    public static Object loadAndInstantiate(final String className,
-                                            final Class source,
-                                            final Class type) {
+    public static Object loadAndInstantiate(String className,
+                                            Class source,
+                                            Class type) {
         try {
-            final ClassLoader loader = getClassLoader(source);
-            final Class c = loader.loadClass(className);
+            ClassLoader loader = getClassLoader(source);
+            Class c = loader.loadClass(className);
             if (type.isAssignableFrom(c)) {
                 return c.newInstance();
             }
@@ -430,9 +432,13 @@ public final class ObjectUtilities {
         return null;
     }
 
-
+    /**
+     * Returns <code>true</code> if we are running on JRE 1.4 or later.
+     * 
+     * @return A boolean.
+     */
     public static boolean isJDK14() {
-        final ClassLoader loader = getClassLoader(ObjectUtilities.class);
+        ClassLoader loader = getClassLoader(ObjectUtilities.class);
         if (loader != null) {
             try {
               loader.loadClass("java.util.RandomAccess");
@@ -448,8 +454,8 @@ public final class ObjectUtilities {
         // OK, the quick and dirty, but secure way failed. Lets try it
         // using the standard way.
         try {
-            final String version = System.getProperty
-                    ("java.vm.specification.version");
+            String version = System.getProperty(
+                    "java.vm.specification.version");
             // parse the beast...
             if (version == null) {
                 return false;
@@ -464,18 +470,15 @@ public final class ObjectUtilities {
         }
     }
 
-    private static String[] parseVersions (String version)
-    {
-      if (version == null)
-      {
+    private static String[] parseVersions (String version) {
+      if (version == null) {
         return new String[0];
       }
 
-      final ArrayList versions = new ArrayList();
+      ArrayList versions = new ArrayList();
       StringTokenizer strtok = new StringTokenizer(version, ".");
-      while (strtok.hasMoreTokens())
-      {
-        versions.add (strtok.nextToken());
+      while (strtok.hasMoreTokens()) {
+          versions.add (strtok.nextToken());
       }
       return (String[]) versions.toArray(new String[versions.size()]);
     }

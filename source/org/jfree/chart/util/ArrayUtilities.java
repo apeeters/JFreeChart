@@ -174,29 +174,35 @@ public class ArrayUtilities {
         return false;
     }
 
-    public static int compareVersionArrays(Comparable[] a1, Comparable[] a2)
-    {
-      int length = Math.min (a1.length, a2.length);
-      for (int i = 0; i < length; i++)
-      {
-        Comparable o1 = a1[i];
-        Comparable o2 = a2[i];
-        if (o1 == null && o2 == null) {
-            // cannot decide ..
-            continue;
+    /**
+     * Compares version arrays.
+     * 
+     * @param a1  array 1.
+     * @param a2  array 2.
+     * 
+     * @return A code for the comparison.
+     */
+    public static int compareVersionArrays(Comparable[] a1, Comparable[] a2) {
+        int length = Math.min (a1.length, a2.length);
+        for (int i = 0; i < length; i++) {
+            Comparable o1 = a1[i];
+            Comparable o2 = a2[i];
+            if (o1 == null && o2 == null) {
+                // cannot decide ..
+                continue;
+            }
+            if (o1 == null) {
+                return 1;
+            }
+            if (o2 == null) {
+                return -1;
+            }
+            int retval = o1.compareTo(o2);
+            if (retval != 0) {
+                return retval;
+            }
         }
-        if (o1 == null) {
-            return 1;
-        }
-        if (o2 == null) {
-            return -1;
-        }
-        int retval = o1.compareTo(o2);
-        if (retval != 0) {
-            return retval;
-        }
-      }
-      return 0;
+        return 0;
     }
 
 }
