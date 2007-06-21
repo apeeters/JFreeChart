@@ -574,7 +574,7 @@ public class StandardDialScale extends AbstractDialLayer implements DialScale,
                     - this.startAngle, Arc2D.OPEN);
             Point2D pt2 = arc.getEndPoint();
             
-            if (tickLabelsVisible) {
+            if (this.tickLabelsVisible) {
                 if (!firstLabel || this.firstTickLabelVisible) {
                     g2.setFont(this.tickLabelFont);
                     TextUtilities.drawAlignedString(String.valueOf(v), g2, 
