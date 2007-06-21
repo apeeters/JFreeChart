@@ -66,6 +66,11 @@ public class LogarithmicAxisTests extends TestCase {
 
     static class MyLogarithmicAxis extends LogarithmicAxis {
 
+        /**
+         * Creates an instance.
+         * 
+         * @param label  the label.
+         */
         public MyLogarithmicAxis(String label) {
             super(label);
         }
