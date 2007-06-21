@@ -188,7 +188,7 @@ import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.Zoomable;
-import org.jfree.ui.ExtensionFileFilter;
+import org.jfree.chart.ui.ExtensionFileFilter;
 
 /**
  * A Swing GUI component for displaying a {@link JFreeChart} object.
