@@ -40,6 +40,7 @@
  * 01-Mar-2004 : Added equals() method and implemented Serializable (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 15-Nov-2006 : Added toString() method override (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -49,7 +50,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import org.jfree.util.ObjectUtilities;
+import org.jfree.chart.util.ObjectUtilities;
 
 /**
  * Represents one data item within a box-and-whisker dataset.  Instances of 

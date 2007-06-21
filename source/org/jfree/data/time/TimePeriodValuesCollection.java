@@ -47,6 +47,7 @@
  * 11-Jun-2007 : Fixed bug in getDomainBounds() method, and changed default
  *               value for domainIsPointsInTime to false (DG);
  * 20-Jun-2007 : Removed deprecated code (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -56,11 +57,11 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
 import org.jfree.data.xy.AbstractIntervalXYDataset;
 import org.jfree.data.xy.IntervalXYDataset;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A collection of {@link TimePeriodValues} objects.

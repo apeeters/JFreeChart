@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------
  * XYDataItem.java
  * ---------------
- * (C) Copyright 2003-2005, by Object Refinery Limited.
+ * (C) Copyright 2003-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -39,6 +39,7 @@
  * 05-Aug-2003 : Renamed XYDataPair --> XYDataItem (DG);
  * 03-Feb-2004 : Fixed bug in equals() method (DG);
  * 21-Feb-2005 : Added setY(double) method (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -46,7 +47,7 @@ package org.jfree.data.xy;
 
 import java.io.Serializable;
 
-import org.jfree.util.ObjectUtilities;
+import org.jfree.chart.util.ObjectUtilities;
 
 /**
  * Represents one (x, y) data item for an {@link XYSeries}.

@@ -102,6 +102,7 @@
  *               argument (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 15-Mar-2007 : Added calculateStackTotal() method (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -111,6 +112,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.util.ArrayUtilities;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.KeyToGroupMap;
 import org.jfree.data.KeyedValues;
@@ -126,7 +128,6 @@ import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.util.ArrayUtilities;
 
 /**
  * A collection of useful static methods relating to datasets.

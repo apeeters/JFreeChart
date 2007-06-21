@@ -49,6 +49,7 @@
  * 02-Feb-2007 : Removed author tags from all over JFreeChart sources (DG);
  * 17-Apr-2007 : Fixed bug 1701822 (DG);
  * 13-Jun-2007 : Fixed error in previous patch (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -56,11 +57,11 @@ package org.jfree.data.statistics;
 
 import java.util.List;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.KeyedObjects2D;
 import org.jfree.data.Range;
 import org.jfree.data.RangeInfo;
 import org.jfree.data.general.AbstractDataset;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A convenience class that provides a default implementation of the

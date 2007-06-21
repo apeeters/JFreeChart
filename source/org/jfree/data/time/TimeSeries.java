@@ -72,6 +72,7 @@
  *               1550045 (DG);
  * 22-Mar-2007 : Simplified getDataItem(RegularTimePeriod) - see patch 1685500 
  *               by Nick Guenther (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -86,10 +87,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.general.Series;
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.general.SeriesException;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * Represents a sequence of zero or more data items in the form (period, value).

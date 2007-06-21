@@ -57,6 +57,7 @@
  *               release (DG);
  * 05-Oct-2005 : Made the interval delegate a dataset listener (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -67,12 +68,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.general.SeriesChangeEvent;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * An {@link XYDataset} where every series shares the same x-values (required 

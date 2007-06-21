@@ -52,6 +52,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 27-Nov-2006 : Added clone() override (DG);
  * 08-May-2007 : Added indexOf(XYSeries) method (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -61,11 +62,11 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * Represents a collection of {@link XYSeries} objects that can be used as a 

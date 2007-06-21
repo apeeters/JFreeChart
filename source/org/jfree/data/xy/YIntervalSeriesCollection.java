@@ -40,6 +40,7 @@
  * 27-Nov-2006 : Added clone() override (DG);
  * 20-Feb-2007 : Added getYValue(), getStartYValue() and getEndYValue() 
  *               methods (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -48,8 +49,8 @@ package org.jfree.data.xy;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A collection of {@link YIntervalSeries} objects.
