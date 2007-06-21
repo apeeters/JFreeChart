@@ -49,8 +49,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.jfree.io.SerialUtilities;
-
 /**
  * A table of {@link Paint} objects.
  */
