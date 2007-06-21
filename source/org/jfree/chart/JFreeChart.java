@@ -1017,7 +1017,7 @@ public class JFreeChart implements Drawable,
 
     /**
      * Sets the background alignment.  Alignment options are defined by the 
-     * {@link org.jfree.ui.Align} class.
+     * {@link Align} class.
      *
      * @param alignment  the alignment.
      * 
