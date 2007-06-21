@@ -65,8 +65,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.jfree.date.SerialDate;
-
 /**
  * Represents a year in the range 1900 to 9999.  This class is immutable, which
  * is a requirement for all {@link RegularTimePeriod} subclasses.

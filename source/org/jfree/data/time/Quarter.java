@@ -66,8 +66,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.jfree.date.SerialDate;
-
 /**
  * Defines a quarter (in a given year).  The range supported is Q1 1900 to 
  * Q4 9999.  This class is immutable, which is a requirement for all 
