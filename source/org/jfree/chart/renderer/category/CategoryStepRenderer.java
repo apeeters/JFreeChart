@@ -47,6 +47,7 @@
  *               (for tooltips, URLs), added new getLegendItem() override (DG);
  * 20-Apr-2007 : Updated getLegendItem() for renderer change (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -68,8 +69,8 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.renderer.xy.XYStepRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A "step" renderer similar to {@link XYStepRenderer} but

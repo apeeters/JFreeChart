@@ -74,12 +74,12 @@ import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.SerialUtilities;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.statistics.StatisticalCategoryDataset;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A renderer that handles the drawing a bar plot where

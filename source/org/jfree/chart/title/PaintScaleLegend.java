@@ -63,12 +63,12 @@ import org.jfree.chart.event.TitleChangeEvent;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.PaintScale;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.Size2D;
 import org.jfree.data.Range;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A legend that shows a range of values and their associated colors, driven

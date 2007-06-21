@@ -54,8 +54,8 @@ import java.io.Serializable;
 
 import org.jfree.chart.Effect3D;
 import org.jfree.chart.event.RendererChangeEvent;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.PaintUtilities;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A XYLineAndShapeRenderer that adds a shadow line to the graph

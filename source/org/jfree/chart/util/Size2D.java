@@ -25,8 +25,6 @@ package org.jfree.chart.util;
 
 import java.io.Serializable;
 
-import org.jfree.util.PublicCloneable;
-
 /**
  * A simple class for representing the dimensions of an object.  It would be
  * better to use <code>Dimension2D</code>, but this class is broken on various

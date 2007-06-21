@@ -102,12 +102,12 @@ import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.renderer.Outlier;
 import org.jfree.chart.renderer.OutlierList;
 import org.jfree.chart.renderer.OutlierListCollection;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.SerialUtilities;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A box-and-whisker renderer.  This renderer requires a 

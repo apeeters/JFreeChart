@@ -149,15 +149,15 @@ import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.chart.util.GradientPaintTransformer;
 import org.jfree.chart.util.Layer;
+import org.jfree.chart.util.LengthAdjustmentType;
+import org.jfree.chart.util.ObjectList;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.LengthAdjustmentType;
-import org.jfree.util.ObjectList;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A base class that can be used to create new {@link XYItemRenderer}

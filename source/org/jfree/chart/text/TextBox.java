@@ -34,11 +34,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.Size2D;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A box containing a text block.

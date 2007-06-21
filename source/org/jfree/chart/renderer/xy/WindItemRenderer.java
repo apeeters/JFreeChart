@@ -73,10 +73,10 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.xy.WindDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A specialised renderer for displaying wind intensity/direction data.

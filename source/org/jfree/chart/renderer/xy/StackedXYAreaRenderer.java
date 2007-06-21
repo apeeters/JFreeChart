@@ -65,6 +65,7 @@
  * 22-Mar-2007 : Fire change events in setShapePaint() and setShapeStroke() 
  *               methods (DG);
  * 20-Apr-2007 : Updated getLegendItem() for renderer change (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -94,15 +95,15 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.PublicCloneable;
+import org.jfree.chart.util.SerialUtilities;
+import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.PublicCloneable;
-import org.jfree.util.ShapeUtilities;
 
 /**
  * A stacked area renderer for the {@link XYPlot} class.

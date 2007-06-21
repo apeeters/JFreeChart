@@ -66,9 +66,9 @@ import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A {@link CategoryItemRenderer} that draws individual data items as 

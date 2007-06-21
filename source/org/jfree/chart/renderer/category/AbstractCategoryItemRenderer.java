@@ -138,15 +138,15 @@ import org.jfree.chart.renderer.AbstractRenderer;
 import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.urls.CategoryURLGenerator;
 import org.jfree.chart.util.GradientPaintTransformer;
+import org.jfree.chart.util.LengthAdjustmentType;
+import org.jfree.chart.util.ObjectList;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.ui.LengthAdjustmentType;
-import org.jfree.util.ObjectList;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * An abstract base class that you can use to implement a new

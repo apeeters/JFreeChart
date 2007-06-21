@@ -50,6 +50,7 @@
  * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG);
  * 14-Feb-2007 : Added equals() method override (DG);
  * 04-May-2007 : Set processVisibleItemsOnly flag to false (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -73,9 +74,9 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
+import org.jfree.chart.util.PublicCloneable;
+import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.util.PublicCloneable;
-import org.jfree.util.ShapeUtilities;
 
 /**
  * A step chart renderer that fills the area between the step and the x-axis.

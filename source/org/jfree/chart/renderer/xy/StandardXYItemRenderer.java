@@ -134,15 +134,14 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
+import org.jfree.chart.util.BooleanList;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.SerialUtilities;
+import org.jfree.chart.util.ShapeUtilities;
+import org.jfree.chart.util.UnitType;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.BooleanList;
-import org.jfree.util.BooleanUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
-import org.jfree.util.ShapeUtilities;
-import org.jfree.util.UnitType;
 
 /**
  * Standard item renderer for an {@link XYPlot}.  This class can draw (a) 
@@ -366,8 +365,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #setShapesFilled(Boolean)
      */
     public void setShapesFilled(boolean filled) {
-        // here we use BooleanUtilities to remain compatible with JDKs < 1.4 
-        setShapesFilled(BooleanUtilities.valueOf(filled));
+        setShapesFilled(Boolean.valueOf(filled));
     }
 
     /**

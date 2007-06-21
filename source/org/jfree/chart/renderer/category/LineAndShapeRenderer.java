@@ -85,6 +85,7 @@
  * 20-Apr-2007 : Updated getLegendItem() for renderer change (DG);
  * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -105,12 +106,11 @@ import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.BooleanList;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
+import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.util.BooleanList;
-import org.jfree.util.BooleanUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
-import org.jfree.util.ShapeUtilities;
 
 /**
  * A renderer that draws shapes for each data item, and lines between data 
@@ -264,7 +264,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param visible  the flag.
      */
     public void setLinesVisible(boolean visible) {
-        setLinesVisible(BooleanUtilities.valueOf(visible));
+        setLinesVisible(Boolean.valueOf(visible));
     }
 
     /**
@@ -297,7 +297,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param visible  the flag.
      */
     public void setSeriesLinesVisible(int series, boolean visible) {
-        setSeriesLinesVisible(series, BooleanUtilities.valueOf(visible));
+        setSeriesLinesVisible(series, Boolean.valueOf(visible));
     }
     
     /**
@@ -371,7 +371,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param visible  the flag.
      */
     public void setShapesVisible(boolean visible) {
-        setShapesVisible(BooleanUtilities.valueOf(visible));
+        setShapesVisible(Boolean.valueOf(visible));
     }
 
     /**
@@ -394,7 +394,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param visible  the flag.
      */
     public void setSeriesShapesVisible(int series, boolean visible) {
-        setSeriesShapesVisible(series, BooleanUtilities.valueOf(visible));
+        setSeriesShapesVisible(series, Boolean.valueOf(visible));
     }
     
     /**
@@ -567,7 +567,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesShapesFilled(int series, boolean filled) {
         this.seriesShapesFilled.setBoolean(
-            series, BooleanUtilities.valueOf(filled)
+            series, Boolean.valueOf(filled)
         );
     }
 

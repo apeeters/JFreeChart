@@ -88,9 +88,9 @@ import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.AreaRendererEndType;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A category item renderer that draws area charts.  You can use this renderer 

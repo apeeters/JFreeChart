@@ -68,14 +68,14 @@ import org.jfree.chart.block.Block;
 import org.jfree.chart.block.LengthConstraintType;
 import org.jfree.chart.block.RectangleConstraint;
 import org.jfree.chart.util.GradientPaintTransformer;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
+import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.Size2D;
 import org.jfree.chart.util.StandardGradientPaintTransformer;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * The graphical item within a legend item.

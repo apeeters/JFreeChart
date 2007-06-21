@@ -82,6 +82,7 @@
  *               see bug report 1599652 (DG);
  * 08-May-2007 : Fixed bugs 1713401 (drawBarOutlines flag) and  1713474 
  *               (shading) (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *               
  */
 
@@ -105,12 +106,11 @@ import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DataUtilities;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.util.BooleanUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * Renders stacked bars with 3D-effect, for use with the 
@@ -469,7 +469,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
                         
             itemLabelList.add(new Object[] {new Integer(series), 
                     faces[5].getBounds2D(), 
-                    BooleanUtilities.valueOf(v0 < getBase())});
+                    Boolean.valueOf(v0 < getBase())});
 
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();
@@ -666,7 +666,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
 
             itemLabelList.add(new Object[] {new Integer(series), 
                     faces[5].getBounds2D(), 
-                    BooleanUtilities.valueOf(v0 < getBase())});
+                    Boolean.valueOf(v0 < getBase())});
             
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();

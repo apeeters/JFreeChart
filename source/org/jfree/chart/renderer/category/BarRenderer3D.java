@@ -131,14 +131,14 @@ import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.text.TextAnchor;
 import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.LengthAdjustmentType;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.SerialUtilities;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.io.SerialUtilities;
-import org.jfree.ui.LengthAdjustmentType;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A renderer for bars with a 3D effect, for use with the 

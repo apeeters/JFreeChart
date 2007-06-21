@@ -49,8 +49,6 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
-import org.jfree.util.PublicCloneable;
-
 /**
  * Transforms a <code>GradientPaint</code> to range over the width of a target 
  * shape.  Instances of this class are immutable.

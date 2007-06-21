@@ -18,6 +18,7 @@
  * 19-Apr-2005 : Changed order of parameters in constructors to match
  *               java.awt.Insets (DG);
  * 16-Mar-2007 : Added default constructor (DG);
+ * 21-Jun-2007 : Copied from JCommon (DG);
  * 
  */
 
@@ -25,9 +26,6 @@ package org.jfree.chart.util;
 
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
-
-import org.jfree.ui.LengthAdjustmentType;
-import org.jfree.util.UnitType;
 
 /**
  * Represents the insets for a rectangle, specified in absolute or relative 
