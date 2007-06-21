@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------
  * KeyedObjects.java
  * -----------------
- * (C) Copyright 2003-2005, by Object Refinery Limited.
+ * (C) Copyright 2003-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,6 +38,7 @@
  * --------
  * 31-Oct-2002 : Version 1 (DG);
  * 11-Jan-2005 : Minor tidy up (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -47,7 +48,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * A collection of (key, object) pairs.

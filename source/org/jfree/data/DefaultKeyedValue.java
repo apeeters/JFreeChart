@@ -43,6 +43,7 @@
  * 15-Sep-2004 : Added PublicCloneable interface (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 11-Jun-2007 : Added toString() method to help with debugging (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -50,7 +51,7 @@ package org.jfree.data;
 
 import java.io.Serializable;
 
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * A (key, value) pair.  This class provides a default implementation 

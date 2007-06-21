@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------
  * HistogramDataset.java
  * ---------------------
- * (C) Copyright 2003-2006, by Jelai Wang and Contributors.
+ * (C) Copyright 2003-2007, by Jelai Wang and Contributors.
  *
  * Original Author:  Jelai Wang (jelaiw AT mindspring.com);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -51,9 +51,10 @@
  *               Hayne (DG);
  * 08-Jun-2005 : Fixed bug in getSeriesKey() method (DG);
  * 22-Nov-2005 : Fixed cast in getSeriesKey() method - see patch 1329287 (DG);
- * ------------- JFREECHART 1.0.0 ---------------------------------------------
+ * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 03-Aug-2006 : Improved precision of bin boundary calculation (DG);
  * 07-Sep-2006 : Fixed bug 1553088 (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -65,11 +66,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractIntervalXYDataset;
 import org.jfree.data.xy.IntervalXYDataset;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A dataset that can be used for creating histograms.

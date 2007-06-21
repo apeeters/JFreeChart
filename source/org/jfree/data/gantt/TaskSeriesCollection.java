@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------
  * TaskSeriesCollection.java
  * -------------------------
- * (C) Copyright 2002-2006, by Object Refinery Limited.
+ * (C) Copyright 2002-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Thomas Schuster;
@@ -46,6 +46,7 @@
  * 12-Jan-2005 : Fixed bug 1099331 (DG);
  * 18-Jan-2006 : Added new methods getSeries(int) and 
  *               getSeries(Comparable) (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -55,11 +56,11 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.AbstractSeriesDataset;
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.TimePeriod;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A collection of {@link TaskSeries} objects.  This class provides one 

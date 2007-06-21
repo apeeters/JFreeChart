@@ -51,6 +51,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 18-Jan-2007 : Fixed bug in getValue() method (DG);
  * 30-Mar-2007 : Fixed bug 1690654, problem with removeValue() (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -61,8 +62,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * A data structure that stores zero, one or many values, where each value 

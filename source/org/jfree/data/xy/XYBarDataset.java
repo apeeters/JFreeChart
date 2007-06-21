@@ -45,14 +45,15 @@
  *               overrides (DG);
  * 30-Jan-2007 : Added method overrides to prevent unnecessary object 
  *               creation (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
 package org.jfree.data.xy;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A dataset wrapper class that converts a standard {@link XYDataset} into an

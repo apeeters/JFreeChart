@@ -48,6 +48,7 @@
  *               release (DG);
  * 27-Jan-2005 : Modified to use TimePeriod rather than RegularTimePeriod (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DefaultKeyedValues2D;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
@@ -65,7 +67,6 @@ import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractIntervalXYDataset;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.TableXYDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A dataset for regular time periods that implements the 

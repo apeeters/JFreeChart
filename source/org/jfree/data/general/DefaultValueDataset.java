@@ -41,6 +41,7 @@
  * 03-Mar-2005 : Implemented PublicCloneable (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 30-Jan-2007 : Added explicit super() call in constructor (for clarity) (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -48,8 +49,8 @@ package org.jfree.data.general;
 
 import java.io.Serializable;
 
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * A dataset that stores a single value (that is possibly <code>null</code>).  

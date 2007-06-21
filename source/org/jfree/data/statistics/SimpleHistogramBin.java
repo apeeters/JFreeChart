@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * SimpleHistogramBin.java
  * -----------------------
- * (C) Copyright 2005 by Object Refinery Limited and Contributors.
+ * (C) Copyright 2005-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -37,14 +37,15 @@
  * Changes
  * -------
  * 10-Jan-2005 : Version 1 (DG);
- *
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 
  */
 
 package org.jfree.data.statistics;
 
 import java.io.Serializable;
 
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * A bin for the {@link SimpleHistogramDataset}.

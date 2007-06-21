@@ -65,9 +65,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.SortOrder;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * An ordered list of (key, value) items.  This class provides a default 

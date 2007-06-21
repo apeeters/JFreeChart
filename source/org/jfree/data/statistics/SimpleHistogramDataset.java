@@ -38,6 +38,7 @@
  * -------
  * 10-Jan-2005 : Version 1 (DG);
  * 21-May-2007 : Added clearObservations() and removeAllBins() (SI);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -49,12 +50,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainOrder;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractIntervalXYDataset;
 import org.jfree.data.xy.IntervalXYDataset;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A dataset used for creating simple histograms with custom defined bins.

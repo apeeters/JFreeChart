@@ -48,6 +48,7 @@
  * 06-Oct-2005 : Implemented DatasetChangeListener to recalculate 
  *               autoIntervalWidth (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *   
  */
 
@@ -55,13 +56,13 @@ package org.jfree.data.xy;
 
 import java.io.Serializable;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
 import org.jfree.data.RangeInfo;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A delegate that handles the specification or automatic calculation of the
