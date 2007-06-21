@@ -69,9 +69,9 @@ import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.util.GradientPaintTransformer;
+import org.jfree.chart.util.ObjectList;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.util.ObjectList;
 
 /**
  * A {@link CategoryItemRenderer} that represents data using bars which are 

@@ -41,6 +41,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 03-May-2006 : Modified DEFAULT_SECTION_LABEL_FORMAT (DG);
  * 10-Jan-2007 : Include attributedLabels in equals() test (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -53,8 +54,8 @@ import java.io.Serializable;
 import java.text.AttributedString;
 import java.text.NumberFormat;
 
+import org.jfree.chart.util.ObjectList;
 import org.jfree.data.general.PieDataset;
-import org.jfree.util.ObjectList;
 
 /**
  * A standard item label generator for plots that use data from a 

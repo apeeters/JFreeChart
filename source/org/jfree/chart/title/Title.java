@@ -76,10 +76,10 @@ import org.jfree.chart.block.Block;
 import org.jfree.chart.event.TitleChangeEvent;
 import org.jfree.chart.event.TitleChangeListener;
 import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.VerticalAlignment;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * The base class for all chart titles.  A chart can have multiple titles, 

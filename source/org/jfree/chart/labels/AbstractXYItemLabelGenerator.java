@@ -47,6 +47,7 @@
  * ------------- JFREECHART 1.0.x --------------------------------------------
  * 26-Jan-2006 : Minor API doc update (DG);
  * 25-Jan-2007 : Added new constructor and fixed bug in clone() method (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -58,8 +59,8 @@ import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A base class for creating item label generators.

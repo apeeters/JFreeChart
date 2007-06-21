@@ -115,11 +115,11 @@ import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueAxisPlot;
 import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.RangeType;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * An axis for displaying numerical data.

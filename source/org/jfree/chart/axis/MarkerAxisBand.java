@@ -64,8 +64,8 @@ import java.util.List;
 
 import org.jfree.chart.plot.IntervalMarker;
 import org.jfree.chart.text.TextUtilities;
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.RectangleEdge;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A band that can be added to a number axis to display regions.

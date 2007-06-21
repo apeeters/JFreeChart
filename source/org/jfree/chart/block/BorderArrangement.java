@@ -51,10 +51,10 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.Size2D;
 import org.jfree.data.Range;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * An arrangement manager that lays out blocks in a similar way to

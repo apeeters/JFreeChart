@@ -51,6 +51,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 02-Feb-2007 : Removed author tags from all over JFreeChart sources (DG);
  * 17-Apr-2007 : Use new URLUtilities class to encode URLs (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -58,8 +59,8 @@ package org.jfree.chart.urls;
 
 import java.io.Serializable;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A URL generator that can be assigned to a 

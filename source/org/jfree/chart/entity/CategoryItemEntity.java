@@ -49,7 +49,7 @@
  * 11-Jan-2005 : Removed deprecated code in preparation for 1.0.0 release (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 18-May-2007 : Updated to use row and column keys to identify item (DG);
- * 19-Jun-2007 : Removed deprecated code (DG);
+ * 19-Jun-2007 : Removed deprecated code and JCommon dependencies (DG);
  *
  */
 
@@ -58,8 +58,8 @@ package org.jfree.chart.entity;
 import java.awt.Shape;
 import java.io.Serializable;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A chart entity that represents one item within a category plot.

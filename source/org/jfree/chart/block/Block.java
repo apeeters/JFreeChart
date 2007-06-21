@@ -49,8 +49,8 @@ package org.jfree.chart.block;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+import org.jfree.chart.Drawable;
 import org.jfree.chart.util.Size2D;
-import org.jfree.ui.Drawable;
 
 /**
  * A block is an arbitrary item that can be drawn (in Java2D space) within a 

@@ -51,7 +51,7 @@ package org.jfree.chart.axis;
 import java.io.Serializable;
 
 import org.jfree.chart.text.TextAnchor;
-import org.jfree.util.ObjectUtilities;
+import org.jfree.chart.util.ObjectUtilities;
 
 /**
  * The base class used to represent labelled ticks along an axis.

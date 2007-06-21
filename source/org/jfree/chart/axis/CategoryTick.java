@@ -47,7 +47,7 @@ package org.jfree.chart.axis;
 import org.jfree.chart.text.TextAnchor;
 import org.jfree.chart.text.TextBlock;
 import org.jfree.chart.text.TextBlockAnchor;
-import org.jfree.util.ObjectUtilities;
+import org.jfree.chart.util.ObjectUtilities;
 
 /**
  * A tick for a {@link CategoryAxis}.

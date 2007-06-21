@@ -66,8 +66,8 @@ import org.jfree.chart.event.TitleChangeEvent;
 import org.jfree.chart.util.HorizontalAlignment;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.Size2D;
 import org.jfree.chart.util.VerticalAlignment;
-import org.jfree.ui.Size2D;
 
 /**
  * A chart title that displays an image.  This is useful, for example, if you

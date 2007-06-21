@@ -27,7 +27,7 @@
  * ----------------------------
  * StandardPieURLGenerator.java
  * ----------------------------
- * (C) Copyright 2002-2006, by Richard Atkinson and Contributors.
+ * (C) Copyright 2002-2007, by Richard Atkinson and Contributors.
  *
  * Original Author:  Richard Atkinson;
  * Contributors:     David Gilbert (for Object Refinery Limited);
@@ -47,6 +47,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 24-Nov-2006 : Fixed equals() method and added argument checks (DG);
  * 17-Apr-2007 : Encode section key in generateURL() (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
  
@@ -54,8 +55,8 @@ package org.jfree.chart.urls;
 
 import java.io.Serializable;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.general.PieDataset;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A URL generator for pie charts.  Instances of this class are immutable.

@@ -141,6 +141,7 @@ import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueAxisPlot;
 import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
@@ -148,7 +149,6 @@ import org.jfree.data.time.DateRange;
 import org.jfree.data.time.Month;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.Year;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * The base class for axes that display dates.  You will find it easier to 

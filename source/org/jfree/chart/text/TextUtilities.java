@@ -52,6 +52,7 @@
  * 27-Jun-2005 : Added code to getTextBounds() method to work around Sun's bug 
  *               parade item 6183356 (DG);
  * 06-Jan-2006 : Reformatted (DG);
+ * 21-Jun-2007 : Copied from JCommon (DG);
  * 
  */
 
@@ -69,7 +70,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.text.BreakIterator;
 
-import org.jfree.util.ObjectUtilities;
+import org.jfree.chart.util.ObjectUtilities;
 
 /**
  * Some utility methods for working with text.

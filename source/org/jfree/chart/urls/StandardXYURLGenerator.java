@@ -45,6 +45,7 @@
  * 13-Jan-2005 : Modified for XHTML 1.0 compliance (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 02-Feb-2007 : Removed author tags from all over JFreeChart sources (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -52,8 +53,8 @@ package org.jfree.chart.urls;
 
 import java.io.Serializable;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * A URL generator.

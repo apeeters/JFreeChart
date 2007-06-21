@@ -41,6 +41,7 @@
  *               Serializable (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 18-May-2007 : Added dataset and seriesKey fields (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -49,8 +50,8 @@ package org.jfree.chart.entity;
 import java.awt.Shape;
 import java.io.Serializable;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.general.Dataset;
-import org.jfree.util.ObjectUtilities;
 
 /**
  * An entity that represents an item within a legend.
