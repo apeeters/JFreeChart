@@ -91,6 +91,7 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.util.Layer;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.time.Day;
+import org.jfree.data.time.MonthConstants;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.DefaultXYDataset;
@@ -98,7 +99,6 @@ import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.date.MonthConstants;
 
 /**
  * Tests for the {@link XYPlot} class.

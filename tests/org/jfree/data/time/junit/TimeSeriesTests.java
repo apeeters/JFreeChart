@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * TimeSeriesTests.java
  * --------------------
- * (C) Copyright 2001-2006, by Object Refinery Limited.
+ * (C) Copyright 2001-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -44,6 +44,7 @@
  *               method can lead to more than maximumItemCount items in the 
  *               dataset (DG);
  * 24-May-2006 : Added new tests (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -66,11 +67,11 @@ import org.jfree.data.general.SeriesException;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.FixedMillisecond;
 import org.jfree.data.time.Month;
+import org.jfree.data.time.MonthConstants;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesDataItem;
 import org.jfree.data.time.Year;
-import org.jfree.date.MonthConstants;
 
 /**
  * A collection of test cases for the {@link TimeSeries} class.

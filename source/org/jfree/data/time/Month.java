@@ -57,6 +57,7 @@
  * 05-Oct-2006 : Updated API docs (DG);
  * 06-Oct-2006 : Refactored to cache first and last millisecond values (DG);
  * 04-Apr-2007 : Fixed bug in Month(Date, TimeZone) constructor (CB);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -67,7 +68,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.jfree.date.MonthConstants;
 import org.jfree.date.SerialDate;
 
 /**

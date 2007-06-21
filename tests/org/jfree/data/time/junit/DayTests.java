@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------
  * DayTests.java
  * -------------
- * (C) Copyright 2001-2006, by Object Refinery Limited.
+ * (C) Copyright 2001-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -45,6 +45,7 @@
  * 21-Oct-2003 : Added hashCode test (DG);
  * 11-Jan-2005 : Added test for non-clonability (DG);
  * 03-Oct-2006 : Added testGetSerialIndex() (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -69,7 +70,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.data.time.Day;
-import org.jfree.date.MonthConstants;
+import org.jfree.data.time.MonthConstants;
 
 /**
  * Tests for the {@link Day} class.

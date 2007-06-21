@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 30-Jul-2003 : Version 1 (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -58,12 +59,12 @@ import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.general.SeriesChangeListener;
 import org.jfree.data.general.SeriesException;
 import org.jfree.data.time.Day;
+import org.jfree.data.time.MonthConstants;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.SimpleTimePeriod;
 import org.jfree.data.time.TimePeriodValue;
 import org.jfree.data.time.TimePeriodValues;
 import org.jfree.data.time.Year;
-import org.jfree.date.MonthConstants;
 
 /**
  * A collection of test cases for the {@link TimePeriodValues} class.
