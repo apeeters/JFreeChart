@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * DefaultTitleEditor.java
  * -----------------------
- * (C) Copyright 2005, by Object Refinery Limited.
+ * (C) Copyright 2005, 2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Arnaud Lelievre;
@@ -38,6 +38,7 @@
  * Changes
  * -------
  * 24-Nov-2005 : Version 1, based on TitlePropertyEditPanel.java (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -61,12 +62,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.title.Title;
 import org.jfree.chart.title.TextTitle;
-import org.jfree.layout.LCBLayout;
-import org.jfree.ui.FontChooserPanel;
-import org.jfree.ui.FontDisplayField;
-import org.jfree.ui.PaintSample;
+import org.jfree.chart.title.Title;
+import org.jfree.chart.ui.FontChooserPanel;
+import org.jfree.chart.ui.FontDisplayField;
+import org.jfree.chart.ui.LCBLayout;
+import org.jfree.chart.ui.PaintSample;
 
 /**
  * A panel for editing the properties of a chart title.

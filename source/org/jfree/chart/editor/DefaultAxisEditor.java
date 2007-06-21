@@ -64,11 +64,12 @@ import javax.swing.JTextField;
 
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.ui.FontChooserPanel;
+import org.jfree.chart.ui.FontDisplayField;
+import org.jfree.chart.ui.LCBLayout;
+import org.jfree.chart.ui.PaintSample;
 import org.jfree.chart.util.RectangleInsets;
-import org.jfree.layout.LCBLayout;
-import org.jfree.ui.FontChooserPanel;
-import org.jfree.ui.FontDisplayField;
-import org.jfree.ui.PaintSample;
+
 
 /**
  * A panel for editing the properties of an axis.

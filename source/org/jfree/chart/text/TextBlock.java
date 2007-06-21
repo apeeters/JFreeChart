@@ -62,8 +62,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.Size2D;
-import org.jfree.util.ShapeUtilities;
 
 /**
  * A list of {@link TextLine} objects that form a block of text.
