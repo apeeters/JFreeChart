@@ -61,6 +61,11 @@ public class BasicProjectInfo extends Library {
         private String libraryClass;
         private transient Library library;
 
+        /**
+         * Creates a new instance.
+         * 
+         * @param libraryClass  the library class.
+         */
         public OptionalLibraryHolder(String libraryClass) {
             if (libraryClass == null) {
                 throw new NullPointerException(
@@ -69,6 +74,11 @@ public class BasicProjectInfo extends Library {
             this.libraryClass = libraryClass;
         }
 
+        /**
+         * Creates a new instance.
+         * 
+         * @param library  the library (<code>null</code> not permitted).
+         */
         public OptionalLibraryHolder(Library library) {
           if (library == null) {
               throw new NullPointerException("Library must not be null.");
@@ -77,15 +87,25 @@ public class BasicProjectInfo extends Library {
           this.libraryClass = library.getClass().getName();
         }
 
+        /**
+         * Returns the library class.
+         * 
+         * @return The library class.
+         */
         public String getLibraryClass() {
-            return libraryClass;
+            return this.libraryClass;
         }
 
+        /**
+         * Returns the library.
+         * 
+         * @return The library.
+         */
         public Library getLibrary() {
-            if (library == null) {
-                library = loadLibrary(libraryClass);
+            if (this.library == null) {
+                this.library = loadLibrary(this.libraryClass);
             }
-            return library;
+            return this.library;
         }
 
         protected Library loadLibrary(String classname) {
@@ -245,9 +265,9 @@ public class BasicProjectInfo extends Library {
      */
     public Library[] getOptionalLibraries() {
         ArrayList libraries = new ArrayList();
-        for (int i = 0; i < optionalLibraries.size(); i++) {
+        for (int i = 0; i < this.optionalLibraries.size(); i++) {
           OptionalLibraryHolder holder =
-                  (OptionalLibraryHolder) optionalLibraries.get(i);
+                  (OptionalLibraryHolder) this.optionalLibraries.get(i);
           Library l = holder.getLibrary();
           if (l != null) {
               libraries.add(l);
@@ -257,11 +277,9 @@ public class BasicProjectInfo extends Library {
     }
 
     /**
-     * Adds an optional library. These libraries will be booted, if they define
-     * a boot class. A missing class is considered non-fatal and it is assumed
-     * that the programm knows how to handle that.
+     * Adds an optional library.
      *
-     * @param library  the library.
+     * @param libraryClass  the library.
      */
     public void addOptionalLibrary(String libraryClass) {
         if (libraryClass == null) {
