@@ -63,6 +63,7 @@
  * 20-Apr-2005 : Added toString() implementation (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 06-Feb-2007 : API doc update (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -78,9 +79,9 @@ import java.io.Serializable;
 
 import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
 import org.jfree.chart.imagemap.URLTagFragmentGenerator;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
+import org.jfree.chart.util.SerialUtilities; 
 
 /**
  * A class that captures information about some component of a chart (a bar, 

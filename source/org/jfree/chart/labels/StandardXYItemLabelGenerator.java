@@ -56,6 +56,7 @@
  *               --> StandardXYItemLabelGenerator (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 25-Jan-2007 : Added new constructor - see bug 1624067 (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -65,8 +66,8 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A standard item label generator for plots that use data from an 

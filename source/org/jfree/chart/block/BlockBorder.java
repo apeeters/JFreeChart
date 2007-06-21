@@ -42,6 +42,7 @@
  * 06-May-2005 : Added new convenience constructors (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 16-Mar-2007 : Implemented BlockFrame (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -56,9 +57,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.util.PaintUtilities;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A border for a block.  This class is immutable.

@@ -87,13 +87,13 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.axis.ValueTick;
 import org.jfree.chart.event.PlotChangeEvent;
+import org.jfree.chart.util.ArrayUtilities;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.SerialUtilities;
 import org.jfree.data.Range;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.ArrayUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PaintUtilities;
 
 /**
  * A fast scatter plot.

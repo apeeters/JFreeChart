@@ -108,16 +108,15 @@ import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.text.TextAnchor;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.BooleanList;
-import org.jfree.util.BooleanUtilities;
-import org.jfree.util.ObjectList;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PaintList;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.ShapeList;
-import org.jfree.util.ShapeUtilities;
-import org.jfree.util.StrokeList;
+import org.jfree.chart.util.BooleanList;
+import org.jfree.chart.util.ObjectList;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PaintList;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.SerialUtilities;
+import org.jfree.chart.util.ShapeList;
+import org.jfree.chart.util.ShapeUtilities;
+import org.jfree.chart.util.StrokeList;
 
 /**
  * Base class providing common services for renderers.  Most methods that update
@@ -1537,7 +1536,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param visible  the flag.
      */
     public void setSeriesItemLabelsVisible(int series, boolean visible) {
-        setSeriesItemLabelsVisible(series, BooleanUtilities.valueOf(visible));
+        setSeriesItemLabelsVisible(series, Boolean.valueOf(visible));
     }
     
     /**
@@ -1586,7 +1585,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param visible  the flag.
      */
     public void setBaseItemLabelsVisible(boolean visible) {
-        setBaseItemLabelsVisible(BooleanUtilities.valueOf(visible));
+        setBaseItemLabelsVisible(Boolean.valueOf(visible));
     }
     
     /**

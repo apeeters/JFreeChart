@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------------
  * StandardPieToolTipGenerator.java
  * --------------------------------
- * (C) Copyright 2001-2006, by Object Refinery Limited.
+ * (C) Copyright 2001-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard Atkinson;
@@ -53,6 +53,7 @@
  * 25-Nov-2004 : Moved some code into abstract super class (DG);
  * 29-Jul-2005 : Removed implementation of PieSectionLabelGenerator 
  *               interface (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -61,8 +62,8 @@ package org.jfree.chart.labels;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.PieDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A standard item label generator for plots that use data from a 

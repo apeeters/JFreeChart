@@ -104,18 +104,18 @@ import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.urls.CategoryURLGenerator;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PaintList;
+import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.Rotation;
+import org.jfree.chart.util.SerialUtilities;
+import org.jfree.chart.util.ShapeUtilities;
+import org.jfree.chart.util.StrokeList;
+import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PaintList;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.Rotation;
-import org.jfree.util.ShapeUtilities;
-import org.jfree.util.StrokeList;
-import org.jfree.util.TableOrder;
 
 /**
  * A plot that displays data from a {@link CategoryDataset} in the form of a 

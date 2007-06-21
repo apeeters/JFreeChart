@@ -74,13 +74,13 @@ import java.io.Serializable;
 import java.text.AttributedString;
 import java.text.CharacterIterator;
 
+import org.jfree.chart.util.AttributedStringUtilities;
 import org.jfree.chart.util.GradientPaintTransformer;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.SerialUtilities;
+import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.general.Dataset;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.AttributedStringUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.ShapeUtilities;
 
 /**
  * A temporary storage object for recording the properties of a legend item, 

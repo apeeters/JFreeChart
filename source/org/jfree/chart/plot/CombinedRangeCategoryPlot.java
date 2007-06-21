@@ -52,6 +52,7 @@
  *               items if set (DG);
  * 05-May-2005 : Updated draw() method parameters (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 
  */
  
 package org.jfree.chart.plot;
@@ -73,11 +74,11 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.PlotChangeListener;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A combined category plot where the range axis is shared.

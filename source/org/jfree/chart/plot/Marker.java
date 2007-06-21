@@ -78,12 +78,12 @@ import javax.swing.event.EventListenerList;
 import org.jfree.chart.event.MarkerChangeEvent;
 import org.jfree.chart.event.MarkerChangeListener;
 import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.LengthAdjustmentType;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleInsets;
-import org.jfree.io.SerialUtilities;
-import org.jfree.ui.LengthAdjustmentType;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PaintUtilities;
+import org.jfree.chart.util.SerialUtilities;
 
 /**
  * The base class for markers that can be added to plots to highlight a value 

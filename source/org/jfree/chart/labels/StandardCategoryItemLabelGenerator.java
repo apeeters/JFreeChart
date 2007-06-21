@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------------------
  * StandardCategoryItemLabelGenerator.java
  * ---------------------------------------
- * (C) Copyright 2004-2006, by Object Refinery Limited.
+ * (C) Copyright 2004-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -39,8 +39,10 @@
  * 11-May-2004 : Version 1 (DG);
  * 20-Apr-2005 : Renamed StandardCategoryLabelGenerator 
  *               --> StandardCategoryItemLabelGenerator (DG);
- * ------------- JFREECHART 1.0.0 ---------------------------------------------
+ * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 03-May-2005 : Added equals() implementation, to fix bug 1481087 (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 
  */
 
 package org.jfree.chart.labels;
@@ -49,8 +51,8 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A standard label generator that can be used with a 

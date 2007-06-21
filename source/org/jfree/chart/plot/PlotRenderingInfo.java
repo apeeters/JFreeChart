@@ -43,6 +43,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 01-Dec-2006 : Implemented clone() method properly (DG);
  * 17-Apr-2007 : Fixed bug 1698965 (NPE in CombinedDomainXYPlot) (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
  
@@ -57,8 +58,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.ObjectUtilities;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.SerialUtilities;
 
 /**
  * Stores information about the dimensions of a plot and its subplots.

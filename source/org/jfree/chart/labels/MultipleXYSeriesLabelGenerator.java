@@ -39,6 +39,7 @@
  * 19-Nov-2004 : Version 1 (DG);
  * 18-Apr-2005 : Use StringBuffer (DG);
  * 20-Feb-2007 : Fixed for equals() and cloning() (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -52,8 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A series label generator for plots that use data from 

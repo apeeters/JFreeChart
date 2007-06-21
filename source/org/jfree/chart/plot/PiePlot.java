@@ -191,19 +191,19 @@ import org.jfree.chart.text.TextBlock;
 import org.jfree.chart.text.TextBox;
 import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.urls.PieURLGenerator;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.Rotation;
+import org.jfree.chart.util.SerialUtilities;
+import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.KeyedValues;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.general.PieDataset;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.PublicCloneable;
-import org.jfree.util.Rotation;
-import org.jfree.util.ShapeUtilities;
 
 /**
  * A plot that displays data in the form of a pie chart, using data from any 

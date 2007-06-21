@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------------
  * CategoryToolTipGenerator.java
  * -----------------------------
- * (C) Copyright 2001-2004, by Object Refinery Limited.
+ * (C) Copyright 2001-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,11 +38,13 @@
  * -------
  * 15-Apr-2004 : Separated tool tip method from CategoryItemLabelGenerator 
  *               interface (DG);
+ * 21-Jun-2007 : Removed JCommon dependency (DG);
  *
  */
 
 package org.jfree.chart.labels;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.category.CategoryDataset;
 
 /**
@@ -52,8 +54,7 @@ import org.jfree.data.category.CategoryDataset;
  * items in a {@link org.jfree.chart.plot.CategoryPlot}. 
  * <p>
  * To assist with cloning charts, classes that implement this interface should 
- * also implement the <code>org.jfree.util.PublicCloneable</code> interface (in
- * JCommon).
+ * also implement the {@link PublicCloneable} interface.
  */
 public interface CategoryToolTipGenerator {
 

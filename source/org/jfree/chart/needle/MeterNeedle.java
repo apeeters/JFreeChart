@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------
  * MeterNeedle.java
  * ----------------
- * (C) Copyright 2002-2006, by the Australian Antarctic Division and 
+ * (C) Copyright 2002-2007, by the Australian Antarctic Division and 
  *                          Contributors.
  *
  * Original Author:  Bryan Scott (for the Australian Antarctic Division);
@@ -44,6 +44,7 @@
  * 01-Sep-2003 : Implemented Serialization (NB);
  * 16-Mar-2004 : Changed transform from private to protected (BRS);
  * 08-Jun-2005 : Fixed equals() method to handle GradientPaint (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -63,9 +64,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PaintUtilities;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.SerialUtilities;
 
 /**
  * The base class used to represent the needle on a 

@@ -55,8 +55,8 @@ import java.io.Serializable;
 
 import org.jfree.chart.event.MarkerChangeEvent;
 import org.jfree.chart.util.GradientPaintTransformer;
-import org.jfree.ui.LengthAdjustmentType;
-import org.jfree.util.ObjectUtilities;
+import org.jfree.chart.util.LengthAdjustmentType;
+import org.jfree.chart.util.ObjectUtilities;
 
 /**
  * Represents an interval to be highlighted in some way.

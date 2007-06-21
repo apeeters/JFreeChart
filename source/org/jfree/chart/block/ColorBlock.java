@@ -40,6 +40,7 @@
  * 20-Apr-2005 : Added new draw() method (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 16-Mar-2007 : Implemented equals() and fixed serialization (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -52,8 +53,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.PaintUtilities;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A block that is filled with a single color.

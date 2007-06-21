@@ -43,6 +43,7 @@
  * 17-Nov-2003 : Implemented PublicCloneable (DG);
  * 25-Feb-2004 : Renamed XYToolTipGenerator --> XYItemLabelGenerator (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -51,8 +52,8 @@ package org.jfree.chart.labels;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A tool tip generator that stores custom tooltips. The dataset passed into 

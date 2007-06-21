@@ -45,6 +45,7 @@
  * 19-Jan-2005 : Now accesses primitives only from dataset (DG);
  * 20-Apr-2005 : Renamed XYLabelGenerator --> XYItemLabelGenerator (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -52,12 +53,12 @@ package org.jfree.chart.labels;
 
 import java.io.Serializable;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XisSymbolic;
 import org.jfree.data.xy.YisSymbolic;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A standard item label generator for plots that use data from an 

@@ -196,6 +196,7 @@ import org.jfree.chart.util.Layer;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.SortOrder;
+import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.IntervalCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
@@ -209,7 +210,6 @@ import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.WindDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYZDataset;
-import org.jfree.util.TableOrder;
 
 /**
  * A collection of utility methods for creating some standard charts with 

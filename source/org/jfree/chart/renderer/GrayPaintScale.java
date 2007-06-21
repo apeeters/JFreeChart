@@ -38,6 +38,7 @@
  * -------
  * 05-Jul-2006 : Version 1 (DG);
  * 31-Jan-2007 : Renamed min and max to lowerBound and upperBound (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -47,7 +48,7 @@ import java.awt.Color;
 import java.awt.Paint;
 import java.io.Serializable;
 
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * A paint scale that returns shades of gray.

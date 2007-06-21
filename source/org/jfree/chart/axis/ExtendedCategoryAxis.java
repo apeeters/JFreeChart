@@ -61,9 +61,9 @@ import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.text.TextBlock;
 import org.jfree.chart.text.TextFragment;
 import org.jfree.chart.text.TextLine;
+import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.RectangleEdge;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.PaintUtilities;
+import org.jfree.chart.util.SerialUtilities;
 
 /**
  * An extended version of the {@link CategoryAxis} class that supports 

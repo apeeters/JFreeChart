@@ -45,6 +45,7 @@
  * 27-Sep-2006 : Updated drawItem() method for new lookup methods (DG);
  * 12-Oct-2006 : Added configurable section depth (DG);
  * 14-Feb-2007 : Added notification in setSectionDepth() method (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -70,14 +71,14 @@ import org.jfree.chart.entity.PieSectionEntity;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.labels.PieToolTipGenerator;
 import org.jfree.chart.urls.PieURLGenerator;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.Rotation;
+import org.jfree.chart.util.SerialUtilities;
+import org.jfree.chart.util.ShapeUtilities;
+import org.jfree.chart.util.UnitType;
 import org.jfree.data.general.PieDataset;
-import org.jfree.io.SerialUtilities;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.Rotation;
-import org.jfree.util.ShapeUtilities;
-import org.jfree.util.UnitType;
 
 /**
  * A customised pie plot that leaves a hole in the middle.

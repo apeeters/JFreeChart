@@ -71,8 +71,8 @@ import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.text.TextAnchor;
 import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.util.RectangleEdge;
+import org.jfree.chart.util.SerialUtilities;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.io.SerialUtilities;
 
 /**
  * A specialised category axis that can display sub-categories.
