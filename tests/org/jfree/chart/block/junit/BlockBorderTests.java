@@ -57,8 +57,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.block.BlockBorder;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.util.UnitType;
+import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.UnitType;
 
 /**
  * Tests for the {@link BlockBorder} class.

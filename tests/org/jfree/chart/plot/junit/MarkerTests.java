@@ -61,9 +61,9 @@ import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.LengthAdjustmentType;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleInsets;
-import org.jfree.ui.LengthAdjustmentType;
 
 /**
  * Tests for the {@link Marker} class.

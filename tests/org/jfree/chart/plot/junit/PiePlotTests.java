@@ -41,6 +41,7 @@
  * 27-Sep-2006 : Added tests for the getBaseSectionPaint() method (DG);
  * 23-Nov-2006 : Additional equals() and clone() tests (DG);
  * 17-Apr-2007 : Added check for label generator that returns a null label (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -76,9 +77,9 @@ import org.jfree.chart.labels.StandardPieToolTipGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.urls.CustomPieURLGenerator;
 import org.jfree.chart.urls.StandardPieURLGenerator;
+import org.jfree.chart.util.Rotation;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.util.Rotation;
 
 /**
  * Some tests for the {@link PiePlot} class.

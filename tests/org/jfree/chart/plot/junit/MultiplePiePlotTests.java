@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------
  * MultiplePiePlotTests.java
  * -------------------------
- * (C) Copyright 2005, 2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2005-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,7 +38,8 @@
  * -------
  * 16-Jun-2005 : Version 1 (DG);
  * 06-Apr-2006 : Added tests for new fields (DG);
- *
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 
  */
 
 package org.jfree.chart.plot.junit;
@@ -58,7 +59,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.plot.MultiplePiePlot;
-import org.jfree.util.TableOrder;
+import org.jfree.chart.util.TableOrder;
 
 /**
  * Some tests for the {@link MultiplePiePlot} class.

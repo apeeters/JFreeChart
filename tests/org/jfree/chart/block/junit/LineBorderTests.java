@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 16-Mar-2007 : Version 1 (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -57,7 +58,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.block.LineBorder;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.util.RectangleInsets;
 
 /**
  * Tests for the {@link LineBorder} class.

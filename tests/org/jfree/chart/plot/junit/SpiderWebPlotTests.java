@@ -39,6 +39,7 @@
  * 10-Jun-2005 : Version 1 (DG);
  * 01-Jun-2006 : Added testDrawWithNullInfo() method (DG);
  * 05-Feb-2007 : Added more checks to testCloning (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  *
  */
 
@@ -69,9 +70,9 @@ import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
 import org.jfree.chart.plot.SpiderWebPlot;
 import org.jfree.chart.urls.StandardCategoryURLGenerator;
+import org.jfree.chart.util.Rotation;
+import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.util.Rotation;
-import org.jfree.util.TableOrder;
 
 /**
  * Tests for the {@link SpiderWebPlot} class.
