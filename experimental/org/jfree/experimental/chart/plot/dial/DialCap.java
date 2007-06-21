@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 03-Nov-2006 : Version 1 (DG);
+ * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 
  */
 
@@ -55,9 +56,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.jfree.chart.HashUtilities;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.PublicCloneable;
+import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A regular dial layer that can be used to draw a cap over the center of 

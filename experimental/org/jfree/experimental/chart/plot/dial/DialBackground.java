@@ -55,10 +55,10 @@ import java.io.Serializable;
 
 import org.jfree.chart.HashUtilities;
 import org.jfree.chart.util.GradientPaintTransformer;
+import org.jfree.chart.util.PaintUtilities;
+import org.jfree.chart.util.PublicCloneable;
+import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.StandardGradientPaintTransformer;
-import org.jfree.io.SerialUtilities;
-import org.jfree.util.PaintUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * A regular dial layer that can be used to draw the background for a dial.

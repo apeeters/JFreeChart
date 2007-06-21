@@ -54,7 +54,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * A base class for the pointer in a {@link DialPlot}.

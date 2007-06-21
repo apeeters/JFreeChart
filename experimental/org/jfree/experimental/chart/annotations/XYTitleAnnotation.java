@@ -60,13 +60,13 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.Title;
+import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.Size2D;
 import org.jfree.data.Range;
 import org.jfree.experimental.chart.util.XYCoordinateType;
-import org.jfree.util.ObjectUtilities;
-import org.jfree.util.PublicCloneable;
 
 /**
  * An annotation that allows any {@link Title} to be placed at a location on 
