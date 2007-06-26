@@ -166,7 +166,7 @@ public class BarChartDemo1 extends ApplicationFrame {
         // ******************************************************************
         
         // set the range axis to display integers only...
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         // disable bar outlines...
