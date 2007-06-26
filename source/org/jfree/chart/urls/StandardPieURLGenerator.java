@@ -48,12 +48,15 @@
  * 24-Nov-2006 : Fixed equals() method and added argument checks (DG);
  * 17-Apr-2007 : Encode section key in generateURL() (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 26-Jun-2007 : Removed URLUtilities dependency (DG);
  *
  */
  
 package org.jfree.chart.urls;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.general.PieDataset;
@@ -138,13 +141,18 @@ public class StandardPieURLGenerator implements PieURLGenerator, Serializable {
      */
     public String generateURL(PieDataset dataset, Comparable key, int pieIndex) {
         String url = this.prefix;
+        String encodedKey = null;
+        try {
+            encodedKey = URLEncoder.encode(key.toString(), "UTF-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            encodedKey = key.toString();
+        }
         if (url.indexOf("?") > -1) {
-            url += "&amp;" + this.categoryParameterName + "=" 
-                    + URLUtilities.encode(key.toString(), "UTF-8");
+            url += "&amp;" + this.categoryParameterName + "=" + encodedKey;
         }
         else {
-            url += "?" + this.categoryParameterName + "=" 
-                    + URLUtilities.encode(key.toString(), "UTF-8");
+            url += "?" + this.categoryParameterName + "=" + encodedKey;
         }
         if (this.indexParameterName != null) {
             url += "&amp;" + this.indexParameterName + "=" 

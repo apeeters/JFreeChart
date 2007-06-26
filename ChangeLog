@@ -1,3 +1,13 @@
+2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
+
+	* source/org/jfree/chart/urls/StandardCategoryURLGenerator.java
+	(generateURL): Use URLEncoder rather than URLUtilities,
+	* source/org/jfree/chart/urls/StandardPieURLGenerator.java
+	(generateURL): Likewise,
+	* source/org/jfree/chart/urls/TimeSeriesURLGenerator.java
+	(generateURL): Likewise,
+	* source/org/jfree/chart/urls/URLUtilities.java: Removed.
+
 2007-06-26  David Gilbert  <david.gilbert@object-refinery.com>
 
 	* source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
