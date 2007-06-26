@@ -1,5 +1,35 @@
 2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/ChartFactory.java
+	(createAreaChart): Updated for renamed method,
+	(createBarChart): Likewise,
+	(createBarChart3D): Likewise,
+	(createGanttChart): Likewise,
+	(createLineChart): Likewise,
+	(createLineChart3D): Likewise,
+	(createStackedAreaChart): Likewise,
+	(createStackedBarChart): Likewise,
+	(createStackedBarChart3D): Likewise,
+	(createWaterfallChart): Likewise,
+	* source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
+	(itemURLGeneratorList): Renamed urlGeneratorList,
+	(baseItemURLGenerator): Renamed baseURLGenerator,
+	(AbstractCategoryItemRenderer): Updated for renamed fields,
+	(getItemURLGenerator): Updated for renamed fields,
+	(getSeriesItemURLGenerator): Renamed getSeriesURLGenerator,
+	(setSeriesItemURLGenerator): Renamed setSeriesURLGenerator,
+	(getBaseItemURLGenerator): Renamed getBaseURLGenerator,
+	(setBaseItemURLGenerator): Renamed setBaseURLGenerator,
+	(equals): Updated for renamed fields,
+	(clone): Likewise,
+	* source/org/jfree/chart/renderer/category/CategoryItemRenderer.java
+	(getSeriesItemURLGenerator): Renamed getSeriesURLGenerator,
+	(setSeriesItemURLGenerator): Renamed setSeriesURLGenerator,
+	(getBaseItemURLGenerator): Renamed getBaseURLGenerator,
+	(setBaseItemURLGenerator): Renamed setBaseURLGenerator.	
+
+2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/urls/StandardCategoryURLGenerator.java
 	(generateURL): Use URLEncoder rather than URLUtilities,
 	* source/org/jfree/chart/urls/StandardPieURLGenerator.java
