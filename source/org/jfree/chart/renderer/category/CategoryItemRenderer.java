@@ -330,7 +330,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
     /**
      * Returns the flag that controls whether a series is visible in the 
      * legend.  This method returns only the "per series" settings - to 
-     * incorporate the override and base settings as well, you need to use the 
+     * do a lookup that falls back to the default value, you need to use the 
      * {@link #isSeriesVisibleInLegend(int)} method.
      *
      * @param series  the series index (zero-based).
@@ -917,6 +917,20 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @see #setSeriesItemLabelsVisible(int, Boolean)
      */    
     public boolean isSeriesItemLabelsVisible(int series);
+    
+    /**
+     * Returns a flag that controls whether or not item labels are displayed
+     * for the data items in the specified series.
+     * 
+     * @param series  the series index.
+     * 
+     * @return The flag (possibly <code>null</code>).
+     * 
+     * @since 1.2.0
+     * 
+     * @see #isSeriesItemLabelsVisible(int)
+     */
+    public Boolean getSeriesItemLabelsVisible(int series);
     
     /**
      * Sets a flag that controls the visibility of the item labels for a series.

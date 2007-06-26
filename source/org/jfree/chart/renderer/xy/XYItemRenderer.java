@@ -84,6 +84,7 @@
  *               negativeItemLabelPosition and createEntities override 
  *               fields (DG);
  * 20-Jun-2007 : Removed deprecated methods (DG);
+ * 27-Jun-2007 : Added getSeriesItemLabelsVisible(int) method (DG);
  *
  */
 
@@ -614,6 +615,19 @@ public interface XYItemRenderer extends LegendItemSource {
      */    
     public boolean isSeriesItemLabelsVisible(int series);
 
+    
+    /**
+     * Returns the flag that controls whether or not item labels are displayed
+     * for the specified series.
+     * 
+     * @param series  the series index.
+     * 
+     * @return The flag (possibly <code>null</code>).
+     * 
+     * @since 1.2.0
+     */
+    public Boolean getSeriesItemLabelsVisible(int series);
+    
     /**
      * Sets a flag that controls the visibility of the item labels for a series.
      * 

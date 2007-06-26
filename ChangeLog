@@ -1,5 +1,14 @@
 2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/renderer/AbstractRenderer.java
+	(getSeriesItemLabelsVisible): New method,
+	* source/org/jfree/chart/renderer/category/CategoryItemRenderer.java
+	(setSeriesItemLabelsVisible): Likewise,
+	* source/org/jfree/chart/renderer/xy/XYItemRenderer.java
+	(setSeriesItemLabelsVisible): Likewise.	
+
+2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
 	(getItemLabelGenerator): Do lookup,
 	(getSeriesItemLabelGenerator): Return per-series value only, even if

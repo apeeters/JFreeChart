@@ -78,6 +78,7 @@
  *               fields (DG);
  * 13-Jun-2007 : Added new autoPopulate flags for core series attributes (DG);
  * 20-Jun-2007 : Removed deprecated code and JCommon dependencies (DG);
+ * 27-Jun-2007 : Added getSeriesItemLabelsVisible(int) method (DG);
  * 
  */
 
@@ -385,7 +386,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public boolean getItemVisible(int series, int item) {
         return isSeriesVisible(series);
     }
-    
+
     /**
      * Returns a boolean that indicates whether or not the specified series 
      * should be drawn.
@@ -509,7 +510,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /**
      * Returns the flag that controls whether a series is visible in the 
      * legend.  This method returns only the "per series" settings - to 
-     * incorporate the override and base settings as well, you need to use the 
+     * do a lookup that falls back to the default, you need to use the 
      * {@link #isSeriesVisibleInLegend(int)} method.
      *
      * @param series  the series index (zero-based).
@@ -1527,6 +1528,22 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         }
         return b.booleanValue();
 
+    }
+    
+    /**
+     * Returns a flag that controls whether or not item labels are displayed
+     * for the data items in the specified series.
+     * 
+     * @param series  the series index.
+     * 
+     * @return The flag (possibly <code>null</code>).
+     * 
+     * @since 1.2.0
+     * 
+     * @see #isSeriesItemLabelsVisible(int)
+     */
+    public Boolean getSeriesItemLabelsVisible(int series) {
+        return this.itemLabelsVisibleList.getBoolean(series);
     }
 
     /**
