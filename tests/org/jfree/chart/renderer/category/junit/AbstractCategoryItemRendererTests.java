@@ -39,7 +39,8 @@
  * 12-Feb-2004 : Version 1 (DG);
  * 24-Nov-2006 : New cloning tests (DG);
  * 07-Dec-2006 : Added testEquals() method (DG);
- * 
+ * 26-Jun-2007 : Added testGetSeriesItemLabelGenerator() and 
+ *               testGetSeriesURLGenerator() (DG);
  */
 
 package org.jfree.chart.renderer.category.junit;
@@ -56,6 +57,7 @@ import org.jfree.chart.labels.StandardCategorySeriesLabelGenerator;
 import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
 import org.jfree.chart.renderer.category.AbstractCategoryItemRenderer;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.urls.StandardCategoryURLGenerator;
 
 /**
@@ -286,6 +288,35 @@ public class AbstractCategoryItemRendererTests extends TestCase {
         assertTrue(r1.getLegendItemURLGenerator() 
                 != r2.getLegendItemURLGenerator());
     }
+    
+    /**
+     * Check that the getSeriesItemLabelGenerator() method behaves as 
+     * expected.
+     */
+    public void testGetSeriesItemLabelGenerator() {
+        CategoryItemRenderer r = new BarRenderer();
+        assertNull(r.getSeriesItemLabelGenerator(2));
+        r.setSeriesItemLabelGenerator(2, 
+                new StandardCategoryItemLabelGenerator());
+        assertNotNull(r.getSeriesItemLabelGenerator(2));
+        r.setSeriesItemLabelGenerator(2, null);
+        assertNull(r.getSeriesItemLabelGenerator(2));
+        r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+        assertNull(r.getSeriesItemLabelGenerator(2));
+    }
 
+    /**
+     * Check that the getSeriesURLGenerator() method behaves as expected.
+     */
+    public void testGetSeriesURLGenerator() {
+        CategoryItemRenderer r = new BarRenderer();
+        assertNull(r.getSeriesURLGenerator(2));
+        r.setSeriesURLGenerator(2, new StandardCategoryURLGenerator());
+        assertNotNull(r.getSeriesURLGenerator(2));
+        r.setSeriesURLGenerator(2, null);
+        assertNull(r.getSeriesURLGenerator(2));
+        r.setBaseURLGenerator(new StandardCategoryURLGenerator());
+        assertNull(r.getSeriesURLGenerator(2));
+    }
 }
     

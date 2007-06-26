@@ -1,5 +1,14 @@
 2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
+	(getItemLabelGenerator): Do lookup,
+	(getSeriesItemLabelGenerator): Return per-series value only, even if
+	null,
+	(getItemURLGenerator): Do lookup,
+	(getSeriesItemURLGenerator): Return per-series value only, even if null.
+
+2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/ChartFactory.java
 	(createAreaChart): Updated for renamed method,
 	(createBarChart): Likewise,

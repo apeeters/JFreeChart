@@ -96,7 +96,7 @@
  *               override fields (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 20-Jun-2007 : Removed deprecated code and removed JCommon dependencies (DG);
- * 26-Jun-2007 : Added some new methods with 'notify' argument, renamed
+ * 27-Jun-2007 : Added some new methods with 'notify' argument, renamed
  *               methods containing 'ItemURL' to just 'URL' (DG);
  *
  */
@@ -257,9 +257,9 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
 
     /**
      * Returns the item label generator for a data item.  This implementation
-     * simply passes control to the {@link #getSeriesItemLabelGenerator(int)}
-     * method.  If, for some reason, you want a different generator for
-     * individual items, you can override this method.
+     * returns the series item label generator if one is defined, otherwise
+     * it returns the default item label generator (which may be 
+     * <code>null</code>).
      *
      * @param row  the row index (zero based).
      * @param column  the column index (zero based).
@@ -268,7 +268,12 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      */
     public CategoryItemLabelGenerator getItemLabelGenerator(int row,
             int column) {
-        return getSeriesItemLabelGenerator(row);
+        CategoryItemLabelGenerator generator = (CategoryItemLabelGenerator)
+        this.itemLabelGeneratorList.get(row);
+        if (generator == null) {
+            generator = this.baseItemLabelGenerator;
+        }
+        return generator;
     }
 
     /**
@@ -281,15 +286,8 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @see #setSeriesItemLabelGenerator(int, CategoryItemLabelGenerator)
      */
     public CategoryItemLabelGenerator getSeriesItemLabelGenerator(int series) {
-
-        // look up the generator table
-        CategoryItemLabelGenerator generator = (CategoryItemLabelGenerator)
-            this.itemLabelGeneratorList.get(series);
-        if (generator == null) {
-            generator = this.baseItemLabelGenerator;
-        }
-        return generator;
-
+        return (CategoryItemLabelGenerator) this.itemLabelGeneratorList.get(
+                series);
     }
 
     /**
@@ -488,9 +486,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     // URL GENERATOR
 
     /**
-     * Returns the URL generator for a data item.  This method just calls the
-     * getSeriesItemURLGenerator method, but you can override this behaviour if
-     * you want to.
+     * Returns the URL generator for a data item.  
      *
      * @param row  the row index (zero based).
      * @param column  the column index (zero based).
@@ -498,7 +494,12 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @return The URL generator.
      */
     public CategoryURLGenerator getItemURLGenerator(int row, int column) {
-        return getSeriesURLGenerator(row);
+        CategoryURLGenerator generator 
+                = (CategoryURLGenerator) this.urlGeneratorList.get(row);
+        if (generator == null) {
+            generator = this.baseURLGenerator;
+        }
+        return generator;
     }
 
     /**
@@ -511,15 +512,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @see #setSeriesURLGenerator(int, CategoryURLGenerator)
      */
     public CategoryURLGenerator getSeriesURLGenerator(int series) {
-
-        // look up the generator table
-        CategoryURLGenerator generator 
-                = (CategoryURLGenerator) this.urlGeneratorList.get(series);
-        if (generator == null) {
-            generator = this.baseURLGenerator;
-        }
-        return generator;
-
+        return (CategoryURLGenerator) this.urlGeneratorList.get(series);
     }
 
     /**
