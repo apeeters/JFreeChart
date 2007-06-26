@@ -93,6 +93,9 @@
  *               negativeItemLabelPosition and createEntities override 
  *               fields (DG);
  * 20-Jun-2007 : Removed deprecated code (DG);
+ * 26-Jun-2007 : Added a number of methods already implemented in the
+ *               AbstractCategoryItemRenderer class but missing from this
+ *               interface (DG);
  *
  */
 
@@ -428,7 +431,17 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setSeriesPaint(int series, Paint paint);
     
-    // FIXME: add setSeriesPaint(int, Paint, boolean)?
+    /**
+     * Sets the paint used for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index.
+     * @param paint  the paint (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     *
+     * @since 1.2.0
+     */
+    public void setSeriesPaint(int series, Paint paint, boolean notify);
     
     /**
      * Returns the base paint.
@@ -449,60 +462,107 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBasePaint(Paint paint);
     
-    // FIXME: add setBasePaint(int, Paint, boolean)?
+    /**
+     * Sets the base paint and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     *
+     * @since 1.2.0
+     */
+    public void setBasePaint(Paint paint, boolean notify);
 
     //// FILL PAINT /////////////////////////////////////////////////////////
     
-//    /**
-//     * Returns the paint used to fill data items as they are drawn.
-//     *
-//     * @param row  the row (or series) index (zero-based).
-//     * @param column  the column (or category) index (zero-based).
-//     *
-//     * @return The paint (never <code>null</code>).
-//     */
-//    public Paint getItemFillPaint(int row, int column);
-//    
-//    /**
-//     * Returns the paint used to fill an item drawn by the renderer.
-//     *
-//     * @param series  the series (zero-based index).
-//     *
-//     * @return The paint (possibly <code>null</code>).
-//     * 
-//     * @see #setSeriesFillPaint(int, Paint)
-//     */
-//    public Paint getSeriesFillPaint(int series);
-//
-//    /**
-//     * Sets the paint used for a series outline and sends a 
-//     * {@link RendererChangeEvent} to all registered listeners.
-//     *
-//     * @param series  the series index (zero-based).
-//     * @param paint  the paint (<code>null</code> permitted).
-//     * 
-//     * @see #getSeriesFillPaint(int)
-//     */
-//    public void setSeriesFillPaint(int series, Paint paint);
-//
-//    /**
-//     * Returns the base outline paint.
-//     *
-//     * @return The paint (never <code>null</code>).
-//     * 
-//     * @see #setBaseFillPaint(Paint)
-//     */
-//    public Paint getBaseFillPaint();
-//
-//    /**
-//     * Sets the base outline paint and sends a {@link RendererChangeEvent} to 
-//     * all registered listeners.
-//     *
-//     * @param paint  the paint (<code>null</code> not permitted).
-//     * 
-//     * @see #getBaseFillPaint()
-//     */
-//    public void setBaseFillPaint(Paint paint);
+    /**
+     * Returns the paint used to fill data items as they are drawn.
+     *
+     * @param row  the row (or series) index (zero-based).
+     * @param column  the column (or category) index (zero-based).
+     *
+     * @return The paint (never <code>null</code>).
+     *
+     * @since 1.2.0
+     */
+    public Paint getItemFillPaint(int row, int column);
+    
+    /**
+     * Returns the paint used to fill an item drawn by the renderer.
+     *
+     * @param series  the series (zero-based index).
+     *
+     * @return The paint (possibly <code>null</code>).
+     * 
+     * @see #setSeriesFillPaint(int, Paint)
+     *
+     * @since 1.2.0
+     */
+    public Paint getSeriesFillPaint(int series);
+
+    /**
+     * Sets the fill paint for the specified series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index (zero-based).
+     * @param paint  the paint (<code>null</code> permitted).
+     * 
+     * @see #getSeriesFillPaint(int)
+     *
+     * @since 1.2.0
+     */
+    public void setSeriesFillPaint(int series, Paint paint);
+    
+    /**
+     * Sets the fill paint for the specified series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index (zero-based).
+     * @param paint  the paint (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesFillPaint(int)
+     *
+     * @since 1.2.0
+     */
+    public void setSeriesFillPaint(int series, Paint paint, boolean notify);
+
+    /**
+     * Returns the base fill paint.
+     *
+     * @return The paint (never <code>null</code>).
+     * 
+     * @see #setBaseFillPaint(Paint)
+     *
+     * @since 1.2.0
+     */
+    public Paint getBaseFillPaint();
+
+    /**
+     * Sets the default fill paint and sends a {@link RendererChangeEvent} to 
+     * all registered listeners.
+     *
+     * @param paint  the paint (<code>null</code> not permitted).
+     * 
+     * @see #getBaseFillPaint()
+     *
+     * @since 1.2.0
+     */
+    public void setBaseFillPaint(Paint paint);
+
+    /**
+     * Sets the default fill paint and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseFillPaint()
+     *
+     * @since 1.2.0
+     */
+    public void setBaseFillPaint(Paint paint, boolean notify);
+    
 
     //// OUTLINE PAINT /////////////////////////////////////////////////////////
     
@@ -538,7 +598,19 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setSeriesOutlinePaint(int series, Paint paint);
 
-    // FIXME: add setSeriesOutlinePaint(int, Paint, boolean)?
+    /**
+     * Sets the paint used for a series outline and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index (zero-based).
+     * @param paint  the paint (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesOutlinePaint(int)
+     *
+     * @since 1.2.0
+     */
+    public void setSeriesOutlinePaint(int series, Paint paint, boolean notify);
 
     /**
      * Returns the base outline paint.
@@ -550,8 +622,8 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public Paint getBaseOutlinePaint();
 
     /**
-     * Sets the base outline paint and sends a {@link RendererChangeEvent} to 
-     * all registered listeners.
+     * Sets the default outline paint and sends a {@link RendererChangeEvent} 
+     * to all registered listeners.
      *
      * @param paint  the paint (<code>null</code> not permitted).
      * 
@@ -559,7 +631,19 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseOutlinePaint(Paint paint);
 
-    // FIXME: add setBaseOutlinePaint(Paint, boolean)?
+    /**
+     * Sets the default outline paint and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseOutlinePaint()
+     *
+     * @since 1.2.0
+     */
+    public void setBaseOutlinePaint(Paint paint, boolean notify);
+    
 
     //// STROKE ////////////////////////////////////////////////////////////////
     
@@ -595,19 +679,31 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setSeriesStroke(int series, Stroke stroke);
 
-    // FIXME: add setSeriesStroke(int, Stroke, boolean) ?
+    /**
+     * Sets the stroke used for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index (zero-based).
+     * @param stroke  the stroke (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesStroke(int)
+     *
+     * @since 1.2.0
+     */
+    public void setSeriesStroke(int series, Stroke stroke, boolean notify);
     
     /**
-     * Returns the base stroke.
+     * Returns the default stroke.
      *
-     * @return The base stroke (never <code>null</code>).
+     * @return The default stroke (never <code>null</code>).
      * 
      * @see #setBaseStroke(Stroke)
      */
     public Stroke getBaseStroke();
 
     /**
-     * Sets the base stroke and sends a {@link RendererChangeEvent} to all
+     * Sets the default stroke and sends a {@link RendererChangeEvent} to all
      * registered listeners.
      *
      * @param stroke  the stroke (<code>null</code> not permitted).
@@ -616,7 +712,19 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseStroke(Stroke stroke);
     
-    // FIXME: add setBaseStroke(Stroke, boolean) ?
+    /**
+     * Sets the default stroke and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param stroke  the stroke (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseStroke()
+     *
+     * @since 1.2.0
+     */
+    public void setBaseStroke(Stroke stroke, boolean notify);
+    
     
     //// OUTLINE STROKE ////////////////////////////////////////////////////////
     
@@ -656,7 +764,20 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setSeriesOutlineStroke(int series, Stroke stroke);
     
-    // FIXME: add setSeriesOutlineStroke(int, Stroke, boolean) ?
+    /**
+     * Sets the outline stroke for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param stroke  the stroke (<code>null</code> permitted)
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getSeriesOutlineStroke(int)
+     */
+    public void setSeriesOutlineStroke(int series, Stroke stroke, 
+            boolean notify);
     
     /**
      * Returns the base outline stroke.
@@ -668,8 +789,8 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public Stroke getBaseOutlineStroke();
 
     /**
-     * Sets the base outline stroke and sends a {@link RendererChangeEvent} to 
-     * all registered listeners.
+     * Sets the default outline stroke and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
      *
      * @param stroke  the stroke (<code>null</code> not permitted).
      * 
@@ -677,7 +798,19 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseOutlineStroke(Stroke stroke);
     
-    // FIXME: add setBaseOutlineStroke(Stroke, boolean) ?
+    /**
+     * Sets the default outline stroke and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param stroke  the stroke (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getBaseOutlineStroke()
+     */
+    public void setBaseOutlineStroke(Stroke stroke, boolean notify);
+    
 
     //// SHAPE /////////////////////////////////////////////////////////////////
     
@@ -713,7 +846,19 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setSeriesShape(int series, Shape shape);
     
-    // FIXME: add setSeriesShape(int, Shape, boolean) ?
+    /**
+     * Sets the shape for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param shape  the shape (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getSeriesShape(int)
+     */
+    public void setSeriesShape(int series, Shape shape, boolean notify);
     
     /**
      * Returns the base shape.
@@ -725,8 +870,8 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public Shape getBaseShape();
 
     /**
-     * Sets the base shape and sends a {@link RendererChangeEvent} to all 
-     * registered listeners.
+     * Sets the default shape for the renderer and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param shape  the shape (<code>null</code> not permitted).
      * 
@@ -734,8 +879,20 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseShape(Shape shape);
 
-    // FIXME: add setBaseShape(Shape, boolean) ?
+    /**
+     * Sets the default shape for the renderer and, if requested, sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param shape  the shape (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getBaseShape()
+     */
+    public void setBaseShape(Shape shape, boolean notify);
 
+    
     // ITEM LABELS VISIBLE 
     
     /**
@@ -870,8 +1027,20 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public void setSeriesItemLabelGenerator(int series, 
             CategoryItemLabelGenerator generator);
     
-    // FIXME: add setSeriesItemLabelGenerator(int, CategoryItemLabelGenerator,
-    //            boolean)
+    /**
+     * Sets the item label generator for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getSeriesItemLabelGenerator(int)
+     */
+    public void setSeriesItemLabelGenerator(int series, 
+            CategoryItemLabelGenerator generator, boolean notify);
 
     /**
      * Returns the base item label generator.
@@ -892,9 +1061,19 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseItemLabelGenerator(CategoryItemLabelGenerator generator);
     
-    // FIXME: add setBaseItemLabelGenerator(CategoryItemLabelGenerator, 
-    //            boolean) ?
+    /**
+     * Sets the default item label generator and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseItemLabelGenerator(CategoryItemLabelGenerator generator, 
+            boolean notify);
 
+    
     // TOOL TIP GENERATOR
     
     /**
@@ -934,8 +1113,20 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public void setSeriesToolTipGenerator(int series, 
                                           CategoryToolTipGenerator generator);
     
-    // FIXME: add setSeriesToolTipGenerator(int, CategoryToolTipGenerator, 
-    //            boolean) ?
+    /**
+     * Sets the tool tip generator for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted)
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getSeriesToolTipGenerator(int)
+     */
+    public void setSeriesToolTipGenerator(int series, 
+            CategoryToolTipGenerator generator, boolean notify);
 
     /**
      * Returns the base tool tip generator (the "layer 2" generator).
@@ -957,8 +1148,21 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseToolTipGenerator(CategoryToolTipGenerator generator);
     
-    // FIXME: add setBaseToolTipGenerator(CategoryToolTipGenerator, boolean) ?
+    /**
+     * Sets the default tool tip generator and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     *
+     * @since 1.2.0
+     * 
+     * @see #getBaseToolTipGenerator()
+     */
+    public void setBaseToolTipGenerator(CategoryToolTipGenerator generator, 
+            boolean notify);
 
+    
     //// ITEM LABEL FONT  //////////////////////////////////////////////////////
     
     /**
@@ -993,7 +1197,19 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setSeriesItemLabelFont(int series, Font font);
     
-    // FIXME: add setSeriesItemLabelFont(int, Font, boolean) ?
+    /**
+     * Sets the item label font for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param font  the font (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getSeriesItemLabelFont(int)
+     */
+    public void setSeriesItemLabelFont(int series, Font font, boolean notify);
 
     /**
      * Returns the base item label font (this is used when no other font 
@@ -1015,7 +1231,19 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseItemLabelFont(Font font);
     
-    // FIXME: add setBaseItemLabelFont(Font, boolean) ?
+    /**
+     * Sets the default item label font and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param font  the font (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getBaseItemLabelFont()
+     */
+    public void setBaseItemLabelFont(Font font, boolean notify);
+    
     
     //// ITEM LABEL PAINT  /////////////////////////////////////////////////////
 
@@ -1051,7 +1279,20 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setSeriesItemLabelPaint(int series, Paint paint);
     
-    // FIXME: add setSeriesItemLabelPaint(int, Paint, boolean) ?
+    /**
+     * Sets the item label paint for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param paint  the paint (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getSeriesItemLabelPaint(int)
+     */
+    public void setSeriesItemLabelPaint(int series, Paint paint, 
+            boolean notify);
     
     /**
      * Returns the base item label paint.
@@ -1072,8 +1313,20 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseItemLabelPaint(Paint paint);
     
-    // FIXME: add setBaseItemLabelPaint(Paint, boolean) ?
-    
+    /**
+     * Sets the default item label paint and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getBaseItemLabelPaint()
+     */
+    public void setBaseItemLabelPaint(Paint paint, boolean notify);
+
+
     // POSITIVE ITEM LABEL POSITION...
 
     /**
@@ -1237,23 +1490,91 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public void setBaseNegativeItemLabelPosition(ItemLabelPosition position, 
                                                  boolean notify);
     
-    // CREATE ENTITIES
-    // FIXME:  these methods should be defined
     
-//    public boolean getItemCreateEntity(int series, int item);
-//    
-//    public Boolean getSeriesCreateEntities(int series);
-//    
-//    public void setSeriesCreateEntities(int series, Boolean create);
-//    
-//    public void setSeriesCreateEntities(int series, Boolean create, 
-//            boolean notify);
-//    
-//    public boolean getBaseCreateEntities();
-//    
-//    public void setBaseCreateEntities(boolean create);
-//    
-//    public void setBaseCreateEntities(boolean create, boolean notify);
+    // CREATE ENTITIES
+    
+    /**
+     * Returns <code>true</code> if the renderer should create an item entity
+     * for the specified data item, and <code>false</code> otherwise.
+     * 
+     * @param series  the series index.
+     * @param item  the item index.
+     *
+     * @return A boolean.
+     * 
+     * @since 1.2.0
+     */
+    public boolean getItemCreateEntity(int series, int item);
+    
+    /**
+     * Returns a flag that controls whether or not chart entities are 
+     * generated for the data items in the specified series.
+     * 
+     * @param series  the series index.
+     * 
+     * @return A flag (possibly <code>null</code>).
+     * 
+     * @since 1.2.0
+     */
+    public Boolean getSeriesCreateEntities(int series);
+    
+    /**
+     * Sets the flag that controls whether or not chart entities are created
+     * for the data items in the specified series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param create  the new flag value (<code>null</code> permitted).
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesCreateEntities(int series, Boolean create);
+    
+    /**
+     * Sets the flag that controls whether or not chart entities are created
+     * for the data items in the specified series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param create  the new flag value (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesCreateEntities(int series, Boolean create, 
+            boolean notify);
+    
+    /**
+     * Returns the default flag that controls whether or not chart entities
+     * are generated for the data items drawn by this renderer.
+     * 
+     * @return A boolean.
+     * 
+     * @since 1.2.0
+     */
+    public boolean getBaseCreateEntities();
+    
+    /**
+     * Sets the default flag that controls whether or not chart entities are
+     * generated for the data items drawn by this renderer.
+     * 
+     * @param create  the flag default.
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseCreateEntities(boolean create);
+    
+    /**
+     * Sets the default flag that controls whether or not chart entities are
+     * generated for the data items drawn by this renderer and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param create  the flag default.
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseCreateEntities(boolean create, boolean notify);
 
     
     // ITEM URL GENERATOR
@@ -1290,7 +1611,18 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public void setSeriesItemURLGenerator(int series, 
                                           CategoryURLGenerator generator);
 
-    // FIXME: add setSeriesItemURLGenerator(int, CategoryURLGenerator, boolean) ?
+    /**
+     * Sets the URL generator for a series and, if requested, sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesItemURLGenerator(int series, 
+            CategoryURLGenerator generator, boolean notify);
     
     /**
      * Returns the base item URL generator.
@@ -1311,7 +1643,17 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseItemURLGenerator(CategoryURLGenerator generator);
 
-    // FIXME: add setBaseItemURLGenerator(CategoryURLGenerator, boolean) ?
+    /**
+     * Sets the default URL generator and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseItemURLGenerator(CategoryURLGenerator generator, 
+            boolean notify);
     
     /**
      * Returns a legend item for a series.  This method can return 
