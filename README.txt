@@ -1,8 +1,8 @@
-*******************************
-*  JFREECHART: Version 1.0.6  *
-*******************************
+************************************
+*  JFREECHART: Version 1.2.0-pre1  *
+************************************
 
-15 June 2007
+25 June 2007
 
 (C)opyright 2000-2007, by Object Refinery Limited and Contributors.
 
@@ -10,7 +10,7 @@
 1.  INTRODUCTION
 -----------------
 JFreeChart is a free chart library for the Java(tm) platform.  It runs 
-on the Java 2 Platform (JDK 1.3 or later) and uses the Java 2D API for 
+on the Java 2 Platform (JDK 1.4.2 or later) and uses the Java 2D API for 
 drawing.
 
 JFreeChart is licensed under the terms of the GNU Lesser General
@@ -35,7 +35,7 @@ message in the JFreeChart forum.
 3.  DOCUMENTATION
 -----------------
 You can download installation instructions
-(jfreechart-1.0.6-install.pdf) from the JFreeChart home
+(jfreechart-1.2.0-install.pdf) from the JFreeChart home
 page or the project page on SourceForge.
 
 Further documentation for JFreeChart (the JFreeChart Developer Guide) is
@@ -59,43 +59,20 @@ distribution.
 -----------------
 JFreeChart has the following dependencies:
 
-(a)  JDK 1.3.1 or higher - JFreeChart requires the Java2D and Collections
-APIs, so it definitely won't work with JDK 1.1 (with a small amount of effort
-you can get it to compile and run with JDK 1.2).  If you are using JFreeChart 
-to create applets, this means that you cannot rely on the JVM integrated with
-Microsoft's Internet Explorer - your users will need to have the Java 2
-plug-in installed.  Most other browsers (e.g. Firefox, Mozilla, Netscape, 
-Konqueror) support JRE 1.4, 1.5 or 1.6.
+(a)  JDK 1.4.2 or higher - if you are using JFreeChart to create applets, 
+this means that you cannot rely on the JVM integrated with Microsoft's 
+Internet Explorer - your users will need to have the Java 2 plug-in 
+installed.  Most other browsers (e.g. Firefox, Mozilla, Netscape, Konqueror) 
+support JRE 1.4, 1.5 or 1.6.
 
-(b)  JCommon - version 1.0.0 or later.  The runtime jar file (version 1.0.10) 
-is included in the JFreeChart distribution.  You can obtain the complete
-source code for JCommon from:
-
-    http://www.jfree.org/jcommon/
-
-JCommon is licensed under the terms of the GNU Lesser General Public Licence.
-
-(c)  GNU JAXP (JDK 1.3 only) - a free implementation of the standard XML 
-processing APIs for Java.
-
-    http://www.gnu.org/software/classpathx/jaxp/
-
-Classes in the org.jfree.data.xml package require this library, or
-another JAXP v1.1 compliant parser.  The gnujaxp.jar file (from the
-gnujaxp-1.0beta1.zip distribution) is included with JFreeChart.  GNU
-JAXP is licensed under the terms of the GNU General Public License
-with an additional library exception.
-
-THIS LIBRARY IS ONLY REQUIRED BY JFREECHART IF YOU ARE USING JDK 1.3.
-
-(d)  servlet.jar - classes in the org.jfree.chart.servlet
+(b)  servlet.jar - classes in the org.jfree.chart.servlet
 package require this file.  The JFreeChart distribution includes the 
 servlet.jar file distributed with Tomcat 4.1.31.  Applicable license 
 terms are published at:  
 
     http://java.sun.com/products/servlet/LICENSE   
 
-(e)  JUnit - a unit testing framework (the junit.jar runtime file is
+(c)  JUnit - a unit testing framework (the junit.jar runtime file is
 included in the distribution).  JUnit is licensed under the terms
 of the IBM Common Public License.  You can find out more about JUnit
 and/or download the latest version from:
@@ -139,9 +116,9 @@ DEPENDENCIES section above) before running the Ant script.
 ------------------------
 A demo application that shows a selection of the charts that can be
 generated is included in the JFreeChart distribution.   To run the
-demo (using JDK 1.3.1 or later), use the following command:
+demo (using JDK 1.4.2 or later), use the following command:
 
-    java -jar jfreechart-1.0.6-demo.jar
+    java -jar jfreechart-1.2.0-pre1-demo.jar
 
 The complete source code for the demo application is available for
 download when you purchase the JFreeChart Developer Guide.
@@ -169,9 +146,6 @@ the future:
       the axis margins;
     - tick labels on a DateAxis that uses a SegmentedTimeline can be 
       problematic;
-    - there is no support for writing charts to JPEG format on JDK 1.3.  JPEG 
-      is not a good format for charts in any case, and it is usually better to 
-      use PNG format.
     
 If there are other items that you think should be listed here,
 please post a bug report.
@@ -192,6 +166,11 @@ developers that have made this possible.
 10.  WHAT's NEW
 ---------------
 A list of changes in recent versions:
+
+1.2.0-pre1 : (25-Jun-2007)
+        - removed JCommon dependency;
+        - removed support for JDK 1.3.1;
+        - removed deprecated code.
 
 1.0.6 : (15-Jun-2007) 
         - the VectorRenderer and associated dataset classes have been promoted

@@ -1,3 +1,14 @@
+JFreeChart 1.2.0-pre1
+---------------------
+25 June 2007
+
+This is a preview of JFreeChart 1.2.0.  The changes since 1.0.6 are:
+
+- removed JCommon dependency by copying required classes into the org.jfree.chart.* package namespace;
+- dropped support for JDK 1.3.1, so that JDK 1.4.2 or later is now required;
+- removed all deprecated code.
+
+
 JFreeChart 1.0.6
 ----------------
 15 June 2007
