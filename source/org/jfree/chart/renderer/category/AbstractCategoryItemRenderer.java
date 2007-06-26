@@ -96,7 +96,8 @@
  *               override fields (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 20-Jun-2007 : Removed deprecated code and removed JCommon dependencies (DG);
- * 26-Jun-2007 : Added some new methods with 'notify' argument (DG);
+ * 26-Jun-2007 : Added some new methods with 'notify' argument, renamed
+ *               methods containing 'ItemURL' to just 'URL' (DG);
  *
  */
 
@@ -176,11 +177,11 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     /** The base tool tip generator. */
     private CategoryToolTipGenerator baseToolTipGenerator;
 
-    /** A list of item label generators (one per series). */
-    private ObjectList itemURLGeneratorList;
+    /** A list of label generators (one per series). */
+    private ObjectList urlGeneratorList;
 
-    /** The base item label generator. */
-    private CategoryURLGenerator baseItemURLGenerator;
+    /** The base label generator. */
+    private CategoryURLGenerator baseURLGenerator;
 
     /** The legend item label generator. */
     private CategorySeriesLabelGenerator legendItemLabelGenerator;
@@ -207,7 +208,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     protected AbstractCategoryItemRenderer() {
         this.itemLabelGeneratorList = new ObjectList();
         this.toolTipGeneratorList = new ObjectList();
-        this.itemURLGeneratorList = new ObjectList();
+        this.urlGeneratorList = new ObjectList();
         this.legendItemLabelGenerator
             = new StandardCategorySeriesLabelGenerator();
     }
@@ -497,7 +498,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @return The URL generator.
      */
     public CategoryURLGenerator getItemURLGenerator(int row, int column) {
-        return getSeriesItemURLGenerator(row);
+        return getSeriesURLGenerator(row);
     }
 
     /**
@@ -507,15 +508,15 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *
      * @return The URL generator for the series.
      *
-     * @see #setSeriesItemURLGenerator(int, CategoryURLGenerator)
+     * @see #setSeriesURLGenerator(int, CategoryURLGenerator)
      */
-    public CategoryURLGenerator getSeriesItemURLGenerator(int series) {
+    public CategoryURLGenerator getSeriesURLGenerator(int series) {
 
         // look up the generator table
-        CategoryURLGenerator generator
-                = (CategoryURLGenerator) this.itemURLGeneratorList.get(series);
+        CategoryURLGenerator generator 
+                = (CategoryURLGenerator) this.urlGeneratorList.get(series);
         if (generator == null) {
-            generator = this.baseItemURLGenerator;
+            generator = this.baseURLGenerator;
         }
         return generator;
 
@@ -528,11 +529,11 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param series  the series index (zero based).
      * @param generator  the generator.
      *
-     * @see #getSeriesItemURLGenerator(int)
+     * @see #getSeriesURLGenerator(int)
      */
-    public void setSeriesItemURLGenerator(int series,
+    public void setSeriesURLGenerator(int series,
             CategoryURLGenerator generator) {
-        setSeriesItemURLGenerator(series, generator, true);
+        setSeriesURLGenerator(series, generator, true);
     }
 
     /**
@@ -545,11 +546,11 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *
      * @since 1.2.0
      *
-     * @see #getSeriesItemURLGenerator(int)
+     * @see #getSeriesURLGenerator(int)
      */
-    public void setSeriesItemURLGenerator(int series,
+    public void setSeriesURLGenerator(int series, 
             CategoryURLGenerator generator, boolean notify) {
-        this.itemURLGeneratorList.set(series, generator);
+        this.urlGeneratorList.set(series, generator);
         if (notify) {
             notifyListeners(new RendererChangeEvent(this));
         }
@@ -560,10 +561,10 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *
      * @return The item URL generator.
      *
-     * @see #setBaseItemURLGenerator(CategoryURLGenerator)
+     * @see #setBaseURLGenerator(CategoryURLGenerator)
      */
-    public CategoryURLGenerator getBaseItemURLGenerator() {
-        return this.baseItemURLGenerator;
+    public CategoryURLGenerator getBaseURLGenerator() {
+        return this.baseURLGenerator;
     }
 
     /**
@@ -571,10 +572,10 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *
      * @param generator  the item URL generator.
      *
-     * @see #getBaseItemURLGenerator()
+     * @see #getBaseURLGenerator()
      */
-    public void setBaseItemURLGenerator(CategoryURLGenerator generator) {
-        setBaseItemURLGenerator(generator, true);
+    public void setBaseURLGenerator(CategoryURLGenerator generator) {
+        setBaseURLGenerator(generator, true);
     }
 
     /**
@@ -583,13 +584,13 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param generator  the item URL generator (<code>null</code> permitted).
      * @param notify  notify listeners?
      *
-     * @see #getBaseItemURLGenerator()
+     * @see #getBaseURLGenerator()
      * 
      * @since 1.2.0
      */
-    public void setBaseItemURLGenerator(CategoryURLGenerator generator, 
+    public void setBaseURLGenerator(CategoryURLGenerator generator, 
             boolean notify) {
-        this.baseItemURLGenerator = generator;
+        this.baseURLGenerator = generator;
         if (notify) {
             notifyListeners(new RendererChangeEvent(this));
         }
@@ -1222,12 +1223,12 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                 that.baseToolTipGenerator)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.itemURLGeneratorList,
-                that.itemURLGeneratorList)) {
+        if (!ObjectUtilities.equal(this.urlGeneratorList, 
+                that.urlGeneratorList)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.baseItemURLGenerator,
-                that.baseItemURLGenerator)) {
+        if (!ObjectUtilities.equal(this.baseURLGenerator,
+                that.baseURLGenerator)) {
             return false;
         }
         if (!ObjectUtilities.equal(this.legendItemLabelGenerator,
@@ -1366,16 +1367,14 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             }
         }
 
-        if (this.itemURLGeneratorList != null) {
-            clone.itemURLGeneratorList
-                    = (ObjectList) this.itemURLGeneratorList.clone();
+        if (this.urlGeneratorList != null) {
+            clone.urlGeneratorList = (ObjectList) this.urlGeneratorList.clone();
         }
 
-        if (this.baseItemURLGenerator != null) {
-            if (this.baseItemURLGenerator instanceof PublicCloneable) {
-                PublicCloneable pc
-                        = (PublicCloneable) this.baseItemURLGenerator;
-                clone.baseItemURLGenerator = (CategoryURLGenerator) pc.clone();
+        if (this.baseURLGenerator != null) {
+            if (this.baseURLGenerator instanceof PublicCloneable) {
+                PublicCloneable pc = (PublicCloneable) this.baseURLGenerator;
+                clone.baseURLGenerator = (CategoryURLGenerator) pc.clone();
             }
             else {
                 throw new CloneNotSupportedException(

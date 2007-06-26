@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------------------
  * AbstractCategoryItemRendererTests.java
  * --------------------------------------
- * (C) Copyright 2004, 2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -113,16 +113,16 @@ public class AbstractCategoryItemRendererTests extends TestCase {
         assertTrue(r1.equals(r2));
         
         // urlGeneratorList
-        r1.setSeriesItemURLGenerator(1, new StandardCategoryURLGenerator());
+        r1.setSeriesURLGenerator(1, new StandardCategoryURLGenerator());
         assertFalse(r1.equals(r2));
-        r2.setSeriesItemURLGenerator(1, new StandardCategoryURLGenerator());
+        r2.setSeriesURLGenerator(1, new StandardCategoryURLGenerator());
         assertTrue(r1.equals(r2));
         
         // baseItemURLGenerator
-        r1.setBaseItemURLGenerator(new StandardCategoryURLGenerator(
+        r1.setBaseURLGenerator(new StandardCategoryURLGenerator(
                 "abc.html"));
         assertFalse(r1.equals(r2));
-        r2.setBaseItemURLGenerator(new StandardCategoryURLGenerator(
+        r2.setBaseURLGenerator(new StandardCategoryURLGenerator(
                 "abc.html"));
         assertTrue(r1.equals(r2));
         

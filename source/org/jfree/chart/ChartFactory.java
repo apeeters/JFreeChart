@@ -116,6 +116,8 @@
  * 17-Jan-2007 : Added createBoxAndWhiskerChart() method from patch 1603937
  *               submitted by Darren Jung (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 26-Jun-2007 : Updated some code for method name changes in 
+ *               the CategoryItemRenderer interface (DG);
  *
  */
 
@@ -613,8 +615,7 @@ public abstract class ChartFactory {
                     new StandardCategoryToolTipGenerator());
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
 
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, 
@@ -670,8 +671,7 @@ public abstract class ChartFactory {
                     new StandardCategoryToolTipGenerator());
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
 
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, 
@@ -725,8 +725,7 @@ public abstract class ChartFactory {
                     new StandardCategoryToolTipGenerator());
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
 
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, 
@@ -790,8 +789,7 @@ public abstract class ChartFactory {
                     new StandardCategoryToolTipGenerator());
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
 
         // create the plot...
@@ -855,8 +853,7 @@ public abstract class ChartFactory {
                     new StandardCategoryToolTipGenerator());
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
 
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, 
@@ -911,8 +908,7 @@ public abstract class ChartFactory {
                     new StandardCategoryToolTipGenerator());
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
 
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, 
@@ -966,8 +962,7 @@ public abstract class ChartFactory {
                     new StandardCategoryToolTipGenerator());
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, 
                 renderer);
@@ -1020,8 +1015,7 @@ public abstract class ChartFactory {
                     new StandardCategoryToolTipGenerator());
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, 
                 renderer);
@@ -1070,8 +1064,7 @@ public abstract class ChartFactory {
                     "{3} - {4}", DateFormat.getDateInstance()));
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
 
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, dateAxis, 
@@ -1142,8 +1135,7 @@ public abstract class ChartFactory {
             renderer.setBaseToolTipGenerator(generator);
         }
         if (urls) {
-            renderer.setBaseItemURLGenerator(
-                    new StandardCategoryURLGenerator());
+            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
         }
 
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, 

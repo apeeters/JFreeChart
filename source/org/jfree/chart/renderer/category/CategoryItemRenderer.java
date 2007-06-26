@@ -1590,26 +1590,27 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public CategoryURLGenerator getItemURLGenerator(int series, int item);
     
     /**
-     * Returns the item URL generator for a series.
+     * Returns the URL generator for a series.
      *
      * @param series  the series index (zero-based).
      *
      * @return The URL generator.
      * 
-     * @see #setSeriesItemURLGenerator(int, CategoryURLGenerator)
+     * @see #setSeriesURLGenerator(int, CategoryURLGenerator)
      */
-    public CategoryURLGenerator getSeriesItemURLGenerator(int series);
+    public CategoryURLGenerator getSeriesURLGenerator(int series);
 
     /**
-     * Sets the item URL generator for a series.
+     * Sets the URL generator for a series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero-based).
      * @param generator  the generator.
      * 
-     * @see #getSeriesItemURLGenerator(int)
+     * @see #getSeriesURLGenerator(int)
      */
-    public void setSeriesItemURLGenerator(int series, 
-                                          CategoryURLGenerator generator);
+    public void setSeriesURLGenerator(int series, 
+            CategoryURLGenerator generator);
 
     /**
      * Sets the URL generator for a series and, if requested, sends a
@@ -1621,27 +1622,27 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * 
      * @since 1.2.0
      */
-    public void setSeriesItemURLGenerator(int series, 
+    public void setSeriesURLGenerator(int series, 
             CategoryURLGenerator generator, boolean notify);
     
     /**
-     * Returns the base item URL generator.
+     * Returns the base URL generator.
      *
-     * @return The item URL generator (possibly <code>null</code>).
+     * @return The URL generator (possibly <code>null</code>).
      * 
-     * @see #setBaseItemURLGenerator(CategoryURLGenerator)
+     * @see #setBaseURLGenerator(CategoryURLGenerator)
      */
-    public CategoryURLGenerator getBaseItemURLGenerator();
+    public CategoryURLGenerator getBaseURLGenerator();
 
     /**
-     * Sets the base item URL generator and sends a {@link RendererChangeEvent}
+     * Sets the base URL generator and sends a {@link RendererChangeEvent}
      * to all registered listeners.
      *
-     * @param generator  the item URL generator (<code>null</code> permitted).
+     * @param generator  the URL generator (<code>null</code> permitted).
      * 
-     * @see #getBaseItemURLGenerator()
+     * @see #getBaseURLGenerator()
      */
-    public void setBaseItemURLGenerator(CategoryURLGenerator generator);
+    public void setBaseURLGenerator(CategoryURLGenerator generator);
 
     /**
      * Sets the default URL generator and, if requested, sends a 
@@ -1652,7 +1653,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * 
      * @since 1.2.0
      */
-    public void setBaseItemURLGenerator(CategoryURLGenerator generator, 
+    public void setBaseURLGenerator(CategoryURLGenerator generator, 
             boolean notify);
     
     /**
