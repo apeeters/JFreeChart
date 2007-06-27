@@ -122,7 +122,6 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
                          int pass) {
 
         // setup for collecting optional entity info...
-        Shape entityArea = null;
         EntityCollection entities = null;
         if (info != null) {
             entities = info.getOwner().getEntityCollection();
