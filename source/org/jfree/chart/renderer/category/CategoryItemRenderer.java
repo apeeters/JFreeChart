@@ -96,6 +96,8 @@
  * 26-Jun-2007 : Added a number of methods already implemented in the
  *               AbstractCategoryItemRenderer class but missing from this
  *               interface (DG);
+ * 27-Jun-2007 : Changed get/setBaseItemLabelsVisible from Boolean to 
+ *               boolean (DG);
  *
  */
 
@@ -115,6 +117,7 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.event.RendererChangeListener;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
+import org.jfree.chart.labels.CategorySeriesLabelGenerator;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.CategoryMarker;
@@ -971,9 +974,9 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * 
      * @return A flag (possibly <code>null</code>).
      * 
-     * @see #setBaseItemLabelsVisible(Boolean)
+     * @see #setBaseItemLabelsVisible(boolean)
      */
-    public Boolean getBaseItemLabelsVisible();
+    public boolean getBaseItemLabelsVisible();
     
     /**
      * Sets the base flag that controls whether or not item labels are visible.
@@ -985,15 +988,6 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public void setBaseItemLabelsVisible(boolean visible);
     
     /**
-     * Sets the base setting for item label visibility.
-     * 
-     * @param visible  the flag (<code>null</code> permitted).
-     * 
-     * @see #getBaseItemLabelsVisible()
-     */
-    public void setBaseItemLabelsVisible(Boolean visible);
-    
-    /**
      * Sets the base visibility for item labels and, if requested, sends a 
      * {@link RendererChangeEvent} to all registered listeners.
      * 
@@ -1003,7 +997,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *                
      * @see #getBaseItemLabelsVisible()
      */
-    public void setBaseItemLabelsVisible(Boolean visible, boolean notify);
+    public void setBaseItemLabelsVisible(boolean visible, boolean notify);
     
     // ITEM LABEL GENERATOR
     
@@ -1682,6 +1676,78 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public LegendItem getLegendItem(int datasetIndex, int series);
 
+    /**
+     * Returns the legend item label generator.
+     *
+     * @return The label generator (never <code>null</code>).
+     *
+     * @see #setLegendItemLabelGenerator(CategorySeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public CategorySeriesLabelGenerator getLegendItemLabelGenerator();
+
+    /**
+     * Sets the legend item label generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> not permitted).
+     *
+     * @see #getLegendItemLabelGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setLegendItemLabelGenerator(
+            CategorySeriesLabelGenerator generator);
+    
+    /**
+     * Returns the legend item tool tip generator.
+     *
+     * @return The tool tip generator (possibly <code>null</code>).
+     *
+     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public CategorySeriesLabelGenerator getLegendItemToolTipGenerator();
+
+    /**
+     * Sets the legend item tool tip generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     *
+     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public void setLegendItemToolTipGenerator(
+            CategorySeriesLabelGenerator generator);
+    
+    /**
+     * Returns the legend item URL generator.
+     *
+     * @return The URL generator (possibly <code>null</code>).
+     *
+     * @see #setLegendItemURLGenerator(CategorySeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public CategorySeriesLabelGenerator getLegendItemURLGenerator();
+
+    /**
+     * Sets the legend item URL generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     *
+     * @see #getLegendItemURLGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setLegendItemURLGenerator(
+            CategorySeriesLabelGenerator generator);
+    
     /**
      * Draws a background for the data area.
      *

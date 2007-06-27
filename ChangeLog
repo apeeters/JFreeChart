@@ -1,5 +1,79 @@
 2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/plot/XYPlot.java
+	(drawDomainGridlines): Updated for method name change in 
+	XYItemRenderer,
+	* source/org/jfree/chart/renderer/AbstractRenderer.java
+	(baseItemLabelsVisible): Changed from Boolean to boolean,
+	(AbstractRenderer): Updated for field type change,
+	(isSeriesItemLabelsVisible): Likewise,
+	(getBaseItemLabelsVisible): Modified return type,
+	(setBaseItemLabelsVisible(boolean)): Updated for field type change,
+	(setBaseItemLabelsVisible(Boolean)): Removed,
+	(setBaseItemLabelsVisbile(boolean, boolean)): Updated for field type
+	change,
+	(equals): Likewise,
+	* source/org/jfree/chart/renderer/category/CategoryItemRenderer.java
+	(getBaseItemLabelsVisible): Modified return type,
+	(setBaseItemLabelsVisible(Boolean)): Removed,
+	(setBaseItemLabelsVisible(Boolean, boolean)): Removed,
+	(setBaseItemLabelsVisible(boolean)): New method,
+	(setBaseItemLabelsVisible(boolean, boolean)): New method,
+	(getLegendItemLabelGenerator): New method,
+	(setLegendItemLabelGenerator): Likewise,
+	(getLegendItemToolTipGenerator): Likewise,
+	(setLegendItemToolTipGenerator): Likewise,
+	(getLegendItemURLGenerator): Likewise,
+	(setLegendItemURLGenerator): Likewise,
+	* source/org/jfree/chart/renderer/xy/AbstractXYItemRenderer.java
+	(setSeriesItemLabelGenerator(int, XYItemLabelGenerator, boolean)): New
+	method,
+	(setBaseItemLabelGenerator(XYItemLabelGenerator, boolean)): Likewise,
+	(setSeriesToolTipGenerator(int, XYToolTipGenerator, boolean)): Likewise,
+	(setBaseToolTipGenerator(XYToolTipGenerator, boolean)): Likewise,
+	(drawDomainGridline): Removed,
+	* source/org/jfree/chart/renderer/xy/XYItemRenderer.java
+	(setSeriesPaint(int, Paint, boolean)): New method,
+	(setBasePaint(Paint, boolean)): Likewise,
+	(getItemFillPaint(int, int)): Likewise,
+	(getSeriesFillPaint(int)): Likewise,
+	(setSeriesFillPaint(int, Paint)): Likewise,
+	(setSeriesFillPaint(int, Paint, boolean)): Likewise,
+	(getBaseFillPaint): Likewise,
+	(setBaseFillPaint(Paint)): Likewise,
+	(setBaseFillPaint(Paint, boolean)): Likewise,
+	(setSeriesOutlinePaint(int, Paint, boolean)): Likewise,
+	(setBaseOutlinePaint(Paint, boolean)): Likewise,
+	(setSeriesStroke(int, Stroke, boolean)): Likewise,
+	(setBaseStroke(Stroke, boolean)): Likewise,
+	(setSeriesOutlineStroke(int, Stroke, boolean)): Likewise,
+	(setBaseOutlineStroke(Stroke, boolean)): Likewise,
+	(setSeriesShape(int, Shape, boolean)): Likewise,
+	(setBaseShape(Shape, boolean)): Likewise,
+	(getLegendItemToolTipGenerator): Likewise,
+	(setLegendItemToolTipGenerator): Likewise,
+	(getLegendItemURLGenerator)): Likewise,
+	(setLegendItemURLGenerator)): Likewise,
+	(setSeriesToolTipGenerator(int, XYToolTipGenerator, boolean)): Likewise,
+	(setBaseToolTipGenerator(XYToolTipGenerator, boolean)): Likewise,
+	(setSeriesItemLabelGenerator(int, XYItemLabelGenerator, boolean)): 
+	Likewise,
+	(setBaseItemLabelGenerator(XYItemLabelGenerator, boolean)): Likewise,
+	(setSeriesItemLabelFont(int, Font, boolean)): New method,
+	(setBaseItemLabelFont(Font, boolean)): Likewise,
+	(setSeriesItemLabelPaint(int, Paint, boolean)): Likewise,
+	(setBaseItemLabelPaint(Paint, boolean)): Likewise,
+	(getItemCreateEntity): Likewise,
+	(getSeriesCreateEntities): Likewise,
+	(setSeriesCreateEntities(int, Boolean)): Likewise,
+	(setSeriesCreateEntities(int, Boolean, boolean)): Likewise,
+	(getBaseCreateEntities): Likewise,
+	(setBaseCreateEntities(boolean)): Likewise,
+	(setBaseCreateEntities(boolean, boolean)): Likewise,
+	(drawDomainLine): New method.		
+
+2007-06-26  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/renderer/AbstractRenderer.java
 	(getSeriesItemLabelsVisible): New method,
 	* source/org/jfree/chart/renderer/category/CategoryItemRenderer.java
@@ -7,7 +81,7 @@
 	* source/org/jfree/chart/renderer/xy/XYItemRenderer.java
 	(setSeriesItemLabelsVisible): Likewise.	
 
-2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
+2007-06-26  David Gilbert  <david.gilbert@object-refinery.com>
 
 	* source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
 	(getItemLabelGenerator): Do lookup,
@@ -16,7 +90,7 @@
 	(getItemURLGenerator): Do lookup,
 	(getSeriesItemURLGenerator): Return per-series value only, even if null.
 
-2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
+2007-06-26  David Gilbert  <david.gilbert@object-refinery.com>
 
 	* source/org/jfree/chart/ChartFactory.java
 	(createAreaChart): Updated for renamed method,
@@ -46,7 +120,7 @@
 	(getBaseItemURLGenerator): Renamed getBaseURLGenerator,
 	(setBaseItemURLGenerator): Renamed setBaseURLGenerator.	
 
-2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
+2007-06-26  David Gilbert  <david.gilbert@object-refinery.com>
 
 	* source/org/jfree/chart/urls/StandardCategoryURLGenerator.java
 	(generateURL): Use URLEncoder rather than URLUtilities,
@@ -56,7 +130,7 @@
 	(generateURL): Likewise,
 	* source/org/jfree/chart/urls/URLUtilities.java: Removed.
 
-2007-06-26  David Gilbert  <david.gilbert@object-refinery.com>
+2007-06-25  David Gilbert  <david.gilbert@object-refinery.com>
 
 	* source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
 	(setSeriesItemLabelGenerator(int, CategoryItemLabelGenerator)): 

@@ -503,7 +503,7 @@ public class AbstractRendererTests extends TestCase {
         assertTrue(detector.getNotified());
 
         detector.setNotified(false);
-        r1.setBaseItemLabelsVisible(Boolean.TRUE);
+        r1.setBaseItemLabelsVisible(true);
         assertTrue(detector.getNotified());
         
         // ITEM_LABEL_FONT

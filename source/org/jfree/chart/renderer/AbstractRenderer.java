@@ -78,7 +78,8 @@
  *               fields (DG);
  * 13-Jun-2007 : Added new autoPopulate flags for core series attributes (DG);
  * 20-Jun-2007 : Removed deprecated code and JCommon dependencies (DG);
- * 27-Jun-2007 : Added getSeriesItemLabelsVisible(int) method (DG);
+ * 27-Jun-2007 : Added getSeriesItemLabelsVisible(int) method, changed
+ *               baseItemLabelsVisible from Boolean to boolean (DG);
  * 
  */
 
@@ -259,7 +260,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     private BooleanList itemLabelsVisibleList;
 
     /** The base item labels visible. */
-    private Boolean baseItemLabelsVisible;
+    private boolean baseItemLabelsVisible;
 
     /** The item label font list (one font per series). */
     private ObjectList itemLabelFontList;
@@ -342,7 +343,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.autoPopulateSeriesShape = true;
 
         this.itemLabelsVisibleList = new BooleanList();
-        this.baseItemLabelsVisible = Boolean.FALSE;
+        this.baseItemLabelsVisible = false;
 
         this.itemLabelFontList = new ObjectList();
         this.baseItemLabelFont = new Font("SansSerif", Font.PLAIN, 10);
@@ -1517,17 +1518,11 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @return A boolean.
      */    
     public boolean isSeriesItemLabelsVisible(int series) {
-
-        // look up the boolean table
         Boolean b = this.itemLabelsVisibleList.getBoolean(series);
-        if (b == null) {
-            b = this.baseItemLabelsVisible;
+        if (b != null) {
+            return b.booleanValue();
         }
-        if (b == null) {
-            b = Boolean.FALSE;
-        }
-        return b.booleanValue();
-
+        return this.baseItemLabelsVisible;
     }
     
     /**
@@ -1584,15 +1579,11 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the base setting for item label visibility.  A <code>null</code>
-     * result should be interpreted as equivalent to <code>Boolean.FALSE</code>.
+     * Returns the base setting for item label visibility.
      * 
      * @return A flag (possibly <code>null</code>).
      */
-    public Boolean getBaseItemLabelsVisible() {
-        // this should have been defined as a boolean primitive, because 
-        // allowing null values is a nuisance...but it is part of the final
-        // API now, so we'll have to support it.
+    public boolean getBaseItemLabelsVisible() {
         return this.baseItemLabelsVisible;
     }
 
@@ -1602,16 +1593,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param visible  the flag.
      */
     public void setBaseItemLabelsVisible(boolean visible) {
-        setBaseItemLabelsVisible(Boolean.valueOf(visible));
-    }
-    
-    /**
-     * Sets the base setting for item label visibility.
-     * 
-     * @param visible  the flag (<code>null</code> is permitted, and viewed
-     *     as equivalent to <code>Boolean.FALSE</code>).
-     */
-    public void setBaseItemLabelsVisible(Boolean visible) {
         setBaseItemLabelsVisible(visible, true);
     }
 
@@ -1619,12 +1600,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * Sets the base visibility for item labels and, if requested, sends a 
      * {@link RendererChangeEvent} to all registered listeners.
      * 
-     * @param visible  the flag (<code>null</code> is permitted, and viewed
-     *     as equivalent to <code>Boolean.FALSE</code>).
-     * @param notify  a flag that controls whether or not listeners are 
-     *                notified.
+     * @param visible  the flag.
+     * @param notify  notify listeners?
      */
-    public void setBaseItemLabelsVisible(Boolean visible, boolean notify) {
+    public void setBaseItemLabelsVisible(boolean visible, boolean notify) {
         this.baseItemLabelsVisible = visible;
         if (notify) {
             fireChangeEvent();
@@ -2438,8 +2417,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                 that.itemLabelsVisibleList)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.baseItemLabelsVisible, 
-                that.baseItemLabelsVisible)) {
+        if (this.baseItemLabelsVisible != that.baseItemLabelsVisible) {
             return false;
         }
         if (!ObjectUtilities.equal(this.itemLabelFontList, 

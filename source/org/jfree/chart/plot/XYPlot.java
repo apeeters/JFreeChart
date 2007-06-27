@@ -188,7 +188,9 @@
  * 07-Jun-2007 : Modified drawBackground() to pass orientation to 
  *               fillBackground() for handling GradientPaint (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
- *
+ * 27-Jun-2007 : Updated drawDomainGridlines() method for renamed method in
+ *               XYItemRenderer interface.
+ *               
  */
 
 package org.jfree.chart.plot;
@@ -3193,6 +3195,8 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      * @param g2  the graphics device.
      * @param dataArea  the data area.
      * @param ticks  the ticks.
+     * 
+     * @see #drawRangeGridlines(Graphics2D, Rectangle2D, List)
      */
     protected void drawDomainGridlines(Graphics2D g2, Rectangle2D dataArea,
                                        List ticks) {
@@ -3206,13 +3210,11 @@ public class XYPlot extends Plot implements ValueAxisPlot,
         if (isDomainGridlinesVisible()) {
             Stroke gridStroke = getDomainGridlineStroke();
             Paint gridPaint = getDomainGridlinePaint();
-            if ((gridStroke != null) && (gridPaint != null)) {
-                Iterator iterator = ticks.iterator();
-                while (iterator.hasNext()) {
-                    ValueTick tick = (ValueTick) iterator.next();
-                    getRenderer().drawDomainGridLine(g2, this, getDomainAxis(),
-                            dataArea, tick.getValue());
-                }
+            Iterator iterator = ticks.iterator();
+            while (iterator.hasNext()) {
+                ValueTick tick = (ValueTick) iterator.next();
+                getRenderer().drawDomainLine(g2, this, getDomainAxis(),
+                        dataArea, tick.getValue(), gridPaint, gridStroke);
             }
         }
     }
@@ -3224,6 +3226,8 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      * @param g2  the graphics device.
      * @param area  the data area.
      * @param ticks  the ticks.
+     * 
+     * @see #drawDomainGridlines(Graphics2D, Rectangle2D, List)
      */
     protected void drawRangeGridlines(Graphics2D g2, Rectangle2D area,
                                       List ticks) {

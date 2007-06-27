@@ -126,33 +126,71 @@ import org.jfree.data.xy.XYDataset;
 public interface XYItemRenderer extends LegendItemSource {
 
     /**
-     * Initialises the renderer then returns the number of 'passes' through the
-     * data that the renderer will require (usually just one).  This method 
-     * will be called before the first item is rendered, giving the renderer 
-     * an opportunity to initialise any state information it wants to maintain.
-     * The renderer can do nothing if it chooses.
+     * Returns the plot that this renderer has been assigned to.
      *
-     * @param g2  the graphics device.
-     * @param dataArea  the area inside the axes.
-     * @param plot  the plot.
-     * @param dataset  the dataset.
-     * @param info  an optional info collection object to return data back to 
-     *              the caller.
-     *
-     * @return The number of passes the renderer requires.
+     * @return The plot.
      */
-    public XYItemRendererState initialise(Graphics2D g2,
-                                          Rectangle2D dataArea,
-                                          XYPlot plot,
-                                          XYDataset dataset,
-                                          PlotRenderingInfo info);
+    public XYPlot getPlot();
 
+    /**
+     * Sets the plot that this renderer is assigned to.  This method will be 
+     * called by the plot class...you do not need to call it yourself.
+     *
+     * @param plot  the plot.
+     */
+    public void setPlot(XYPlot plot);
+    
     /**
      * Returns the number of passes through the data required by the renderer.
      * 
      * @return The pass count.
      */
     public int getPassCount();
+
+    /**
+     * Returns the lower and upper bounds (range) of the x-values in the 
+     * specified dataset.
+     * 
+     * @param dataset  the dataset (<code>null</code> permitted).
+     * 
+     * @return The range.
+     */
+    public Range findDomainBounds(XYDataset dataset);
+    
+    /**
+     * Returns the lower and upper bounds (range) of the y-values in the
+     * specified dataset.  The implementation of this method will take 
+     * into account the presentation used by the renderers (for example,
+     * a renderer that "stacks" values will return a bigger range than
+     * a renderer that doesn't.
+     * 
+     * @param dataset  the dataset (<code>null</code> permitted).
+     * 
+     * @return The range (or <code>null</code> if the dataset is 
+     *         <code>null</code> or empty).
+     */
+    public Range findRangeBounds(XYDataset dataset);
+    
+    /**
+     * Add a renderer change listener.
+     * 
+     * @param listener  the listener.
+     * 
+     * @see #removeChangeListener(RendererChangeListener)
+     */
+    public void addChangeListener(RendererChangeListener listener);
+
+    /**
+     * Removes a change listener.
+     * 
+     * @param listener  the listener.
+     * 
+     * @see #addChangeListener(RendererChangeListener)
+     */
+    public void removeChangeListener(RendererChangeListener listener);
+    
+    
+    //// VISIBLE //////////////////////////////////////////////////////////////
 
     /**
      * Returns a boolean that indicates whether or not the specified item 
@@ -181,6 +219,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series index (zero-based).
      *
      * @return The flag (possibly <code>null</code>).
+     * 
+     * @see #setSeriesVisible(int, Boolean)
      */
     public Boolean getSeriesVisible(int series);
     
@@ -190,6 +230,8 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      * @param visible  the flag (<code>null</code> permitted).
+     * 
+     * @see #getSeriesVisible(int)
      */
     public void setSeriesVisible(int series, Boolean visible);
     
@@ -201,6 +243,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series index.
      * @param visible  the flag (<code>null</code> permitted).
      * @param notify  notify listeners?
+     * 
+     * @see #getSeriesVisible(int)
      */
     public void setSeriesVisible(int series, Boolean visible, boolean notify);
 
@@ -208,6 +252,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * Returns the base visibility for all series.
      *
      * @return The base visibility.
+     * 
+     * @see #setBaseSeriesVisible(boolean)
      */
     public boolean getBaseSeriesVisible();
 
@@ -216,6 +262,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * registered listeners.
      *
      * @param visible  the flag.
+     * 
+     * @see #getBaseSeriesVisible()
      */
     public void setBaseSeriesVisible(boolean visible);
     
@@ -225,10 +273,13 @@ public interface XYItemRenderer extends LegendItemSource {
      * 
      * @param visible  the visibility.
      * @param notify  notify listeners?
+     * 
+     * @see #getBaseSeriesVisible()
      */
     public void setBaseSeriesVisible(boolean visible, boolean notify);
 
-    // SERIES VISIBLE IN LEGEND (not yet respected by all renderers)
+    
+    // SERIES VISIBLE IN LEGEND (not yet respected by all renderers) //////////
     
     /**
      * Returns <code>true</code> if the series should be shown in the legend,
@@ -249,6 +300,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series index (zero-based).
      *
      * @return The flag (possibly <code>null</code>).
+     * 
+     * @see #setSeriesVisibleInLegend(int, Boolean)
      */
     public Boolean getSeriesVisibleInLegend(int series);
     
@@ -258,6 +311,8 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      * @param visible  the flag (<code>null</code> permitted).
+     * 
+     * @see #getSeriesVisibleInLegend(int)
      */
     public void setSeriesVisibleInLegend(int series, Boolean visible);
     
@@ -269,6 +324,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series index.
      * @param visible  the flag (<code>null</code> permitted).
      * @param notify  notify listeners?
+     * 
+     * @see #getSeriesVisibleInLegend(int)
      */
     public void setSeriesVisibleInLegend(int series, Boolean visible, 
                                          boolean notify);
@@ -277,6 +334,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * Returns the base visibility in the legend for all series.
      *
      * @return The base visibility.
+     * 
+     * @see #setBaseSeriesVisibleInLegend(boolean)
      */
     public boolean getBaseSeriesVisibleInLegend();
 
@@ -285,6 +344,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param visible  the flag.
+     * 
+     * @see #getBaseSeriesVisibleInLegend()
      */
     public void setBaseSeriesVisibleInLegend(boolean visible);
     
@@ -294,10 +355,13 @@ public interface XYItemRenderer extends LegendItemSource {
      * 
      * @param visible  the visibility.
      * @param notify  notify listeners?
+     * 
+     * @see #getBaseSeriesVisibleInLegend()
      */
     public void setBaseSeriesVisibleInLegend(boolean visible, boolean notify);
 
-    // PAINT
+    
+    //// PAINT ////////////////////////////////////////////////////////////////
     
     /**
      * Returns the paint used to fill data items as they are drawn.
@@ -315,6 +379,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series index (zero-based).
      *
      * @return The paint (possibly <code>null</code>).
+     * 
+     * @see #setSeriesPaint(int, Paint)
      */
     public Paint getSeriesPaint(int series);
     
@@ -324,15 +390,31 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      * @param paint  the paint (<code>null</code> permitted).
+     * 
+     * @see #getSeriesPaint(int)
      */
     public void setSeriesPaint(int series, Paint paint);
     
-    // FIXME: add setSeriesPaint(int, Paint, boolean)?
+    /**
+     * Sets the paint for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param paint  the paint (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesPaint(int)
+     *
+     * @since 1.2.0
+     */
+    public void setSeriesPaint(int series, Paint paint, boolean notify);
     
     /**
      * Returns the base paint.
      *
      * @return The base paint (never <code>null</code>).
+     * 
+     * @see #setBasePaint(Paint)
      */
     public Paint getBasePaint();
 
@@ -341,61 +423,117 @@ public interface XYItemRenderer extends LegendItemSource {
      * registered listeners.
      *
      * @param paint  the paint (<code>null</code> not permitted).
+     * 
+     * @see #getBasePaint()
      */
     public void setBasePaint(Paint paint);
     
-    // FIXME: add setBasePaint(int, Paint, boolean)?
+    /**
+     * Sets the default paint and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBasePaint()
+     * 
+     * @since 1.2.0
+     */
+    public void setBasePaint(Paint paint, boolean notify);
     
-//    // FILL PAINT
-//    
-//    /**
-//     * Returns the paint used to fill data items as they are drawn.
-//     *
-//     * @param row  the row (or series) index (zero-based).
-//     * @param column  the column (or category) index (zero-based).
-//     *
-//     * @return The paint (never <code>null</code>).
-//     */
-//    public Paint getItemFillPaint(int row, int column);
-//
-//    /**
-//     * Returns the paint used to fill an item drawn by the renderer.
-//     *
-//     * @param series  the series index (zero-based).
-//     *
-//     * @return The paint (possibly <code>null</code>).
-//     */
-//    public Paint getSeriesFillPaint(int series);
-//    
-//    /**
-//     * Sets the paint used for a series and sends a {@link RendererChangeEvent}
-//     * to all registered listeners.
-//     *
-//     * @param series  the series index (zero-based).
-//     * @param paint  the paint (<code>null</code> permitted).
-//     */
-//    public void setSeriesFillPaint(int series, Paint paint);
-//    
-//    // FIXME: add setSeriesFillPaint(int, Paint, boolean)?
-//    
-//    /**
-//     * Returns the base paint.
-//     *
-//     * @return The base paint (never <code>null</code>).
-//     */
-//    public Paint getBaseFillPaint();
-//
-//    /**
-//     * Sets the base paint and sends a {@link RendererChangeEvent} to all 
-//     * registered listeners.
-//     *
-//     * @param paint  the paint (<code>null</code> not permitted).
-//     */
-//    public void setBaseFillPaint(Paint paint);
-//    
-//    // FIXME: add setBaseFillPaint(int, Paint, boolean)?
     
-    // OUTLINE PAINT
+    //// FILL PAINT /////////////////////////////////////////////////////////
+    
+    /**
+     * Returns the paint used to fill data items as they are drawn.
+     *
+     * @param row  the row (or series) index (zero-based).
+     * @param column  the column (or category) index (zero-based).
+     *
+     * @return The paint (never <code>null</code>).
+     *
+     * @since 1.2.0
+     */
+    public Paint getItemFillPaint(int row, int column);
+    
+    /**
+     * Returns the paint used to fill an item drawn by the renderer.
+     *
+     * @param series  the series (zero-based index).
+     *
+     * @return The paint (possibly <code>null</code>).
+     * 
+     * @see #setSeriesFillPaint(int, Paint)
+     *
+     * @since 1.2.0
+     */
+    public Paint getSeriesFillPaint(int series);
+
+    /**
+     * Sets the fill paint for the specified series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index (zero-based).
+     * @param paint  the paint (<code>null</code> permitted).
+     * 
+     * @see #getSeriesFillPaint(int)
+     *
+     * @since 1.2.0
+     */
+    public void setSeriesFillPaint(int series, Paint paint);
+    
+    /**
+     * Sets the fill paint for the specified series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index (zero-based).
+     * @param paint  the paint (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesFillPaint(int)
+     *
+     * @since 1.2.0
+     */
+    public void setSeriesFillPaint(int series, Paint paint, boolean notify);
+
+    /**
+     * Returns the base fill paint.
+     *
+     * @return The paint (never <code>null</code>).
+     * 
+     * @see #setBaseFillPaint(Paint)
+     *
+     * @since 1.2.0
+     */
+    public Paint getBaseFillPaint();
+
+    /**
+     * Sets the default fill paint and sends a {@link RendererChangeEvent} to 
+     * all registered listeners.
+     *
+     * @param paint  the paint (<code>null</code> not permitted).
+     * 
+     * @see #getBaseFillPaint()
+     *
+     * @since 1.2.0
+     */
+    public void setBaseFillPaint(Paint paint);
+
+    /**
+     * Sets the default fill paint and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseFillPaint()
+     *
+     * @since 1.2.0
+     */
+    public void setBaseFillPaint(Paint paint, boolean notify);
+
+
+    //// OUTLINE PAINT ////////////////////////////////////////////////////////
     
     /**
      * Returns the paint used to outline data items as they are drawn.
@@ -413,6 +551,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series (zero-based index).
      *
      * @return The paint (possibly <code>null</code>).
+     * 
+     * @see #setSeriesOutlinePaint(int, Paint)
      */
     public Paint getSeriesOutlinePaint(int series);
 
@@ -422,15 +562,31 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      * @param paint  the paint (<code>null</code> permitted).
+     * 
+     * @see #getSeriesOutlinePaint(int)
      */
     public void setSeriesOutlinePaint(int series, Paint paint);
 
-    // FIXME: add setSeriesOutlinePaint(int, Paint, boolean)?
+    /**
+     * Sets the outline paint for the specified series and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesOutlinePaint(int)
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesOutlinePaint(int series, Paint paint, boolean notify);
     
     /**
      * Returns the base outline paint.
      *
      * @return The paint (never <code>null</code>).
+     * 
+     * @see #setBaseOutlinePaint(Paint)
      */
     public Paint getBaseOutlinePaint();
 
@@ -439,12 +595,26 @@ public interface XYItemRenderer extends LegendItemSource {
      * all registered listeners.
      *
      * @param paint  the paint (<code>null</code> not permitted).
+     * 
+     * @see #getBaseOutlinePaint()
      */
     public void setBaseOutlinePaint(Paint paint);
     
-    // FIXME: add setBaseOutlinePaint(Paint, boolean)?
+    /**
+     * Sets the default outline paint and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     * 
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseOutlinePaint()
+     *
+     * @since 1.2.0
+     */
+    public void setBaseOutlinePaint(Paint paint, boolean notify);
 
-    // STROKE
+
+    //// STROKE ///////////////////////////////////////////////////////////////
     
     /**
      * Returns the stroke used to draw data items.
@@ -462,6 +632,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series (zero-based index).
      *
      * @return The stroke (possibly <code>null</code>).
+     * 
+     * @see #setSeriesStroke(int, Stroke)
      */
     public Stroke getSeriesStroke(int series);
 
@@ -471,28 +643,59 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      * @param stroke  the stroke (<code>null</code> permitted).
+     * 
+     * @see #getSeriesStroke(int)
      */
     public void setSeriesStroke(int series, Stroke stroke);
 
-    // FIXME: add setSeriesStroke(int, Stroke, boolean) ?
+    /**
+     * Sets the stroke for the specified series and, if requested, sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param stroke  the stroke (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesStroke(int)
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesStroke(int series, Stroke stroke, boolean notify);
 
     /**
      * Returns the base stroke.
      *
      * @return The base stroke (never <code>null</code>).
+     * 
+     * @see #setBaseStroke(Stroke)
      */
     public Stroke getBaseStroke();
 
     /**
-     * Sets the base stroke.
+     * Sets the base stroke and sends a {@link RendererChangeEvent} to all 
+     * registered listeners.
      *
      * @param stroke  the stroke (<code>null</code> not permitted).
+     * 
+     * @see #getBaseStroke()
      */
     public void setBaseStroke(Stroke stroke);
     
-    // FIXME: add setBaseStroke(Stroke, boolean) ?
+    /**
+     * Sets the default stroke and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param stroke  the stroke (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseStroke()
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseStroke(Stroke stroke, boolean notify);
 
-    // OUTLINE STROKE 
+
+    //// OUTLINE STROKE ///////////////////////////////////////////////////////
     
     /**
      * Returns the stroke used to outline data items.  The default 
@@ -512,6 +715,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series (zero-based index).
      *
      * @return The stroke (possibly <code>null</code>).
+     * 
+     * @see #setSeriesOutlineStroke(int, Stroke)
      */
     public Stroke getSeriesOutlineStroke(int series);
     
@@ -521,15 +726,32 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      * @param stroke  the stroke (<code>null</code> permitted).
+     * 
+     * @see #getSeriesOutlineStroke(int)
      */
     public void setSeriesOutlineStroke(int series, Stroke stroke);
     
-    // FIXME: add setSeriesOutlineStroke(int, Stroke, boolean) ?
+    /**
+     * Sets the outline stroke for the specified series and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param stroke  the stroke (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesOutlineStroke(int)
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesOutlineStroke(int series, Stroke stroke, 
+            boolean notify);
 
     /**
      * Returns the base outline stroke.
      *
      * @return The stroke (never <code>null</code>).
+     * 
+     * @see #setBaseOutlineStroke(Stroke)
      */
     public Stroke getBaseOutlineStroke();
 
@@ -538,12 +760,26 @@ public interface XYItemRenderer extends LegendItemSource {
      * all registered listeners.
      *
      * @param stroke  the stroke (<code>null</code> not permitted).
+     * 
+     * @see #getBaseOutlineStroke()
      */
     public void setBaseOutlineStroke(Stroke stroke);
     
-    // FIXME: add setBaseOutlineStroke(Stroke, boolean) ?
+    /**
+     * Sets the default outline stroke and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param stroke  the stroke (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseOutlineStroke()
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseOutlineStroke(Stroke stroke, boolean notify);
     
-    // SHAPE
+    
+    //// SHAPE ////////////////////////////////////////////////////////////////
     
     /**
      * Returns a shape used to represent a data item.
@@ -561,6 +797,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series (zero-based index).
      *
      * @return The shape (possibly <code>null</code>).
+     * 
+     * @see #setSeriesShape(int, Shape)
      */
     public Shape getSeriesShape(int series);
     
@@ -570,15 +808,31 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      * @param shape  the shape (<code>null</code> permitted).
+     * 
+     * @see #getSeriesShape(int)
      */
     public void setSeriesShape(int series, Shape shape);
     
-    // FIXME: add setSeriesShape(int, Shape, boolean) ?
+    /**
+     * Sets the shape for the specified series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param shape  the shape (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesShape(int)
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesShape(int series, Shape shape, boolean notify);
     
     /**
      * Returns the base shape.
      *
      * @return The shape (never <code>null</code>).
+     * 
+     * @see #setBaseShape(Shape)
      */
     public Shape getBaseShape();
 
@@ -587,12 +841,206 @@ public interface XYItemRenderer extends LegendItemSource {
      * registered listeners.
      *
      * @param shape  the shape (<code>null</code> not permitted).
+     * 
+     * @see #getBaseShape()
      */
     public void setBaseShape(Shape shape);
     
-    // FIXME: add setBaseShape(Shape, boolean) ?
+    /**
+     * Sets the default shape and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *  
+     * @param shape  the shape (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseShape()
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseShape(Shape shape, boolean notify);
 
-    // ITEM LABELS VISIBLE 
+    
+    //// LEGEND ITEMS /////////////////////////////////////////////////////////
+    
+    /**
+     * Returns a legend item for a series from a dataset.
+     *
+     * @param datasetIndex  the dataset index.
+     * @param series  the series (zero-based index).
+     *
+     * @return The legend item (possibly <code>null</code>).
+     */
+    public LegendItem getLegendItem(int datasetIndex, int series);
+
+    
+    //// LEGEND ITEM LABEL GENERATOR //////////////////////////////////////////
+    
+    /**
+     * Returns the legend item label generator.
+     * 
+     * @return The legend item label generator (never <code>null</code>).
+     * 
+     * @see #setLegendItemLabelGenerator(XYSeriesLabelGenerator)
+     */
+    public XYSeriesLabelGenerator getLegendItemLabelGenerator();
+    
+    /**
+     * Sets the legend item label generator and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> not permitted).
+     */
+    public void setLegendItemLabelGenerator(XYSeriesLabelGenerator generator);
+
+    /**
+     * Returns the legend item tool tip generator.
+     *
+     * @return The tool tip generator (possibly <code>null</code>).
+     *
+     * @see #setLegendItemToolTipGenerator(XYSeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public XYSeriesLabelGenerator getLegendItemToolTipGenerator();
+    
+    /**
+     * Sets the legend item tool tip generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     *
+     * @see #getLegendItemToolTipGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setLegendItemToolTipGenerator(XYSeriesLabelGenerator generator);
+    
+    /**
+     * Returns the legend item URL generator.
+     *
+     * @return The URL generator (possibly <code>null</code>).
+     *
+     * @see #setLegendItemURLGenerator(XYSeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public XYSeriesLabelGenerator getLegendItemURLGenerator();
+
+    /**
+     * Sets the legend item URL generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     *
+     * @see #getLegendItemURLGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setLegendItemURLGenerator(XYSeriesLabelGenerator generator); 
+    
+    
+    //// TOOL TIP GENERATOR ///////////////////////////////////////////////////
+
+    /**
+     * Returns the tool tip generator for a data item.
+     *
+     * @param row  the row index (zero based).
+     * @param column  the column index (zero based).
+     *
+     * @return The generator (possibly <code>null</code>).
+     */
+    public XYToolTipGenerator getToolTipGenerator(int row, int column);
+    
+    /**
+     * Returns the tool tip generator for a series.
+     *
+     * @param series  the series index (zero based).
+     *
+     * @return The generator (possibly <code>null</code>).
+     * 
+     * @see #setSeriesToolTipGenerator(int, XYToolTipGenerator)
+     */
+    public XYToolTipGenerator getSeriesToolTipGenerator(int series);
+
+    /**
+     * Sets the tool tip generator for a series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index (zero based).
+     * @param generator  the generator (<code>null</code> permitted).
+     * 
+     * @see #getSeriesToolTipGenerator(int)
+     */
+    public void setSeriesToolTipGenerator(int series,               
+            XYToolTipGenerator generator);
+    
+    /**
+     * Sets the tool tip generator for the specified series and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesToolTipGenerator(int series, 
+            XYToolTipGenerator generator, boolean notify);
+
+    /**
+     * Returns the base tool tip generator.
+     *
+     * @return The generator (possibly <code>null</code>).
+     * 
+     * @see #setBaseToolTipGenerator(XYToolTipGenerator)
+     */
+    public XYToolTipGenerator getBaseToolTipGenerator();
+
+    /**
+     * Sets the base tool tip generator and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     * 
+     * @see #getBaseToolTipGenerator()
+     */
+    public void setBaseToolTipGenerator(XYToolTipGenerator generator);
+    
+    /**
+     * Sets the default tool tip generator and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseToolTipGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseToolTipGenerator(XYToolTipGenerator generator, 
+            boolean notify);
+
+    
+    //// URL GENERATOR ////////////////////////////////////////////////////////
+    
+    // FIXME: make this per-series
+    
+    /**
+     * Returns the URL generator for HTML image maps.
+     *
+     * @return The URL generator (possibly null).
+     */
+    public XYURLGenerator getURLGenerator();
+
+    /**
+     * Sets the URL generator for HTML image maps.
+     *
+     * @param urlGenerator the URL generator (null permitted).
+     */
+    public void setURLGenerator(XYURLGenerator urlGenerator);
+
+    
+    //// ITEM LABELS VISIBLE //////////////////////////////////////////////////
     
     /**
      * Returns <code>true</code> if an item label is visible, and 
@@ -615,7 +1063,6 @@ public interface XYItemRenderer extends LegendItemSource {
      */    
     public boolean isSeriesItemLabelsVisible(int series);
 
-    
     /**
      * Returns the flag that controls whether or not item labels are displayed
      * for the specified series.
@@ -624,15 +1071,21 @@ public interface XYItemRenderer extends LegendItemSource {
      * 
      * @return The flag (possibly <code>null</code>).
      * 
+     * @see #setSeriesItemLabelsVisible(int, Boolean)
+     * 
      * @since 1.2.0
      */
     public Boolean getSeriesItemLabelsVisible(int series);
     
     /**
-     * Sets a flag that controls the visibility of the item labels for a series.
+     * Sets a flag that controls the visibility of the item labels for a 
+     * series and sends a {@link RendererChangeEvent} to all registered 
+     * listeners.
      * 
      * @param series  the series index (zero-based).
      * @param visible  the flag.
+     * 
+     * @see #getSeriesItemLabelsVisible(int)
      */
     public void setSeriesItemLabelsVisible(int series, boolean visible);
     
@@ -641,6 +1094,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * 
      * @param series  the series index (zero-based).
      * @param visible  the flag (<code>null</code> permitted).
+     * 
+     * @see #getSeriesItemLabelsVisible(int)
      */
     public void setSeriesItemLabelsVisible(int series, Boolean visible);
     
@@ -652,6 +1107,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param visible  the visible flag.
      * @param notify  a flag that controls whether or not listeners are 
      *                notified.
+     *                
+     * @see #getSeriesItemLabelsVisible(int)
      */
     public void setSeriesItemLabelsVisible(int series, Boolean visible, 
                                            boolean notify);
@@ -660,22 +1117,19 @@ public interface XYItemRenderer extends LegendItemSource {
      * Returns the base setting for item label visibility.
      * 
      * @return A flag (possibly <code>null</code>).
+     * 
+     * @see #setBaseItemLabelsVisible(boolean)
      */
-    public Boolean getBaseItemLabelsVisible();
+    public boolean getBaseItemLabelsVisible();
     
     /**
      * Sets the base flag that controls whether or not item labels are visible.
      * 
      * @param visible  the flag.
+     * 
+     * @see #getBaseItemLabelsVisible()
      */
     public void setBaseItemLabelsVisible(boolean visible);
-    
-    /**
-     * Sets the base setting for item label visibility.
-     * 
-     * @param visible  the flag (<code>null</code> permitted).
-     */
-    public void setBaseItemLabelsVisible(Boolean visible);
     
     /**
      * Sets the base visibility for item labels and, if requested, sends a 
@@ -684,10 +1138,13 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param visible  the visibility flag.
      * @param notify  a flag that controls whether or not listeners are
      *                notified.
+     *                
+     * @see #getBaseItemLabelsVisible()
      */
-    public void setBaseItemLabelsVisible(Boolean visible, boolean notify);
+    public void setBaseItemLabelsVisible(boolean visible, boolean notify);
 
-    // ITEM LABEL GENERATOR
+    
+    //// ITEM LABEL GENERATOR /////////////////////////////////////////////////
 
     /**
      * Returns the item label generator for a data item.
@@ -705,6 +1162,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series index (zero based).
      *
      * @return The generator (possibly <code>null</code>).
+     * 
+     * @see #setSeriesItemLabelGenerator(int, XYItemLabelGenerator)
      */
     public XYItemLabelGenerator getSeriesItemLabelGenerator(int series);
 
@@ -714,14 +1173,33 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero based).
      * @param generator  the generator (<code>null</code> permitted).
+     * 
+     * @see #getSeriesItemLabelGenerator(int)
      */
     public void setSeriesItemLabelGenerator(int series, 
                                             XYItemLabelGenerator generator);
 
     /**
+     * Sets the item label generator for the specified series and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesItemLabelGenerator(int)
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesItemLabelGenerator(int series, 
+            XYItemLabelGenerator generator, boolean notify);
+
+    /**
      * Returns the base item label generator.
      *
      * @return The generator (possibly <code>null</code>).
+     * 
+     * @see #setBaseItemLabelGenerator(XYItemLabelGenerator)
      */
     public XYItemLabelGenerator getBaseItemLabelGenerator();
 
@@ -730,73 +1208,28 @@ public interface XYItemRenderer extends LegendItemSource {
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param generator  the generator (<code>null</code> permitted).
+     * 
+     * @see #getBaseItemLabelGenerator()
      */
     public void setBaseItemLabelGenerator(XYItemLabelGenerator generator);
-
-    // TOOL TIP GENERATOR
-
-    /**
-     * Returns the tool tip generator for a data item.
-     *
-     * @param row  the row index (zero based).
-     * @param column  the column index (zero based).
-     *
-     * @return The generator (possibly <code>null</code>).
-     */
-    public XYToolTipGenerator getToolTipGenerator(int row, int column);
     
     /**
-     * Returns the tool tip generator for a series.
-     *
-     * @param series  the series index (zero based).
-     *
-     * @return The generator (possibly <code>null</code>).
-     */
-    public XYToolTipGenerator getSeriesToolTipGenerator(int series);
-
-    /**
-     * Sets the tool tip generator for a series and sends a 
+     * Sets the default item label generator and, if requested, sends a 
      * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param series  the series index (zero based).
+     * 
      * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getBaseItemLabelGenerator()
+     * 
+     * @since 1.2.0
      */
-    public void setSeriesToolTipGenerator(int series,               
-                                          XYToolTipGenerator generator);
+    public void setBaseItemLabelGenerator(XYItemLabelGenerator generator, 
+            boolean notify);
 
-    /**
-     * Returns the base tool tip generator.
-     *
-     * @return The generator (possibly <code>null</code>).
-     */
-    public XYToolTipGenerator getBaseToolTipGenerator();
-
-    /**
-     * Sets the base tool tip generator and sends a {@link RendererChangeEvent}
-     * to all registered listeners.
-     *
-     * @param generator  the generator (<code>null</code> permitted).
-     */
-    public void setBaseToolTipGenerator(XYToolTipGenerator generator);
-
-    // URL GENERATOR
-    
-    /**
-     * Returns the URL generator for HTML image maps.
-     *
-     * @return The URL generator (possibly null).
-     */
-    public XYURLGenerator getURLGenerator();
-
-    /**
-     * Sets the URL generator for HTML image maps.
-     *
-     * @param urlGenerator the URL generator (null permitted).
-     */
-    public void setURLGenerator(XYURLGenerator urlGenerator);
 
     //// ITEM LABEL FONT ///////////////////////////////////////////////////////
-
+    
     /**
      * Returns the font for an item label.
      * 
@@ -822,14 +1255,32 @@ public interface XYItemRenderer extends LegendItemSource {
      * 
      * @param series  the series index (zero-based).
      * @param font  the font (<code>null</code> permitted).
+     * 
+     * @see #getSeriesItemLabelFont(int)
      */
     public void setSeriesItemLabelFont(int series, Font font);
 
+    /**
+     * Sets the item label font for the specified series and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param font  the font (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesItemLabelFont(int)
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesItemLabelFont(int series, Font font, boolean notify);
+    
     /**
      * Returns the base item label font (this is used when no other font 
      * setting is available).
      * 
      * @return The font (<code>never</code> null).
+     * 
+     * @see #setBaseItemLabelFont(Font)
      */
     public Font getBaseItemLabelFont();
 
@@ -838,11 +1289,25 @@ public interface XYItemRenderer extends LegendItemSource {
      * to all registered listeners.  
      * 
      * @param font  the font (<code>null</code> not permitted).
+     * 
+     * @see #getBaseItemLabelFont()
      */
     public void setBaseItemLabelFont(Font font);
 
-    //// ITEM LABEL PAINT  /////////////////////////////////////////////////////
+    /**
+     * Sets the default item label font and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param font  the font (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseItemLabelFont(Font font, boolean notify);
 
+
+    //// ITEM LABEL PAINT  /////////////////////////////////////////////////////
+    
     /**
      * Returns the paint used to draw an item label.
      * 
@@ -859,6 +1324,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series  the series index (zero based).
      * 
      * @return The paint (possibly <code>null<code>).
+     * 
+     * @see #setSeriesItemLabelPaint(int, Paint)
      */
     public Paint getSeriesItemLabelPaint(int series);
 
@@ -868,9 +1335,26 @@ public interface XYItemRenderer extends LegendItemSource {
      * 
      * @param series  the series (zero based index).
      * @param paint  the paint (<code>null</code> permitted).
+     * 
+     * @see #getSeriesItemLabelPaint(int)
      */
     public void setSeriesItemLabelPaint(int series, Paint paint);
         
+    /**
+     * Sets the item label paint for the specified series and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param paint  the paint (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesItemLabelPaint(int)
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesItemLabelPaint(int series, Paint paint, 
+            boolean notify);
+    
     /**
      * Returns the base item label paint.
      * 
@@ -886,6 +1370,18 @@ public interface XYItemRenderer extends LegendItemSource {
      */
     public void setBaseItemLabelPaint(Paint paint);
     
+    /**
+     * Sets the base item label paint and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseItemLabelPaint(Paint paint, boolean notify);
+    
+
     // POSITIVE ITEM LABEL POSITION...
 
     /**
@@ -953,6 +1449,7 @@ public interface XYItemRenderer extends LegendItemSource {
      */
     public void setBasePositiveItemLabelPosition(ItemLabelPosition position, 
                                                  boolean notify);
+
 
     // NEGATIVE ITEM LABEL POSITION...
 
@@ -1025,23 +1522,94 @@ public interface XYItemRenderer extends LegendItemSource {
     public void setBaseNegativeItemLabelPosition(ItemLabelPosition position, 
                                                  boolean notify);
 
-    // CREATE ENTITIES
-    // FIXME:  these methods should be defined
     
-//    public boolean getItemCreateEntity(int series, int item);
-//    
-//    public Boolean getSeriesCreateEntities(int series);
-//    
-//    public void setSeriesCreateEntities(int series, Boolean create);
-//    
-//    public void setSeriesCreateEntities(int series, Boolean create, 
-//            boolean notify);
-//    
-//    public boolean getBaseCreateEntities();
-//    
-//    public void setBaseCreateEntities(boolean create);
-//    
-//    public void setBaseCreateEntities(boolean create, boolean notify);
+    // CREATE ENTITIES
+    
+    /**
+     * Returns <code>true</code> if the renderer should create an item entity
+     * for the specified data item, and <code>false</code> otherwise.
+     * 
+     * @param series  the series index.
+     * @param item  the item index.
+     *
+     * @return A boolean.
+     * 
+     * @since 1.2.0
+     */
+    public boolean getItemCreateEntity(int series, int item);
+    
+    /**
+     * Returns a flag that controls whether or not chart entities are 
+     * generated for the data items in the specified series.
+     * 
+     * @param series  the series index.
+     * 
+     * @return A flag (possibly <code>null</code>).
+     * 
+     * @since 1.2.0
+     */
+    public Boolean getSeriesCreateEntities(int series);
+    
+    /**
+     * Sets the flag that controls whether or not chart entities are created
+     * for the data items in the specified series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param create  the new flag value (<code>null</code> permitted).
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesCreateEntities(int series, Boolean create);
+    
+    /**
+     * Sets the flag that controls whether or not chart entities are created
+     * for the data items in the specified series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param create  the new flag value (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesCreateEntities(int series, Boolean create, 
+            boolean notify);
+    
+    /**
+     * Returns the default flag that controls whether or not chart entities
+     * are generated for the data items drawn by this renderer.
+     * 
+     * @return A boolean.
+     * 
+     * @since 1.2.0
+     */
+    public boolean getBaseCreateEntities();
+    
+    /**
+     * Sets the default flag that controls whether or not chart entities are
+     * generated for the data items drawn by this renderer.
+     * 
+     * @param create  the flag default.
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseCreateEntities(boolean create);
+    
+    /**
+     * Sets the default flag that controls whether or not chart entities are
+     * generated for the data items drawn by this renderer and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param create  the flag default.
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseCreateEntities(boolean create, boolean notify);
+  
+
+    //// ANNOTATIONS //////////////////////////////////////////////////////////
     
     /**
      * Adds an annotation and sends a {@link RendererChangeEvent} to all 
@@ -1095,6 +1663,30 @@ public interface XYItemRenderer extends LegendItemSource {
                                 Layer layer, 
                                 PlotRenderingInfo info);
     
+    //// DRAWING //////////////////////////////////////////////////////////////
+    
+    /**
+     * Initialises the renderer then returns the number of 'passes' through the
+     * data that the renderer will require (usually just one).  This method 
+     * will be called before the first item is rendered, giving the renderer 
+     * an opportunity to initialise any state information it wants to maintain.
+     * The renderer can do nothing if it chooses.
+     *
+     * @param g2  the graphics device.
+     * @param dataArea  the area inside the axes.
+     * @param plot  the plot.
+     * @param dataset  the dataset.
+     * @param info  an optional info collection object to return data back to 
+     *              the caller.
+     *
+     * @return The number of passes the renderer requires.
+     */
+    public XYItemRendererState initialise(Graphics2D g2,
+                                          Rectangle2D dataArea,
+                                          XYPlot plot,
+                                          XYDataset dataset,
+                                          PlotRenderingInfo info);
+
     /**
      * Called for each item to be plotted.
      * <p>
@@ -1128,32 +1720,9 @@ public interface XYItemRenderer extends LegendItemSource {
                          int item,
                          CrosshairState crosshairState,
                          int pass);
-
-    /**
-     * Returns a legend item for a series from a dataset.
-     *
-     * @param datasetIndex  the dataset index.
-     * @param series  the series (zero-based index).
-     *
-     * @return The legend item (possibly <code>null</code>).
-     */
-    public LegendItem getLegendItem(int datasetIndex, int series);
-
-    /**
-     * Returns the legend item label generator.
-     * 
-     * @return The legend item label generator (never <code>null</code>).
-     */
-    public XYSeriesLabelGenerator getLegendItemLabelGenerator();
+   
     
     /**
-     * Sets the legend item label generator.
-     * 
-     * @param generator  the generator (<code>null</code> not permitted).
-     */
-    public void setLegendItemLabelGenerator(XYSeriesLabelGenerator generator);
-
-        /**
      * Fills a band between two values on the axis.  This can be used to color 
      * bands between the grid lines.
      *
@@ -1188,40 +1757,34 @@ public interface XYItemRenderer extends LegendItemSource {
                                   double start, double end);
 
     /**
-     * Draws a grid line against the domain axis.
+     * Draws a line perpendicular to the domain axis.
      *
      * @param g2  the graphics device.
      * @param plot  the plot.
      * @param axis  the value axis.
-     * @param dataArea  the area for plotting data (not yet adjusted for any 
-     *                  3D effect).
-     * @param value  the value.
+     * @param dataArea  the area for plotting data.
+     * @param value  the data value.
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param stroke  the stroke (<code>null</code> not permitted).
+     * 
+     * @since 1.2.0
      */
-    public void drawDomainGridLine(Graphics2D g2,
-                                   XYPlot plot,
-                                   ValueAxis axis,
-                                   Rectangle2D dataArea,
-                                   double value);
-
+    public void drawDomainLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
+            Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
+    
     /**
-     * Draws a grid line against the range axis.
+     * Draws a line perpendicular to the range axis.
      *
      * @param g2  the graphics device.
      * @param plot  the plot.
      * @param axis  the value axis.
-     * @param dataArea  the area for plotting data (not yet adjusted for any 
-     *                  3D effect).
-     * @param value  the value.
+     * @param dataArea  the area for plotting data.
+     * @param value  the data value.
      * @param paint  the paint (<code>null</code> not permitted).
      * @param stroke  the stroke (<code>null</code> not permitted).
      */
-    public void drawRangeLine(Graphics2D g2,
-                              XYPlot plot,
-                              ValueAxis axis,
-                              Rectangle2D dataArea,
-                              double value,
-                              Paint paint,
-                              Stroke stroke);
+    public void drawRangeLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
+            Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
 
     /**
      * Draws the specified <code>marker</code> against the domain axis.
@@ -1232,11 +1795,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param marker  the marker.
      * @param dataArea  the axis data area.
      */
-    public void drawDomainMarker(Graphics2D g2,
-                                 XYPlot plot,
-                                 ValueAxis axis,
-                                 Marker marker,
-                                 Rectangle2D dataArea);
+    public void drawDomainMarker(Graphics2D g2, XYPlot plot, ValueAxis axis,
+            Marker marker, Rectangle2D dataArea);
 
     /**
      * Draws a horizontal line across the chart to represent a 'range marker'.
@@ -1247,63 +1807,8 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param marker  the marker line.
      * @param dataArea  the axis data area.
      */
-    public void drawRangeMarker(Graphics2D g2,
-                                XYPlot plot,
-                                ValueAxis axis,
-                                Marker marker,
-                                Rectangle2D dataArea);
+    public void drawRangeMarker(Graphics2D g2, XYPlot plot, ValueAxis axis,
+            Marker marker, Rectangle2D dataArea);
 
-    /**
-     * Returns the plot that this renderer has been assigned to.
-     *
-     * @return The plot.
-     */
-    public XYPlot getPlot();
-
-    /**
-     * Sets the plot that this renderer is assigned to.  This method will be 
-     * called by the plot class...you do not need to call it yourself.
-     *
-     * @param plot  the plot.
-     */
-    public void setPlot(XYPlot plot);
-    
-    /**
-     * Returns the lower and upper bounds (range) of the x-values in the 
-     * specified dataset.
-     * 
-     * @param dataset  the dataset (<code>null</code> permitted).
-     * 
-     * @return The range.
-     */
-    public Range findDomainBounds(XYDataset dataset);
-    
-    /**
-     * Returns the lower and upper bounds (range) of the y-values in the
-     * specified dataset.  The implementation of this method will take 
-     * into account the presentation used by the renderers (for example,
-     * a renderer that "stacks" values will return a bigger range than
-     * a renderer that doesn't.
-     * 
-     * @param dataset  the dataset (<code>null</code> permitted).
-     * 
-     * @return The range (or <code>null</code> if the dataset is 
-     *         <code>null</code> or empty).
-     */
-    public Range findRangeBounds(XYDataset dataset);
-    
-    /**
-     * Add a renderer change listener.
-     * 
-     * @param listener  the listener.
-     */
-    public void addChangeListener(RendererChangeListener listener);
-
-    /**
-     * Removes a change listener.
-     * 
-     * @param listener  the listener.
-     */
-    public void removeChangeListener(RendererChangeListener listener);
     
 }
