@@ -121,9 +121,14 @@ public class YIntervalRendererTests extends TestCase {
         r2.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         assertTrue(r1.equals(r2));
         
-        r1.setURLGenerator(new StandardXYURLGenerator());
+        r1.setSeriesURLGenerator(0, new StandardXYURLGenerator());
         assertFalse(r1.equals(r2));
-        r2.setURLGenerator(new StandardXYURLGenerator());
+        r2.setSeriesURLGenerator(0, new StandardXYURLGenerator());
+        assertTrue(r1.equals(r2));
+        
+        r1.setBaseURLGenerator(new StandardXYURLGenerator());
+        assertFalse(r1.equals(r2));
+        r2.setBaseURLGenerator(new StandardXYURLGenerator());
         assertTrue(r1.equals(r2));
         
         r1.addAnnotation(new XYTextAnnotation("X", 1.0, 2.0), Layer.FOREGROUND);

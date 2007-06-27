@@ -77,6 +77,7 @@
  * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 20-Jun-2007 : Removed deprecated code and JCommon dependencies (DG);
+ * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
  *
  */
 
@@ -98,7 +99,6 @@ import java.io.Serializable;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
-import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.XYSeriesLabelGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
@@ -152,7 +152,7 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
         super();
         this.showOutline = false;
         setBaseToolTipGenerator(labelGenerator);
-        setURLGenerator(urlGenerator);
+        setBaseURLGenerator(urlGenerator);
         GeneralPath area = new GeneralPath();
         area.moveTo(0.0f, -4.0f);
         area.lineTo(3.0f, -2.0f);
@@ -376,25 +376,9 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
         updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex, 
                 rangeAxisIndex, transX1, transY1, orientation);
         
-        // collect entity and tool tip information...
-        if (state.getInfo() != null) {
-            EntityCollection entities = state.getEntityCollection();
-            if (entities != null && hotspot != null) {
-                String tip = null;
-                XYToolTipGenerator generator = getToolTipGenerator(
-                    series, item
-                );
-                if (generator != null) {
-                    tip = generator.generateToolTip(dataset, series, item);
-                }
-                String url = null;
-                if (getURLGenerator() != null) {
-                    url = getURLGenerator().generateURL(dataset, series, item);
-                }
-                XYItemEntity entity = new XYItemEntity(hotspot, dataset, 
-                        series, item, tip, url);
-                entities.add(entity);
-            }
+        EntityCollection entities = state.getEntityCollection();
+        if (entities != null) {
+            addEntity(entities, hotspot, dataset, series, item, 0.0, 0.0);
         }
 
     }

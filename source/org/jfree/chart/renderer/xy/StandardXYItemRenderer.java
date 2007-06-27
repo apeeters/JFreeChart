@@ -104,6 +104,7 @@
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 08-Jun-2007 : Fixed bug in entity creation (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 27-Jun-2007 : Updated constructor for method changes in XYItemRenderer (DG);
  *
  */
 
@@ -265,7 +266,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
 
         super();
         setBaseToolTipGenerator(toolTipGenerator);
-        setURLGenerator(urlGenerator);
+        setBaseURLGenerator(urlGenerator);
         if ((type & SHAPES) != 0) {
             this.baseShapesVisible = true;
         }

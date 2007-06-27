@@ -81,6 +81,7 @@
  * 05-Mar-2007 : Added flag to allow optional use of outline paint (DG);
  * 20-Jun-2007 : Removed deprecated drawVolume() method, and removed JCommon
  *               dependencies (DG);
+ * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
  * 
  */
 
@@ -102,7 +103,6 @@ import java.io.Serializable;
 
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
-import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.HighLowItemLabelGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
@@ -801,21 +801,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         }
         g2.draw(body);
 
-        // add an entity for the item...
-        if (entities != null) {
-            String tip = null;
-            XYToolTipGenerator generator = getToolTipGenerator(series, item);
-            if (generator != null) {
-                tip = generator.generateToolTip(dataset, series, item);
-            }
-            String url = null;
-            if (getURLGenerator() != null) {
-                url = getURLGenerator().generateURL(dataset, series, item);
-            }
-            XYItemEntity entity = new XYItemEntity(body, dataset, series, item, 
-                    tip, url);
-            entities.add(entity);
-        }
+        addEntity(entities, body, dataset, series, item, 0.0, 0.0);
 
     }
 

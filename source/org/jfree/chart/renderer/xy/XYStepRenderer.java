@@ -61,6 +61,7 @@
  *               thanks to Gerald Struck (DG);
  * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
  *
  */
 
@@ -68,7 +69,6 @@ package org.jfree.chart.renderer.xy;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -76,7 +76,6 @@ import java.io.Serializable;
 
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
-import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
@@ -119,7 +118,7 @@ public class XYStepRenderer extends XYLineAndShapeRenderer
                           XYURLGenerator urlGenerator) {
         super();
         setBaseToolTipGenerator(toolTipGenerator);
-        setURLGenerator(urlGenerator);
+        setBaseURLGenerator(urlGenerator);
         setShapesVisible(false);
     }
 
@@ -236,33 +235,9 @@ public class XYStepRenderer extends XYLineAndShapeRenderer
         updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex, 
                 rangeAxisIndex, transX1, transY1, orientation);
         
-        // collect entity and tool tip information...
-        if (state.getInfo() != null) {
-            EntityCollection entities = state.getEntityCollection();
-            if (entities != null) {
-                int r = getDefaultEntityRadius();
-                Shape shape = orientation == PlotOrientation.VERTICAL
-                    ? new Rectangle2D.Double(transX1 - r, transY1 - r, 2 * r, 
-                            2 * r)
-                    : new Rectangle2D.Double(transY1 - r, transX1 - r, 2 * r, 
-                            2 * r);           
-                if (shape != null) {
-                    String tip = null;
-                    XYToolTipGenerator generator 
-                        = getToolTipGenerator(series, item);
-                    if (generator != null) {
-                        tip = generator.generateToolTip(dataset, series, item);
-                    }
-                    String url = null;
-                    if (getURLGenerator() != null) {
-                        url = getURLGenerator().generateURL(dataset, series, 
-                                item);
-                    }
-                    XYItemEntity entity = new XYItemEntity(shape, dataset, 
-                            series, item, tip, url);
-                    entities.add(entity);
-                }
-            }
+        EntityCollection entities = state.getEntityCollection();
+        if (entities != null) {
+            addEntity(entities, null, dataset, series, item, transX1, transY1);
         }
     }
 

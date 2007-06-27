@@ -72,6 +72,8 @@
  * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 27-Jun-2007 : Updated drawItem() for method name changes in 
+ *               XYItemRenderer (DG);
  * 
  */
 
@@ -918,7 +920,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
                         x_item);
             }
             String l_url = null;
-            XYURLGenerator l_urlGenerator = getURLGenerator();
+            XYURLGenerator l_urlGenerator = getURLGenerator(x_series, x_item);
             if (null != l_urlGenerator) {
                 l_url = l_urlGenerator.generateURL(x_dataset, x_series, 
                         x_item);

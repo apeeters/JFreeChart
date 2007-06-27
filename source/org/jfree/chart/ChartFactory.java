@@ -118,6 +118,7 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 26-Jun-2007 : Updated some code for method name changes in 
  *               the CategoryItemRenderer interface (DG);
+ * 27-Jun-2007 : Updates for method name changes in XYItemRenderer (DG);
  *
  */
 
@@ -1230,7 +1231,7 @@ public abstract class ChartFactory {
         }
         XYItemRenderer renderer = new XYLineAndShapeRenderer(false, true);
         renderer.setBaseToolTipGenerator(toolTipGenerator);
-        renderer.setURLGenerator(urlGenerator);
+        renderer.setBaseURLGenerator(urlGenerator);
         plot.setRenderer(renderer);
         plot.setOrientation(orientation);
 
@@ -1297,7 +1298,7 @@ public abstract class ChartFactory {
             renderer.setBaseToolTipGenerator(tt);
         }
         if (urls) {
-            renderer.setURLGenerator(new StandardXYURLGenerator());
+            renderer.setBaseURLGenerator(new StandardXYURLGenerator());
         }
 
         XYPlot plot = new XYPlot(dataset, domainAxis, valueAxis, renderer);
@@ -1465,7 +1466,7 @@ public abstract class ChartFactory {
             renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         }
         if (urls) {
-            renderer.setURLGenerator(new StandardXYURLGenerator());
+            renderer.setBaseURLGenerator(new StandardXYURLGenerator());
         }
 
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
@@ -1633,7 +1634,7 @@ public abstract class ChartFactory {
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, 
                 false);
         renderer.setBaseToolTipGenerator(toolTipGenerator);
-        renderer.setURLGenerator(urlGenerator);
+        renderer.setBaseURLGenerator(urlGenerator);
         plot.setRenderer(renderer);
         
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
@@ -1781,7 +1782,7 @@ public abstract class ChartFactory {
             renderer.setBaseToolTipGenerator(new StandardXYZToolTipGenerator());
         }
         if (urls) {
-            renderer.setURLGenerator(new StandardXYZURLGenerator());
+            renderer.setBaseURLGenerator(new StandardXYZURLGenerator());
         }
         plot.setRenderer(renderer);
         plot.setOrientation(orientation);
@@ -1831,7 +1832,7 @@ public abstract class ChartFactory {
             renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         }
         if (urls) {
-            renderer.setURLGenerator(new StandardXYURLGenerator());
+            renderer.setBaseURLGenerator(new StandardXYURLGenerator());
         }
 
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
@@ -1935,7 +1936,7 @@ public abstract class ChartFactory {
             renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         }
         if (urls) {
-            renderer.setURLGenerator(new StandardXYURLGenerator());
+            renderer.setBaseURLGenerator(new StandardXYURLGenerator());
         }
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,

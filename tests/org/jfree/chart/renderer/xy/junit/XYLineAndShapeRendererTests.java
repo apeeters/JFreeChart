@@ -184,9 +184,9 @@ public class XYLineAndShapeRendererTests extends TestCase {
         assertEquals(r1, r2);
         assertEquals(r2, r1);
     
-        r1.setURLGenerator(new TimeSeriesURLGenerator());
+        r1.setBaseURLGenerator(new TimeSeriesURLGenerator());
         assertFalse(r1.equals(r2));
-        r2.setURLGenerator(new TimeSeriesURLGenerator());
+        r2.setBaseURLGenerator(new TimeSeriesURLGenerator());
         assertTrue(r1.equals(r2));
     }
 

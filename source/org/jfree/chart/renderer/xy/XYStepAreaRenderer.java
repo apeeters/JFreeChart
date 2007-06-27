@@ -51,6 +51,7 @@
  * 14-Feb-2007 : Added equals() method override (DG);
  * 04-May-2007 : Set processVisibleItemsOnly flag to false (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
  * 
  */
 
@@ -66,7 +67,6 @@ import java.io.Serializable;
 
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
-import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.CrosshairState;
@@ -155,7 +155,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
 
         super();
         setBaseToolTipGenerator(toolTipGenerator);
-        setURLGenerator(urlGenerator);
+        setBaseURLGenerator(urlGenerator);
 
         if (type == AREA) {
             this.plotArea = true;
@@ -522,24 +522,9 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
                     rangeAxisIndex, transX1, transY1, orientation);
         }
 
-        // collect entity and tool tip information...
-        if (state.getInfo() != null) {
-            EntityCollection entities = state.getEntityCollection();
-            if (entities != null && shape != null) {
-                String tip = null;
-                XYToolTipGenerator generator 
-                    = getToolTipGenerator(series, item);
-                if (generator != null) {
-                    tip = generator.generateToolTip(dataset, series, item);
-                }
-                String url = null;
-                if (getURLGenerator() != null) {
-                    url = getURLGenerator().generateURL(dataset, series, item);
-                }
-                XYItemEntity entity = new XYItemEntity(shape, dataset, series, 
-                        item, tip, url);
-                entities.add(entity);
-            }
+        EntityCollection entities = state.getEntityCollection();
+        if (entities != null) {
+            addEntity(entities, shape, dataset, series, item, 0.0, 0.0);
         }
     }
 

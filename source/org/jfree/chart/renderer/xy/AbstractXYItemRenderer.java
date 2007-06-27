@@ -187,8 +187,11 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     /** The base tool tip generator. */
     private XYToolTipGenerator baseToolTipGenerator;
 
+    /** A list of URL generators (one per series). */
+    private ObjectList urlGeneratorList;
+    
     /** The URL text generator. */
-    private XYURLGenerator urlGenerator;
+    private XYURLGenerator baseURLGenerator;
 
     /**
      * Annotations to be drawn in the background layer ('underneath' the data
@@ -222,7 +225,8 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         super();
         this.itemLabelGeneratorList = new ObjectList();
         this.toolTipGeneratorList = new ObjectList();
-        this.urlGenerator = null;
+        this.urlGeneratorList = new ObjectList();
+        this.baseURLGenerator = null;
         this.backgroundAnnotations = new java.util.ArrayList();
         this.foregroundAnnotations = new java.util.ArrayList();
         this.defaultEntityRadius = 3;
@@ -505,24 +509,118 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     // URL GENERATOR
 
     /**
-     * Returns the URL generator for HTML image maps.
-     *
-     * @return The URL generator (possibly <code>null</code>).
+     * Returns the URL generator for the specified item.
+     * 
+     * @param series  the series index.
+     * @param item  the item index.
+     * 
+     * @return The generator (possibly <code>null</code>).
+     * 
+     * @since 1.2.0
      */
-    public XYURLGenerator getURLGenerator() {
-        return this.urlGenerator;
+    public XYURLGenerator getURLGenerator(int series, int item) {
+        XYURLGenerator generator 
+                = (XYURLGenerator) this.urlGeneratorList.get(series);
+        if (generator == null) {
+            generator = this.baseURLGenerator;
+        }
+        return generator;
+    }
+    
+    /**
+     * Returns the URL generator for the specified series, if one is defined.
+     * 
+     * @param series  the series index.
+     * 
+     * @return The URL generator (possibly <code>null</code>).
+     * 
+     * @see #setSeriesURLGenerator(int, XYURLGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public XYURLGenerator getSeriesURLGenerator(int series) {
+        return (XYURLGenerator) this.urlGeneratorList.get(series);
+    }
+    
+    /**
+     * Sets the URL generator for the specified series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted)
+     * 
+     * @see #getSeriesURLGenerator(int)
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesURLGenerator(int series, XYURLGenerator generator) {
+        setSeriesURLGenerator(series, generator, true);
     }
 
     /**
-     * Sets the URL generator for HTML image maps.
-     *
-     * @param urlGenerator  the URL generator (<code>null</code> permitted).
+     * Sets the URL generator for the specified series and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesURLGenerator(int)
+     * 
+     * @since 1.2.0
      */
-    public void setURLGenerator(XYURLGenerator urlGenerator) {
-        this.urlGenerator = urlGenerator;
-        notifyListeners(new RendererChangeEvent(this));
+    public void setSeriesURLGenerator(int series, XYURLGenerator generator, 
+            boolean notify) {
+        this.toolTipGeneratorList.set(series, generator);
+        if (notify) {
+            notifyListeners(new RendererChangeEvent(this));
+        }
     }
-
+    
+    /**
+     * Returns the default URL generator.
+     * 
+     * @return The default URL generator (possibly <code>null</code>).
+     * 
+     * @see #setBaseURLGenerator(XYURLGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public XYURLGenerator getBaseURLGenerator() {
+        return this.baseURLGenerator;
+    }
+    
+    /**
+     * Sets the default URL generator and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> permitted).
+     * 
+     * @see #getBaseURLGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseURLGenerator(XYURLGenerator generator) {
+        setBaseURLGenerator(generator, true);
+    }
+    
+    /**
+     * Sets the default URL generator and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listener?
+     *
+     * @see #getBaseURLGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseURLGenerator(XYURLGenerator generator, boolean notify) {
+        this.baseURLGenerator = generator;
+        if (notify) {
+            notifyListeners(new RendererChangeEvent(this));
+        }
+    }
     
     // ANNOTATIONS
     
@@ -1436,7 +1534,11 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                 that.baseToolTipGenerator)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.urlGenerator, that.urlGenerator)) {
+        if (!this.urlGeneratorList.equals(that.urlGeneratorList)) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.baseURLGenerator,
+                that.baseURLGenerator)) {
             return false;
         }
         if (!this.foregroundAnnotations.equals(that.foregroundAnnotations)) {
@@ -1636,8 +1738,9 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             tip = generator.generateToolTip(dataset, series, item);
         }
         String url = null;
-        if (getURLGenerator() != null) {
-            url = getURLGenerator().generateURL(dataset, series, item);
+        XYURLGenerator urlster = getURLGenerator(series, item);
+        if (urlster != null) {
+            url = urlster.generateURL(dataset, series, item);
         }
         XYItemEntity entity = new XYItemEntity(area, dataset, series, item,
                 tip, url);

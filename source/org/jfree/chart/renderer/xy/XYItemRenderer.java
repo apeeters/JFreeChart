@@ -84,7 +84,8 @@
  *               negativeItemLabelPosition and createEntities override 
  *               fields (DG);
  * 20-Jun-2007 : Removed deprecated methods (DG);
- * 27-Jun-2007 : Added getSeriesItemLabelsVisible(int) method (DG);
+ * 27-Jun-2007 : Added getSeriesItemLabelsVisible(int) method, added new 
+ *               methods for XYURLGenerator (DG);
  *
  */
 
@@ -1023,22 +1024,96 @@ public interface XYItemRenderer extends LegendItemSource {
     
     //// URL GENERATOR ////////////////////////////////////////////////////////
     
-    // FIXME: make this per-series
+
+    /**
+     * Returns the URL generator for the specified item.
+     * 
+     * @param series  the series index.
+     * @param item  the item index.
+     * 
+     * @return The generator (possibly <code>null</code>).
+     * 
+     * @since 1.2.0
+     */
+    public XYURLGenerator getURLGenerator(int series, int item);
     
     /**
-     * Returns the URL generator for HTML image maps.
-     *
-     * @return The URL generator (possibly null).
+     * Returns the URL generator for the specified series, if one is defined.
+     * 
+     * @param series  the series index.
+     * 
+     * @return The URL generator (possibly <code>null</code>).
+     * 
+     * @see #setSeriesURLGenerator(int, XYURLGenerator)
+     * 
+     * @since 1.2.0
      */
-    public XYURLGenerator getURLGenerator();
+    public XYURLGenerator getSeriesURLGenerator(int series);
+    
+    /**
+     * Sets the URL generator for the specified series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted)
+     * 
+     * @see #getSeriesURLGenerator(int)
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesURLGenerator(int series, XYURLGenerator generator);
 
     /**
-     * Sets the URL generator for HTML image maps.
-     *
-     * @param urlGenerator the URL generator (null permitted).
+     * Sets the URL generator for the specified series and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getSeriesURLGenerator(int)
+     * 
+     * @since 1.2.0
      */
-    public void setURLGenerator(XYURLGenerator urlGenerator);
-
+    public void setSeriesURLGenerator(int series, XYURLGenerator generator, 
+            boolean notify);
+    
+    /**
+     * Returns the default URL generator.
+     * 
+     * @return The default URL generator (possibly <code>null</code>).
+     * 
+     * @see #setBaseURLGenerator(XYURLGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public XYURLGenerator getBaseURLGenerator();
+    
+    /**
+     * Sets the default URL generator and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> permitted).
+     * 
+     * @see #getBaseURLGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseURLGenerator(XYURLGenerator generator);
+    
+    /**
+     * Sets the default URL generator and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listener?
+     *
+     * @see #getBaseURLGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseURLGenerator(XYURLGenerator generator, boolean notify);
+    
     
     //// ITEM LABELS VISIBLE //////////////////////////////////////////////////
     
