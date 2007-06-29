@@ -493,7 +493,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *
      * @return The URL generator.
      */
-    public CategoryURLGenerator getItemURLGenerator(int row, int column) {
+    public CategoryURLGenerator getURLGenerator(int row, int column) {
         CategoryURLGenerator generator 
                 = (CategoryURLGenerator) this.urlGeneratorList.get(row);
         if (generator == null) {
@@ -1549,7 +1549,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             tip = tipster.generateToolTip(dataset, row, column);
         }
         String url = null;
-        CategoryURLGenerator urlster = getItemURLGenerator(row, column);
+        CategoryURLGenerator urlster = getURLGenerator(row, column);
         if (urlster != null) {
             url = urlster.generateURL(dataset, row, column);
         }

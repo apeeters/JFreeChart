@@ -151,16 +151,6 @@ import org.jfree.data.category.CategoryDataset;
 public interface CategoryItemRenderer extends LegendItemSource {
 
     /**
-     * Returns the number of passes through the dataset required by the 
-     * renderer.  Usually this will be one, but some renderers may use
-     * a second or third pass to overlay items on top of things that were
-     * drawn in an earlier pass.
-     * 
-     * @return The pass count.
-     */
-    public int getPassCount();
-
-    /**
      * Returns the plot that the renderer has been assigned to (where 
      * <code>null</code> indicates that the renderer is not currently assigned 
      * to a plot).
@@ -183,6 +173,27 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public void setPlot(CategoryPlot plot);
 
     /**
+     * Returns the number of passes through the dataset required by the 
+     * renderer.  Usually this will be one, but some renderers may use
+     * a second or third pass to overlay items on top of things that were
+     * drawn in an earlier pass.
+     * 
+     * @return The pass count.
+     */
+    public int getPassCount();
+
+    /**
+     * Returns the range of values the renderer requires to display all the 
+     * items from the specified dataset.
+     * 
+     * @param dataset  the dataset (<code>null</code> permitted).
+     * 
+     * @return The range (or <code>null</code> if the dataset is 
+     *         <code>null</code> or empty).
+     */
+    public Range findRangeBounds(CategoryDataset dataset);
+    
+    /**
      * Adds a change listener.
      * 
      * @param listener  the listener.
@@ -200,38 +211,8 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void removeChangeListener(RendererChangeListener listener);
 
-    /**
-     * Returns the range of values the renderer requires to display all the 
-     * items from the specified dataset.
-     * 
-     * @param dataset  the dataset (<code>null</code> permitted).
-     * 
-     * @return The range (or <code>null</code> if the dataset is 
-     *         <code>null</code> or empty).
-     */
-    public Range findRangeBounds(CategoryDataset dataset);
+    //// VISIBILITY ///////////////////////////////////////////////////////////
     
-    /**
-     * Initialises the renderer.  This method will be called before the first 
-     * item is rendered, giving the renderer an opportunity to initialise any 
-     * state information it wants to maintain. The renderer can do nothing if 
-     * it chooses.
-     *
-     * @param g2  the graphics device.
-     * @param dataArea  the area inside the axes.
-     * @param plot  the plot.
-     * @param rendererIndex  the renderer index.
-     * @param info  collects chart rendering information for return to caller.
-     * 
-     * @return A state object (maintains state information relevant to one 
-     *         chart drawing).
-     */
-    public CategoryItemRendererState initialise(Graphics2D g2,
-                                                Rectangle2D dataArea,
-                                                CategoryPlot plot,
-                                                int rendererIndex,
-                                                PlotRenderingInfo info);
-                           
     /**
      * Returns a boolean that indicates whether or not the specified item 
      * should be drawn (this is typically used to hide an entire series).
@@ -318,6 +299,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseSeriesVisible(boolean visible, boolean notify);
 
+
     // SERIES VISIBLE IN LEGEND (not yet respected by all renderers)
     
     /**
@@ -400,7 +382,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public void setBaseSeriesVisibleInLegend(boolean visible, boolean notify);
 
 
-    //// PAINT /////////////////////////////////////////////////////////////////
+    //// PAINT ////////////////////////////////////////////////////////////////
     
     /**
      * Returns the paint used to fill data items as they are drawn.
@@ -475,6 +457,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @since 1.2.0
      */
     public void setBasePaint(Paint paint, boolean notify);
+    
 
     //// FILL PAINT /////////////////////////////////////////////////////////
     
@@ -896,6 +879,262 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public void setBaseShape(Shape shape, boolean notify);
 
     
+    //// LEGEND ITEMS /////////////////////////////////////////////////////////
+    
+    /**
+     * Returns a legend item for a series.  This method can return 
+     * <code>null</code>, in which case the series will have no entry in the
+     * legend.
+     *
+     * @param datasetIndex  the dataset index (zero-based).
+     * @param series  the series (zero-based index).
+     *
+     * @return The legend item (possibly <code>null</code>).
+     */
+    public LegendItem getLegendItem(int datasetIndex, int series);
+
+    /**
+     * Returns the legend item label generator.
+     *
+     * @return The label generator (never <code>null</code>).
+     *
+     * @see #setLegendItemLabelGenerator(CategorySeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public CategorySeriesLabelGenerator getLegendItemLabelGenerator();
+
+    /**
+     * Sets the legend item label generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> not permitted).
+     *
+     * @see #getLegendItemLabelGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setLegendItemLabelGenerator(
+            CategorySeriesLabelGenerator generator);
+    
+    /**
+     * Returns the legend item tool tip generator.
+     *
+     * @return The tool tip generator (possibly <code>null</code>).
+     *
+     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public CategorySeriesLabelGenerator getLegendItemToolTipGenerator();
+
+    /**
+     * Sets the legend item tool tip generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     *
+     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public void setLegendItemToolTipGenerator(
+            CategorySeriesLabelGenerator generator);
+    
+    /**
+     * Returns the legend item URL generator.
+     *
+     * @return The URL generator (possibly <code>null</code>).
+     *
+     * @see #setLegendItemURLGenerator(CategorySeriesLabelGenerator)
+     * 
+     * @since 1.2.0
+     */
+    public CategorySeriesLabelGenerator getLegendItemURLGenerator();
+
+    /**
+     * Sets the legend item URL generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     *
+     * @see #getLegendItemURLGenerator()
+     * 
+     * @since 1.2.0
+     */
+    public void setLegendItemURLGenerator(
+            CategorySeriesLabelGenerator generator);
+    
+    
+    // TOOL TIP GENERATOR
+    
+    /**
+     * Returns the tool tip generator that should be used for the specified 
+     * item.  This method looks up the generator using the "three-layer" 
+     * approach outlined in the general description of this interface.  
+     *
+     * @param row  the row index (zero-based).
+     * @param column  the column index (zero-based).
+     *
+     * @return The generator (possibly <code>null</code>).
+     */
+    public CategoryToolTipGenerator getToolTipGenerator(int row, int column);
+    
+    /**
+     * Returns the tool tip generator for the specified series (a "layer 1" 
+     * generator).
+     *
+     * @param series  the series index (zero-based).
+     *
+     * @return The tool tip generator (possibly <code>null</code>).
+     * 
+     * @see #setSeriesToolTipGenerator(int, CategoryToolTipGenerator)
+     */
+    public CategoryToolTipGenerator getSeriesToolTipGenerator(int series);
+
+    /**
+     * Sets the tool tip generator for a series and sends a 
+     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered 
+     * listeners.
+     *
+     * @param series  the series index (zero-based).
+     * @param generator  the generator (<code>null</code> permitted).
+     * 
+     * @see #getSeriesToolTipGenerator(int)
+     */
+    public void setSeriesToolTipGenerator(int series, 
+                                          CategoryToolTipGenerator generator);
+    
+    /**
+     * Sets the tool tip generator for a series and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted)
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     * 
+     * @see #getSeriesToolTipGenerator(int)
+     */
+    public void setSeriesToolTipGenerator(int series, 
+            CategoryToolTipGenerator generator, boolean notify);
+
+    /**
+     * Returns the base tool tip generator (the "layer 2" generator).
+     *
+     * @return The tool tip generator (possibly <code>null</code>).
+     * 
+     * @see #setBaseToolTipGenerator(CategoryToolTipGenerator)
+     */
+    public CategoryToolTipGenerator getBaseToolTipGenerator();
+
+    /**
+     * Sets the base tool tip generator and sends a 
+     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered 
+     * listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     * 
+     * @see #getBaseToolTipGenerator()
+     */
+    public void setBaseToolTipGenerator(CategoryToolTipGenerator generator);
+    
+    /**
+     * Sets the default tool tip generator and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     *
+     * @since 1.2.0
+     * 
+     * @see #getBaseToolTipGenerator()
+     */
+    public void setBaseToolTipGenerator(CategoryToolTipGenerator generator, 
+            boolean notify);
+
+    
+    // ITEM URL GENERATOR
+    
+    /**
+     * Returns the URL generator for an item.
+     *
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
+     *
+     * @return The item URL generator.
+     */
+    public CategoryURLGenerator getURLGenerator(int series, int item);
+    
+    /**
+     * Returns the URL generator for a series.
+     *
+     * @param series  the series index (zero-based).
+     *
+     * @return The URL generator.
+     * 
+     * @see #setSeriesURLGenerator(int, CategoryURLGenerator)
+     */
+    public CategoryURLGenerator getSeriesURLGenerator(int series);
+
+    /**
+     * Sets the URL generator for a series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index (zero-based).
+     * @param generator  the generator.
+     * 
+     * @see #getSeriesURLGenerator(int)
+     */
+    public void setSeriesURLGenerator(int series, 
+            CategoryURLGenerator generator);
+
+    /**
+     * Sets the URL generator for a series and, if requested, sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series  the series index.
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setSeriesURLGenerator(int series, 
+            CategoryURLGenerator generator, boolean notify);
+    
+    /**
+     * Returns the base URL generator.
+     *
+     * @return The URL generator (possibly <code>null</code>).
+     * 
+     * @see #setBaseURLGenerator(CategoryURLGenerator)
+     */
+    public CategoryURLGenerator getBaseURLGenerator();
+
+    /**
+     * Sets the base URL generator and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     *
+     * @param generator  the URL generator (<code>null</code> permitted).
+     * 
+     * @see #getBaseURLGenerator()
+     */
+    public void setBaseURLGenerator(CategoryURLGenerator generator);
+
+    /**
+     * Sets the default URL generator and, if requested, sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param generator  the generator (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.2.0
+     */
+    public void setBaseURLGenerator(CategoryURLGenerator generator, 
+            boolean notify);
+        
+
     // ITEM LABELS VISIBLE 
     
     /**
@@ -999,6 +1238,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseItemLabelsVisible(boolean visible, boolean notify);
     
+
     // ITEM LABEL GENERATOR
     
     /**
@@ -1079,95 +1319,6 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @since 1.2.0
      */
     public void setBaseItemLabelGenerator(CategoryItemLabelGenerator generator, 
-            boolean notify);
-
-    
-    // TOOL TIP GENERATOR
-    
-    /**
-     * Returns the tool tip generator that should be used for the specified 
-     * item.  This method looks up the generator using the "three-layer" 
-     * approach outlined in the general description of this interface.  
-     *
-     * @param row  the row index (zero-based).
-     * @param column  the column index (zero-based).
-     *
-     * @return The generator (possibly <code>null</code>).
-     */
-    public CategoryToolTipGenerator getToolTipGenerator(int row, int column);
-    
-    /**
-     * Returns the tool tip generator for the specified series (a "layer 1" 
-     * generator).
-     *
-     * @param series  the series index (zero-based).
-     *
-     * @return The tool tip generator (possibly <code>null</code>).
-     * 
-     * @see #setSeriesToolTipGenerator(int, CategoryToolTipGenerator)
-     */
-    public CategoryToolTipGenerator getSeriesToolTipGenerator(int series);
-
-    /**
-     * Sets the tool tip generator for a series and sends a 
-     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered 
-     * listeners.
-     *
-     * @param series  the series index (zero-based).
-     * @param generator  the generator (<code>null</code> permitted).
-     * 
-     * @see #getSeriesToolTipGenerator(int)
-     */
-    public void setSeriesToolTipGenerator(int series, 
-                                          CategoryToolTipGenerator generator);
-    
-    /**
-     * Sets the tool tip generator for a series and, if requested, sends a 
-     * {@link RendererChangeEvent} to all registered listeners.
-     * 
-     * @param series  the series index.
-     * @param generator  the generator (<code>null</code> permitted)
-     * @param notify  notify listeners?
-     * 
-     * @since 1.2.0
-     * 
-     * @see #getSeriesToolTipGenerator(int)
-     */
-    public void setSeriesToolTipGenerator(int series, 
-            CategoryToolTipGenerator generator, boolean notify);
-
-    /**
-     * Returns the base tool tip generator (the "layer 2" generator).
-     *
-     * @return The tool tip generator (possibly <code>null</code>).
-     * 
-     * @see #setBaseToolTipGenerator(CategoryToolTipGenerator)
-     */
-    public CategoryToolTipGenerator getBaseToolTipGenerator();
-
-    /**
-     * Sets the base tool tip generator and sends a 
-     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered 
-     * listeners.
-     *
-     * @param generator  the generator (<code>null</code> permitted).
-     * 
-     * @see #getBaseToolTipGenerator()
-     */
-    public void setBaseToolTipGenerator(CategoryToolTipGenerator generator);
-    
-    /**
-     * Sets the default tool tip generator and, if requested, sends a 
-     * {@link RendererChangeEvent} to all registered listeners.
-     * 
-     * @param generator  the generator (<code>null</code> permitted).
-     * @param notify  notify listeners?
-     *
-     * @since 1.2.0
-     * 
-     * @see #getBaseToolTipGenerator()
-     */
-    public void setBaseToolTipGenerator(CategoryToolTipGenerator generator, 
             boolean notify);
 
     
@@ -1585,190 +1736,26 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public void setBaseCreateEntities(boolean create, boolean notify);
 
     
-    // ITEM URL GENERATOR
+    //// DRAWING //////////////////////////////////////////////////////////////
     
     /**
-     * Returns the URL generator for an item.
-     *
-     * @param series  the series index (zero-based).
-     * @param item  the item index (zero-based).
-     *
-     * @return The item URL generator.
-     */
-    public CategoryURLGenerator getItemURLGenerator(int series, int item);
-    
-    /**
-     * Returns the URL generator for a series.
-     *
-     * @param series  the series index (zero-based).
-     *
-     * @return The URL generator.
-     * 
-     * @see #setSeriesURLGenerator(int, CategoryURLGenerator)
-     */
-    public CategoryURLGenerator getSeriesURLGenerator(int series);
-
-    /**
-     * Sets the URL generator for a series and sends a 
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param series  the series index (zero-based).
-     * @param generator  the generator.
-     * 
-     * @see #getSeriesURLGenerator(int)
-     */
-    public void setSeriesURLGenerator(int series, 
-            CategoryURLGenerator generator);
-
-    /**
-     * Sets the URL generator for a series and, if requested, sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     * 
-     * @param series  the series index.
-     * @param generator  the generator (<code>null</code> permitted).
-     * @param notify  notify listeners?
-     * 
-     * @since 1.2.0
-     */
-    public void setSeriesURLGenerator(int series, 
-            CategoryURLGenerator generator, boolean notify);
-    
-    /**
-     * Returns the base URL generator.
-     *
-     * @return The URL generator (possibly <code>null</code>).
-     * 
-     * @see #setBaseURLGenerator(CategoryURLGenerator)
-     */
-    public CategoryURLGenerator getBaseURLGenerator();
-
-    /**
-     * Sets the base URL generator and sends a {@link RendererChangeEvent}
-     * to all registered listeners.
-     *
-     * @param generator  the URL generator (<code>null</code> permitted).
-     * 
-     * @see #getBaseURLGenerator()
-     */
-    public void setBaseURLGenerator(CategoryURLGenerator generator);
-
-    /**
-     * Sets the default URL generator and, if requested, sends a 
-     * {@link RendererChangeEvent} to all registered listeners.
-     * 
-     * @param generator  the generator (<code>null</code> permitted).
-     * @param notify  notify listeners?
-     * 
-     * @since 1.2.0
-     */
-    public void setBaseURLGenerator(CategoryURLGenerator generator, 
-            boolean notify);
-    
-    /**
-     * Returns a legend item for a series.  This method can return 
-     * <code>null</code>, in which case the series will have no entry in the
-     * legend.
-     *
-     * @param datasetIndex  the dataset index (zero-based).
-     * @param series  the series (zero-based index).
-     *
-     * @return The legend item (possibly <code>null</code>).
-     */
-    public LegendItem getLegendItem(int datasetIndex, int series);
-
-    /**
-     * Returns the legend item label generator.
-     *
-     * @return The label generator (never <code>null</code>).
-     *
-     * @see #setLegendItemLabelGenerator(CategorySeriesLabelGenerator)
-     * 
-     * @since 1.2.0
-     */
-    public CategorySeriesLabelGenerator getLegendItemLabelGenerator();
-
-    /**
-     * Sets the legend item label generator and sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param generator  the generator (<code>null</code> not permitted).
-     *
-     * @see #getLegendItemLabelGenerator()
-     * 
-     * @since 1.2.0
-     */
-    public void setLegendItemLabelGenerator(
-            CategorySeriesLabelGenerator generator);
-    
-    /**
-     * Returns the legend item tool tip generator.
-     *
-     * @return The tool tip generator (possibly <code>null</code>).
-     *
-     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
-     * 
-     * @since 1.2.0
-     */
-    public CategorySeriesLabelGenerator getLegendItemToolTipGenerator();
-
-    /**
-     * Sets the legend item tool tip generator and sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param generator  the generator (<code>null</code> permitted).
-     *
-     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
-     * 
-     * @since 1.2.0
-     */
-    public void setLegendItemToolTipGenerator(
-            CategorySeriesLabelGenerator generator);
-    
-    /**
-     * Returns the legend item URL generator.
-     *
-     * @return The URL generator (possibly <code>null</code>).
-     *
-     * @see #setLegendItemURLGenerator(CategorySeriesLabelGenerator)
-     * 
-     * @since 1.2.0
-     */
-    public CategorySeriesLabelGenerator getLegendItemURLGenerator();
-
-    /**
-     * Sets the legend item URL generator and sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param generator  the generator (<code>null</code> permitted).
-     *
-     * @see #getLegendItemURLGenerator()
-     * 
-     * @since 1.2.0
-     */
-    public void setLegendItemURLGenerator(
-            CategorySeriesLabelGenerator generator);
-    
-    /**
-     * Draws a background for the data area.
+     * Initialises the renderer.  This method will be called before the first 
+     * item is rendered, giving the renderer an opportunity to initialise any 
+     * state information it wants to maintain. The renderer can do nothing if 
+     * it chooses.
      *
      * @param g2  the graphics device.
+     * @param dataArea  the area inside the axes.
      * @param plot  the plot.
-     * @param dataArea  the data area.
+     * @param rendererIndex  the renderer index.
+     * @param info  collects chart rendering information for return to caller.
+     * 
+     * @return A state object (maintains state information relevant to one 
+     *         chart drawing).
      */
-    public void drawBackground(Graphics2D g2,
-                               CategoryPlot plot,
-                               Rectangle2D dataArea);
-
-    /**
-     * Draws an outline for the data area.
-     *
-     * @param g2  the graphics device.
-     * @param plot  the plot.
-     * @param dataArea  the data area.
-     */
-    public void drawOutline(Graphics2D g2,
-                            CategoryPlot plot,
-                            Rectangle2D dataArea);
+    public CategoryItemRendererState initialise(Graphics2D g2,
+            Rectangle2D dataArea, CategoryPlot plot, int rendererIndex,
+            PlotRenderingInfo info);
 
     /**
      * Draws a single data item.
@@ -1784,16 +1771,30 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param column  the column index (zero-based).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass);
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            int pass);
+
+    /**
+     * Draws a background for the data area.
+     *
+     * @param g2  the graphics device.
+     * @param plot  the plot.
+     * @param dataArea  the data area.
+     */
+    public void drawBackground(Graphics2D g2, CategoryPlot plot, 
+            Rectangle2D dataArea);
+
+    /**
+     * Draws an outline for the data area.
+     *
+     * @param g2  the graphics device.
+     * @param plot  the plot.
+     * @param dataArea  the data area.
+     */
+    public void drawOutline(Graphics2D g2, CategoryPlot plot, 
+            Rectangle2D dataArea);
 
     /**
      * Draws a grid line against the domain axis.
@@ -1807,10 +1808,8 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @see #drawRangeGridline(Graphics2D, CategoryPlot, ValueAxis, 
      *     Rectangle2D, double)
      */
-    public void drawDomainGridline(Graphics2D g2,
-                                   CategoryPlot plot,
-                                   Rectangle2D dataArea,
-                                   double value);
+    public void drawDomainGridline(Graphics2D g2, CategoryPlot plot,
+            Rectangle2D dataArea, double value);
 
     /**
      * Draws a grid line against the range axis.
@@ -1824,11 +1823,8 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * 
      * @see #drawDomainGridline(Graphics2D, CategoryPlot, Rectangle2D, double)
      */
-    public void drawRangeGridline(Graphics2D g2,
-                                  CategoryPlot plot,
-                                  ValueAxis axis,
-                                  Rectangle2D dataArea,
-                                  double value);
+    public void drawRangeGridline(Graphics2D g2, CategoryPlot plot,
+            ValueAxis axis, Rectangle2D dataArea, double value);
 
     /**
      * Draws a line (or some other marker) to indicate a particular category on 
@@ -1843,11 +1839,8 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @see #drawRangeMarker(Graphics2D, CategoryPlot, ValueAxis, Marker, 
      *     Rectangle2D)
      */
-    public void drawDomainMarker(Graphics2D g2,
-                                 CategoryPlot plot,
-                                 CategoryAxis axis,
-                                 CategoryMarker marker,
-                                 Rectangle2D dataArea);
+    public void drawDomainMarker(Graphics2D g2, CategoryPlot plot, 
+            CategoryAxis axis, CategoryMarker marker, Rectangle2D dataArea);
 
     /**
      * Draws a line (or some other marker) to indicate a particular value on 
@@ -1862,10 +1855,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @see #drawDomainMarker(Graphics2D, CategoryPlot, CategoryAxis, 
      *     CategoryMarker, Rectangle2D)
      */
-    public void drawRangeMarker(Graphics2D g2,
-                                CategoryPlot plot,
-                                ValueAxis axis,
-                                Marker marker,
-                                Rectangle2D dataArea);
-
+    public void drawRangeMarker(Graphics2D g2, CategoryPlot plot, 
+            ValueAxis axis, Marker marker, Rectangle2D dataArea);
+                            
 }

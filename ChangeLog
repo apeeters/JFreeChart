@@ -1,3 +1,28 @@
+2007-06-29  David Gilbert  <david.gilbert@object-refinery.com>
+
+	* source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java
+	(getItemURLGenerator): Renamed getURLGenerator(),
+	(addItemEntity): Updated for renamed method,
+	* source/org/jfree/chart/renderer/category/BoxAndWhiskerRenderer.java
+	(drawHorizontalItem): Call addEntity() to handle entity generation,
+	(drawVerticalItem): Likewise,
+	* source/org/jfree/chart/renderer/category/CategoryItemRenderer.java:
+	Reorganised source file,
+	* source/org/jfree/chart/renderer/category/GanttRenderer.java
+	(drawTasks): Call addEntity() to handle entity generation,
+	(drawTask): Likewise,
+	* source/org/jfree/chart/renderer/category/GroupedStackedBarRenderer.java
+	(drawItem): Likewise,
+	* source/org/jfree/chart/renderer/category/IntervalBarRenderer.java
+	(drawItem): Likewise,
+	* source/org/jfree/chart/renderer/category/LayeredBarRenderer.java
+	(drawHorizontalItem): Likewise,
+	(drawVerticalItem): Likewise,
+	* source/org/jfree/chart/renderer/category/LevelRenderer.java
+	(drawItem): Likewise,
+	* source/org/jfree/chart/renderer/category/StatisticalLineAndShapeRenderer.java
+	(drawItem): Likewise.
+
 2007-06-27  David Gilbert  <david.gilbert@object-refinery.com>
 
 	* source/org/jfree/chart/ChartFactory.java

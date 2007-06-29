@@ -40,6 +40,8 @@
  * 25-Jun-2002 : Removed redundant code (DG);
  * 17-Oct-2002 : Fixed errors reported by Checkstyle (DG);
  * 14-Jul-2003 : Renamed BarChart3DTests.java (DG);
+ * 27-Jun-2007 : Updated for method name change in CategoryItemRenderer
+ *               interface (DG);
  *
  */
 
@@ -175,7 +177,7 @@ public class BarChart3DTests extends TestCase {
         StandardCategoryURLGenerator url1
                 = new StandardCategoryURLGenerator();
         renderer.setSeriesURLGenerator(0, url1);
-        CategoryURLGenerator url2 = renderer.getItemURLGenerator(0, 0);
+        CategoryURLGenerator url2 = renderer.getURLGenerator(0, 0);
         assertTrue(url2 == url1);
     }
     

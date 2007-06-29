@@ -66,6 +66,7 @@
  * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 29-Jun-2007 : Simplified entity generation by calling addEntity() (DG);
  *
  */
 
@@ -92,10 +93,8 @@ import java.util.List;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.entity.CategoryItemEntity;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
-import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
@@ -497,21 +496,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
         if (state.getInfo() != null && box != null) {
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                String tip = null;
-                CategoryToolTipGenerator tipster 
-                        = getToolTipGenerator(row, column);
-                if (tipster != null) {
-                    tip = tipster.generateToolTip(dataset, row, column);
-                }
-                String url = null;
-                if (getItemURLGenerator(row, column) != null) {
-                    url = getItemURLGenerator(row, column).generateURL(
-                            dataset, row, column);
-                }
-                CategoryItemEntity entity = new CategoryItemEntity(box, tip, 
-                        url, dataset, dataset.getRowKey(row), 
-                        dataset.getColumnKey(column));
-                entities.add(entity);
+                addItemEntity(entities, dataset, row, column, box);
             }
         }
 
@@ -729,21 +714,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
         if (state.getInfo() != null && box != null) {
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                String tip = null;
-                CategoryToolTipGenerator tipster 
-                        = getToolTipGenerator(row, column);
-                if (tipster != null) {
-                    tip = tipster.generateToolTip(dataset, row, column);
-                }
-                String url = null;
-                if (getItemURLGenerator(row, column) != null) {
-                    url = getItemURLGenerator(row, column).generateURL(dataset,
-                            row, column);
-                }
-                CategoryItemEntity entity = new CategoryItemEntity(box, tip, 
-                        url, dataset, dataset.getRowKey(row), 
-                        dataset.getColumnKey(column));
-                entities.add(entity);
+                addItemEntity(entities, dataset, row, column, box);
             }
         }
 
