@@ -86,6 +86,7 @@
  * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Jul-2007 : Removed override settings (DG);
  * 
  */
 
@@ -122,9 +123,6 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
 
     /** For serialization. */
     private static final long serialVersionUID = -197749519869226398L;
-    
-    /** A flag that controls whether or not lines are visible for ALL series. */
-    private Boolean linesVisible;
 
     /** 
      * A table of flags that control (per series) whether or not lines are 
@@ -139,11 +137,6 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     private boolean baseLinesVisible;
 
     /** 
-     * A flag that controls whether or not shapes are visible for ALL series. 
-     */
-    private Boolean shapesVisible;
-
-    /** 
      * A table of flags that control (per series) whether or not shapes are 
      * visible. 
      */
@@ -151,9 +144,6 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
 
     /** The default value returned by the getShapeVisible() method. */
     private boolean baseShapesVisible;
-
-    /** A flag that controls whether or not shapes are filled for ALL series. */
-    private Boolean shapesFilled;
     
     /** 
      * A table of flags that control (per series) whether or not shapes are 
@@ -194,13 +184,10 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public LineAndShapeRenderer(boolean lines, boolean shapes) {
         super();
-        this.linesVisible = null;
         this.seriesLinesVisible = new BooleanList();
         this.baseLinesVisible = lines;
-        this.shapesVisible = null;
         this.seriesShapesVisible = new BooleanList();
         this.baseShapesVisible = shapes;
-        this.shapesFilled = null;
         this.seriesShapesFilled = new BooleanList();
         this.baseShapesFilled = true;
         this.useFillPaint = false;
@@ -220,51 +207,13 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @return A boolean.
      */
     public boolean getItemLineVisible(int series, int item) {
-        Boolean flag = this.linesVisible;
-        if (flag == null) {
-            flag = getSeriesLinesVisible(series);
-        }
+        Boolean flag = getSeriesLinesVisible(series);
         if (flag != null) {
             return flag.booleanValue();
         }
         else {
             return this.baseLinesVisible;   
         }
-    }
-
-    /**
-     * Returns a flag that controls whether or not lines are drawn for ALL 
-     * series.  If this flag is <code>null</code>, then the "per series" 
-     * settings will apply.
-     * 
-     * @return A flag (possibly <code>null</code>).
-     */
-    public Boolean getLinesVisible() {
-        return this.linesVisible;   
-    }
-    
-    /**
-     * Sets a flag that controls whether or not lines are drawn between the 
-     * items in ALL series, and sends a {@link RendererChangeEvent} to all 
-     * registered listeners.  You need to set this to <code>null</code> if you 
-     * want the "per series" settings to apply.
-     *
-     * @param visible  the flag (<code>null</code> permitted).
-     */
-    public void setLinesVisible(Boolean visible) {
-        this.linesVisible = visible;
-        notifyListeners(new RendererChangeEvent(this));
-    }
-
-    /**
-     * Sets a flag that controls whether or not lines are drawn between the 
-     * items in ALL series, and sends a {@link RendererChangeEvent} to all 
-     * registered listeners.
-     *
-     * @param visible  the flag.
-     */
-    public void setLinesVisible(boolean visible) {
-        setLinesVisible(Boolean.valueOf(visible));
     }
 
     /**
@@ -331,47 +280,13 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @return A boolean.
      */
     public boolean getItemShapeVisible(int series, int item) {
-        Boolean flag = this.shapesVisible;
-        if (flag == null) {
-            flag = getSeriesShapesVisible(series);
-        }
+        Boolean flag = getSeriesShapesVisible(series);
         if (flag != null) {
             return flag.booleanValue();
         }
         else {
             return this.baseShapesVisible;   
         }
-    }
-
-    /**
-     * Returns the flag that controls whether the shapes are visible for the 
-     * items in ALL series.
-     * 
-     * @return The flag (possibly <code>null</code>).
-     */
-    public Boolean getShapesVisible() {
-        return this.shapesVisible;    
-    }
-    
-    /**
-     * Sets the 'shapes visible' for ALL series and sends a 
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param visible  the flag (<code>null</code> permitted).
-     */
-    public void setShapesVisible(Boolean visible) {
-        this.shapesVisible = visible;
-        notifyListeners(new RendererChangeEvent(this));
-    }
-
-    /**
-     * Sets the 'shapes visible' for ALL series and sends a 
-     * {@link RendererChangeEvent} to all registered listeners.
-     * 
-     * @param visible  the flag.
-     */
-    public void setShapesVisible(boolean visible) {
-        setShapesVisible(Boolean.valueOf(visible));
     }
 
     /**
@@ -487,7 +402,13 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @return A boolean.
      */
     public boolean getItemShapeFilled(int series, int item) {
-        return getSeriesShapesFilled(series);
+        Boolean flag = getSeriesShapesFilled(series);
+        if (flag != null) {
+            return flag.booleanValue();   
+        }
+        else {
+            return this.baseShapesFilled;   
+        }
     }
 
     /**
@@ -497,96 +418,61 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param series  the series index (zero-based).
      *
      * @return A boolean.
+     * 
+     * @see #setSeriesShapesFilled(int, Boolean)
      */
-    public boolean getSeriesShapesFilled(int series) {
-
-        // return the overall setting, if there is one...
-        if (this.shapesFilled != null) {
-            return this.shapesFilled.booleanValue();
-        }
-
-        // otherwise look up the paint table
-        Boolean flag = this.seriesShapesFilled.getBoolean(series);
-        if (flag != null) {
-            return flag.booleanValue();
-        }
-        else {
-            return this.baseShapesFilled;
-        } 
-
+    public Boolean getSeriesShapesFilled(int series) {
+        return this.seriesShapesFilled.getBoolean(series);
     }
     
     /**
-     * Returns the flag that controls whether or not shapes are filled for 
-     * ALL series.
-     * 
-     * @return A Boolean.
-     */
-    public Boolean getShapesFilled() {
-        return this.shapesFilled;
-    }
-
-    /**
-     * Sets the 'shapes filled' for ALL series.
-     * 
-     * @param filled  the flag.
-     */
-    public void setShapesFilled(boolean filled) {
-        if (filled) {
-            setShapesFilled(Boolean.TRUE);
-        }
-        else {
-            setShapesFilled(Boolean.FALSE);
-        }
-    }
-    
-    /**
-     * Sets the 'shapes filled' for ALL series.
-     * 
-     * @param filled  the flag (<code>null</code> permitted).
-     */
-    public void setShapesFilled(Boolean filled) {
-        this.shapesFilled = filled;
-    }
-    
-    /**
-     * Sets the 'shapes filled' flag for a series.
+     * Sets the 'shapes filled' flag for a series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero-based).
      * @param filled  the flag.
+     * 
+     * @see #getSeriesShapesFilled(int)
      */
     public void setSeriesShapesFilled(int series, Boolean filled) {
         this.seriesShapesFilled.setBoolean(series, filled);
+        notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
-     * Sets the 'shapes filled' flag for a series.
+     * Sets the 'shapes filled' flag for a series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero-based).
      * @param filled  the flag.
      */
     public void setSeriesShapesFilled(int series, boolean filled) {
-        this.seriesShapesFilled.setBoolean(
-            series, Boolean.valueOf(filled)
-        );
+        this.seriesShapesFilled.setBoolean(series, Boolean.valueOf(filled));
+        notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
      * Returns the base 'shape filled' attribute.
      *
      * @return The base flag.
+     * 
+     * @see #setBaseShapesFilled(boolean)
      */
     public boolean getBaseShapesFilled() {
         return this.baseShapesFilled;
     }
 
     /**
-     * Sets the base 'shapes filled' flag.
+     * Sets the base 'shapes filled' flag and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param flag  the flag.
+     * 
+     * @see #getBaseShapesFilled()
      */
     public void setBaseShapesFilled(boolean flag) {
         this.baseShapesFilled = flag;
+        notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
@@ -823,20 +709,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                 that.seriesLinesVisible)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.linesVisible, that.linesVisible)) {
-            return false;
-        }
         if (this.baseShapesVisible != that.baseShapesVisible) {
             return false;
         }
         if (!ObjectUtilities.equal(this.seriesShapesVisible, 
                 that.seriesShapesVisible)) {
-            return false;
-        }
-        if (!ObjectUtilities.equal(this.shapesVisible, that.shapesVisible)) {
-            return false;
-        }
-        if (!ObjectUtilities.equal(this.shapesFilled, that.shapesFilled)) {
             return false;
         }
         if (!ObjectUtilities.equal(this.seriesShapesFilled, 
@@ -865,11 +742,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     public Object clone() throws CloneNotSupportedException {
         LineAndShapeRenderer clone = (LineAndShapeRenderer) super.clone();
         clone.seriesLinesVisible 
-            = (BooleanList) this.seriesLinesVisible.clone();
+                = (BooleanList) this.seriesLinesVisible.clone();
         clone.seriesShapesVisible 
-            = (BooleanList) this.seriesLinesVisible.clone();
+                = (BooleanList) this.seriesLinesVisible.clone();
         clone.seriesShapesFilled 
-            = (BooleanList) this.seriesShapesFilled.clone();
+                = (BooleanList) this.seriesShapesFilled.clone();
         return clone;
     }
     

@@ -104,11 +104,6 @@ public class LineAndShapeRendererTests extends TestCase {
         r2.setSeriesLinesVisible(1, true);
         assertTrue(r1.equals(r2));
         
-        r1.setLinesVisible(false);
-        assertFalse(r1.equals(r2));
-        r2.setLinesVisible(false);
-        assertTrue(r1.equals(r2));
-        
         r1.setBaseShapesVisible(!r1.getBaseShapesVisible());
         assertFalse(r1.equals(r2));
         r2.setBaseShapesVisible(r1.getBaseShapesVisible());
@@ -117,16 +112,6 @@ public class LineAndShapeRendererTests extends TestCase {
         r1.setSeriesShapesVisible(1, true);
         assertFalse(r1.equals(r2));
         r2.setSeriesShapesVisible(1, true);
-        assertTrue(r1.equals(r2));
-        
-        r1.setShapesVisible(false);
-        assertFalse(r1.equals(r2));
-        r2.setShapesVisible(false);
-        assertTrue(r1.equals(r2));
-
-        r1.setShapesFilled(false);
-        assertFalse(r1.equals(r2));
-        r2.setShapesFilled(false);
         assertTrue(r1.equals(r2));
         
         r1.setSeriesShapesFilled(1, true);
@@ -212,15 +197,6 @@ public class LineAndShapeRendererTests extends TestCase {
         if (!r1.equals(r2)) {
             return false;
         }
-            
-        r1.setLinesVisible(false);
-        if (r1.equals(r2)) {
-            return false;
-        }
-        r2.setLinesVisible(false);
-        if (!r1.equals(r2)) {
-            return false;
-        }
         
         r1.setBaseShapesVisible(!r1.getBaseShapesVisible());
         if (r1.equals(r2)) {
@@ -239,32 +215,7 @@ public class LineAndShapeRendererTests extends TestCase {
         if (!r1.equals(r2)) {
             return false;
         }
-            
-        r1.setShapesVisible(false);
-        if (r1.equals(r2)) {
-            return false;
-        }
-        r2.setShapesVisible(false);
-        if (!r1.equals(r2)) {
-            return false;
-        }
-        
-        boolean flag = true;
-        Boolean existing = r1.getShapesFilled();
-        if (existing != null) {
-            flag = !existing.booleanValue();
-        }
-        r1.setShapesFilled(flag);
-        if (r1.equals(r2)) {
-            return false;
-        }
-        r2.setShapesFilled(flag);
-        if (!r1.equals(r2)) {
-            return false;
-        }
 
-        r1.setShapesFilled(false);
-        r2.setShapesFilled(false);
         r1.setSeriesShapesFilled(0, false);
         r2.setSeriesShapesFilled(0, true);
         if (r1.equals(r2)) {
