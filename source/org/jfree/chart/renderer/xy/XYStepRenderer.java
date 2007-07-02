@@ -62,6 +62,7 @@
  * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
+ * 02-Jul-2007 : Updated for removed methods in super-class (DG);
  *
  */
 
@@ -119,7 +120,7 @@ public class XYStepRenderer extends XYLineAndShapeRenderer
         super();
         setBaseToolTipGenerator(toolTipGenerator);
         setBaseURLGenerator(urlGenerator);
-        setShapesVisible(false);
+        setBaseShapesVisible(false);
     }
 
     /**
