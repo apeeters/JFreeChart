@@ -92,7 +92,7 @@ public class AxisTests extends TestCase {
             a2 = (CategoryAxis) a1.clone();
         }
         catch (CloneNotSupportedException e) {
-            System.err.println("Failed to clone.");
+            e.printStackTrace();
         }
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
@@ -144,6 +144,16 @@ public class AxisTests extends TestCase {
         a1.setLabelAngle(1.23);
         assertFalse(a1.equals(a2));
         a2.setLabelAngle(1.23);
+        assertTrue(a1.equals(a2));
+
+        a1.setLabelToolTip("123");
+        assertFalse(a1.equals(a2));
+        a2.setLabelToolTip("123");
+        assertTrue(a1.equals(a2));
+
+        a1.setLabelURL("ABC");
+        assertFalse(a1.equals(a2));
+        a2.setLabelURL("ABC");
         assertTrue(a1.equals(a2));
 
         // axis line visible...

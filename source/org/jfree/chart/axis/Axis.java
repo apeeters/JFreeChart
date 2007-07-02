@@ -78,6 +78,7 @@
  * ------------- JFREECHART 1.0.0 ---------------------------------------------
  * 22-Aug-2006 : API doc updates (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Jul-2007 : Modifications to support entities for axis labels (DG);
  * 
  */
 
@@ -104,6 +105,8 @@ import java.util.List;
 
 import javax.swing.event.EventListenerList;
 
+import org.jfree.chart.entity.AxisLabelEntity;
+import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.event.AxisChangeListener;
 import org.jfree.chart.plot.Plot;
@@ -130,15 +133,15 @@ public abstract class Axis implements Cloneable, Serializable {
     public static final boolean DEFAULT_AXIS_VISIBLE = true;
 
     /** The default axis label font. */
-    public static final Font DEFAULT_AXIS_LABEL_FONT 
-        = new Font("SansSerif", Font.PLAIN, 12);
+    public static final Font DEFAULT_AXIS_LABEL_FONT = new Font(
+            "SansSerif", Font.PLAIN, 12);
 
     /** The default axis label paint. */
     public static final Paint DEFAULT_AXIS_LABEL_PAINT = Color.black;
 
     /** The default axis label insets. */
     public static final RectangleInsets DEFAULT_AXIS_LABEL_INSETS 
-        = new RectangleInsets(3.0, 3.0, 3.0, 3.0);
+            = new RectangleInsets(3.0, 3.0, 3.0, 3.0);
 
     /** The default axis line paint. */
     public static final Paint DEFAULT_AXIS_LINE_PAINT = Color.gray;
@@ -150,15 +153,15 @@ public abstract class Axis implements Cloneable, Serializable {
     public static final boolean DEFAULT_TICK_LABELS_VISIBLE = true;
 
     /** The default tick label font. */
-    public static final Font DEFAULT_TICK_LABEL_FONT 
-        = new Font("SansSerif", Font.PLAIN, 10);
+    public static final Font DEFAULT_TICK_LABEL_FONT = new Font("SansSerif", 
+            Font.PLAIN, 10);
 
     /** The default tick label paint. */
     public static final Paint DEFAULT_TICK_LABEL_PAINT = Color.black;
 
     /** The default tick label insets. */
     public static final RectangleInsets DEFAULT_TICK_LABEL_INSETS 
-        = new RectangleInsets(2.0, 4.0, 2.0, 4.0);
+            = new RectangleInsets(2.0, 4.0, 2.0, 4.0);
 
     /** The default tick marks visible. */
     public static final boolean DEFAULT_TICK_MARKS_VISIBLE = true;
@@ -192,7 +195,21 @@ public abstract class Axis implements Cloneable, Serializable {
 
     /** The label angle. */
     private double labelAngle;
+    
+    /**
+     * The tool tip text for the label (<code>null</code> is permitted).
+     * 
+     * @since 1.2.0
+     */
+    private String labelToolTip;
 
+    /**
+     * The URL for the label (<code>null</code> is permitted).
+     * 
+     * @since 1.2.0.
+     */
+    private String labelURL;
+    
     /** A flag that controls whether or not the axis line is visible. */
     private boolean axisLineVisible;
 
@@ -260,6 +277,8 @@ public abstract class Axis implements Cloneable, Serializable {
         this.labelPaint = DEFAULT_AXIS_LABEL_PAINT;
         this.labelInsets = DEFAULT_AXIS_LABEL_INSETS;
         this.labelAngle = 0.0;
+        this.labelToolTip = null;
+        this.labelURL = null;
         
         this.axisLineVisible = true;
         this.axisLinePaint = DEFAULT_AXIS_LINE_PAINT;
@@ -460,6 +479,62 @@ public abstract class Axis implements Cloneable, Serializable {
         notifyListeners(new AxisChangeEvent(this));
     }
 
+    /**
+     * Returns the tool tip text for the axis label.
+     * 
+     * @return The tool tip text (possibly <code>null</code>).
+     * 
+     * @see #setLabelToolTip(String)
+     * 
+     * @since 1.2.0
+     */
+    public String getLabelToolTip() {
+        return this.labelToolTip;
+    }
+    
+    /**
+     * Sets the tool tip text for the axis label and sends a .
+     * {@link AxisChangeEvent} to all registered listeners.
+     * 
+     * @param text  the tool tip text (<code>null</code> permitted).
+     * 
+     * @see #getLabelToolTip()
+     * 
+     * @since 1.2.0
+     */
+    public void setLabelToolTip(String text) {
+        this.labelToolTip = text;
+        notifyListeners(new AxisChangeEvent(this));
+    }
+    
+    /**
+     * Returns the URL text for the axis label.
+     * 
+     * @return The URL (possibly <code>null</code>).
+     * 
+     * @see #setLabelURL(String)
+     * 
+     * @since 1.2.0
+     */
+    public String getLabelURL() {
+        return this.labelURL;
+    }
+    
+    /**
+     * Sets the URL for the axis label and sends an {@link AxisChangeEvent} to
+     * all registered listeners.
+     * 
+     * @param url  the URL (<code>null</code> permitted).
+     * 
+     * @see #getLabelURL()
+     * 
+     * @since 1.2.0
+     */
+    public void setLabelURL(String url) {
+        this.labelURL = url;
+        notifyListeners(new AxisChangeEvent(this));        
+    }
+    
     /**
      * A flag that controls whether or not the axis line is drawn.
      * 
@@ -1009,15 +1084,13 @@ public abstract class Axis implements Cloneable, Serializable {
      * @param dataArea  the area inside the axes.
      * @param edge  the location of the axis.
      * @param state  the axis state (<code>null</code> not permitted).
+     * @param plotState  the plot state (<code>null</code> permitted).
      *
      * @return Information about the axis.
      */
-    protected AxisState drawLabel(String label,
-                                  Graphics2D g2, 
-                                  Rectangle2D plotArea, 
-                                  Rectangle2D dataArea,
-                                  RectangleEdge edge, 
-                                  AxisState state) {
+    protected AxisState drawLabel(String label, Graphics2D g2, 
+            Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge, 
+            AxisState state, PlotRenderingInfo plotState) {
 
         // it is unlikely that 'state' will be null, but check anyway...
         if (state == null) {
@@ -1034,54 +1107,60 @@ public abstract class Axis implements Cloneable, Serializable {
         g2.setPaint(getLabelPaint());
         FontMetrics fm = g2.getFontMetrics();
         Rectangle2D labelBounds = TextUtilities.getTextBounds(label, g2, fm);
-
+        Shape hotspot = null;
+        
         if (edge == RectangleEdge.TOP) {
-
             AffineTransform t = AffineTransform.getRotateInstance(
                     getLabelAngle(), labelBounds.getCenterX(), 
                     labelBounds.getCenterY());
             Shape rotatedLabelBounds = t.createTransformedShape(labelBounds);
             labelBounds = rotatedLabelBounds.getBounds2D();
-            double labelx = dataArea.getCenterX();
-            double labely = state.getCursor() - insets.getBottom() 
-                            - labelBounds.getHeight() / 2.0;
-            TextUtilities.drawRotatedString(label, g2, (float) labelx, 
-                    (float) labely, TextAnchor.CENTER, getLabelAngle(), 
-                    TextAnchor.CENTER);
+            float w = (float) labelBounds.getWidth();
+            float h = (float) labelBounds.getHeight();
+            float labelx = (float) dataArea.getCenterX();
+            float labely = (float) (state.getCursor() - insets.getBottom() 
+                    - h / 2.0);
+            TextUtilities.drawRotatedString(label, g2, labelx, labely, 
+                    TextAnchor.CENTER, getLabelAngle(), TextAnchor.CENTER);
+            hotspot = new Rectangle2D.Float(labelx - w / 2.0f, 
+                    labely - h / 2.0f, w, h);
             state.cursorUp(insets.getTop() + labelBounds.getHeight() 
                     + insets.getBottom());
-
         }
         else if (edge == RectangleEdge.BOTTOM) {
-
             AffineTransform t = AffineTransform.getRotateInstance(
                     getLabelAngle(), labelBounds.getCenterX(), 
                     labelBounds.getCenterY());
             Shape rotatedLabelBounds = t.createTransformedShape(labelBounds);
             labelBounds = rotatedLabelBounds.getBounds2D();
-            double labelx = dataArea.getCenterX();
-            double labely = state.getCursor() 
-                            + insets.getTop() + labelBounds.getHeight() / 2.0;
-            TextUtilities.drawRotatedString(label, g2, (float) labelx, 
-                    (float) labely, TextAnchor.CENTER, getLabelAngle(), 
-                    TextAnchor.CENTER);
+            float w = (float) labelBounds.getWidth();
+            float h = (float) labelBounds.getHeight();
+            float labelx = (float) dataArea.getCenterX();
+            float labely = (float) (state.getCursor() + insets.getTop() 
+                    + h / 2.0);
+            TextUtilities.drawRotatedString(label, g2, labelx, labely, 
+                    TextAnchor.CENTER, getLabelAngle(), TextAnchor.CENTER);
+            hotspot = new Rectangle2D.Float(labelx - w / 2.0f, 
+                    labely - h / 2.0f, w, h);
             state.cursorDown(insets.getTop() + labelBounds.getHeight() 
                     + insets.getBottom());
-
         }
         else if (edge == RectangleEdge.LEFT) {
-
             AffineTransform t = AffineTransform.getRotateInstance(
                     getLabelAngle() - Math.PI / 2.0, labelBounds.getCenterX(), 
                     labelBounds.getCenterY());
             Shape rotatedLabelBounds = t.createTransformedShape(labelBounds);
             labelBounds = rotatedLabelBounds.getBounds2D();
-            double labelx = state.getCursor() 
-                            - insets.getRight() - labelBounds.getWidth() / 2.0;
-            double labely = dataArea.getCenterY();
-            TextUtilities.drawRotatedString(label, g2, (float) labelx, 
-                    (float) labely, TextAnchor.CENTER, 
-                    getLabelAngle() - Math.PI / 2.0, TextAnchor.CENTER);
+            float w = (float) labelBounds.getWidth();
+            float h = (float) labelBounds.getHeight();
+            float labelx = (float) (state.getCursor() - insets.getRight() 
+                    - w / 2.0);
+            float labely = (float) dataArea.getCenterY();
+            TextUtilities.drawRotatedString(label, g2, labelx, labely, 
+                    TextAnchor.CENTER, getLabelAngle() - Math.PI / 2.0, 
+                    TextAnchor.CENTER);
+            hotspot = new Rectangle2D.Float(labelx - w / 2.0f, 
+                    labely - h / 2.0f, w, h);
             state.cursorLeft(insets.getLeft() + labelBounds.getWidth() 
                     + insets.getRight());
         }
@@ -1092,17 +1171,29 @@ public abstract class Axis implements Cloneable, Serializable {
                     labelBounds.getCenterX(), labelBounds.getCenterY());
             Shape rotatedLabelBounds = t.createTransformedShape(labelBounds);
             labelBounds = rotatedLabelBounds.getBounds2D();
-            double labelx = state.getCursor() 
-                            + insets.getLeft() + labelBounds.getWidth() / 2.0;
-            double labely = dataArea.getY() + dataArea.getHeight() / 2.0;
-            TextUtilities.drawRotatedString(label, g2, (float) labelx, 
-                    (float) labely, TextAnchor.CENTER,
-                    getLabelAngle() + Math.PI / 2.0, TextAnchor.CENTER);
+            float w = (float) labelBounds.getWidth();
+            float h = (float) labelBounds.getHeight();
+            float labelx = (float) (state.getCursor() 
+                            + insets.getLeft() + w / 2.0);
+            float labely = (float) (dataArea.getY() + dataArea.getHeight() 
+                    / 2.0);
+            TextUtilities.drawRotatedString(label, g2, labelx, labely, 
+                    TextAnchor.CENTER, getLabelAngle() + Math.PI / 2.0, 
+                    TextAnchor.CENTER);
+            hotspot = new Rectangle2D.Float(labelx - w / 2.0f, 
+                    labely - h / 2.0f, w, h);
             state.cursorRight(insets.getLeft() + labelBounds.getWidth() 
                     + insets.getRight());
 
         }
-
+        if (plotState != null && hotspot != null) {
+            EntityCollection entities = plotState.getOwner()
+                    .getEntityCollection();
+            if (entities != null) {
+                entities.add(new AxisLabelEntity(this, hotspot, 
+                        this.labelToolTip, this.labelURL));
+            }
+        }
         return state;
 
     }
@@ -1188,6 +1279,12 @@ public abstract class Axis implements Cloneable, Serializable {
             return false;
         }
         if (this.labelAngle != that.labelAngle) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.labelToolTip, that.labelToolTip)) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.labelURL, that.labelURL)) {
             return false;
         }
         if (this.axisLineVisible != that.axisLineVisible) {

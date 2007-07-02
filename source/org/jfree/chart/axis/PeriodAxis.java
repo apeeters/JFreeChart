@@ -51,6 +51,7 @@
  *               subclasses (DG);
  * 22-Mar-2007 : Use new defaultAutoRange attribute (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Jul-2007 : Added entity support for axis labels (DG);
  *
  */
 
@@ -636,7 +637,7 @@ public class PeriodAxis extends ValueAxis
         // draw the axis label (note that 'state' is passed in *and* 
         // returned)...
         axisState = drawLabel(getLabel(), g2, plotArea, dataArea, edge, 
-                axisState);
+                axisState, plotState);
         return axisState;
         
     }

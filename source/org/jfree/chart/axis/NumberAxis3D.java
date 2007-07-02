@@ -66,6 +66,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 18-Jan-2006 : Fixed bug 1408904 (axis assumes CategoryPlot) (DG):
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Jul-2007 : Added entity support for axis labels (DG);
  *
  */
 
@@ -171,7 +172,8 @@ public class NumberAxis3D extends NumberAxis implements Serializable {
                 adjustedDataArea, edge);
        
         // draw the axis label...
-        info = drawLabel(getLabel(), g2, plotArea, dataArea, edge, info);
+        info = drawLabel(getLabel(), g2, plotArea, dataArea, edge, info, 
+                plotState);
 
         return info;
         

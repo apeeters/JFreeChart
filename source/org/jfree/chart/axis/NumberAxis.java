@@ -93,6 +93,7 @@
  *               see bug 1608371 (DG);
  * 22-Mar-2007 : Use new defaultAutoRange attribute (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Jul-2007 : Added entity support for axis labels (DG);
  *
  */
 
@@ -676,7 +677,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
 //        }
         
         // draw the axis label...
-        state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state);
+        state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state,
+                plotState);
 
         return state;
         

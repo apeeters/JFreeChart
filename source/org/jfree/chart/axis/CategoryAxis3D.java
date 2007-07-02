@@ -50,6 +50,7 @@
  * 18-Aug-2006 : Fix for bug drawing category labels, thanks to Adriaan
  *               Joubert (1277726) (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Jul-2007 : Added entity support for axis labels (DG);
  *
  */
 
@@ -149,7 +150,8 @@ public class CategoryAxis3D extends CategoryAxis
         AxisState state = new AxisState(cursor);
         state = drawCategoryLabels(g2, plotArea, adjustedDataArea, edge, 
                 state, plotState);
-        state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state);
+        state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state,
+                plotState);
 
         return state;
         

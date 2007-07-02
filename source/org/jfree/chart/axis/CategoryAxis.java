@@ -85,6 +85,7 @@
  * 07-Mar-2007 : Fixed bug in axis label positioning (DG);
  * 19-Jun-2007 : Removed deprecated code (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Jul-2007 : Added entity support for axis labels (DG);
  *
  */
 
@@ -824,7 +825,8 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
         AxisState state = new AxisState(cursor);
         state = drawCategoryLabels(g2, plotArea, dataArea, edge, state, 
                 plotState);
-        state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state);
+        state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state,
+                plotState);
     
         return state;
 
