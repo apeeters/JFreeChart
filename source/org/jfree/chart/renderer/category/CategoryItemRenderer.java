@@ -136,17 +136,9 @@ import org.jfree.data.category.CategoryDataset;
  * If you are implementing a custom renderer, you should consider extending the
  * {@link AbstractCategoryItemRenderer} class.
  * <p>
- * Most renderer attributes are defined using a "three layer" approach.  When 
- * looking up an attribute (for example, the outline paint) the renderer first 
- * checks to see if there is a setting (in layer 0) that applies to ALL items 
- * that the renderer draws.  If there is, that setting is used, but if it is 
- * <code>null</code> the renderer looks up the next layer, which contains 
- * "per series" settings for the attribute (many attributes are defined on a
- * per series basis, so this is the layer that is most commonly used).  If the 
- * layer 1 setting is <code>null</code>, the renderer will look up the final 
- * layer, which provides a default or "base" setting.  Some attributes allow 
- * the base setting to be <code>null</code>, while other attributes enforce 
- * non-<code>null</code> values.
+ * Most renderer attributes are defined using a "per-series" approach with
+ * a base (default) value to cover cases where no per-series value is
+ * defined.
  */
 public interface CategoryItemRenderer extends LegendItemSource {
 
