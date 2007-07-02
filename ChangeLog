@@ -1,5 +1,15 @@
 2007-07-02  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/renderer/xy/StandardXYItemRenderer.java
+	(shapesFilled): Removed,
+	(StandardXYItemRenderer): Updated for removed field,
+	(getItemShapeFilled): Likewise,
+	(getShapesFilled): Removed,
+	(setShapesFilled): Likewise,
+	(equals): Updated for removed field.
+
+2007-07-02  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/editor/DefaultPlotEditor.java
 	(updatePlotProperties): Updated for changes to LineAndShapeRenderer,
 	* source/org/jfree/chart/renderer/category/LineAndShapeRenderer.java
