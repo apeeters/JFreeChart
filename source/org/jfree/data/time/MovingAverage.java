@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------
  * MovingAverage.java
  * ------------------
- * (C) Copyright 2003-2005, by Object Refinery Limited.
+ * (C) Copyright 2003-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Benoit Xhenseval;
@@ -45,6 +45,7 @@
  *               getYValue() (DG);
  * 11-Jan-2005 : Removed deprecated code in preparation for the 1.0.0 
  *               release (DG);
+ * 02-Jul-2007 : Clean-up (DG);
  *
  */
 
@@ -73,29 +74,24 @@ public class MovingAverage {
      * @return A collection of moving average time series.
      */
     public static TimeSeriesCollection createMovingAverage(
-        TimeSeriesCollection source, String suffix, int periodCount,
-        int skip) {
+            TimeSeriesCollection source, String suffix, int periodCount,
+            int skip) {
     
-        // check arguments
         if (source == null) {
-            throw new IllegalArgumentException(
-                "MovingAverage.createMovingAverage() : null source."
-            );
+            throw new IllegalArgumentException("Null 'source' argument.");
         }
 
         if (periodCount < 1) {
-            throw new IllegalArgumentException(
-                "periodCount must be greater than or equal to 1."
-            );
+            throw new IllegalArgumentException("periodCount must be greater "
+                    + "than or equal to 1.");
         }
 
         TimeSeriesCollection result = new TimeSeriesCollection();
         
         for (int i = 0; i < source.getSeriesCount(); i++) {
             TimeSeries sourceSeries = source.getSeries(i);
-            TimeSeries maSeries = createMovingAverage(
-                sourceSeries, sourceSeries.getKey() + suffix, periodCount, skip
-            );
+            TimeSeries maSeries = createMovingAverage(sourceSeries, 
+                    sourceSeries.getKey() + suffix, periodCount, skip);
             result.addSeries(maSeries);       
         }
         
@@ -117,19 +113,15 @@ public class MovingAverage {
      * @return The moving average series.
      */
     public static TimeSeries createMovingAverage(TimeSeries source,
-                                                 String name,
-                                                 int periodCount,
-                                                 int skip) {
+            String name, int periodCount, int skip) {
 
-        // check arguments
         if (source == null) {
             throw new IllegalArgumentException("Null source.");
         }
 
         if (periodCount < 1) {
-            throw new IllegalArgumentException(
-                "periodCount must be greater than or equal to 1."
-            );
+            throw new IllegalArgumentException("periodCount must be greater " +
+                    "than or equal to 1.");
 
         }
 
@@ -141,7 +133,7 @@ public class MovingAverage {
             // calculate the index of the
             // first data item to have an average calculated...
             long firstSerial 
-                = source.getDataItem(0).getPeriod().getSerialIndex() + skip;
+                    = source.getDataItem(0).getPeriod().getSerialIndex() + skip;
 
             for (int i = source.getItemCount() - 1; i >= 0; i--) {
 
@@ -160,8 +152,8 @@ public class MovingAverage {
 
                     while ((offset < periodCount) && (!finished)) {
                         if ((i - offset) >= 0) {
-                            TimeSeriesDataItem item 
-                                = source.getDataItem(i - offset);
+                            TimeSeriesDataItem item = source.getDataItem(
+                                    i - offset);
                             RegularTimePeriod p = item.getPeriod();
                             Number v = item.getValue();
                             long currentIndex = p.getSerialIndex();
@@ -208,18 +200,15 @@ public class MovingAverage {
      * @return The moving average series.
      */
     public static TimeSeries createPointMovingAverage(TimeSeries source,
-                                                      String name, 
-                                                      int pointCount) {
+            String name, int pointCount) {
 
-        // check arguments
         if (source == null) {
             throw new IllegalArgumentException("Null 'source'.");
         }
 
         if (pointCount < 2) {
-            throw new IllegalArgumentException(
-                "periodCount must be greater than or equal to 2."
-            );
+            throw new IllegalArgumentException("periodCount must be greater " +
+                    "than or equal to 2.");
         }
 
         TimeSeries result = new TimeSeries(name, source.getTimePeriodClass());
@@ -232,10 +221,10 @@ public class MovingAverage {
 
             if (i > pointCount - 1) {
                 // remove the point i-periodCount out of the rolling sum.
-                TimeSeriesDataItem startOfMovingAvg 
-                    = source.getDataItem(i - pointCount);
-                rollingSumForPeriod 
-                    -= startOfMovingAvg.getValue().doubleValue();
+                TimeSeriesDataItem startOfMovingAvg = source.getDataItem(
+                        i - pointCount);
+                rollingSumForPeriod -= startOfMovingAvg.getValue()
+                        .doubleValue();
                 result.add(period, rollingSumForPeriod / pointCount);
             }
             else if (i == pointCount - 1) {
@@ -258,11 +247,10 @@ public class MovingAverage {
      * @return The dataset.
      */
     public static XYDataset createMovingAverage(XYDataset source, String suffix,
-                                                long period, final long skip) {
+            long period, long skip) {
 
-        return createMovingAverage(
-            source, suffix, (double) period, (double) skip
-        );
+        return createMovingAverage(source, suffix, (double) period, 
+                (double) skip);
         
     }
 
@@ -279,10 +267,9 @@ public class MovingAverage {
      *
      * @return The dataset.
      */
-    public static XYDataset createMovingAverage(XYDataset source, String suffix,
-                                                double period, double skip) {
+    public static XYDataset createMovingAverage(XYDataset source, 
+            String suffix, double period, double skip) {
 
-        // check arguments
         if (source == null) {
             throw new IllegalArgumentException("Null source (XYDataset).");
         }
@@ -290,9 +277,8 @@ public class MovingAverage {
         XYSeriesCollection result = new XYSeriesCollection();
 
         for (int i = 0; i < source.getSeriesCount(); i++) {
-            XYSeries s = createMovingAverage(
-                source, i, source.getSeriesKey(i) + suffix, period, skip
-            );
+            XYSeries s = createMovingAverage(source, i, source.getSeriesKey(i) 
+                    + suffix, period, skip);
             result.addSeries(s);
         }
 
@@ -313,20 +299,16 @@ public class MovingAverage {
      * @return The dataset.
      */
     public static XYSeries createMovingAverage(XYDataset source, 
-                                               int series, String name,
-                                               double period, double skip) {
+            int series, String name, double period, double skip) {
 
                                                
-        // check arguments
         if (source == null) {
             throw new IllegalArgumentException("Null source (XYDataset).");
         }
-
         if (period < Double.MIN_VALUE) {
             throw new IllegalArgumentException("period must be positive.");
 
         }
-
         if (skip < 0.0) {
             throw new IllegalArgumentException("skip must be >= 0.0.");
 
