@@ -1,3 +1,10 @@
+2007-07-03  David Gilbert  <david.gilbert@object-refinery.com>
+
+	* source/org/jfree/chart/plot/XYPlot.java
+	(drawZeroDomainBaseline): No need to cast to AbstractXYItemRenderer,
+	(setFixedDomainAxisSpace): Fire event,
+	(setFixedRangeAxisSpace): Likewise.
+
 2007-07-02  David Gilbert  <david.gilbert@object-refinery.com>
 
 	* source/org/jfree/chart/renderer/xy/StandardXYItemRenderer.java

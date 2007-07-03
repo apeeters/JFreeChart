@@ -236,7 +236,6 @@ import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.event.RendererChangeListener;
 import org.jfree.chart.renderer.RendererUtilities;
-import org.jfree.chart.renderer.xy.AbstractXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRendererState;
 import org.jfree.chart.util.Layer;
@@ -3269,15 +3268,9 @@ public class XYPlot extends Plot implements ValueAxisPlot,
     protected void drawZeroDomainBaseline(Graphics2D g2, Rectangle2D area) {
         if (isDomainZeroBaselineVisible()) {
             XYItemRenderer r = getRenderer();
-            // FIXME: the renderer interface doesn't have the drawDomainLine()
-            // method, so we have to rely on the renderer being a subclass of
-            // AbstractXYItemRenderer (which is lame)
-            if (r instanceof AbstractXYItemRenderer) {
-                AbstractXYItemRenderer renderer = (AbstractXYItemRenderer) r;
-                renderer.drawDomainLine(g2, this, getDomainAxis(), area, 0.0, 
-                        this.domainZeroBaselinePaint, 
-                        this.domainZeroBaselineStroke);
-            }
+            r.drawDomainLine(g2, this, getDomainAxis(), area, 0.0, 
+                    this.domainZeroBaselinePaint, 
+                    this.domainZeroBaselineStroke);
         }
     }
 
@@ -4138,7 +4131,8 @@ public class XYPlot extends Plot implements ValueAxisPlot,
     }
 
     /**
-     * Sets the fixed domain axis space.
+     * Sets the fixed domain axis space and sends a {@link PlotChangeEvent} to
+     * all registered listeners.
      *
      * @param space  the space (<code>null</code> permitted).
      * 
@@ -4146,7 +4140,7 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      */
     public void setFixedDomainAxisSpace(AxisSpace space) {
         this.fixedDomainAxisSpace = space;
-        // TODO: notify listeners?
+        notifyListeners(new PlotChangeEvent(this));
     }
 
     /**
@@ -4161,7 +4155,8 @@ public class XYPlot extends Plot implements ValueAxisPlot,
     }
 
     /**
-     * Sets the fixed range axis space.
+     * Sets the fixed range axis space and sends a {@link PlotChangeEvent} to
+     * all registered listeners.
      *
      * @param space  the space (<code>null</code> permitted).
      * 
@@ -4169,7 +4164,7 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      */
     public void setFixedRangeAxisSpace(AxisSpace space) {
         this.fixedRangeAxisSpace = space;
-        // TODO: notify listeners?
+        notifyListeners(new PlotChangeEvent(this));
     }
 
     /**
