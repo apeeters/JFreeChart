@@ -51,6 +51,8 @@
  *               Chabanois (CC);
  * 06-Jun-2007 : Fixed minor issues with tooltips. bug reported and fix proposed 
  *               by Christoph Beck, bug 1726404 (HP);
+ * 04-Jul-2007 : Added addChartMouseListener and removeChartMouseListener methods
+ *               as suggested by Christoph Beck, bug 1742002 (HP);
  */
 
 package org.jfree.experimental.chart.swt;
@@ -1114,6 +1116,25 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         ev.count = 0;
         canvas.notifyListeners(SWT.Paint, ev);
         ev.gc.dispose();
+    }
+    
+    /**
+     * Adds a listener to the list of objects listening for chart mouse events.
+     *
+     * @param listener  the listener (<code>null</code> not permitted).
+     */
+    public void addChartMouseListener(ChartMouseListener listener) {
+    	this.chartMouseListeners.add(ChartMouseListener.class, listener);
+    }
+    
+    /**
+     * Removes a listener from the list of objects listening for chart mouse 
+     * events.
+     *
+     * @param listener  the listener.
+     */
+    public void removeChartMouseListener(ChartMouseListener listener) {
+    	this.chartMouseListeners.remove(ChartMouseListener.class, listener);
     }
     
     /**

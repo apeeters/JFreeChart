@@ -47,7 +47,10 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.PieSectionEntity;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
@@ -97,8 +100,7 @@ public class SWTPieChartDemo1 {
         plot.setNoDataMessage("No data available");
         plot.setCircular(false);
         plot.setLabelGap(0.02);
-        return chart;
-        
+        return chart;        
     }
     
     /**
@@ -106,9 +108,8 @@ public class SWTPieChartDemo1 {
      *
      * @param args  ignored.
      */
-    public static void main( String[] args ) 
-    {
-        JFreeChart chart = createChart(createDataset());
+    public static void main( String[] args ) {
+        final JFreeChart chart = createChart(createDataset());
         Display display = new Display();
         Shell shell = new Shell(display);
         shell.setSize(600, 400);
@@ -116,6 +117,28 @@ public class SWTPieChartDemo1 {
         shell.setText("Test for jfreechart running with SWT");
         final ChartComposite frame = new ChartComposite(shell, SWT.NONE, chart, true);
         //frame.setDisplayToolTips(false);
+    	frame.addChartMouseListener(new ChartMouseListener() {
+	  		String slice;
+    		public void chartMouseClicked(ChartMouseEvent event) {
+    			PieSectionEntity entity = (PieSectionEntity) event.getEntity();
+    			if (entity != null) {
+    				String slice = (String) entity.getSectionKey();
+    				PiePlot plot = (PiePlot) chart.getPlot();
+    				if (this.slice != null) {
+        				plot.setExplodePercent(this.slice, 0.0);
+    				}
+    				if (slice == this.slice) {
+        				this.slice = null;
+    				} else {
+        				plot.setExplodePercent(slice, 0.25);
+        				this.slice = slice;
+    				}
+    			}
+    		}
+    		
+    		public void chartMouseMoved(ChartMouseEvent event) {}
+    	});
+
         frame.pack();
         shell.open();
         while (!shell.isDisposed()) {
