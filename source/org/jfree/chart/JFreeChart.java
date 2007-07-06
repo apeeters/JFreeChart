@@ -138,7 +138,8 @@
  *               method (DG);
  * 05-Jun-2007 : Add change listener to default legend (DG);
  * 20-Jun-2007 : Removed JCommon dependency (DG);
- * 07-Jul-2007 : Changed default background color to white (DG);
+ * 07-Jul-2007 : Changed default background color to white. Fixed bug
+ *               1749124 (not registering as listener with TextTitle) (DG);
  * 
  */
 
@@ -567,7 +568,13 @@ public class JFreeChart implements Drawable,
      * @see #getTitle()
      */
     public void setTitle(TextTitle title) {
+        if (this.title != null) {
+            this.title.removeChangeListener(this);
+        }
         this.title = title;
+        if (title != null) {
+            title.addChangeListener(this);
+        }
         fireChartChanged();
     }
 

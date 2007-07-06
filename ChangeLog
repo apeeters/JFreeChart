@@ -1,5 +1,10 @@
 2007-07-06  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/JFreeChart.java
+	(setTitle): Add/remove chart as TitleChangeListener.
+
+2007-07-06  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/entity/AxisLabelEntity.java
 	(AxisLabelEntity): Assign axis argument,
 	(toString): New method override.
