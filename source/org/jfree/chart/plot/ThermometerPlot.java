@@ -323,7 +323,7 @@ public class ThermometerPlot extends Plot implements ValueAxisPlot,
     public ThermometerPlot(ValueDataset dataset) {
 
         super();
-
+        setBackgroundPaint(Color.WHITE);
         this.padding = new RectangleInsets(UnitType.RELATIVE, 0.05, 0.05, 0.05, 
                 0.05);
         this.dataset = dataset;

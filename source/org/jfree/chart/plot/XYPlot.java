@@ -278,7 +278,7 @@ public class XYPlot extends Plot implements ValueAxisPlot,
             new float[] {2.0f, 2.0f}, 0.0f);
 
     /** The default grid line paint. */
-    public static final Paint DEFAULT_GRIDLINE_PAINT = Color.lightGray;
+    public static final Paint DEFAULT_GRIDLINE_PAINT = Color.WHITE;
 
     /** The default crosshair visibility. */
     public static final boolean DEFAULT_CROSSHAIR_VISIBLE = false;
@@ -513,7 +513,7 @@ public class XYPlot extends Plot implements ValueAxisPlot,
 
         this.orientation = PlotOrientation.VERTICAL;
         this.weight = 1;  // only relevant when this is a subplot
-        this.axisOffset = RectangleInsets.ZERO_INSETS;
+        this.axisOffset = new RectangleInsets(4.0, 4.0, 4.0, 4.0);
 
         // allocate storage for datasets, axes and renderers (all optional)
         this.domainAxes = new ObjectList();

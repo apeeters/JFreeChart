@@ -241,14 +241,11 @@ public class CategoryPlot extends Plot
 
     /** The default grid line stroke. */
     public static final Stroke DEFAULT_GRIDLINE_STROKE = new BasicStroke(0.5f,
-        BasicStroke.CAP_BUTT,
-        BasicStroke.JOIN_BEVEL,
-        0.0f,
-        new float[] {2.0f, 2.0f},
-        0.0f);
+            BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0.0f,
+            new float[] {2.0f, 2.0f}, 0.0f);
 
     /** The default grid line paint. */
-    public static final Paint DEFAULT_GRIDLINE_PAINT = Color.lightGray;
+    public static final Paint DEFAULT_GRIDLINE_PAINT = Color.WHITE;
 
     /** The default value label font. */
     public static final Font DEFAULT_VALUE_LABEL_FONT 
@@ -459,7 +456,7 @@ public class CategoryPlot extends Plot
             dataset.addChangeListener(this);
         }
 
-        this.axisOffset = RectangleInsets.ZERO_INSETS;
+        this.axisOffset = new RectangleInsets(4.0, 4.0, 4.0, 4.0);
 
         setDomainAxisLocation(AxisLocation.BOTTOM_OR_LEFT, false);
         setRangeAxisLocation(AxisLocation.TOP_OR_LEFT, false);

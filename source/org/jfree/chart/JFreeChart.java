@@ -138,6 +138,7 @@
  *               method (DG);
  * 05-Jun-2007 : Add change listener to default legend (DG);
  * 20-Jun-2007 : Removed JCommon dependency (DG);
+ * 07-Jul-2007 : Changed default background color to white (DG);
  * 
  */
 
@@ -170,7 +171,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
 import javax.swing.event.EventListenerList;
 
 import org.jfree.chart.block.BlockParams;
@@ -246,8 +246,7 @@ public class JFreeChart implements Drawable,
             = new Font("SansSerif", Font.BOLD, 18);
 
     /** The default background color. */
-    public static final Paint DEFAULT_BACKGROUND_PAINT 
-            = UIManager.getColor("Panel.background");
+    public static final Paint DEFAULT_BACKGROUND_PAINT = Color.WHITE;
 
     /** The default background image. */
     public static final Image DEFAULT_BACKGROUND_IMAGE = null;

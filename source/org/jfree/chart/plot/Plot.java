@@ -122,6 +122,7 @@
  * 07-Jun-2007 : Added new fillBackground() method to handle GradientPaint 
  *               taking into account orientation (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 06-Jul-2007 : Changed default background color to LIGHT_GRAY (DG);
  *
  */
 
@@ -195,7 +196,7 @@ public abstract class Plot implements AxisChangeListener,
 
     /** The default insets. */
     public static final RectangleInsets DEFAULT_INSETS 
-        = new RectangleInsets(4.0, 8.0, 4.0, 8.0);
+            = new RectangleInsets(4.0, 8.0, 4.0, 8.0);
 
     /** The default outline stroke. */
     public static final Stroke DEFAULT_OUTLINE_STROKE = new BasicStroke(0.5f);
@@ -210,7 +211,7 @@ public abstract class Plot implements AxisChangeListener,
     public static final float DEFAULT_BACKGROUND_ALPHA = 1.0f;
 
     /** The default background color. */
-    public static final Paint DEFAULT_BACKGROUND_PAINT = Color.white;
+    public static final Paint DEFAULT_BACKGROUND_PAINT = Color.LIGHT_GRAY;
 
     /** The minimum width at which the plot should be drawn. */
     public static final int MINIMUM_WIDTH_TO_DRAW = 10;
