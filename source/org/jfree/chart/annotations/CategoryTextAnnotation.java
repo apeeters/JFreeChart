@@ -46,6 +46,7 @@
  * ------------- JFREECHART 1.0.x -------------------------------------------
  * 06-Mar-2007 : Implemented hashCode() (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 06-Jul-2007 : Updated for changes to CategoryAnnotation interface (DG);
  *
  */
 
@@ -61,6 +62,7 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
@@ -182,9 +184,12 @@ public class CategoryTextAnnotation extends TextAnnotation
      * @param dataArea  the data area.
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
+     * @param rendererIndex  the renderer index.
+     * @param info  the plot info (<code>null</code> permitted).
      */
     public void draw(Graphics2D g2, CategoryPlot plot, Rectangle2D dataArea,
-                     CategoryAxis domainAxis, ValueAxis rangeAxis) {
+            CategoryAxis domainAxis, ValueAxis rangeAxis, 
+            int rendererIndex, PlotRenderingInfo info) {
 
         CategoryDataset dataset = plot.getDataset();
         int catIndex = dataset.getColumnIndex(this.category);

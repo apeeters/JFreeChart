@@ -98,6 +98,7 @@
  *               interface (DG);
  * 27-Jun-2007 : Changed get/setBaseItemLabelsVisible from Boolean to 
  *               boolean (DG);
+ * 06-Jul-2007 : Added annotation support (DG);
  *
  */
 
@@ -112,6 +113,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemSource;
+import org.jfree.chart.annotations.CategoryAnnotation;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.event.RendererChangeEvent;
@@ -125,6 +127,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.urls.CategoryURLGenerator;
+import org.jfree.chart.util.Layer;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 
@@ -1727,6 +1730,68 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setBaseCreateEntities(boolean create, boolean notify);
 
+    
+    //// ANNOTATIONS //////////////////////////////////////////////////////////
+    
+    /**
+     * Adds an annotation and sends a {@link RendererChangeEvent} to all 
+     * registered listeners.  The annotation is added to the foreground
+     * layer.
+     * 
+     * @param annotation  the annotation (<code>null</code> not permitted).
+     * 
+     * @since 1.2.0
+     */
+    public void addAnnotation(CategoryAnnotation annotation);
+
+    /**
+     * Adds an annotation to the specified layer.
+     * 
+     * @param annotation  the annotation (<code>null</code> not permitted).
+     * @param layer  the layer (<code>null</code> not permitted).
+     * 
+     * @since 1.2.0
+     */
+    public void addAnnotation(CategoryAnnotation annotation, Layer layer);
+
+    /**
+     * Removes the specified annotation and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     * 
+     * @param annotation  the annotation to remove (<code>null</code> not 
+     *                    permitted).
+     * 
+     * @return A boolean to indicate whether or not the annotation was 
+     *         successfully removed.
+     * 
+     * @since 1.2.0
+     */
+    public boolean removeAnnotation(CategoryAnnotation annotation);
+    
+    /**
+     * Removes all annotations and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     * 
+     * @since 1.2.0
+     */
+    public void removeAnnotations();
+    
+    /**
+     * Draws all the annotations for the specified layer.
+     * 
+     * @param g2  the graphics device.
+     * @param dataArea  the data area.
+     * @param domainAxis  the domain axis.
+     * @param rangeAxis  the range axis.
+     * @param layer  the layer.
+     * @param info  the plot rendering info.
+     * 
+     * @since 1.2.0
+     */
+    public void drawAnnotations(Graphics2D g2, Rectangle2D dataArea, 
+            CategoryAxis domainAxis, ValueAxis rangeAxis, Layer layer, 
+            PlotRenderingInfo info);
+    
     
     //// DRAWING //////////////////////////////////////////////////////////////
     

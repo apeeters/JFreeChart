@@ -51,6 +51,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.jfree.chart.annotations.CategoryTextAnnotation;
 import org.jfree.chart.labels.IntervalCategoryItemLabelGenerator;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.labels.StandardCategorySeriesLabelGenerator;
@@ -59,6 +60,7 @@ import org.jfree.chart.renderer.category.AbstractCategoryItemRenderer;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.urls.StandardCategoryURLGenerator;
+import org.jfree.chart.util.Layer;
 
 /**
  * Tests for the {@link AbstractCategoryItemRenderer} class.
@@ -150,6 +152,22 @@ public class AbstractCategoryItemRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setLegendItemURLGenerator(
                 new StandardCategorySeriesLabelGenerator("URL"));
+        assertTrue(r1.equals(r2));
+        
+        // background annotation
+        r1.addAnnotation(new CategoryTextAnnotation("ABC", "A", 2.0), 
+                Layer.BACKGROUND);
+        assertFalse(r1.equals(r2));
+        r2.addAnnotation(new CategoryTextAnnotation("ABC", "A", 2.0), 
+                Layer.BACKGROUND);
+        assertTrue(r1.equals(r2));
+        
+        // foreground annotation
+        r1.addAnnotation(new CategoryTextAnnotation("DEF", "B", 4.0),
+                Layer.FOREGROUND);
+        assertFalse(r1.equals(r2));
+        r2.addAnnotation(new CategoryTextAnnotation("DEF", "B", 4.0), 
+                Layer.FOREGROUND);
         assertTrue(r1.equals(r2));
     }
 

@@ -98,6 +98,7 @@
  * 20-Jun-2007 : Removed deprecated code and removed JCommon dependencies (DG);
  * 27-Jun-2007 : Added some new methods with 'notify' argument, renamed
  *               methods containing 'ItemURL' to just 'URL' (DG);
+ * 06-Jul-2007 : Added annotation support (DG);
  *
  */
 
@@ -115,9 +116,13 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.annotations.CategoryAnnotation;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.CategoryItemEntity;
@@ -140,6 +145,7 @@ import org.jfree.chart.renderer.AbstractRenderer;
 import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.urls.CategoryURLGenerator;
 import org.jfree.chart.util.GradientPaintTransformer;
+import org.jfree.chart.util.Layer;
 import org.jfree.chart.util.LengthAdjustmentType;
 import org.jfree.chart.util.ObjectList;
 import org.jfree.chart.util.ObjectUtilities;
@@ -192,6 +198,22 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     /** The legend item URL generator. */
     private CategorySeriesLabelGenerator legendItemURLGenerator;
 
+    /**
+     * Annotations to be drawn in the background layer ('underneath' the data
+     * items).
+     * 
+     * @since 1.2.0
+     */
+    private List backgroundAnnotations;
+
+    /**
+     * Annotations to be drawn in the foreground layer ('on top' of the data
+     * items).
+     * 
+     * @since 1.2.0
+     */
+    private List foregroundAnnotations;
+
     /** The number of rows in the dataset (temporary record). */
     private transient int rowCount;
 
@@ -210,7 +232,9 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         this.toolTipGeneratorList = new ObjectList();
         this.urlGeneratorList = new ObjectList();
         this.legendItemLabelGenerator
-            = new StandardCategorySeriesLabelGenerator();
+                = new StandardCategorySeriesLabelGenerator();
+        this.backgroundAnnotations = new ArrayList();
+        this.foregroundAnnotations = new ArrayList();
     }
 
     /**
@@ -587,6 +611,78 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         if (notify) {
             notifyListeners(new RendererChangeEvent(this));
         }
+    }
+
+    // ANNOTATIONS
+    
+    /**
+     * Adds an annotation and sends a {@link RendererChangeEvent} to all
+     * registered listeners.  The annotation is added to the foreground
+     * layer.
+     *
+     * @param annotation  the annotation (<code>null</code> not permitted).
+     *
+     * @since 1.2.0
+     */
+    public void addAnnotation(CategoryAnnotation annotation) {
+        // defer argument checking
+        addAnnotation(annotation, Layer.FOREGROUND);
+    }
+
+    /**
+     * Adds an annotation to the specified layer.
+     *
+     * @param annotation  the annotation (<code>null</code> not permitted).
+     * @param layer  the layer (<code>null</code> not permitted).
+     *
+     * @since 1.2.0
+     */
+    public void addAnnotation(CategoryAnnotation annotation, Layer layer) {
+        if (annotation == null) {
+            throw new IllegalArgumentException("Null 'annotation' argument.");
+        }
+        if (layer.equals(Layer.FOREGROUND)) {
+            this.foregroundAnnotations.add(annotation);
+            notifyListeners(new RendererChangeEvent(this));
+        }
+        else if (layer.equals(Layer.BACKGROUND)) {
+            this.backgroundAnnotations.add(annotation);
+            notifyListeners(new RendererChangeEvent(this));
+        }
+        else {
+            // should never get here
+            throw new RuntimeException("Unknown layer.");
+        }
+    }
+    /**
+     * Removes the specified annotation and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     *
+     * @param annotation  the annotation to remove (<code>null</code> not
+     *                    permitted).
+     *
+     * @return A boolean to indicate whether or not the annotation was
+     *         successfully removed.
+     *
+     * @since 1.2.0
+     */
+    public boolean removeAnnotation(CategoryAnnotation annotation) {
+        boolean removed = this.foregroundAnnotations.remove(annotation);
+        removed = removed & this.backgroundAnnotations.remove(annotation);
+        notifyListeners(new RendererChangeEvent(this));
+        return removed;
+    }
+
+    /**
+     * Removes all annotations and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     *
+     * @since 1.2.0
+     */
+    public void removeAnnotations() {
+        this.foregroundAnnotations.clear();
+        this.backgroundAnnotations.clear();
+        notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
@@ -1236,6 +1332,14 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                 that.legendItemURLGenerator)) {
             return false;
         }
+        if (!ObjectUtilities.equal(this.backgroundAnnotations,
+                that.backgroundAnnotations)) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.foregroundAnnotations,
+                that.foregroundAnnotations)) {
+            return false;
+        }
         return super.equals(obj);
     }
 
@@ -1304,6 +1408,41 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                     (float) anchorPoint.getX(), (float) anchorPoint.getY(),
                     position.getTextAnchor(),
                     position.getAngle(), position.getRotationAnchor());
+        }
+
+    }
+
+    /**
+     * Draws all the annotations for the specified layer.
+     *
+     * @param g2  the graphics device.
+     * @param dataArea  the data area.
+     * @param domainAxis  the domain axis.
+     * @param rangeAxis  the range axis.
+     * @param layer  the layer.
+     * @param info  the plot rendering info.
+     *
+     * @since 1.2.0
+     */
+    public void drawAnnotations(Graphics2D g2, Rectangle2D dataArea,
+            CategoryAxis domainAxis, ValueAxis rangeAxis, Layer layer,
+            PlotRenderingInfo info) {
+
+        Iterator iterator = null;
+        if (layer.equals(Layer.FOREGROUND)) {
+            iterator = this.foregroundAnnotations.iterator();
+        }
+        else if (layer.equals(Layer.BACKGROUND)) {
+            iterator = this.backgroundAnnotations.iterator();
+        }
+        else {
+            // should not get here
+            throw new RuntimeException("Unknown layer.");
+        }
+        while (iterator.hasNext()) {
+            CategoryAnnotation annotation = (CategoryAnnotation) iterator.next();
+            annotation.draw(g2, this.plot, dataArea, domainAxis, rangeAxis,
+                    0, info);
         }
 
     }

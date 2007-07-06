@@ -47,10 +47,12 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.labels.StandardXYSeriesLabelGenerator;
 import org.jfree.chart.renderer.xy.AbstractXYItemRenderer;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.chart.util.Layer;
 import org.jfree.data.Range;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -193,5 +195,59 @@ public class AbstractXYItemRendererTests extends TestCase {
                 != r2.getLegendItemURLGenerator());
     }
 
+    /**
+     * Some checks for the equals() method.
+     */
+    public void testEquals() {
+        XYBarRenderer r1 = new XYBarRenderer();
+        XYBarRenderer r2 = new XYBarRenderer();
+        assertTrue(r1.equals(r2));
+        
+        // background annotation
+        r1.addAnnotation(new XYTextAnnotation("ABC", 1.0, 2.0), 
+                Layer.BACKGROUND);
+        assertFalse(r1.equals(r2));
+        r2.addAnnotation(new XYTextAnnotation("ABC", 1.0, 2.0), 
+                Layer.BACKGROUND);
+        assertTrue(r1.equals(r2));
+        
+        // foreground annotation
+        r1.addAnnotation(new XYTextAnnotation("DEF", 3.0, 4.0),
+                Layer.FOREGROUND);
+        assertFalse(r1.equals(r2));
+        r2.addAnnotation(new XYTextAnnotation("DEF", 3.0, 4.0), 
+                Layer.FOREGROUND);
+        assertTrue(r1.equals(r2));
+        
+        // default entity radius
+        r1.setDefaultEntityRadius(99);
+        assertFalse(r1.equals(r2));
+        r2.setDefaultEntityRadius(99);
+        assertTrue(r1.equals(r2));
+        
+        // legend item label generator
+        r1.setLegendItemLabelGenerator(new StandardXYSeriesLabelGenerator(
+                "X:{0}"));
+        assertFalse(r1.equals(r2));
+        r2.setLegendItemLabelGenerator(new StandardXYSeriesLabelGenerator(
+                "X:{0}"));
+        assertTrue(r1.equals(r2));
+
+        // legend item tool tip generator
+        r1.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator(
+                "X:{0}"));
+        assertFalse(r1.equals(r2));
+        r2.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator(
+                "X:{0}"));
+        assertTrue(r1.equals(r2));
+    
+        // legend item URL generator
+        r1.setLegendItemURLGenerator(new StandardXYSeriesLabelGenerator(
+                "X:{0}"));
+        assertFalse(r1.equals(r2));
+        r2.setLegendItemURLGenerator(new StandardXYSeriesLabelGenerator(
+                "X:{0}"));
+        assertTrue(r1.equals(r2));
+    }
 
 }

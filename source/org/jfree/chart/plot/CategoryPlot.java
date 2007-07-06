@@ -149,6 +149,7 @@
  *               anntotations (DG);
  * 07-Jun-2007 : Override drawBackground() for new GradientPaint handling (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 06-Jul-2007 : Updated annotation handling (DG);
  * 
  */
 
@@ -2342,7 +2343,7 @@ public class CategoryPlot extends Plot
     /**
      * Returns the list of annotations.
      *
-     * @return The list of annotations.
+     * @return The list of annotations (never <code>null</code>).
      */
     public List getAnnotations() {
         return this.annotations;
@@ -2605,15 +2606,64 @@ public class CategoryPlot extends Plot
 
         DatasetRenderingOrder order = getDatasetRenderingOrder();
         if (order == DatasetRenderingOrder.FORWARD) {
-            for (int i = 0; i < this.datasets.size(); i++) {
+
+            // draw background annotations
+            int datasetCount = this.datasets.size();
+            for (int i = 0; i < datasetCount; i++) {
+                CategoryItemRenderer r = getRenderer(i);
+                if (r != null) {
+                    CategoryAxis domainAxis = getDomainAxisForDataset(i);
+                    ValueAxis rangeAxis = getRangeAxisForDataset(i);
+                    r.drawAnnotations(g2, dataArea, domainAxis, rangeAxis,
+                            Layer.BACKGROUND, state);
+                }
+            }
+
+            for (int i = 0; i < datasetCount; i++) {
                 foundData = render(g2, dataArea, i, state) || foundData;
+            }
+
+            // draw foreground annotations
+            for (int i = 0; i < datasetCount; i++) {
+                CategoryItemRenderer r = getRenderer(i);
+                if (r != null) {
+                    CategoryAxis domainAxis = getDomainAxisForDataset(i);
+                    ValueAxis rangeAxis = getRangeAxisForDataset(i);
+                    r.drawAnnotations(g2, dataArea, domainAxis, rangeAxis,
+                            Layer.FOREGROUND, state);
+                }
             }
         }
         else {  // DatasetRenderingOrder.REVERSE
+            
+            // draw background annotations
+            int datasetCount = this.datasets.size();
+            for (int i = datasetCount - 1; i >= 0; i--) {
+                CategoryItemRenderer r = getRenderer(i);
+                if (r != null) {
+                    CategoryAxis domainAxis = getDomainAxisForDataset(i);
+                    ValueAxis rangeAxis = getRangeAxisForDataset(i);
+                    r.drawAnnotations(g2, dataArea, domainAxis, rangeAxis,
+                            Layer.BACKGROUND, state);
+                }
+            }
+            
             for (int i = this.datasets.size() - 1; i >= 0; i--) {
                 foundData = render(g2, dataArea, i, state) || foundData;   
             }
+
+            // draw foreground annotations
+            for (int i = datasetCount - 1; i >= 0; i--) {
+                CategoryItemRenderer r = getRenderer(i);
+                if (r != null) {
+                    CategoryAxis domainAxis = getDomainAxisForDataset(i);
+                    ValueAxis rangeAxis = getRangeAxisForDataset(i);
+                    r.drawAnnotations(g2, dataArea, domainAxis, rangeAxis,
+                            Layer.FOREGROUND, state);
+                }
+            }
         }
+        
         // draw the foreground markers...
         for (int i = 0; i < this.renderers.size(); i++) {
             drawDomainMarkers(g2, dataArea, i, Layer.FOREGROUND);
@@ -2622,8 +2672,8 @@ public class CategoryPlot extends Plot
             drawRangeMarkers(g2, dataArea, i, Layer.FOREGROUND);
         }
 
-        // draw the annotations (if any)...
-        drawAnnotations(g2, dataArea);
+        // draw the plot's annotations (if any)...
+        drawAnnotations(g2, dataArea, state);
 
         g2.setClip(savedClip);
         g2.setComposite(originalComposite);
@@ -2904,21 +2954,21 @@ public class CategoryPlot extends Plot
     }
 
     /**
-     * Draws the annotations...
+     * Draws the annotations.
      *
      * @param g2  the graphics device.
      * @param dataArea  the data area.
+     * @param info  the plot rendering info (<code>null</code> permitted).
      */
-    protected void drawAnnotations(Graphics2D g2, Rectangle2D dataArea) {
+    protected void drawAnnotations(Graphics2D g2, Rectangle2D dataArea,
+            PlotRenderingInfo info) {
 
-        if (getAnnotations() != null) {
-            Iterator iterator = getAnnotations().iterator();
-            while (iterator.hasNext()) {
-                CategoryAnnotation annotation 
-                        = (CategoryAnnotation) iterator.next();
-                annotation.draw(g2, this, dataArea, getDomainAxis(), 
-                        getRangeAxis());
-            }
+        Iterator iterator = getAnnotations().iterator();
+        while (iterator.hasNext()) {
+            CategoryAnnotation annotation 
+                    = (CategoryAnnotation) iterator.next();
+            annotation.draw(g2, this, dataArea, getDomainAxis(), 
+                    getRangeAxis(), 0, info);
         }
 
     }
