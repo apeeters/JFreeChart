@@ -105,6 +105,7 @@ import java.util.List;
 
 import javax.swing.event.EventListenerList;
 
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.entity.AxisLabelEntity;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.AxisChangeEvent;
@@ -1187,11 +1188,13 @@ public abstract class Axis implements Cloneable, Serializable {
 
         }
         if (plotState != null && hotspot != null) {
-            EntityCollection entities = plotState.getOwner()
-                    .getEntityCollection();
-            if (entities != null) {
-                entities.add(new AxisLabelEntity(this, hotspot, 
-                        this.labelToolTip, this.labelURL));
+            ChartRenderingInfo owner = plotState.getOwner();
+            if (owner != null) {
+                EntityCollection entities = owner.getEntityCollection();
+                if (entities != null) {
+                    entities.add(new AxisLabelEntity(this, hotspot, 
+                            this.labelToolTip, this.labelURL));
+                }
             }
         }
         return state;
