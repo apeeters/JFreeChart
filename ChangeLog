@@ -1,5 +1,22 @@
 2007-07-06  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/renderer/category/BarRenderer.java
+	(BarRenderer): Changed default value for drawBarOutline,
+	* source/org/jfree/chart/renderer/category/IntervalBarRenderer.java
+	(drawInterval): Respect drawBarOutline setting,
+	* source/org/jfree/chart/renderer/category/StatisticalBarRenderer.java
+	(errorIndicatorStroke): New field,
+	(StatisticalBarRenderer): Initialise new field,
+	(getErrorIndicatorStroke): New method,
+	(setErrorIndicatorStroke): Likewise,
+	(drawHorizontalItem): Respect drawBarOutline setting, and set appropriate 
+	stroke,
+	(drawVerticalItem): Likewise,
+	* source/org/jfree/chart/renderer/xy/YIntervalRenderer.java
+	(getLegendItem): New method override.	
+
+2007-07-06  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/JFreeChart.java
 	(setTitle): Add/remove chart as TitleChangeListener.
 

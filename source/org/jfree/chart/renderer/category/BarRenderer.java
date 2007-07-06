@@ -83,6 +83,7 @@
  * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 06-Jul-2007 : Changed default for drawBarOutline attribute (DG);
  * 
  */
 
@@ -195,7 +196,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         this.base = 0.0;
         this.includeBaseInRange = true;
         this.itemMargin = DEFAULT_ITEM_MARGIN;
-        this.drawBarOutline = true;
+        this.drawBarOutline = false;
         this.maximumBarWidth = 1.0;  
             // 100 percent, so it will not apply unless changed
         this.positiveItemLabelPositionFallback = null;

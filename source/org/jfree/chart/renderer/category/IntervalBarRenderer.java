@@ -59,6 +59,7 @@
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 29-Jun-2007 : Simplified entity generation by calling addEntity() (DG);
+ * 06-Jul-2007 : Respect drawBarOutline attribute (DG);
  * 
  */
 
@@ -250,7 +251,8 @@ public class IntervalBarRenderer extends BarRenderer
         g2.fill(bar);
         
         // draw the outline...
-        if (state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
+        if (isDrawBarOutline() && state.getBarWidth() 
+                > BAR_OUTLINE_WIDTH_THRESHOLD) {
             Stroke stroke = getItemOutlineStroke(row, column);
             Paint paint = getItemOutlinePaint(row, column);
             if (stroke != null && paint != null) {

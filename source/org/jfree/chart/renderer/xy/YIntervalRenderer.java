@@ -46,6 +46,7 @@
  * 11-Nov-2004 : Now uses ShapeUtilities to translate shapes (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
+ * 06-Jul-2007 : Override getLegendItem() (DG);
  * 
  */
 
@@ -59,6 +60,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
+import org.jfree.chart.LegendItem;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.plot.CrosshairState;
@@ -167,11 +169,53 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
 
         // add an entity for the item...
         if (entities != null) {
-            addEntity(entities, line.getBounds(), dataset, series, item, 0.0, 0.0);
+            addEntity(entities, line.getBounds(), dataset, series, item, 0.0, 
+                    0.0);
         }
 
     }
     
+    /**
+     * Returns a default legend item for the specified series.  Subclasses
+     * should override this method to generate customised items.
+     *
+     * @param datasetIndex  the dataset index (zero-based).
+     * @param series  the series index (zero-based).
+     *
+     * @return A legend item for the series.
+     */
+    public LegendItem getLegendItem(int datasetIndex, int series) {
+        LegendItem result = null;
+        XYPlot xyplot = getPlot();
+        if (xyplot != null) {
+            XYDataset dataset = xyplot.getDataset(datasetIndex);
+            if (dataset != null) {
+                String label = getLegendItemLabelGenerator().generateLabel(
+                        dataset, series);
+                String description = label;
+                String toolTipText = null;
+                if (getLegendItemToolTipGenerator() != null) {
+                    toolTipText = getLegendItemToolTipGenerator().generateLabel(
+                            dataset, series);
+                }
+                String urlText = null;
+                if (getLegendItemURLGenerator() != null) {
+                    urlText = getLegendItemURLGenerator().generateLabel(
+                            dataset, series);
+                }
+                Shape shape = lookupSeriesShape(series);
+                Paint paint = lookupSeriesPaint(series);
+                result = new LegendItem(label, description, toolTipText,
+                        urlText, shape, paint);
+                result.setSeriesKey(dataset.getSeriesKey(series));
+                result.setSeriesIndex(series);
+                result.setDataset(dataset);
+                result.setDatasetIndex(datasetIndex);
+            }
+        }
+        return result;
+    }
+
     /**
      * Returns a clone of the renderer.
      * 
