@@ -43,6 +43,7 @@
  *               thanks to silent for pointing this out (HP);
  * 23-May-2007 : removed resource leaks by adding a resource pool (CC);
  * 15-Jun-2007 : Fixed compile error for JDK 1.4 (DG);
+ * 06-Jul-2007 : implemented clipping (HP);
  * 
  */
 
@@ -656,15 +657,6 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /* (non-Javadoc)
-     * @see java.awt.Graphics2D#clip(java.awt.Shape)
-     */
-    public void clip(Shape s) {
-        Path path = toSwtPath(s);
-        gc.setClipping(path);
-        path.dispose();
-    }
-
-    /* (non-Javadoc)
      * @see java.awt.Graphics2D#getFontRenderContext()
      */
     public FontRenderContext getFontRenderContext() {
@@ -752,6 +744,15 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /* (non-Javadoc)
+     * @see java.awt.Graphics2D#clip(java.awt.Shape)
+     */
+    public void clip(Shape s) {
+        Path path = toSwtPath(s);
+        gc.setClipping(path);
+        path.dispose();
+    }
+
+    /* (non-Javadoc)
      * @see java.awt.Graphics#getClipBounds()
      */
     public Rectangle getClipBounds() {
@@ -779,8 +780,7 @@ public class SWTGraphics2D extends Graphics2D {
      * @see java.awt.Graphics#getClip()
      */
     public Shape getClip() {
-        // TODO Auto-generated method stub
-        return null;
+    	return SWTUtils.toAwtRectangle(gc.getClipping());
     }
 
     /* (non-Javadoc)

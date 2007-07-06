@@ -1,3 +1,9 @@
+2007-07-06 Henry Proudhon <henry.proudhon@insa-lyon.fr>
+	* swt/org/jfree/experimental/swt/SWTGraphics2D.java
+        (getClip): implemented,
+	* swt/org/jfree/experimental/chart/swt/ChartComposite.java
+        (zoom): fixed bug with multiple plots.
+
 2007-07-04 Henry Proudhon <henry.proudhon@insa-lyon.fr>
 	* swt/org/jfree/experimental/chart/swt/ChartComposite.java
 	(addChartMouseListener): New method,

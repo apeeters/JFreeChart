@@ -53,6 +53,7 @@
  *               by Christoph Beck, bug 1726404 (HP);
  * 04-Jul-2007 : Added addChartMouseListener and removeChartMouseListener methods
  *               as suggested by Christoph Beck, bug 1742002 (HP);
+ * 06-Jul-2007 : Fixed bug in zooming with multiple plots (HP);
  */
 
 package org.jfree.experimental.chart.swt;
@@ -627,6 +628,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 switch (event.type) {
                     case SWT.MouseDown:
                         Rectangle scaledDataArea = getScreenDataArea(event.x, event.y);
+                        if (scaledDataArea == null) return;
                         zoomPoint = getPointInRectangle(event.x, event.y, scaledDataArea);
                         Rectangle insets = getClientArea();
                         int x = (int) ((event.x - insets.x) / scaleX);
@@ -643,8 +645,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                         }
 
                         ChartEntity entity = null;
-                        if (info != null) 
-                        {
+                        if (info != null) {
                             EntityCollection entities 
                                     = info.getEntityCollection();
                             if (entities != null) {
@@ -700,9 +701,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                                     movingPoint.x - zoomPoint.x, scaledDataArea.height);
                         }
                         else if (vZoom) {
+                            int ymax = Math.max(movingPoint.y, scaledDataArea.y);
                             zoomRectangle = new Rectangle(
                                     scaledDataArea.x, zoomPoint.y,
-                                    scaledDataArea.width, event.y - zoomPoint.y);
+                                    scaledDataArea.width, ymax - zoomPoint.y);
                         }
                         canvas.redraw();
                         break;
@@ -739,7 +741,9 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                                 if ((hZoom && (zoomRectangle.x + zoomRectangle.width < zoomPoint.x)) 
                                         || (vZoom && (zoomRectangle.y + zoomRectangle.height < zoomPoint.y))) 
                                     restoreAutoBounds();
-                                else zoom(zoomRectangle);
+                                else {
+                                	zoom(zoomRectangle);
+                                }
                                 canvas.redraw();
                             }
                         }
@@ -1059,8 +1063,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 new Point(selection.x, selection.y));
         PlotRenderingInfo plotInfo = this.info.getPlotInfo();
         Rectangle scaledDataArea = getScreenDataArea(
-                (int) (selection.x + selection.width)/2, 
-                (int) (selection.y + selection.height)/2);
+                (int) (selection.x + selection.width/2), 
+                (int) (selection.y + selection.height/2));
         if ((selection.height > 0) && (selection.width > 0)) {
 
             double hLower = (selection.x - scaledDataArea.x) 

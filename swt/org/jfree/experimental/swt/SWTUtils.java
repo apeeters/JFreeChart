@@ -76,12 +76,12 @@ public class SWTUtils {
      * from the provided awt Font.
      * <p>Generally speaking, given a font size, the returned swt font 
      * will display differently on the screen than the awt one.
-     * Because the SWT toolkit use native graphical ressources whenever 
-     * it is possible, this fact is plateform dependent. To address 
+     * Because the SWT toolkit use native graphical resources whenever 
+     * it is possible, this fact is platform dependent. To address 
      * this issue, it is possible to enforce the method to return 
      * a font with the same size (or at least as close as possible) 
      * as the awt one.
-     * <p>When the object is no more used, the user must explicitely 
+     * <p>When the object is no more used, the user must explicitly 
      * call the dispose method on the returned font to free the 
      * operating system resources (the garbage collector won't do it).
      * 
@@ -155,7 +155,7 @@ public class SWTUtils {
      * <p>Generally speaking, given a font size, an swt font will 
      * display differently on the screen than the corresponding awt 
      * one. Because the SWT toolkit use native graphical ressources whenever 
-     * it is possible, this fact is plateform dependent. To address 
+     * it is possible, this fact is platform dependent. To address 
      * this issue, it is possible to enforce the method to return 
      * an awt font with the same height as the swt one.
      * 
