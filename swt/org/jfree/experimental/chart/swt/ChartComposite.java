@@ -54,6 +54,7 @@
  * 04-Jul-2007 : Added addChartMouseListener and removeChartMouseListener methods
  *               as suggested by Christoph Beck, bug 1742002 (HP);
  * 06-Jul-2007 : Fixed bug in zooming with multiple plots (HP);
+ * 06-Jul-2007 : check for null zoom point when restoring auto range and domain bounds (HP);
  */
 
 package org.jfree.experimental.chart.swt;
@@ -1163,10 +1164,12 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      */
     public void restoreAutoDomainBounds() {
         Plot p = this.chart.getPlot();
-        if (p instanceof Zoomable) 
-        {
+        if (p instanceof Zoomable) {
             Zoomable z = (Zoomable) p;
-            z.zoomDomainAxes(0.0, this.info.getPlotInfo(), SWTUtils.toAwtPoint(this.zoomPoint));
+            // we need to guard against this.zoomPoint being null
+            org.eclipse.swt.graphics.Point zp = 
+            	(this.zoomPoint != null ? this.zoomPoint : new org.eclipse.swt.graphics.Point(0,0));
+            z.zoomDomainAxes(0.0, this.info.getPlotInfo(), SWTUtils.toAwtPoint(zp));
         }
     }
 
@@ -1177,7 +1180,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         Plot p = this.chart.getPlot();
         if (p instanceof ValueAxisPlot) {
             Zoomable z = (Zoomable) p;
-            z.zoomRangeAxes(0.0, this.info.getPlotInfo(), SWTUtils.toAwtPoint(this.zoomPoint)); 
+            // we need to guard against this.zoomPoint being null
+            org.eclipse.swt.graphics.Point zp = 
+            	(this.zoomPoint != null ? this.zoomPoint : new org.eclipse.swt.graphics.Point(0,0));
+            z.zoomRangeAxes(0.0, this.info.getPlotInfo(), SWTUtils.toAwtPoint(zp)); 
         }
     }
 

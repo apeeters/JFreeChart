@@ -1,4 +1,9 @@
 2007-07-06 Henry Proudhon <henry.proudhon@insa-lyon.fr>
+	* swt/org/jfree/experimental/chart/swt/ChartComposite.java
+	(restoreAutoDomainBounds): check for null zoom point,
+	(restoreAutoRangeBounds): Likewise.
+
+2007-07-06 Henry Proudhon <henry.proudhon@insa-lyon.fr>
 	* swt/org/jfree/experimental/swt/SWTGraphics2D.java
         (getClip): implemented,
 	* swt/org/jfree/experimental/chart/swt/ChartComposite.java
