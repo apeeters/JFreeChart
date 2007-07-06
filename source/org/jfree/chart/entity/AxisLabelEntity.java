@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 02-Jul-2007 : Version 1 (DG);
+ * 06-Jul-2007 : Assign axis in constructor, override toString() (DG); 
  *
  */
 
@@ -67,6 +68,10 @@ public class AxisLabelEntity extends ChartEntity {
     public AxisLabelEntity(Axis axis, Shape hotspot, String toolTipText, 
             String url) {
         super(hotspot, toolTipText, url);
+        if (axis == null) {
+            throw new IllegalArgumentException("Null 'axis' argument.");
+        }
+        this.axis = axis;
     }
     
     /**
@@ -77,5 +82,19 @@ public class AxisLabelEntity extends ChartEntity {
     public Axis getAxis() {
         return this.axis;
     }
+    
+    /**
+     * Returns a string representation of the chart entity, useful for 
+     * debugging.
+     * 
+     * @return A string.
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer("AxisLabelEntity: ");
+        buf.append("label = ");
+        buf.append(this.axis.getLabel());
+        return buf.toString();
+    }
+
 
 }
