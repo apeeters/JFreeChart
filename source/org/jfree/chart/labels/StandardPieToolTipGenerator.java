@@ -54,6 +54,7 @@
  * 29-Jul-2005 : Removed implementation of PieSectionLabelGenerator 
  *               interface (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 10-Jul-2007 : Added constructors with locale argument (DG);
  *
  */
 
@@ -61,6 +62,7 @@ package org.jfree.chart.labels;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.util.Locale;
 
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.PieDataset;
@@ -86,25 +88,45 @@ public class StandardPieToolTipGenerator extends AbstractPieItemLabelGenerator
     /** The default tooltip format. */
     public static final String DEFAULT_TOOLTIP_FORMAT = "{0}: ({1}, {2})";
 
-    /** The default section label format. */
-    public static final String DEFAULT_SECTION_LABEL_FORMAT = "{0} = {1}";
-
     /**
      * Creates an item label generator using default number formatters.
      */
     public StandardPieToolTipGenerator() {
-        this(DEFAULT_SECTION_LABEL_FORMAT, NumberFormat.getNumberInstance(), 
-                NumberFormat.getPercentInstance());
+        this(DEFAULT_TOOLTIP_FORMAT);
     }
 
     /**
-     * Creates an item label generator.
+     * Creates a pie tool tip generator for the specified locale, using the
+     * default format string.
      * 
-     * @param labelFormat  the label format.
+     * @param locale  the locale (<code>null</code> not permitted).
+     * 
+     * @since 1.0.7
+     */
+    public StandardPieToolTipGenerator(Locale locale) {
+        this(DEFAULT_TOOLTIP_FORMAT, locale);
+    }
+    
+    /**
+     * Creates a pie tool tip generator for the default locale.
+     * 
+     * @param labelFormat  the label format (<code>null</code> not permitted).
      */
     public StandardPieToolTipGenerator(String labelFormat) {
-        this(labelFormat, NumberFormat.getNumberInstance(), 
-                NumberFormat.getPercentInstance());
+        this(labelFormat, Locale.getDefault());
+    }
+    
+    /**
+     * Creates a pie tool tip generator for the specified locale.
+     * 
+     * @param labelFormat  the label format (<code>null</code> not permitted).
+     * @param locale  the locale (<code>null</code> not permitted).
+     * 
+     * @since 1.0.7
+     */
+    public StandardPieToolTipGenerator(String labelFormat, Locale locale) {
+        this(labelFormat, NumberFormat.getNumberInstance(locale), 
+                NumberFormat.getPercentInstance(locale));
     }
     
     /**
