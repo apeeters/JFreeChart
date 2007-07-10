@@ -953,6 +953,30 @@ public class CategoryPlot extends Plot
     }
     
     /**
+     * Returns the index of the specified axis, or <code>-1</code> if the axis
+     * is not assigned to the plot.
+     *
+     * @param axis  the axis.
+     *
+     * @return The axis index.
+     * 
+     * @see #getDomainAxisIndex(CategoryAxis)
+     * 
+     * @since 1.0.7
+     */
+    public int getRangeAxisIndex(ValueAxis axis) {
+        int result = this.rangeAxes.indexOf(axis);
+        if (result < 0) { // try the parent plot
+            Plot parent = getParent();
+            if (parent instanceof CategoryPlot) {
+                CategoryPlot p = (CategoryPlot) parent;
+                result = p.getRangeAxisIndex(axis);
+            }
+        }
+        return result;
+    }
+    
+    /**
      * Returns the range axis location.
      *
      * @return The location (never <code>null</code>).
