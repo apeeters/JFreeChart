@@ -39,6 +39,7 @@
  * 10-Jan-2005 : Version 1 (DG);
  * 21-May-2007 : Added clearObservations() and removeAllBins() (SI);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 10-Jul-2007 : Added null argument check to constructor (DG);
  *
  */
 
@@ -85,9 +86,12 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
     /**
      * Creates a new histogram dataset.
      * 
-     * @param key  the series key.
+     * @param key  the series key (<code>null</code> not permitted).
      */
     public SimpleHistogramDataset(Comparable key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Null 'key' argument.");
+        }
         this.key = key;
         this.bins = new ArrayList();
         this.adjustForBinSize = true;
