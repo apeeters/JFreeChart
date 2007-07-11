@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------------
  * StatisticalBarRendererTests.java
  * --------------------------------
- * (C) Copyright 2003-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -120,7 +120,7 @@ public class StatisticalBarRendererTests extends TestCase {
             r2 = (StatisticalBarRenderer) r1.clone();
         }
         catch (CloneNotSupportedException e) {
-            System.err.println("Failed to clone.");
+            e.printStackTrace();
         }
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
@@ -142,13 +142,12 @@ public class StatisticalBarRendererTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             r2 = (StatisticalBarRenderer) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(r1, r2);
 
@@ -162,7 +161,7 @@ public class StatisticalBarRendererTests extends TestCase {
         boolean success = false;
         try {
             DefaultStatisticalCategoryDataset dataset 
-                = new DefaultStatisticalCategoryDataset();
+                    = new DefaultStatisticalCategoryDataset();
             dataset.add(1.0, 2.0, "S1", "C1");
             dataset.add(3.0, 4.0, "S1", "C2");
             CategoryPlot plot = new CategoryPlot(dataset, 
