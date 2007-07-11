@@ -43,6 +43,7 @@
  * 11-Jan-2005 : Added test for non-clonability (DG);
  * 05-Oct-2006 : Added some tests (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 11-Jul-2007 : Fixed bad time zone assumption (DG);
  *
  */
 
@@ -235,9 +236,12 @@ public class MillisecondTests extends TestCase {
     public void testGetFirstMillisecond() {
         Locale saved = Locale.getDefault();
         Locale.setDefault(Locale.UK);
+        TimeZone savedZone = TimeZone.getDefault();
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"));
         Millisecond m = new Millisecond(500, 15, 43, 15, 1, 4, 2006);
         assertEquals(1143902595500L, m.getFirstMillisecond());
         Locale.setDefault(saved);
+        TimeZone.setDefault(savedZone);
     }
     
     /**
@@ -266,7 +270,8 @@ public class MillisecondTests extends TestCase {
     public void testGetFirstMillisecondWithCalendar() {
         Millisecond m = new Millisecond(500, 55, 40, 2, 15, 4, 2000);
         GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        assertEquals(955762855500L, m.getFirstMillisecond(calendar));
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(955766455500L, m.getFirstMillisecond(calendar));
         
         // try null calendar
         boolean pass = false;
@@ -285,9 +290,12 @@ public class MillisecondTests extends TestCase {
     public void testGetLastMillisecond() {
         Locale saved = Locale.getDefault();
         Locale.setDefault(Locale.UK);
+        TimeZone savedZone = TimeZone.getDefault();
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"));
         Millisecond m = new Millisecond(750, 1, 1, 1, 1, 1, 1970);
         assertEquals(61750L, m.getLastMillisecond());
         Locale.setDefault(saved);
+        TimeZone.setDefault(savedZone);
     }
     
     /**
@@ -316,7 +324,8 @@ public class MillisecondTests extends TestCase {
     public void testGetLastMillisecondWithCalendar() {
         Millisecond m = new Millisecond(250, 50, 45, 21, 21, 4, 2001);
         GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        assertEquals(987885950250L, m.getLastMillisecond(calendar));
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(987889550250L, m.getLastMillisecond(calendar));
         
         // try null calendar
         boolean pass = false;
