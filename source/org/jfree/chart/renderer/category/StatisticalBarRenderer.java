@@ -53,6 +53,7 @@
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 06-Jul-2007 : Added errorIndicatorStroke attribute (DG);
+ * 11-Jul-2007 : Fixed serialization for new errorIndicatorStroke field (DG);
  * 
  */
 
@@ -104,7 +105,7 @@ public class StatisticalBarRenderer extends BarRenderer
      * 
      * @since 1.2.0
      */
-    private Stroke errorIndicatorStroke;
+    private transient Stroke errorIndicatorStroke;
     
     /**
      * Default constructor.
@@ -532,6 +533,7 @@ public class StatisticalBarRenderer extends BarRenderer
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
         SerialUtilities.writePaint(this.errorIndicatorPaint, stream);
+        SerialUtilities.writeStroke(this.errorIndicatorStroke, stream);
     }
 
     /**
@@ -546,6 +548,7 @@ public class StatisticalBarRenderer extends BarRenderer
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.errorIndicatorPaint = SerialUtilities.readPaint(stream);
+        this.errorIndicatorStroke = SerialUtilities.readStroke(stream);
     }
 
 }
