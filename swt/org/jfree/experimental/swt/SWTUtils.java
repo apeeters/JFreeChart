@@ -39,6 +39,8 @@
  * 16-Jan-2007 : Use FontData.getHeight() instead of direct field access (RB); 
  * 31-Jan-2007 : moved the dummy JPanel from SWTGraphics2D.java, 
  *               added a new convert method for mouse events (HP);
+ * 12-Jul-2007 : improved the mouse event conversion with buttons 
+ *               and modifiers handling, patch sent by Christoph Beck (HP);
  */
 
 package org.jfree.experimental.swt;
@@ -363,8 +365,24 @@ public class SWTUtils {
      * @return A AWT mouse event based on the given SWT event.
      */
     public static MouseEvent toAwtMouseEvent(org.eclipse.swt.widgets.Event event) {
+    	int button = MouseEvent.NOBUTTON;
+    	switch (event.button) {
+    	case 1: button = MouseEvent.BUTTON1; break;
+    	case 2: button = MouseEvent.BUTTON2; break;
+    	case 3: button = MouseEvent.BUTTON3; break;
+    	}
+    	int modifiers = 0;
+    	if ((event.stateMask & SWT.CTRL) != 0) {
+    	modifiers |= MouseEvent.CTRL_DOWN_MASK;
+    	}
+    	if ((event.stateMask & SWT.SHIFT) != 0) {
+    	modifiers |= MouseEvent.SHIFT_DOWN_MASK;
+    	}
+    	if ((event.stateMask & SWT.ALT) != 0) {
+    	modifiers |= MouseEvent.ALT_DOWN_MASK;
+    	}
         MouseEvent awtMouseEvent = new MouseEvent(DUMMY_PANEL, event.hashCode(), 
-                (long) event.time, SWT.NONE, event.x, event.y, 1, false);
+                event.time, modifiers, event.x, event.y, 1, false, button);
         return awtMouseEvent;
     }
 }
