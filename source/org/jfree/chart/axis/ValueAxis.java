@@ -98,7 +98,8 @@
  * 10-Oct-2006 : Source reformatting (DG);
  * 22-Mar-2007 : Added new defaultAutoRange attribute (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
- *
+ * 12-Jul-2007 : Added PlotRenderingInfo to drawTickMarksAndLabels() 
+ *               method (DG);
  */
 
 package org.jfree.chart.axis;
@@ -121,6 +122,7 @@ import java.util.List;
 
 import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.plot.Plot;
+import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
@@ -649,14 +651,13 @@ public abstract class ValueAxis extends Axis
      * @param plotArea  the plot area.
      * @param dataArea  the data area.
      * @param edge  the edge that the axis is aligned with.
+     * @param info  the plot rendering info.
      * 
      * @return The width or height used to draw the axis.
      */
-    protected AxisState drawTickMarksAndLabels(Graphics2D g2, 
-                                               double cursor,
-                                               Rectangle2D plotArea,
-                                               Rectangle2D dataArea, 
-                                               RectangleEdge edge) {
+    protected AxisState drawTickMarksAndLabels(Graphics2D g2, double cursor,
+            Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge,
+            PlotRenderingInfo info) {
                                               
         AxisState state = new AxisState(cursor);
 

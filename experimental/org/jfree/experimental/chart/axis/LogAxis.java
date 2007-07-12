@@ -40,6 +40,7 @@
  * 22-Mar-2007 : Use defaultAutoArrange attribute (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
+ * 12-Jul-2007 : Updated for API changes in super class (DG);
  *
  */
 
@@ -443,7 +444,8 @@ public class LogAxis extends ValueAxis {
             state.setTicks(ticks);
             return state;
         }
-        state = drawTickMarksAndLabels(g2, cursor, plotArea, dataArea, edge);
+        state = drawTickMarksAndLabels(g2, cursor, plotArea, dataArea, edge,
+                plotState);
         state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state, 
                 plotState);
         return state;

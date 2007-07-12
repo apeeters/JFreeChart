@@ -67,6 +67,7 @@
  * 18-Jan-2006 : Fixed bug 1408904 (axis assumes CategoryPlot) (DG):
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
+ * 12-Jul-2007 : Updated for API changes in super class (DG);
  *
  */
 
@@ -169,7 +170,7 @@ public class NumberAxis3D extends NumberAxis implements Serializable {
 
         // draw the tick marks and labels...
         AxisState info = drawTickMarksAndLabels(g2, cursor, plotArea, 
-                adjustedDataArea, edge);
+                adjustedDataArea, edge, plotState);
        
         // draw the axis label...
         info = drawLabel(getLabel(), g2, plotArea, dataArea, edge, info, 

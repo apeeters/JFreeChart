@@ -94,6 +94,7 @@
  * 22-Mar-2007 : Use new defaultAutoRange attribute (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
+ * 12-Jul-2007 : Updated for API changes in super class (DG);
  *
  */
 
@@ -666,7 +667,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
         }
 
         // draw the tick marks and labels...
-        state = drawTickMarksAndLabels(g2, cursor, plotArea, dataArea, edge);
+        state = drawTickMarksAndLabels(g2, cursor, plotArea, dataArea, edge,
+                plotState);
 
 //        // draw the marker band (if there is one)...
 //        if (getMarkerBand() != null) {

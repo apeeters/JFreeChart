@@ -118,6 +118,7 @@
  *               tests (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
+ * 12-Jul-2007 : Updated for API changes in super class (DG);
  * 
  */
 
@@ -1697,7 +1698,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
 
         // draw the tick marks and labels...
         AxisState state = drawTickMarksAndLabels(g2, cursor, plotArea, 
-                dataArea, edge);
+                dataArea, edge, plotState);
 
         // draw the axis label (note that 'state' is passed in *and* 
         // returned)...

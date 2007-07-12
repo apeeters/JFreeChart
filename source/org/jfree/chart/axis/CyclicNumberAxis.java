@@ -46,6 +46,7 @@
  *               parameters (DG);
  * 08-Jun-2005 : Fixed equals() method to handle GradientPaint (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 12-Jul-2007 : Updated for API changes in super class (DG);
  *
  */
 
@@ -978,17 +979,17 @@ public class CyclicNumberAxis extends NumberAxis {
      * @param plotArea  the plot area.
      * @param dataArea  the area inside the axes.
      * @param edge  the side on which the axis is displayed.
+     * @param info  the plot rendering info.
      * 
      * @return The axis state.
      */
     protected AxisState drawTickMarksAndLabels(Graphics2D g2, double cursor, 
-                                               Rectangle2D plotArea, 
-                                               Rectangle2D dataArea, 
-                                               RectangleEdge edge) {
+            Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge,
+            PlotRenderingInfo info) {
+        
         this.internalMarkerWhenTicksOverlap = false;
-        AxisState ret = super.drawTickMarksAndLabels(
-            g2, cursor, plotArea, dataArea, edge
-        );
+        AxisState ret = super.drawTickMarksAndLabels(g2, cursor, plotArea, 
+                dataArea, edge, info);
         
         // continue and separate the labels only if necessary
         if (!this.internalMarkerWhenTicksOverlap) {
