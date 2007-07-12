@@ -40,7 +40,8 @@
  * 22-Mar-2007 : Use defaultAutoArrange attribute (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
- * 12-Jul-2007 : Updated for API changes in super class (DG);
+ * 12-Jul-2007 : Fixed zooming bug, and updated for API changes in super 
+ *               class (DG);
  *
  */
 
@@ -124,6 +125,8 @@ public class LogAxis extends ValueAxis {
      * Returns the base for the logarithm calculation.
      * 
      * @return The base for the logarithm calculation.
+     * 
+     * @see #setBase(double)
      */
     public double getBase() {
         return this.base;
@@ -134,6 +137,8 @@ public class LogAxis extends ValueAxis {
      * {@link AxisChangeEvent} to all registered listeners.
      * 
      * @param base  the base value (must be > 1.0).
+     * 
+     * @see #getBase()
      */
     public void setBase(double base) {
         if (base <= 1.0) {
@@ -148,27 +153,35 @@ public class LogAxis extends ValueAxis {
      * Returns the smallest value represented by the axis.
      * 
      * @return The smallest value represented by the axis.
+     * 
+     * @see #setSmallestValue(double)
      */
     public double getSmallestValue() {
         return this.smallestValue;
     }
     
     /**
-     * Sets the smallest value represented by the axis.
+     * Sets the smallest value represented by the axis and sends an 
+     * {@link AxisChangeEvent} to all registered listeners.
      * 
      * @param value  the value.
+     * 
+     * @see #getSmallestValue()
      */
     public void setSmallestValue(double value) {
         if (value <= 0.0) {
             throw new IllegalArgumentException("Requires 'value' > 0.0.");
         }
         this.smallestValue = value;
+        notifyListeners(new AxisChangeEvent(this));
     }
     
     /**
      * Returns the current tick unit.
      * 
      * @return The current tick unit.
+     * 
+     * @see #setTickUnit(NumberTickUnit)
      */
     public NumberTickUnit getTickUnit() {
         return this.tickUnit;
@@ -182,6 +195,8 @@ public class LogAxis extends ValueAxis {
      * method).
      *
      * @param unit  the new tick unit (<code>null</code> not permitted).
+     * 
+     * @see #getTickUnit()
      */
     public void setTickUnit(NumberTickUnit unit) {
         // defer argument checking...
@@ -198,6 +213,8 @@ public class LogAxis extends ValueAxis {
      * @param unit  the new tick unit (<code>null</code> not permitted).
      * @param notify  notify listeners?
      * @param turnOffAutoSelect  turn off the auto-tick selection?
+     * 
+     * @see #getTickUnit()
      */
     public void setTickUnit(NumberTickUnit unit, boolean notify, 
                             boolean turnOffAutoSelect) {
@@ -220,6 +237,8 @@ public class LogAxis extends ValueAxis {
      * be used to format the numbers on the axis.
      *
      * @return The number formatter (possibly <code>null</code>).
+     * 
+     * @see #setNumberFormatOverride(NumberFormat)
      */
     public NumberFormat getNumberFormatOverride() {
         return this.numberFormatOverride;
@@ -230,6 +249,8 @@ public class LogAxis extends ValueAxis {
      * used to format the numbers on the axis.
      *
      * @param formatter  the number formatter (<code>null</code> permitted).
+     * 
+     * @see #getNumberFormatOverride()
      */
     public void setNumberFormatOverride(NumberFormat formatter) {
         this.numberFormatOverride = formatter;
@@ -240,15 +261,20 @@ public class LogAxis extends ValueAxis {
      * Returns the number of minor tick marks to display.
      * 
      * @return The number of minor tick marks to display.
+     * 
+     * @see #setMinorTickCount(int)
      */
     public int getMinorTickCount() {
         return this.minorTickCount;
     }
     
     /**
-     * Sets the number of minor tick marks to display.
+     * Sets the number of minor tick marks to display, and sends an
+     * {@link AxisChangeEvent} to all registered listeners.
      * 
      * @param count  the count.
+     * 
+     * @see #getMinorTickCount()
      */
     public void setMinorTickCount(int count) {
         if (count <= 0) {
@@ -265,6 +291,7 @@ public class LogAxis extends ValueAxis {
      * 
      * @return The log of the given value.
      * 
+     * @see #calculateValue(double)
      * @see #getBase()
      */
     public double calculateLog(double value) {
@@ -277,6 +304,9 @@ public class LogAxis extends ValueAxis {
      * @param log  the log value (must be > 0.0).
      * 
      * @return The value with the given log.
+     * 
+     * @see #calculateLog(double)
+     * @see #getBase()
      */
     public double calculateValue(double log) {
         return Math.pow(this.base, log);
@@ -549,6 +579,33 @@ public class LogAxis extends ValueAxis {
             current = current + this.tickUnit.getSize();
         }
         return ticks;
+    }
+    
+    /**
+     * Zooms in on the current range.
+     * 
+     * @param lowerPercent  the new lower bound.
+     * @param upperPercent  the new upper bound.
+     */
+    public void zoomRange(double lowerPercent, double upperPercent) {
+        Range range = getRange();
+        double start = range.getLowerBound();
+        double end = range.getUpperBound();
+        double log1 = calculateLog(start);
+        double log2 = calculateLog(end);
+        double length = log2 - log1;
+        Range adjusted = null;
+        if (isInverted()) {
+            double logA = log1 + length * (1 - upperPercent);
+            double logB = log1 + length * (1 - lowerPercent);
+            adjusted = new Range(calculateValue(logA), calculateValue(logB)); 
+        }
+        else {
+            double logA = log1 + length * lowerPercent;
+            double logB = log1 + length * upperPercent;
+            adjusted = new Range(calculateValue(logA), calculateValue(logB)); 
+        }
+        setRange(adjusted);
     }
 
     /**
