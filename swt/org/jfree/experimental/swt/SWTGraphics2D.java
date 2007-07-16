@@ -44,11 +44,13 @@
  * 23-May-2007 : removed resource leaks by adding a resource pool (CC);
  * 15-Jun-2007 : Fixed compile error for JDK 1.4 (DG);
  * 06-Jul-2007 : implemented clipping (HP);
+ * 16-Jul-2007 : implemented alpha channel (HP);
  * 
  */
 
 package org.jfree.experimental.swt;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
@@ -92,6 +94,8 @@ import org.eclipse.swt.graphics.Path;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.Transform;
+
+import sun.java2d.loops.XORComposite;
 
 /**
  * This is a class utility to draw Graphics2D stuff on a swt composite.
@@ -413,7 +417,14 @@ public class SWTGraphics2D extends Graphics2D {
      * @see java.awt.Graphics2D#setComposite(java.awt.Composite)
      */
     public void setComposite(Composite comp) {
-        // TODO Auto-generated method stub
+    	//TODO handle XOR composite
+    	if (comp instanceof AlphaComposite) {
+    		int alpha = (int) (((AlphaComposite) comp).getAlpha()*0xFF);
+    		this.gc.setAlpha(alpha);
+    	} else {
+    		System.out.println("warning, can only handle alpha composite at the moment.");
+    		//this.gc.setXORMode(xor)
+    	}
     }
 
     /**
@@ -627,8 +638,8 @@ public class SWTGraphics2D extends Graphics2D {
      * @see java.awt.Graphics2D#getComposite()
      */
     public Composite getComposite() {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO verify if we need to handle XOR composite
+        return AlphaComposite.getInstance(AlphaComposite.XOR, this.gc.getAlpha()/0xFF);
     }
 
     /* (non-Javadoc)

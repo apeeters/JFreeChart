@@ -39,6 +39,7 @@
  */
 package org.jfree.experimental.chart.swt.demo;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 
@@ -49,6 +50,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.plot.IntervalMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -95,7 +97,8 @@ public class SWTTimeSeriesDemo
         plot.setAxisOffset(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
-        
+        //plot.setForegroundAlpha(0.5f);
+
         XYItemRenderer r = plot.getRenderer();
         if (r instanceof XYLineAndShapeRenderer) {
             XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
@@ -105,6 +108,11 @@ public class SWTTimeSeriesDemo
         
         DateAxis axis = (DateAxis) plot.getDomainAxis();
         axis.setDateFormatOverride(new SimpleDateFormat("MMM-yyyy"));
+        
+        // code to test the alpha channel
+        IntervalMarker interv = new IntervalMarker(120, 150,
+        		Color.blue, new BasicStroke(5.0f),null,null,0.2f);
+        plot.addRangeMarker(interv);
         
         return chart;
 
