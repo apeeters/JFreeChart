@@ -87,7 +87,8 @@
  * 23-Mar-2007 : Reverted previous patch (DG);
  * 17-Apr-2007 : Added null argument checks to findSubplot() (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
- *
+ * 18-Jul-2007 : Fixed bug in removeSubplot (DG);
+ * 
  */
 
 package org.jfree.chart.plot;
@@ -254,6 +255,7 @@ public class CombinedRangeXYPlot extends XYPlot
             i++;
         }
         if (position != -1) {
+            this.subplots.remove(position);
             subplot.setParent(null);
             subplot.removeChangeListener(this);
             this.totalWeight -= subplot.getWeight();
