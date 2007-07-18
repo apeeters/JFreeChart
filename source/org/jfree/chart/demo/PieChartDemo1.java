@@ -108,10 +108,9 @@ public class PieChartDemo1 extends ApplicationFrame {
 
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setSectionOutlinesVisible(false);
-        plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
+        plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 10));
         plot.setNoDataMessage("No data available");
-        plot.setCircular(false);
-        plot.setLabelGap(0.02);
+        plot.setSimpleLabels(true);
         return chart;
         
     }
