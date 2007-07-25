@@ -45,6 +45,7 @@
  * 26-Feb-2007 : Added DeviationRendererTests (DG);
  * 30-Apr-2007 : Added XYLine3DRendererTests (DG);
  * 25-May-2007 : Added VectorRendererTests (DG);
+ * 25-Jul-2007 : Added XYSplineAndRendererTests (DG);
  *
  */
 
@@ -95,6 +96,7 @@ public class RendererXYPackageTests extends TestCase {
         suite.addTestSuite(XYErrorRendererTests.class);
         suite.addTestSuite(XYLineAndShapeRendererTests.class);
         suite.addTestSuite(XYLine3DRendererTests.class);
+		suite.addTestSuite(XYSplineAndShapeRendererTests.class);
         suite.addTestSuite(XYStepRendererTests.class);
         suite.addTestSuite(XYStepAreaRendererTests.class);
         suite.addTestSuite(YIntervalRendererTests.class);
