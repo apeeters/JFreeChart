@@ -55,6 +55,7 @@
  *               as suggested by Christoph Beck, bug 1742002 (HP);
  * 06-Jul-2007 : Fixed bug in zooming with multiple plots (HP);
  * 06-Jul-2007 : check for null zoom point when restoring auto range and domain bounds (HP);
+ * 25-Jul-2007 : pass mouse mouved events to listening ChartMouseListeners (HP);
  */
 
 package org.jfree.experimental.chart.swt;
@@ -626,26 +627,29 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
         Listener listener = new Listener() {
             public void handleEvent (Event event) {
+            	Object[] listeners;
+                ChartEntity entity = null;
+                java.awt.event.MouseEvent mouseEvent = null;
+                ChartMouseEvent chartEvent = null;
+                int x, y;
                 switch (event.type) {
                     case SWT.MouseDown:
                         Rectangle scaledDataArea = getScreenDataArea(event.x, event.y);
                         if (scaledDataArea == null) return;
                         zoomPoint = getPointInRectangle(event.x, event.y, scaledDataArea);
-                        Rectangle insets = getClientArea();
-                        int x = (int) ((event.x - insets.x) / scaleX);
-                        int y = (int) ((event.y - insets.y) / scaleY);
+                        x = (int) ((event.x - getClientArea().x) / scaleX);
+                        y = (int) ((event.y - getClientArea().y) / scaleY);
 
                         anchor = new Point2D.Double(x, y);
                         chart.setNotify(true);  // force a redraw 
                         canvas.redraw();
                         // new entity code...
-                        Object[] listeners = chartMouseListeners.getListeners(
+                        listeners = chartMouseListeners.getListeners(
                                 ChartMouseListener.class);
                         if (listeners.length == 0) {
                             return;
                         }
 
-                        ChartEntity entity = null;
                         if (info != null) {
                             EntityCollection entities 
                                     = info.getEntityCollection();
@@ -653,16 +657,16 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                                 entity = entities.getEntity(x, y);
                             }
                         }
-                        java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event); 
-                        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), mouseEvent, entity);
+                        mouseEvent = SWTUtils.toAwtMouseEvent(event); 
+                        chartEvent = new ChartMouseEvent(getChart(), mouseEvent, entity);
                         for (int i = listeners.length - 1; i >= 0; i -= 1) {
-                            ((ChartMouseListener) 
-                                    listeners[i]).chartMouseClicked(chartEvent);
+                            ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
+                            ((ChartMouseListener) listeners[i]).chartMouseMoved(chartEvent);
                         }
                         break;
                     case SWT.MouseMove:
                         // handle axis trace
-                        if ( horizontalAxisTrace || verticalAxisTrace ) {
+                        if (horizontalAxisTrace || verticalAxisTrace) {
                             horizontalTraceLineY = event.y;
                             verticalTraceLineX = event.x;
                             canvas.redraw();
@@ -708,6 +712,30 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                                     scaledDataArea.width, ymax - zoomPoint.y);
                         }
                         canvas.redraw();
+                    	// pass mouse move event if some ChartMouseListener are listening
+                        listeners = chartMouseListeners.getListeners(
+                                ChartMouseListener.class);
+                        if (listeners.length == 0) {
+                            return;
+                        }
+
+                        x = (int) ((event.x - getClientArea().x) / scaleX);
+                        y = (int) ((event.y - getClientArea().y) / scaleY);
+
+                        if (info != null) {
+                            EntityCollection entities 
+                                    = info.getEntityCollection();
+                            if (entities != null) {
+                                entity = entities.getEntity(x, y);
+                            }
+                        }
+                        mouseEvent = SWTUtils.toAwtMouseEvent(event); 
+                        chartEvent = new ChartMouseEvent(getChart(), mouseEvent, entity);
+                        for (int i = listeners.length - 1; i >= 0; i -= 1) {
+                            ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
+                            ((ChartMouseListener) listeners[i]).chartMouseMoved(chartEvent);
+                        }
+                    	
                         break;
                     case SWT.MouseUp:
                         if (zoomRectangle == null) {
