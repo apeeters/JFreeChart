@@ -68,10 +68,10 @@ public class StackedBarRenderer3DTests extends TestCase {
      * Provide access to protected method.
      */
     static class MyRenderer extends StackedBarRenderer3D {
-        public static List createStackedValueList(CategoryDataset dataset, 
+        public List createStackedValueList(CategoryDataset dataset, 
             Comparable category, double base, boolean asPercentages) {
-            return StackedBarRenderer3D.createStackedValueList(dataset, 
-                    category, base, asPercentages);
+            return createStackedValueList(dataset, category, base, 
+                    asPercentages);
         }
     }
 
@@ -163,7 +163,8 @@ public class StackedBarRenderer3DTests extends TestCase {
     public void testCreateStackedValueList1() {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(1.0, "s0", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(2, l.size());
         assertEquals(new Double(0.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(1.0), ((Object[]) l.get(1))[1]);
@@ -175,7 +176,8 @@ public class StackedBarRenderer3DTests extends TestCase {
     public void testCreateStackedValueList2() {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(-1.0, "s0", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(2, l.size());
         assertEquals(new Double(-1.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -187,7 +189,8 @@ public class StackedBarRenderer3DTests extends TestCase {
     public void testCreateStackedValueList3() {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(0.0, "s0", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(2, l.size());
         assertEquals(new Double(0.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -199,7 +202,8 @@ public class StackedBarRenderer3DTests extends TestCase {
     public void testCreateStackedValueList4() {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(null, "s0", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(0, l.size());
     }
     
@@ -210,7 +214,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(1.0, "s0", "c0");
         d.addValue(1.1, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(0.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(1.0), ((Object[]) l.get(1))[1]);
@@ -224,7 +229,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(1.0, "s0", "c0");
         d.addValue(-1.1, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(-1.1), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -238,7 +244,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(1.0, "s0", "c0");
         d.addValue(0.0, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(0.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(1.0), ((Object[]) l.get(1))[1]);
@@ -252,7 +259,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(1.0, "s0", "c0");
         d.addValue(null, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(2, l.size());
         assertEquals(new Double(0.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(1.0), ((Object[]) l.get(1))[1]);
@@ -265,7 +273,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(-1.0, "s0", "c0");
         d.addValue(1.1, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(-1.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -279,7 +288,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(-1.0, "s0", "c0");
         d.addValue(-1.1, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(-2.1), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(-1.0), ((Object[]) l.get(1))[1]);
@@ -293,7 +303,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(-1.0, "s0", "c0");
         d.addValue(0.0, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(-1.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -307,7 +318,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(-1.0, "s0", "c0");
         d.addValue(null, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(2, l.size());
         assertEquals(new Double(-1.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -320,7 +332,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(0.0, "s0", "c0");
         d.addValue(1.1, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(0.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -334,7 +347,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(0.0, "s0", "c0");
         d.addValue(-1.1, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(-1.1), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -348,7 +362,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(0.0, "s0", "c0");
         d.addValue(0.0, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(0.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -362,7 +377,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         d.addValue(0.0, "s0", "c0");
         d.addValue(null, "s1", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(2, l.size());
         assertEquals(new Double(0.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(0.0), ((Object[]) l.get(1))[1]);
@@ -376,7 +392,8 @@ public class StackedBarRenderer3DTests extends TestCase {
         d.addValue(1.0, "s0", "c0");
         d.addValue(null, "s1", "c0");
         d.addValue(2.0, "s2", "c0");
-        List l = MyRenderer.createStackedValueList(d, "c0", 0.0, false);
+        MyRenderer r = new MyRenderer();
+        List l = r.createStackedValueList(d, "c0", 0.0, false);
         assertEquals(3, l.size());
         assertEquals(new Double(0.0), ((Object[]) l.get(0))[1]);
         assertEquals(new Double(1.0), ((Object[]) l.get(1))[1]);

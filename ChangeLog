@@ -1,3 +1,13 @@
+2007-07-31  David Gilbert  <david.gilbert@object-refinery.com>
+
+	* source/org/jfree/chart/renderer/category/StackedBarRenderer3D.java
+	(ignoreZeroValues): New field,
+	(getIgnoreZeroValues): New method,
+	(setIgnoreZeroValues): Likewise,
+	(createStackedValueList): Removed static qualifier, added handling for
+	ignoreZeroValues flag,
+	(equals): Updated for new field.
+
 2007-07-25  David Gilbert  <david.gilbert@object-refinery.com>
 
 	Patch 1752205:

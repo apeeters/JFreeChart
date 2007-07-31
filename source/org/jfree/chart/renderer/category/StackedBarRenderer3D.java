@@ -83,6 +83,7 @@
  * 08-May-2007 : Fixed bugs 1713401 (drawBarOutlines flag) and  1713474 
  *               (shading) (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 31-Jul-2007 : Added flag for handling zero values (DG);
  *               
  */
 
@@ -125,6 +126,14 @@ public class StackedBarRenderer3D extends BarRenderer3D
     
     /** A flag that controls whether the bars display values or percentages. */
     private boolean renderAsPercentages;
+    
+    /** 
+     * A flag that controls whether or not zero values are drawn by the
+     * renderer.
+     * 
+     * @since 1.2.0
+     */
+    private boolean ignoreZeroValues;
     
     /**
      * Creates a new renderer with no tool tip generator and no URL generator.
@@ -205,6 +214,32 @@ public class StackedBarRenderer3D extends BarRenderer3D
     }
 
     /**
+     * Returns the flag that controls whether or not zero values are drawn
+     * by the renderer.
+     * 
+     * @return A boolean.
+     * 
+     * @since 1.2.0
+     */
+    public boolean getIgnoreZeroValues() {
+        return this.ignoreZeroValues;
+    }
+    
+    /**
+     * Sets a flag that controls whether or not zero values are drawn by the
+     * renderer, and sends a {@link RendererChangeEvent} to all registered
+     * listeners.
+     * 
+     * @param ignore  the new flag value.
+     * 
+     * @since 1.2.0
+     */
+    public void setIgnoreZeroValues(boolean ignore) {
+        this.ignoreZeroValues = ignore;
+        notifyListeners(new RendererChangeEvent(this));
+    }
+    
+    /**
      * Returns the range of values the renderer requires to display all the 
      * items from the specified dataset.
      * 
@@ -278,9 +313,9 @@ public class StackedBarRenderer3D extends BarRenderer3D
      *     
      * @return The value list.
      *
-     * @since 1.0.4
+     * @since 1.2.0
      */
-    protected static List createStackedValueList(CategoryDataset dataset, 
+    protected List createStackedValueList(CategoryDataset dataset, 
             Comparable category, double base, boolean asPercentages) {
         
         List result = new ArrayList();
@@ -303,7 +338,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
             if (asPercentages) {
                 v = v / total;
             }
-            if (v >= 0.0) {
+            if ((v > 0.0) || (!this.ignoreZeroValues && v >= 0.0)) {
                 if (baseIndex < 0) {
                     result.add(new Object[] {null, new Double(base)});
                     baseIndex = 0;
@@ -791,14 +826,14 @@ public class StackedBarRenderer3D extends BarRenderer3D
         if (!(obj instanceof StackedBarRenderer3D)) {
             return false;   
         }
-        if (!super.equals(obj)) {
-            return false;   
-        }
         StackedBarRenderer3D that = (StackedBarRenderer3D) obj;
         if (this.renderAsPercentages != that.getRenderAsPercentages()) {
             return false;   
         }
-        return true;
+        if (this.ignoreZeroValues != that.ignoreZeroValues) {
+            return false;
+        }
+        return super.equals(obj);
     }
 
 }
