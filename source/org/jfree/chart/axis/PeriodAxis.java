@@ -52,6 +52,7 @@
  * 22-Mar-2007 : Use new defaultAutoRange attribute (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
+ * 31-Jul-2007 : Fix for inverted axis labelling (see bug 1763413) (DG);
  *
  */
 
@@ -810,7 +811,13 @@ public class PeriodAxis extends ValueAxis
                 g2.getFontMetrics());
         double w = Math.max(b1.getWidth(), b2.getWidth());
         long ww = Math.round(java2DToValue(dataArea.getX() + w + 5.0, 
-                dataArea, edge)) - axisMin;
+                dataArea, edge));
+        if (isInverted()) {
+            ww = axisMax - ww;
+        }
+        else {
+            ww = ww - axisMin;
+        }
         long length = p1.getLastMillisecond(this.calendar) 
                       - p1.getFirstMillisecond(this.calendar);
         int periods = (int) (ww / length) + 1;
