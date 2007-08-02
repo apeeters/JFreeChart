@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Bill Kelemen;
  *
- * $Id: AxisPackageTests.java,v 1.1.2.2 2007/03/21 11:17:59 mungady Exp $
- *
  * Changes:
  * --------
  * 26-Mar-2003 : Version 1 (DG);
@@ -42,6 +40,7 @@
  * 19-Jan-2005 : Added main() method to run JUnit in text mode (DG);
  * 21-Mar-2007 : Added ExtendedCategoryAxisTests (DG);
  * 19-Jun-2007 : Removed ColorBarTests (DG);
+ * 02-Aug-2007 : Added LogAxisTests and TickUnitsTests (DG);
  * 
  */
 
@@ -81,6 +80,7 @@ public class AxisPackageTests extends TestCase {
         suite.addTestSuite(DateTickMarkPositionTests.class);
         suite.addTestSuite(DateTickUnitTests.class);
         suite.addTestSuite(ExtendedCategoryAxisTests.class);
+        suite.addTestSuite(LogAxisTests.class);
         suite.addTestSuite(LogarithmicAxisTests.class);
         suite.addTestSuite(MarkerAxisBandTests.class);
         suite.addTestSuite(MonthDateFormatTests.class);
@@ -94,6 +94,7 @@ public class AxisPackageTests extends TestCase {
         suite.addTestSuite(SegmentedTimelineTests2.class);
         suite.addTestSuite(SubCategoryAxisTests.class);
         suite.addTestSuite(SymbolAxisTests.class);
+        suite.addTestSuite(TickUnitsTests.class);
         suite.addTestSuite(ValueAxisTests.class);
         return suite;
     }

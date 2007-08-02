@@ -38,7 +38,8 @@
  * -------
  * 07-Nov-2003 : Version 1 (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
- *
+ * 02-Aug-2007 : Added new constructor with tick type (DG);
+ * 
  */
 
 package org.jfree.chart.axis;
@@ -56,7 +57,7 @@ public class NumberTick extends ValueTick {
     /**
      * Creates a new tick.
      * 
-     * @param number  the number.
+     * @param number  the number (<code>null</code> not permitted).
      * @param label  the label.
      * @param textAnchor  the part of the label that is aligned with the anchor 
      *                    point.
@@ -72,6 +73,28 @@ public class NumberTick extends ValueTick {
             
     }
 
+    /**
+     * Creates a new tick.
+     * 
+     * @param tickType  the tick type.
+     * @param value  the value.
+     * @param label  the label.
+     * @param textAnchor  the part of the label that is aligned with the anchor 
+     *                    point.
+     * @param rotationAnchor  defines the rotation point relative to the text.
+     * @param angle  the rotation angle (in radians).
+     * 
+     * @since 1.0.7
+     */
+    public NumberTick(TickType tickType, double value, String label,
+                      TextAnchor textAnchor, 
+                      TextAnchor rotationAnchor, double angle) {
+                        
+        super(tickType, value, label, textAnchor, rotationAnchor, angle);
+        this.number = new Double(value);
+            
+    }
+    
     /**
      * Returns the number.
      * 

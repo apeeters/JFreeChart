@@ -100,6 +100,8 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 12-Jul-2007 : Added PlotRenderingInfo to drawTickMarksAndLabels() 
  *               method (DG);
+ * 02-Aug-2007 : Check for major tick when drawing label (DG);
+ *
  */
 
 package org.jfree.chart.axis;
@@ -683,7 +685,7 @@ public abstract class ValueAxis extends Axis
                         tick.getAngle(), tick.getRotationAnchor());
             }
 
-            if (isTickMarksVisible()) {
+            if (isTickMarksVisible() && tick.getTickType().equals(TickType.MAJOR)) {
                 float xx = (float) valueToJava2D(tick.getValue(), dataArea, 
                         edge);
                 Line2D mark = null;
