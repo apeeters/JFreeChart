@@ -59,6 +59,8 @@ import junit.framework.TestSuite;
 import org.jfree.chart.renderer.GrayPaintScale;
 import org.jfree.chart.renderer.LookupPaintScale;
 import org.jfree.chart.renderer.xy.XYBlockRenderer;
+import org.jfree.data.Range;
+import org.jfree.data.xy.DefaultXYZDataset;
 
 /**
  * Tests for the {@link XYBlockRenderer} class.
@@ -173,6 +175,30 @@ public class XYBlockRendererTests extends TestCase {
             e.printStackTrace();
         }
         assertEquals(r1, r2);
+    }
+
+    /**
+     * A simple test for bug 1766646.
+     */
+    public void testBug1766646A() {
+        XYBlockRenderer r = new XYBlockRenderer();
+        Range range = r.findDomainBounds(null);
+        assertTrue(range == null);
+        DefaultXYZDataset emptyDataset = new DefaultXYZDataset();
+        range = r.findDomainBounds(emptyDataset);
+        assertTrue(range == null);
+    }
+
+    /**
+     * A simple test for bug 1766646.
+     */
+    public void testBug1766646B() {
+        XYBlockRenderer r = new XYBlockRenderer();
+        Range range = r.findRangeBounds(null);
+        assertTrue(range == null);
+        DefaultXYZDataset emptyDataset = new DefaultXYZDataset();
+        range = r.findRangeBounds(emptyDataset);
+        assertTrue(range == null);
     }
 
 }
