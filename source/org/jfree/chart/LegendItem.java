@@ -56,6 +56,7 @@
  * 13-Dec-2006 : Added fillPaintTransformer attribute (DG);
  * 18-May-2007 : Added dataset and seriesKey fields (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 03-Aug-2007 : Fixed null pointer exception (DG);
  *
  */
 
@@ -458,6 +459,7 @@ public class LegendItem implements Serializable {
         this.shape = shape;
         this.shapeFilled = shapeFilled;
         this.fillPaint = fillPaint;
+        this.fillPaintTransformer = new StandardGradientPaintTransformer();
         this.shapeOutlineVisible = shapeOutlineVisible;
         this.outlinePaint = outlinePaint;
         this.outlineStroke = outlineStroke;
