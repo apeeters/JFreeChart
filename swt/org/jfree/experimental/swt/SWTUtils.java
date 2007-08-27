@@ -41,6 +41,7 @@
  *               added a new convert method for mouse events (HP);
  * 12-Jul-2007 : improved the mouse event conversion with buttons 
  *               and modifiers handling, patch sent by Christoph Beck (HP);
+ * 27-Aug-2007 : modified toAwtMouseEvent signature (HP).
  */
 
 package org.jfree.experimental.swt;
@@ -364,7 +365,7 @@ public class SWTUtils {
      * @param event The swt event.
      * @return A AWT mouse event based on the given SWT event.
      */
-    public static MouseEvent toAwtMouseEvent(org.eclipse.swt.widgets.Event event) {
+    public static MouseEvent toAwtMouseEvent(org.eclipse.swt.events.MouseEvent event) {
     	int button = MouseEvent.NOBUTTON;
     	switch (event.button) {
     	case 1: button = MouseEvent.BUTTON1; break;
@@ -385,4 +386,5 @@ public class SWTUtils {
                 event.time, modifiers, event.x, event.y, 1, false, button);
         return awtMouseEvent;
     }
+
 }
