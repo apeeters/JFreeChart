@@ -37,6 +37,7 @@
  * Changes
  * -------
  * 25-Mar-2003 : Version 1 (DG);
+ * 28-Aug-2007 : Added tests for bug 1779941 (DG);
  *
  */
 
@@ -58,6 +59,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.StatisticalBarRenderer;
 import org.jfree.data.statistics.DefaultStatisticalCategoryDataset;
 
@@ -141,8 +143,8 @@ public class StatisticalBarRendererTests extends TestCase {
             out.writeObject(r1);
             out.close();
 
-            ObjectInput in = new ObjectInputStream(
-                    new ByteArrayInputStream(buffer.toByteArray()));
+            ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(
+                    buffer.toByteArray()));
             r2 = (StatisticalBarRenderer) in.readObject();
             in.close();
         }
@@ -167,6 +169,116 @@ public class StatisticalBarRendererTests extends TestCase {
             CategoryPlot plot = new CategoryPlot(dataset, 
                     new CategoryAxis("Category"), new NumberAxis("Value"), 
                     new StatisticalBarRenderer());
+            JFreeChart chart = new JFreeChart(plot);
+            /* BufferedImage image = */ chart.createBufferedImage(300, 200, 
+                    null);
+            success = true;
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+            success = false;
+        }
+        assertTrue(success);
+    }
+
+    /**
+     * Draws the chart with a <code>null</code> mean value to make sure that 
+     * no exceptions are thrown (particularly by code in the renderer).  See
+     * bug report 1779941.
+     */
+    public void testDrawWithNullMeanVertical() {
+        boolean success = false;
+        try {
+            DefaultStatisticalCategoryDataset dataset 
+                    = new DefaultStatisticalCategoryDataset();
+            dataset.add(1.0, 2.0, "S1", "C1");
+            dataset.add(null, new Double(4.0), "S1", "C2");
+            CategoryPlot plot = new CategoryPlot(dataset, 
+                    new CategoryAxis("Category"), new NumberAxis("Value"), 
+                    new StatisticalBarRenderer());
+            JFreeChart chart = new JFreeChart(plot);
+            /* BufferedImage image = */ chart.createBufferedImage(300, 200, 
+                    null);
+            success = true;
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+            success = false;
+        }
+        assertTrue(success);
+    }
+
+    /**
+     * Draws the chart with a <code>null</code> mean value to make sure that 
+     * no exceptions are thrown (particularly by code in the renderer).  See
+     * bug report 1779941.
+     */
+    public void testDrawWithNullMeanHorizontal() {
+        boolean success = false;
+        try {
+            DefaultStatisticalCategoryDataset dataset 
+                    = new DefaultStatisticalCategoryDataset();
+            dataset.add(1.0, 2.0, "S1", "C1");
+            dataset.add(null, new Double(4.0), "S1", "C2");
+            CategoryPlot plot = new CategoryPlot(dataset, 
+                    new CategoryAxis("Category"), new NumberAxis("Value"), 
+                    new StatisticalBarRenderer());
+            plot.setOrientation(PlotOrientation.HORIZONTAL);
+            JFreeChart chart = new JFreeChart(plot);
+            /* BufferedImage image = */ chart.createBufferedImage(300, 200, 
+                    null);
+            success = true;
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+            success = false;
+        }
+        assertTrue(success);
+    }
+
+    /**
+     * Draws the chart with a <code>null</code> standard deviation to make sure 
+     * that no exceptions are thrown (particularly by code in the renderer).  
+     * See bug report 1779941.
+     */
+    public void testDrawWithNullDeviationVertical() {
+        boolean success = false;
+        try {
+            DefaultStatisticalCategoryDataset dataset 
+                    = new DefaultStatisticalCategoryDataset();
+            dataset.add(1.0, 2.0, "S1", "C1");
+            dataset.add(new Double(4.0), null, "S1", "C2");
+            CategoryPlot plot = new CategoryPlot(dataset, 
+                    new CategoryAxis("Category"), new NumberAxis("Value"), 
+                    new StatisticalBarRenderer());
+            JFreeChart chart = new JFreeChart(plot);
+            /* BufferedImage image = */ chart.createBufferedImage(300, 200, 
+                    null);
+            success = true;
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+            success = false;
+        }
+        assertTrue(success);
+    }
+
+    /**
+     * Draws the chart with a <code>null</code> standard deviation to make sure 
+     * that no exceptions are thrown (particularly by code in the renderer).  
+     * See bug report 1779941.
+     */
+    public void testDrawWithNullDeviationHorizontal() {
+        boolean success = false;
+        try {
+            DefaultStatisticalCategoryDataset dataset 
+                    = new DefaultStatisticalCategoryDataset();
+            dataset.add(1.0, 2.0, "S1", "C1");
+            dataset.add(new Double(4.0), null, "S1", "C2");
+            CategoryPlot plot = new CategoryPlot(dataset, 
+                    new CategoryAxis("Category"), new NumberAxis("Value"), 
+                    new StatisticalBarRenderer());
+            plot.setOrientation(PlotOrientation.HORIZONTAL);
             JFreeChart chart = new JFreeChart(plot);
             /* BufferedImage image = */ chart.createBufferedImage(300, 200, 
                     null);

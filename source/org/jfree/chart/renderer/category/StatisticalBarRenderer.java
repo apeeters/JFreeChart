@@ -54,6 +54,7 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 06-Jul-2007 : Added errorIndicatorStroke attribute (DG);
  * 11-Jul-2007 : Fixed serialization for new errorIndicatorStroke field (DG);
+ * 28-Aug-2007 : Fixed NullPointerException - see bug 1779941 (DG);
  * 
  */
 
@@ -255,6 +256,9 @@ public class StatisticalBarRenderer extends BarRenderer
 
         // BAR X
         Number meanValue = dataset.getMeanValue(row, column);
+        if (meanValue == null) {
+            return;
+        }
 
         double value = meanValue.doubleValue();
         double base = 0.0;
@@ -311,41 +315,44 @@ public class StatisticalBarRenderer extends BarRenderer
         }
 
         // standard deviation lines
-        double valueDelta = dataset.getStdDevValue(row, column).doubleValue();
-        double highVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 
-                + valueDelta, dataArea, yAxisLocation);
-        double lowVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 
-                - valueDelta, dataArea, yAxisLocation);
+        Number n = dataset.getStdDevValue(row, column);
+        if (n != null) {
+            double valueDelta = n.doubleValue();
+            double highVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 
+                    + valueDelta, dataArea, yAxisLocation);
+            double lowVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 
+                    - valueDelta, dataArea, yAxisLocation);
 
-        if (this.errorIndicatorStroke != null) {
-            g2.setStroke(this.errorIndicatorStroke);
-        }
-        else {
-            g2.setStroke(getItemOutlineStroke(row, column));
-        }
-        if (this.errorIndicatorPaint != null) {
-            g2.setPaint(this.errorIndicatorPaint);  
-        }
-        else {
-            g2.setPaint(getItemOutlinePaint(row, column));   
-        }
+            if (this.errorIndicatorStroke != null) {
+                g2.setStroke(this.errorIndicatorStroke);
+            }
+            else {
+                g2.setStroke(getItemOutlineStroke(row, column));
+            }
+            if (this.errorIndicatorPaint != null) {
+                g2.setPaint(this.errorIndicatorPaint);  
+            }
+            else {
+                g2.setPaint(getItemOutlinePaint(row, column));   
+            }
         
-        Line2D line = null;
-        line = new Line2D.Double(lowVal, rectY + rectHeight / 2.0d, 
-                                 highVal, rectY + rectHeight / 2.0d);
-        g2.draw(line);
-        line = new Line2D.Double(highVal, rectY + rectHeight * 0.25, 
-                                 highVal, rectY + rectHeight * 0.75);
-        g2.draw(line);
-        line = new Line2D.Double(lowVal, rectY + rectHeight * 0.25, 
-                                 lowVal, rectY + rectHeight * 0.75);
-        g2.draw(line);
+            Line2D line = null;
+            line = new Line2D.Double(lowVal, rectY + rectHeight / 2.0d, 
+                                     highVal, rectY + rectHeight / 2.0d);
+            g2.draw(line);
+            line = new Line2D.Double(highVal, rectY + rectHeight * 0.25, 
+                                     highVal, rectY + rectHeight * 0.75);
+            g2.draw(line);
+            line = new Line2D.Double(lowVal, rectY + rectHeight * 0.25, 
+                                     lowVal, rectY + rectHeight * 0.75);
+            g2.draw(line);
+        }
         
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row, 
                 column);
         if (generator != null && isItemLabelVisible(row, column)) {
             drawItemLabel(g2, dataset, row, column, plot, generator, bar, 
-                (value < 0.0));
+                    (value < 0.0));
         }        
 
         // add an item entity, if this information is being collected
@@ -399,6 +406,9 @@ public class StatisticalBarRenderer extends BarRenderer
 
         // BAR Y
         Number meanValue = dataset.getMeanValue(row, column);
+        if (meanValue == null) {
+            return;
+        }
 
         double value = meanValue.doubleValue();
         double base = 0.0;
@@ -455,40 +465,43 @@ public class StatisticalBarRenderer extends BarRenderer
         }
 
         // standard deviation lines
-        double valueDelta = dataset.getStdDevValue(row, column).doubleValue();
-        double highVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 
-                + valueDelta, dataArea, yAxisLocation);
-        double lowVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 
-                - valueDelta, dataArea, yAxisLocation);
+        Number n = dataset.getStdDevValue(row, column);
+        if (n != null) {
+            double valueDelta = n.doubleValue();
+            double highVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 
+                    + valueDelta, dataArea, yAxisLocation);
+            double lowVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 
+                    - valueDelta, dataArea, yAxisLocation);
 
-        if (this.errorIndicatorStroke != null) {
-            g2.setStroke(this.errorIndicatorStroke);
+            if (this.errorIndicatorStroke != null) {
+                g2.setStroke(this.errorIndicatorStroke);
+            }
+            else {
+                g2.setStroke(getItemOutlineStroke(row, column));
+            }
+            if (this.errorIndicatorPaint != null) {
+                g2.setPaint(this.errorIndicatorPaint);  
+            }
+            else {
+                g2.setPaint(getItemOutlinePaint(row, column));   
+            }
+            Line2D line = null;
+            line = new Line2D.Double(rectX + rectWidth / 2.0d, lowVal,
+                                     rectX + rectWidth / 2.0d, highVal);
+            g2.draw(line);
+            line = new Line2D.Double(rectX + rectWidth / 2.0d - 5.0d, highVal,
+                                     rectX + rectWidth / 2.0d + 5.0d, highVal);
+            g2.draw(line);
+            line = new Line2D.Double(rectX + rectWidth / 2.0d - 5.0d, lowVal,
+                                     rectX + rectWidth / 2.0d + 5.0d, lowVal);
+            g2.draw(line);
         }
-        else {
-            g2.setStroke(getItemOutlineStroke(row, column));
-        }
-        if (this.errorIndicatorPaint != null) {
-            g2.setPaint(this.errorIndicatorPaint);  
-        }
-        else {
-            g2.setPaint(getItemOutlinePaint(row, column));   
-        }
-        Line2D line = null;
-        line = new Line2D.Double(rectX + rectWidth / 2.0d, lowVal,
-                                 rectX + rectWidth / 2.0d, highVal);
-        g2.draw(line);
-        line = new Line2D.Double(rectX + rectWidth / 2.0d - 5.0d, highVal,
-                                 rectX + rectWidth / 2.0d + 5.0d, highVal);
-        g2.draw(line);
-        line = new Line2D.Double(rectX + rectWidth / 2.0d - 5.0d, lowVal,
-                                 rectX + rectWidth / 2.0d + 5.0d, lowVal);
-        g2.draw(line);
         
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row, 
                 column);
         if (generator != null && isItemLabelVisible(row, column)) {
             drawItemLabel(g2, dataset, row, column, plot, generator, bar, 
-                (value < 0.0));
+                    (value < 0.0));
         }        
 
         // add an item entity, if this information is being collected

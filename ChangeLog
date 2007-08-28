@@ -1,3 +1,14 @@
+2007-08-28  David Gilbert  <david.gilbert@object-refinery.com>
+
+	* source/org/jfree/chart/renderer/category/StatisticalBarRenderer.java
+	(drawHorizontalItem): Check for null data items,
+	(drawVerticalItem): Likewise,
+	* tests/org/jfree/chart/renderer/category/junit/StatisticalBarRendererTests.java
+	(testDrawWithNullMeanVertical): New test method,
+	(testDrawWithNullMeanHorizontal): Likewise,
+	(testDrawWithNullDeviationVertical): Likewise,
+	(testDrawWithNullDeviationHorizontal): Likewise.
+	
 2007-08-27  Henry Proudhon  <henry.proudhon@insa-lyon.fr>
 
 	* source/swt/org/jfree/experimental/chart/swt/ChartComposite.java
