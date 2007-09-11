@@ -52,6 +52,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.IntervalMarker;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYDifferenceRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.util.RectangleInsets;
@@ -66,8 +67,7 @@ import org.jfree.experimental.chart.swt.ChartComposite;
  * used, except that the renderer is modified to show filled shapes (as well as 
  * lines) at each data point.
  */
-public class SWTTimeSeriesDemo
-{
+public class SWTTimeSeriesDemo {
 
     /**
      * Creates a chart.
@@ -106,13 +106,17 @@ public class SWTTimeSeriesDemo
             renderer.setBaseShapesFilled(true);
         }
         
-        DateAxis axis = (DateAxis) plot.getDomainAxis();
-        axis.setDateFormatOverride(new SimpleDateFormat("MMM-yyyy"));
-        
         // code to test the alpha channel
         IntervalMarker interv = new IntervalMarker(120, 150,
         		Color.blue, new BasicStroke(5.0f),null,null,0.2f);
         plot.addRangeMarker(interv);
+        
+        // code to test the alpha channel within awt colors
+        XYDifferenceRenderer differenceRenderer= new XYDifferenceRenderer(new Color(255,0,0,128),new Color(0,255,0,128),false);
+        plot.setRenderer(differenceRenderer);
+        
+        DateAxis axis = (DateAxis) plot.getDomainAxis();
+        axis.setDateFormatOverride(new SimpleDateFormat("MMM-yyyy"));
         
         return chart;
 
