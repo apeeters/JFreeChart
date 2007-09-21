@@ -84,7 +84,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
     private boolean adjustForBinSize;
     
     /**
-     * Creates a new histogram dataset.
+     * Creates a new histogram dataset.  Note that the 
+     * <code>adjustForBinSize</code> flag defaults to <code>true</code>.
      * 
      * @param key  the series key (<code>null</code> not permitted).
      */
@@ -102,6 +103,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      * the bin size in the {@link #getXValue(int, int)} method.
      * 
      * @return A boolean.
+     * 
+     * @see #setAdjustForBinSize(boolean)
      */
     public boolean getAdjustForBinSize() {
         return this.adjustForBinSize;
@@ -109,9 +112,12 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
     
     /**
      * Sets the flag that controls whether or not the bin count is divided by 
-     * the bin size in the {@link #getXValue(int, int)} method.
+     * the bin size in the {@link #getYValue(int, int)} method, and sends a
+     * {@link DatasetChangeEvent} to all registered listeners.
      * 
      * @param adjust  the flag.
+     * 
+     * @see #getAdjustForBinSize()
      */
     public void setAdjustForBinSize(boolean adjust) {
         this.adjustForBinSize = adjust;
@@ -128,7 +134,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
     }
 
     /**
-     * Returns the key for a series.
+     * Returns the key for a series.  Since this dataset only stores a single
+     * series, the <code>series</code> argument is ignored.
      *
      * @param series  the series (zero-based index, ignored in this dataset).
      *
@@ -148,7 +155,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
     }
     
     /**
-     * Returns the number of items in a series.
+     * Returns the number of items in a series.  Since this dataset only stores
+     * a single series, the <code>series</code> argument is ignored.
      *
      * @param series  the series index (zero-based, ignored in this dataset).
      *
@@ -163,13 +171,15 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      * with any existing bin in the dataset.
      * 
      * @param bin  the bin (<code>null</code> not permitted).
+     * 
+     * @see #removeAllBins()
      */
     public void addBin(SimpleHistogramBin bin) {
         // check that the new bin doesn't overlap with any existing bin
         Iterator iterator = this.bins.iterator();
         while (iterator.hasNext()) {
             SimpleHistogramBin existingBin 
-                = (SimpleHistogramBin) iterator.next();
+                    = (SimpleHistogramBin) iterator.next();
             if (bin.overlapsWith(existingBin)) {
                 throw new RuntimeException("Overlapping bin");
             }
@@ -216,9 +226,12 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
     }
     
     /**
-     * Adds a set of values to the dataset.
+     * Adds a set of values to the dataset and sends a 
+     * {@link DatasetChangeEvent} to all registered listeners.
      * 
      * @param values  the values (<code>null</code> not permitted).
+     * 
+     * @see #clearObservations()
      */
     public void addObservations(double[] values) {
         for (int i = 0; i < values.length; i++) {
@@ -232,6 +245,9 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      * {@link DatasetChangeEvent} to all registered listeners.
      * 
      * @since 1.0.6
+     * 
+     * @see #addObservations(double[])
+     * @see #removeAllBins()
      */
     public void clearObservations() {
         Iterator iterator = this.bins.iterator();
@@ -247,6 +263,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      * registered listeners.
      * 
      * @since 1.0.6
+     * 
+     * @see #addBin(SimpleHistogramBin)
      */
     public void removeAllBins() {
         this.bins = new ArrayList();
@@ -299,6 +317,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      * @param item  the item index (zero-based).
      * 
      * @return The y-value.
+     * 
+     * @see #getAdjustForBinSize()
      */
     public double getYValue(int series, int item) {
         SimpleHistogramBin bin = (SimpleHistogramBin) this.bins.get(item);
