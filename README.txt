@@ -689,6 +689,7 @@ below:
     - Paolo Cova
     - Mike Duffy
     - Don Elliott
+    - Rune Fauske
     - Jonathan Gabbai
     - Serge V. Grachov
     - Daniel Gredler
