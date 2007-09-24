@@ -83,6 +83,7 @@
  *               bug (DG);
  * 19-Jun-2007 : Removed deprecated code (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 24-Sep-2007 : Implemented new methods in Zoomable interface (DG);
  * 
  */
 
@@ -1444,6 +1445,22 @@ public class ThermometerPlot extends Plot implements ValueAxisPlot,
     }
 
     /**
+     * Multiplies the range on the domain axis/axes by the specified factor.
+     *
+     * @param factor  the zoom factor.
+     * @param state  the plot state.
+     * @param source  the source point.
+     * @param useAnchor  a flag that controls whether or not the source point
+     *         is used for the zoom anchor.
+     *         
+     * @since 1.0.7
+     */
+    public void zoomDomainAxes(double factor, PlotRenderingInfo state, 
+                               Point2D source, boolean useAnchor) {
+        // no domain axis to zoom
+    }
+    
+    /**
      * Multiplies the range on the range axis/axes by the specified factor.
      *
      * @param factor  the zoom factor.
@@ -1455,6 +1472,24 @@ public class ThermometerPlot extends Plot implements ValueAxisPlot,
         this.rangeAxis.resizeRange(factor);
     }
 
+    /**
+     * Multiplies the range on the range axis/axes by the specified factor.
+     *
+     * @param factor  the zoom factor.
+     * @param state  the plot state.
+     * @param source  the source point.
+     * @param useAnchor  a flag that controls whether or not the source point
+     *         is used for the zoom anchor.
+     *         
+     * @since 1.0.7
+     */
+    public void zoomRangeAxes(double factor, PlotRenderingInfo state, 
+                              Point2D source, boolean useAnchor) {
+        double anchorY = this.getRangeAxis().java2DToValue(source.getY(), 
+                state.getDataArea(), RectangleEdge.LEFT);
+        this.rangeAxis.resizeRange(factor, anchorY);
+    }
+    
     /**
      * This method does nothing.
      *
