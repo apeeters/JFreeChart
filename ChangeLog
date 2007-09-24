@@ -1,5 +1,11 @@
 2007-09-24  David Gilbert  <david.gilbert@object-refinery.com>
 
+	* source/org/jfree/chart/renderer/category/LineAndShapeRenderer.java
+	(setUseOutlinePaint): Fire change event,
+	(clone): Clone correct list for seriesShapesVisible.
+
+2007-09-24  David Gilbert  <david.gilbert@object-refinery.com>
+
 	* source/org/jfree/chart/ChartPanel.java
 	(paintComponent): Clear chart buffer before refreshing.
 	
