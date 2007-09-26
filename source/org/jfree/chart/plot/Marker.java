@@ -27,7 +27,7 @@
  * -----------
  * Marker.java
  * -----------
- * (C) Copyright 2002-2006, by Object Refinery Limited.
+ * (C) Copyright 2002-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Nicolas Brodu;
@@ -54,9 +54,10 @@
  *               applied to the domain or range axis as appropriate (DG);
  * 06-Jun-2005 : Fix equals() method to handle GradientPaint (DG);
  * 19-Aug-2005 : Changed constructor from public --> protected (DG);
- * ------------- JFREECHART 1.0.0 ---------------------------------------------
+ * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 05-Sep-2006 : Added MarkerChangeListener support (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 26-Sep-2007 : Fix for serialization bug 1802195 (DG);
  *
  */
 
@@ -527,6 +528,8 @@ public abstract class Marker implements Cloneable, Serializable {
      *
      * @param listener  the object to be registered.
      * 
+     * @see #removeChangeListener(MarkerChangeListener)
+     * 
      * @since 1.0.3
      */
     public void addChangeListener(MarkerChangeListener listener) {
@@ -537,6 +540,8 @@ public abstract class Marker implements Cloneable, Serializable {
      * Unregisters an object for notification of changes to the marker.
      *
      * @param listener  the object to be unregistered.
+     * 
+     * @see #addChangeListener(MarkerChangeListener)
      * 
      * @since 1.0.3
      */
@@ -672,6 +677,7 @@ public abstract class Marker implements Cloneable, Serializable {
         this.outlinePaint = SerialUtilities.readPaint(stream);
         this.outlineStroke = SerialUtilities.readStroke(stream);
         this.labelPaint = SerialUtilities.readPaint(stream);
+        this.listenerList = new EventListenerList();
     }
 
 }

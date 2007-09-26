@@ -41,7 +41,8 @@
  * 01-Jun-2005 : Strengthened equals() test (DG);
  * 05-Sep-2006 : Added checks for MarkerChangeEvent generation (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
- *
+ * 26-Sep-2007 : Added test1802195() method (DG);
+ * 
  */
 
 package org.jfree.chart.plot.junit;
@@ -244,6 +245,42 @@ public class ValueMarkerTests
 
     public void markerChanged(MarkerChangeEvent event) {
         this.lastEvent = event;
+    }
+    
+    /**
+     * A test for bug 1802195.
+     */
+    public void test1802195() {
+
+        ValueMarker m1 = new ValueMarker(25.0);
+        ValueMarker m2 = null;
+
+        try {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            ObjectOutput out = new ObjectOutputStream(buffer);
+            out.writeObject(m1);
+            out.close();
+
+            ObjectInput in = new ObjectInputStream(
+                    new ByteArrayInputStream(buffer.toByteArray()));
+            m2 = (ValueMarker) in.readObject();
+            in.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        boolean b = m1.equals(m2);
+        assertTrue(b);
+
+        boolean pass = true;
+        try {
+            m2.setValue(-10.0);
+        }
+        catch (NullPointerException e) {
+            pass = false;
+        }
+        assertTrue(pass);
+
     }
 
 }
