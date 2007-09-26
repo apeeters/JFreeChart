@@ -39,6 +39,7 @@
  * 05-Jul-2006 : Version 1 (DG);
  * 31-Jan-2007 : Renamed min and max to lowerBound and upperBound (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 26-Sep-2007 : Fixed bug 1767315, problem in getPaint() method (DG);
  * 
  */
 
@@ -76,6 +77,9 @@ public class GrayPaintScale
      * 
      * @param lowerBound  the lower bound.
      * @param upperBound  the upper bound.
+     * 
+     * @throws IllegalArgumentException if <code>lowerBound</code> is not
+     *       less than <code>upperBound</code>.
      */
     public GrayPaintScale(double lowerBound, double upperBound) {
         if (lowerBound >= upperBound) {
@@ -90,6 +94,8 @@ public class GrayPaintScale
      * Returns the lower bound.
      * 
      * @return The lower bound.
+     * 
+     * @see #getUpperBound()
      */
     public double getLowerBound() {
         return this.lowerBound;
@@ -99,6 +105,8 @@ public class GrayPaintScale
      * Returns the upper bound.
      * 
      * @return The upper bound.
+     * 
+     * @see #getLowerBound()
      */
     public double getUpperBound() {
         return this.upperBound;
@@ -107,14 +115,15 @@ public class GrayPaintScale
     /**
      * Returns a paint for the specified value.
      * 
-     * @param value  the value.
+     * @param value  the value (must be within the range specified by the
+     *         lower and upper bounds for the scale).
      * 
      * @return A paint for the specified value.
      */
     public Paint getPaint(double value) {
         double v = Math.max(value, this.lowerBound);
         v = Math.min(v, this.upperBound);
-        int g = (int) ((value - this.lowerBound) / (this.upperBound 
+        int g = (int) ((v - this.lowerBound) / (this.upperBound 
                 - this.lowerBound) * 255.0);
         return new Color(g, g, g);
     }
