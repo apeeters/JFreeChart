@@ -51,6 +51,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 04-May-2006 : Updated API docs (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 26-Sep-2007 : Added isEmpty() and getItemCount() methods (DG);
  * 
  */
 
@@ -200,6 +201,25 @@ public abstract class Series implements Cloneable, Serializable {
             fireSeriesChanged();
         }
     }
+    
+    /**
+     * Returns <code>true</code> if the series contains no data items, and
+     * <code>false</code> otherwise.
+     * 
+     * @return A boolean.
+     * 
+     * @since 1.0.7
+     */
+    public boolean isEmpty() {
+        return (getItemCount() == 0);
+    }
+    
+    /**
+     * Returns the number of data items in the series.
+     * 
+     * @return The number of data items in the series.
+     */
+    public abstract int getItemCount();
     
     /**
      * Returns a clone of the series.
