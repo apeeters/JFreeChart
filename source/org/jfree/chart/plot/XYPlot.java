@@ -191,6 +191,7 @@
  * 27-Jun-2007 : Updated drawDomainGridlines() method for renamed method in
  *               XYItemRenderer interface.
  * 24-Sep-2007 : Added new zoom methods (DG);
+ * 26-Sep-2007 : Include index value in IllegalArgumentExceptions (DG);
  *
  */
 
@@ -2021,8 +2022,8 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      */
     public Paint getQuadrantPaint(int index) {
         if (index < 0 || index > 3) {
-            throw new IllegalArgumentException(
-                    "The index should be in the range 0 to 3.");
+            throw new IllegalArgumentException("The index value (" + index 
+                    + ") should be in the range 0 to 3.");
         }
         return this.quadrantPaint[index];
     }
@@ -2038,8 +2039,8 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      */
     public void setQuadrantPaint(int index, Paint paint) {
         if (index < 0 || index > 3) {
-            throw new IllegalArgumentException(
-                    "The index should be in the range 0 to 3.");
+            throw new IllegalArgumentException("The index value (" + index 
+                    + ") should be in the range 0 to 3.");
         }
         this.quadrantPaint[index] = paint;
         notifyListeners(new PlotChangeEvent(this));
@@ -3147,7 +3148,8 @@ public class XYPlot extends Plot implements ValueAxisPlot,
     public ValueAxis getDomainAxisForDataset(int index) {
 
         if (index < 0 || index >= getDatasetCount()) {
-            throw new IllegalArgumentException("Index 'index' out of bounds.");
+            throw new IllegalArgumentException("Index " + index 
+                    + " out of bounds.");
         }
 
         ValueAxis valueAxis = null;
@@ -3173,7 +3175,8 @@ public class XYPlot extends Plot implements ValueAxisPlot,
     public ValueAxis getRangeAxisForDataset(int index) {
 
         if (index < 0 || index >= getDatasetCount()) {
-            throw new IllegalArgumentException("Index 'index' out of bounds.");
+            throw new IllegalArgumentException("Index " + index 
+                    + " out of bounds.");
         }
 
         ValueAxis valueAxis = null;
