@@ -89,6 +89,7 @@
  * 02-Jul-2007 : Removed override settings (DG);
  * 24-Sep-2007 : Fixed bug in clone() method and added change event to
  *               setUseOutlinePaint() method (DG);
+ * 27-Sep-2007 : Added option to offset series x-position within category (DG);
  * 
  */
 
@@ -170,7 +171,23 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * outlines - if not, the regular series paint is used. 
      */
     private boolean useOutlinePaint;
+    
+    /**
+     * A flag that controls whether or not the x-position for each item is
+     * offset within the category according to the series.
+     * 
+     * @since 1.0.7
+     */
+    private boolean useSeriesOffset;
 
+    /**
+     * The item margin used for series offsetting - this allows the positioning
+     * to match the bar positions of the {@link BarRenderer} class.
+     * 
+     * @since 1.0.7
+     */
+    private double itemMargin;
+    
     /**
      * Creates a renderer with both lines and shapes visible by default.
      */
@@ -195,6 +212,8 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
         this.useFillPaint = false;
         this.drawOutlines = true;
         this.useOutlinePaint = false;
+        this.useSeriesOffset = false;  // preserves old behaviour
+        this.itemMargin = 0.0;
     }
     
     // LINES VISIBLE
@@ -541,6 +560,73 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
     
     /**
+     * Returns the flag that controls whether or not the x-position for each
+     * data item is offset within the category according to the series.
+     * 
+     * @return A boolean.
+     * 
+     * @see #setUseSeriesOffset(boolean)
+     * 
+     * @since 1.0.7
+     */
+    public boolean getUseSeriesOffset() {
+        return this.useSeriesOffset;
+    }
+    
+    /**
+     * Sets the flag that controls whether or not the x-position for each 
+     * data item is offset within its category according to the series, and
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param offset  the offset.
+     * 
+     * @see #getUseSeriesOffset()
+     * 
+     * @since 1.0.7
+     */
+    public void setUseSeriesOffset(boolean offset) {
+        this.useSeriesOffset = offset;
+        notifyListeners(new RendererChangeEvent(this));
+    }
+    
+    /**
+     * Returns the item margin, which is the gap between items within a 
+     * category (expressed as a percentage of the overall category width).  
+     * This can be used to match the offset alignment with the bars drawn by 
+     * a {@link BarRenderer}).
+     * 
+     * @return The item margin.
+     * 
+     * @see #setItemMargin(double)
+     * @see #getUseSeriesOffset()
+     * 
+     * @since 1.0.7
+     */
+    public double getItemMargin() {
+        return this.itemMargin;
+    }
+    
+    /**
+     * Sets the item margin, which is the gap between items within a category
+     * (expressed as a percentage of the overall category width), and sends
+     * a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param margin  the margin (0.0 <= margin < 1.0).
+     * 
+     * @see #getItemMargin()
+     * @see #getUseSeriesOffset()
+     * 
+     * @since 1.0.7
+     */
+    public void setItemMargin(double margin) {
+        if (margin < 0.0 || margin >= 1.0) {
+            throw new IllegalArgumentException("Requires 0.0 <= margin < 1.0.");
+        }
+        this.itemMargin = margin;
+        notifyListeners(new RendererChangeEvent(this));
+    }
+    
+    /**
      * Returns a legend item for a series.
      *
      * @param datasetIndex  the dataset index (zero-based).
@@ -643,8 +729,16 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
         PlotOrientation orientation = plot.getOrientation();
 
         // current data point...
-        double x1 = domainAxis.getCategoryMiddle(column, getColumnCount(), 
-                dataArea, plot.getDomainAxisEdge());
+        double x1;
+        if (this.useSeriesOffset) {
+            x1 = domainAxis.getCategorySeriesMiddle(dataset.getColumnKey(
+                    column), dataset.getRowKey(row), dataset, this.itemMargin, 
+                    dataArea, plot.getDomainAxisEdge());            
+        }
+        else {
+            x1 = domainAxis.getCategoryMiddle(column, getColumnCount(), 
+                    dataArea, plot.getDomainAxisEdge());
+        }
         double value = v.doubleValue();
         double y1 = rangeAxis.valueToJava2D(value, dataArea, 
                 plot.getRangeAxisEdge());
@@ -655,9 +749,19 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                 if (previousValue != null) {
                     // previous data point...
                     double previous = previousValue.doubleValue();
-                    double x0 = domainAxis.getCategoryMiddle(column - 1, 
-                            getColumnCount(), dataArea, 
-                            plot.getDomainAxisEdge());
+                    double x0;
+                    if (this.useSeriesOffset) {
+                        x0 = domainAxis.getCategorySeriesMiddle(
+                                dataset.getColumnKey(column - 1), 
+                                dataset.getRowKey(row), dataset, 
+                                this.itemMargin, dataArea, 
+                                plot.getDomainAxisEdge());
+                    }
+                    else {
+                        x0 = domainAxis.getCategoryMiddle(column - 1, 
+                                getColumnCount(), dataArea, 
+                                plot.getDomainAxisEdge());
+                    }
                     double y0 = rangeAxis.valueToJava2D(previous, dataArea, 
                             plot.getRangeAxisEdge());
 
@@ -766,6 +870,12 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             return false;
         }
         if (this.useOutlinePaint != that.useOutlinePaint) {
+            return false;
+        }
+        if (this.useSeriesOffset != that.useSeriesOffset) {
+            return false;
+        }
+        if (this.itemMargin != that.itemMargin) {
             return false;
         }
         return super.equals(obj);

@@ -86,6 +86,7 @@
  * 19-Jun-2007 : Removed deprecated code (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
+ * 27-Sep-2007 : Added getCategorySeriesMiddle() method (DG);
  *
  */
 
@@ -124,6 +125,7 @@ import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.Size2D;
+import org.jfree.data.category.CategoryDataset;
 
 /**
  * An axis that displays categories.
@@ -647,6 +649,43 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
         return getCategoryStart(category, categoryCount, area, edge)
                + calculateCategorySize(categoryCount, area, edge);
 
+    }
+    
+    /**
+     * Returns the middle coordinate (in Java2D space) for a series within a 
+     * category.
+     * 
+     * @param category  the category (<code>null</code> not permitted).
+     * @param seriesKey  the series key (<code>null</code> not permitted).
+     * @param dataset  the dataset (<code>null</code> not permitted).
+     * @param itemMargin  the item margin (0.0 <= itemMargin < 1.0);
+     * @param area  the area (<code>null</code> not permitted).
+     * @param edge  the edge (<code>null</code> not permitted).
+     * 
+     * @return The coordinate in Java2D space.
+     * 
+     * @since 1.0.7
+     */
+    public double getCategorySeriesMiddle(Comparable category, 
+            Comparable seriesKey, CategoryDataset dataset, double itemMargin,
+            Rectangle2D area, RectangleEdge edge) {
+        
+        int categoryIndex = dataset.getColumnIndex(category);
+        int categoryCount = dataset.getColumnCount();
+        int seriesIndex = dataset.getRowIndex(seriesKey);
+        int seriesCount = dataset.getRowCount();
+        double start = getCategoryStart(categoryIndex, categoryCount, area, 
+                edge);
+        double end = getCategoryEnd(categoryIndex, categoryCount, area, edge);
+        double width = end - start;
+        if (seriesCount == 1) {
+            return start + width / 2.0;
+        }
+        else {
+            double gap = (width * itemMargin) / (seriesCount - 1);
+            double ww = (width * (1 - itemMargin)) / seriesCount;
+            return start + (seriesIndex * (ww + gap)) + ww / 2.0;
+        }
     }
 
     /**
