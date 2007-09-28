@@ -33,8 +33,6 @@
  *                   Science);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *
- * $Id: DefaultBoxAndWhiskerCategoryDataset.java,v 1.9.2.5 2007/06/13 15:26:00 mungady Exp $
- *
  * Changes
  * -------
  * 05-Aug-2003 : Version 1, contributed by David Browning (DG);
@@ -50,6 +48,7 @@
  * 17-Apr-2007 : Fixed bug 1701822 (DG);
  * 13-Jun-2007 : Fixed error in previous patch (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 28-Sep-2007 : Fixed cloning bug (DG);
  *
  */
 
@@ -58,6 +57,7 @@ package org.jfree.data.statistics;
 import java.util.List;
 
 import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.KeyedObjects2D;
 import org.jfree.data.Range;
 import org.jfree.data.RangeInfo;
@@ -68,7 +68,7 @@ import org.jfree.data.general.AbstractDataset;
  * {@link BoxAndWhiskerCategoryDataset} interface.
  */
 public class DefaultBoxAndWhiskerCategoryDataset extends AbstractDataset
-        implements BoxAndWhiskerCategoryDataset, RangeInfo {
+        implements BoxAndWhiskerCategoryDataset, RangeInfo, PublicCloneable {
 
     /** Storage for the data. */
     protected KeyedObjects2D data;
@@ -653,6 +653,20 @@ public class DefaultBoxAndWhiskerCategoryDataset extends AbstractDataset
             return ObjectUtilities.equal(this.data, dataset.data);
         }
         return false;
+    }
+    
+    /**
+     * Returns a clone of this dataset.
+     * 
+     * @return A clone.
+     * 
+     * @throws CloneNotSupportedException if cloning is not possible.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        DefaultBoxAndWhiskerCategoryDataset clone 
+                = (DefaultBoxAndWhiskerCategoryDataset) super.clone();
+        clone.data = (KeyedObjects2D) this.data.clone();
+        return clone;
     }
 
 }
