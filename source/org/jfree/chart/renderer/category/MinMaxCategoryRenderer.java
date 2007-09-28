@@ -56,6 +56,7 @@
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  * 09-Mar-2007 : Fixed problem with horizontal rendering (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 28-Sep-2007 : Added equals() method override (DG);
  * 
  */
 
@@ -82,12 +83,11 @@ import javax.swing.Icon;
 
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.entity.CategoryItemEntity;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
-import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.data.category.CategoryDataset;
 
@@ -216,12 +216,17 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
 
     /**
      * Sets the stroke of the line between the minimum value and the maximum 
-     * value.
+     * value and sends a {@link RendererChangeEvent} to all registered 
+     * listeners.
      *
-     * @param groupStroke The new stroke
+     * @param stroke the new stroke (<code>null</code> not permitted).
      */
-    public void setGroupStroke(Stroke groupStroke) {
-        this.groupStroke = groupStroke;
+    public void setGroupStroke(Stroke stroke) {
+        if (stroke == null) {
+            throw new IllegalArgumentException("Null 'stroke' argument.");
+        }
+        this.groupStroke = stroke;
+        notifyListeners(new RendererChangeEvent(this));        
     }
 
     /**
@@ -409,23 +414,42 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
                 }
             }
 
-            // collect entity and tool tip information...
-            if (state.getInfo() != null) {
-                EntityCollection entities = state.getEntityCollection();
-                if (entities != null && shape != null) {
-                    String tip = null;
-                    CategoryToolTipGenerator tipster = getToolTipGenerator(row,
-                            column);
-                    if (tipster != null) {
-                        tip = tipster.generateToolTip(dataset, row, column);
-                    }
-                    CategoryItemEntity entity = new CategoryItemEntity(
-                            shape, tip, null, dataset, dataset.getRowKey(row), 
-                            dataset.getColumnKey(column));
-                    entities.add(entity);
-                }
+            // add an item entity, if this information is being collected
+            EntityCollection entities = state.getEntityCollection();
+            if (entities != null && shape != null) {
+                addItemEntity(entities, dataset, row, column, shape);
             }
         }
+    }
+    
+    /**
+     * Tests this instance for equality with an arbitrary object.  The icon fields
+     * are NOT included in the test, so this implementation is a little weak.
+     * 
+     * @param obj  the object (<code>null</code> permitted).
+     * 
+     * @return A boolean.
+     *
+     * @since 1.0.7
+     */
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof MinMaxCategoryRenderer)) {
+            return false;
+        }
+        MinMaxCategoryRenderer that = (MinMaxCategoryRenderer) obj;
+        if (this.plotLines != that.plotLines) {
+            return false;
+        }
+        if (!PaintUtilities.equal(this.groupPaint, that.groupPaint)) {
+            return false;
+        }
+        if (!this.groupStroke.equals(that.groupStroke)) {
+            return false;
+        }
+        return super.equals(obj);
     }
 
     /**
@@ -470,7 +494,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     }
 
     /**
-     * Returns an icon.
+     * Returns an icon from a shape.
      *
      * @param shape  the shape.
      * @param fill  the fill flag.
@@ -479,7 +503,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
      * @return The icon.
      */
     private Icon getIcon(Shape shape, final boolean fill, 
-                         final boolean outline) {
+            final boolean outline) {
         final int width = shape.getBounds().width;
         final int height = shape.getBounds().height;
         final GeneralPath path = new GeneralPath(shape);
