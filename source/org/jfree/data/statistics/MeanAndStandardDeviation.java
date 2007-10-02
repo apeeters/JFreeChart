@@ -32,13 +32,13 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: MeanAndStandardDeviation.java,v 1.3.2.1 2005/10/25 21:34:46 mungady Exp $
- *
  * Changes:
  * --------
  * 05-Feb-2002 : Version 1 (DG);
  * 05-Feb-2005 : Added equals() method and implemented Serializable (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Oct-2007 : Added getMeanValue() and getStandardDeviationValue() methods
+ *               for convenience, and toString() method for debugging (DG);
  *
  */
 
@@ -94,6 +94,24 @@ public class MeanAndStandardDeviation implements Serializable {
     public Number getMean() {
         return this.mean;
     }
+    
+    /**
+     * Returns the mean as a double primitive.  If the underlying mean is
+     * <code>null</code>, this method will return <code>Double.NaN</code>.
+     * 
+     * @return The mean.
+     * 
+     * @see #getMean()
+     * 
+     * @since 1.0.7
+     */
+    public double getMeanValue() {
+        double result = Double.NaN;
+        if (this.mean != null) {
+            result = this.mean.doubleValue();
+        }
+        return result;
+    }
 
     /**
      * Returns the standard deviation.
@@ -102,6 +120,23 @@ public class MeanAndStandardDeviation implements Serializable {
      */
     public Number getStandardDeviation() {
         return this.standardDeviation;
+    }
+
+    /**
+     * Returns the standard deviation as a double primitive.  If the underlying
+     * standard deviation is <code>null</code>, this method will return 
+     * <code>Double.NaN</code>.
+     * 
+     * @return The standard deviation.
+     * 
+     * @since 1.0.7
+     */
+    public double getStandardDeviationValue() {
+        double result = Double.NaN;
+        if (this.standardDeviation != null) {
+            result = this.standardDeviation.doubleValue();
+        }
+        return result;
     }
 
     /**
@@ -129,4 +164,16 @@ public class MeanAndStandardDeviation implements Serializable {
         }
         return true;
     }
+    
+    /**
+     * Returns a string representing this instance.
+     * 
+     * @return A string.
+     * 
+     * @since 1.0.7
+     */
+    public String toString() {
+        return "[" + this.mean + ", " + this.standardDeviation + "]";
+    }
+
 }
