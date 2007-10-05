@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: EmptyBlock.java,v 1.4.2.1 2005/10/25 20:39:38 mungady Exp $
- *
  * Changes:
  * --------
  * 22-Oct-2004 : Version 1 (DG);

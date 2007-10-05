@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: CenterArrangement.java,v 1.3.2.2 2006/07/20 16:21:58 mungady Exp $
- *
  * Changes:
  * --------
  * 08-Mar-2005 : Version 1 (DG);
