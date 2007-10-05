@@ -30,9 +30,8 @@
  * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Bill Kelemen; Nicolas Brodu
- *
- * $Id: Axis.java,v 1.11.2.4 2006/08/23 10:24:26 mungady Exp $
+ * Contributor(s):   Bill Kelemen; 
+ *                   Nicolas Brodu.
  *
  * Changes (from 21-Aug-2001)
  * --------------------------
@@ -75,7 +74,7 @@
  * 26-Apr-2005 : Removed LOGGER (DG);
  * 01-Jun-2005 : Added hasListener() method for unit testing (DG);
  * 08-Jun-2005 : Fixed equals() method to handle GradientPaint (DG);
- * ------------- JFREECHART 1.0.0 ---------------------------------------------
+ * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 22-Aug-2006 : API doc updates (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Modifications to support entities for axis labels (DG);

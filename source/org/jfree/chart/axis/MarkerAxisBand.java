@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: MarkerAxisBand.java,v 1.6.2.1 2005/10/25 20:37:34 mungady Exp $
- *
  * Changes (from 03-Sep-2002)
  * --------------------------
  * 03-Sep-2002 : Updated Javadoc comments (DG);

@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: CategoryLabelPositions.java,v 1.5.2.1 2005/10/25 20:37:34 mungady Exp $
- *
  * Changes
  * -------
  * 06-Jan-2004 : Version 1 (DG);

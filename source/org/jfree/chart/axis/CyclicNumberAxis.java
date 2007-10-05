@@ -32,8 +32,6 @@
  * Original Author:  Nicolas Brodu;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *
- * $Id: CyclicNumberAxis.java,v 1.10.2.2 2005/10/25 20:37:34 mungady Exp $
- *
  * Changes
  * -------
  * 19-Nov-2003 : Initial import to JFreeChart from the JSynoptic project (NB);

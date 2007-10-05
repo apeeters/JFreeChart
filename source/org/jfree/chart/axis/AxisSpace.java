@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: AxisSpace.java,v 1.7.2.1 2005/10/25 20:37:34 mungady Exp $
- *
  * Changes
  * -------
  * 03-Jul-2003 : Version 1 (DG);

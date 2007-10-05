@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: NumberTickUnit.java,v 1.3.2.4 2007/06/11 13:41:07 mungady Exp $
- *
  * Changes (from 19-Dec-2001)
  * --------------------------
  * 19-Dec-2001 : Added standard header (DG);

@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: TickUnit.java,v 1.3.2.3 2007/06/11 11:09:25 mungady Exp $
- *
  * Changes (from 19-Dec-2001)
  * --------------------------
  * 19-Dec-2001 : Added standard header (DG);

@@ -35,8 +35,6 @@
  *                   Richard Atkinson;
  *                   Tin Luu;
  *
- * $Id: NumberAxis3D.java,v 1.5.2.3 2006/12/07 15:34:16 mungady Exp $
- *
  * Changes
  * -------
  * 31-Oct-2001 : Version 1 contributed by Serge V. Grachov (DG);

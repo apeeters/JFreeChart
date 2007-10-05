@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Nicolas Brodu;
  *
- * $Id: Tick.java,v 1.6.2.1 2005/10/25 20:37:34 mungady Exp $
- *
  * Changes (from 18-Sep-2001)
  * --------------------------
  * 18-Sep-2001 : Added standard header and fixed DOS encoding problem (DG);
