@@ -32,12 +32,11 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: PiePlot3DTests.java,v 1.1.2.2 2007/03/22 14:08:24 mungady Exp $
- *
  * Changes
  * -------
  * 18-Mar-2003 : Version 1 (DG);
  * 22-Mar-2007 : Added testEquals() (DG);
+ * 05-Oct-2007 : Modified testEquals() for new field (DG);
  *
  */
 
@@ -91,6 +90,11 @@ public class PiePlot3DTests extends TestCase {
         p1.setDepthFactor(1.23);
         assertFalse(p1.equals(p2));
         p2.setDepthFactor(1.23);
+        assertTrue(p1.equals(p2));
+        
+        p1.setDarkerSides(true);
+        assertFalse(p1.equals(p2));
+        p2.setDarkerSides(true);
         assertTrue(p1.equals(p2));
     }
     

@@ -37,8 +37,6 @@
  *                   Arnaud Lelievre;
  *                   Dave Crane;
  *
- * $Id: PiePlot3D.java,v 1.10.2.6 2007/03/22 14:08:24 mungady Exp $
- *
  * Changes
  * -------
  * 21-Jun-2002 : Version 1;
@@ -75,6 +73,8 @@
  * 22-Mar-2007 : Added equals() override (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 18-Jun-2007 : Added handling for simple label option (DG);
+ * 04-Oct-2007 : Added option to darken sides of plot - thanks to Alex Moots 
+ *               (see patch 1805262) (DG);
  *
  */
 
@@ -123,6 +123,15 @@ public class PiePlot3D extends PiePlot implements Serializable {
     /** The factor of the depth of the pie from the plot height */
     private double depthFactor = 0.2;
 
+    /** 
+     * A flag that controls whether or not the sides of the pie chart
+     * are rendered using a darker colour.
+     * 
+     *  @since 1.0.7.
+     */
+    private boolean darkerSides = false;  // default preserves previous 
+                                          // behaviour
+    
     /**
      * Creates a new instance with no dataset.
      */
@@ -162,6 +171,38 @@ public class PiePlot3D extends PiePlot implements Serializable {
      */
     public void setDepthFactor(double factor) {
         this.depthFactor = factor;
+        notifyListeners(new PlotChangeEvent(this));
+    }
+
+    /**
+     * Returns a flag that controls whether or not the sides of the pie chart
+     * are rendered using a darker colour.  This is only applied if the
+     * section colour is an instance of {@link java.awt.Color}.
+     *
+     * @return A boolean.
+     * 
+     * @see #setDarkerSides(boolean)
+     * 
+     * @since 1.0.7
+     */
+    public boolean getDarkerSides() {
+        return this.darkerSides;
+    }
+
+    /**
+     * Sets a flag that controls whether or not the sides of the pie chart
+     * are rendered using a darker colour, and sends a {@link PlotChangeEvent} 
+     * to all registered listeners.  This is only applied if the
+     * section colour is an instance of {@link java.awt.Color}.
+     *
+     * @param darker true to darken the sides, false to use the default behaviour.
+     * 
+     * @see #getDarkerSides()
+     * 
+     * @since 1.0.7.
+     */
+    public void setDarkerSides(boolean darker) {
+        this.darkerSides = darker;
         notifyListeners(new PlotChangeEvent(this));
     }
 
@@ -544,6 +585,14 @@ public class PiePlot3D extends PiePlot implements Serializable {
                             boolean drawFront, 
                             boolean drawBack) {
 
+        if (getDarkerSides()) {
+            if (paint instanceof Color) {
+                Color c = (Color) paint;
+                c = c.darker();
+                paint = c;
+            }
+        }
+    	
         double start = arc.getAngleStart();
         double extent = arc.getAngleExtent();
         double end = start + extent;
@@ -938,6 +987,9 @@ public class PiePlot3D extends PiePlot implements Serializable {
         }
         PiePlot3D that = (PiePlot3D) obj;
         if (this.depthFactor != that.depthFactor) {
+            return false;
+        }
+        if (this.darkerSides != that.darkerSides) {
             return false;
         }
         return super.equals(obj);
