@@ -27,12 +27,10 @@
  * -----------------------
  * CategoryAnnotation.java
  * -----------------------
- * (C) Copyright 2003-2005, by Object Refinery Limited.
+ * (C) Copyright 2003-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: CategoryAnnotation.java,v 1.2.2.1 2005/10/25 16:51:15 mungady Exp $
  *
  * Changes:
  * --------

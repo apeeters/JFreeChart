@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: XYBoxAnnotation.java,v 1.5.2.3 2006/08/02 11:49:10 mungady Exp $
- *
  * Changes:
  * --------
  * 19-Jan-2005 : Version 1 (DG);

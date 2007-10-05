@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Mike Harris;
  *
- * $Id: XYImageAnnotation.java,v 1.8.2.2 2006/12/01 15:57:33 mungady Exp $
- *
  * Changes:
  * --------
  * 01-Dec-2003 : Version 1 (DG);
