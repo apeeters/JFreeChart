@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: StandardEntityCollection.java,v 1.8.2.2 2006/12/01 11:22:03 mungady Exp $
- *
  * Changes
  * -------
  * 23-May-2002 : Version 1 (DG);
