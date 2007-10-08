@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,12 +27,10 @@
  * ----------------
  * ValueMarker.java
  * ----------------
- * (C) Copyright 2004, 2006, by Object Refinery Limited.
+ * (C) Copyright 2004-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: ValueMarker.java,v 1.3.2.3 2006/10/25 17:03:10 mungady Exp $
  *
  * Changes
  * -------
@@ -40,6 +38,8 @@
  * 16-Feb-2005 : Added new constructor (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 05-Sep-2006 : Added setValue() method (DG);
+ * 08-Oct-2007 : Fixed bug 1808376, constructor calling super with incorrect
+ *               values (DG);
  * 
  */
 
@@ -88,11 +88,11 @@ public class ValueMarker extends Marker {
      * @param stroke  the stroke (<code>null</code> not permitted).
      * @param outlinePaint  the outline paint (<code>null</code> permitted).
      * @param outlineStroke  the outline stroke (<code>null</code> permitted).
-     * @param alpha  the alpha transparency.
+     * @param alpha  the alpha transparency (in the range 0.0f to 1.0f).
      */
     public ValueMarker(double value, Paint paint, Stroke stroke, 
                        Paint outlinePaint, Stroke outlineStroke, float alpha) {
-        super(paint, stroke, paint, stroke, alpha);
+        super(paint, stroke, outlinePaint, outlineStroke, alpha);
         this.value = value;
     }
     
@@ -100,6 +100,8 @@ public class ValueMarker extends Marker {
      * Returns the value.
      *
      * @return The value.
+     * 
+     * @see #setValue(double)
      */
     public double getValue() {
         return this.value;
@@ -110,6 +112,8 @@ public class ValueMarker extends Marker {
      * all registered listeners.
      * 
      * @param value  the value.
+     * 
+     * @see #getValue()
      * 
      * @since 1.0.3
      */
