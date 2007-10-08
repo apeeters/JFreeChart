@@ -33,8 +33,6 @@
  * Contributor(s):   Arnaud Lelievre;
  *                   Daniel Gredler;
  *
- * $Id: DefaultTitleEditor.java,v 1.1.2.1 2005/11/24 16:11:48 mungady Exp $
- *
  * Changes
  * -------
  * 24-Nov-2005 : Version 1, based on TitlePropertyEditPanel.java (DG);

@@ -33,8 +33,6 @@
  * Contributor(s):   Arnaud Lelievre;
  *                   Daniel Gredler;
  *
- * $Id: DefaultChartEditor.java,v 1.1.2.1 2005/11/24 16:11:48 mungady Exp $
- *
  * Changes
  * -------
  * 24-Nov-2005 : New class, based on ChartPropertyEditPanel.java (DG);
