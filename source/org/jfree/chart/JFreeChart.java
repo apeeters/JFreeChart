@@ -41,8 +41,6 @@
  * contributed to this source file (JFreeChart.java) - for a list of ALL
  * contributors to the project, please see the README.txt file.
  *
- * $Id: JFreeChart.java,v 1.34.2.21 2007/06/05 15:41:38 mungady Exp $
- *
  * Changes (from 20-Jun-2001)
  * --------------------------
  * 20-Jun-2001 : Modifications submitted by Andrzej Porebski for legend 
@@ -902,7 +900,7 @@ public class JFreeChart implements Drawable,
      * {@link RenderingHints#VALUE_TEXT_ANTIALIAS_OFF}, then sends a 
      * {@link ChartChangeEvent} to all registered listeners.
      * 
-     * @param flag
+     * @param flag  the new value of the flag.
      * 
      * @since 1.0.5
      * 
@@ -914,7 +912,7 @@ public class JFreeChart implements Drawable,
             setTextAntiAlias(RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         }
         else {
-            setTextAntiAlias(RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);            
+            setTextAntiAlias(RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
         }
     }
 
@@ -1227,10 +1225,10 @@ public class JFreeChart implements Drawable,
     /**
      * Creates a rectangle that is aligned to the frame.
      * 
-     * @param dimensions
-     * @param frame
-     * @param hAlign
-     * @param vAlign
+     * @param dimensions  the dimensions for the rectangle.
+     * @param frame  the frame to align to.
+     * @param hAlign  the horizontal alignment.
+     * @param vAlign  the vertical alignment.
      * 
      * @return A rectangle.
      */
