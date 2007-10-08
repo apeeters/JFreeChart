@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: CandlestickRendererTests.java,v 1.1.2.2 2007/03/05 14:40:33 mungady Exp $
- *
  * Changes
  * -------
  * 25-Mar-2003 : Version 1 (DG);
@@ -41,6 +39,7 @@
  * 17-Aug-2006 : Strengthened testEquals() and added testFindRangeBounds() 
  *               method (DG);
  * 05-Mar-2007 : Added new field to testEquals() (DG);
+ * 08-Oct-2007 : Added tests for new volumePaint field (DG);
  *
  */
 
@@ -87,6 +86,23 @@ public class CandlestickRendererTests extends TestCase {
      */
     public CandlestickRendererTests(String name) {
         super(name);
+    }
+
+    private static final double EPSILON = 0.0000000001;
+    
+    /**
+     * Some checks for the constructor.
+     */
+    public void testConstructor() {
+        CandlestickRenderer r1 = new CandlestickRenderer();
+        
+        // check defaults
+        assertEquals(Color.green, r1.getUpPaint());
+        assertEquals(Color.red, r1.getDownPaint());
+        assertFalse(r1.getUseOutlinePaint());
+        assertTrue(r1.getDrawVolume());
+        assertEquals(Color.gray, r1.getVolumePaint());
+        assertEquals(-1.0, r1.getCandleWidth(), EPSILON);
     }
 
     /**
@@ -152,6 +168,11 @@ public class CandlestickRendererTests extends TestCase {
         r1.setUseOutlinePaint(true);
         assertFalse(r1.equals(r2));
         r2.setUseOutlinePaint(true);
+        assertTrue(r1.equals(r2));
+        
+        r1.setVolumePaint(Color.blue);
+        assertFalse(r1.equals(r2));
+        r2.setVolumePaint(Color.blue);
         assertTrue(r1.equals(r2));
     }
 

@@ -35,8 +35,6 @@
  *                    Christian W. Zuckschwerdt;
  *                    Jerome Fisher;
  *
- * $Id: CandlestickRenderer.java,v 1.7.2.6 2007/06/11 11:07:18 mungady Exp $
- *
  * Changes
  * -------
  * 13-Dec-2001 : Version 1.  Based on code in the (now redundant) 
@@ -82,6 +80,7 @@
  * 20-Jun-2007 : Removed deprecated drawVolume() method, and removed JCommon
  *               dependencies (DG);
  * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
+ * 08-Oct-2007 : Added new volumePaint field (DG);
  * 
  */
 
@@ -180,6 +179,14 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     /** A flag controlling whether or not volume bars are drawn on the chart. */
     private boolean drawVolume;
     
+    /** 
+     * The paint used to fill the volume bars (if they are visible).  Once 
+     * initialised, this field should never be set to <code>null</code>.
+     *
+     * @since 1.0.7
+     */
+    private transient Paint volumePaint;
+    
     /** Temporary storage for the maximum volume. */
     private transient double maxVolume;
     
@@ -229,6 +236,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         setBaseToolTipGenerator(toolTipGenerator);
         this.candleWidth = candleWidth;
         this.drawVolume = drawVolume;
+        this.volumePaint = Color.gray;
         this.upPaint = Color.green;
         this.downPaint = Color.red;
         this.useOutlinePaint = false;  // false preserves the old behaviour
@@ -477,6 +485,39 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
             notifyListeners(new RendererChangeEvent(this));
         }
     }
+    
+    /**
+     * Returns the paint that is used to fill the volume bars if they are
+     * visible.
+     * 
+     * @return The paint (never <code>null</code>).
+     * 
+     * @see #setVolumePaint(Paint)
+     * 
+     * @since 1.0.7
+     */
+    public Paint getVolumePaint() {
+        return this.volumePaint;    
+    }
+    
+    /**
+     * Sets the paint used to fill the volume bars, and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param paint  the paint (<code>null</code> not permitted).
+     * 
+     * @see #getVolumePaint()
+     * @see #getDrawVolume()
+     * 
+     * @since 1.0.7
+     */
+    public void setVolumePaint(Paint paint) {
+        if (paint == null) { 
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        this.volumePaint = paint;
+        notifyListeners(new RendererChangeEvent(this));        
+    }
 
     /**
      * Returns the flag that controls whether or not the renderer's outline
@@ -715,7 +756,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
 
             double zzVolume = volumeHeight * (max - min);
 
-            g2.setPaint(Color.gray);
+            g2.setPaint(getVolumePaint());
             Composite originalComposite = g2.getComposite();
             g2.setComposite(
                 AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f)
@@ -848,6 +889,9 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         if (this.useOutlinePaint != that.useOutlinePaint) {
             return false;
         }
+        if (!PaintUtilities.equal(this.volumePaint, that.volumePaint)) {
+            return false;
+        }
         return super.equals(obj);
     }
 
@@ -873,6 +917,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         stream.defaultWriteObject();
         SerialUtilities.writePaint(this.upPaint, stream);
         SerialUtilities.writePaint(this.downPaint, stream);
+        SerialUtilities.writePaint(this.volumePaint, stream);
     }
 
     /**
@@ -888,6 +933,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         stream.defaultReadObject();
         this.upPaint = SerialUtilities.readPaint(stream);
         this.downPaint = SerialUtilities.readPaint(stream);
+        this.volumePaint = SerialUtilities.readPaint(stream);
     }
 
 }
