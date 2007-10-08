@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,18 +27,17 @@
  * ---------------------------------
  * RendererCategoryPackageTests.java
  * ---------------------------------
- * (C) Copyright 2004, 2005, by Object Refinery Limited.
+ * (C) Copyright 2004-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: RendererCategoryPackageTests.java,v 1.1.2.1 2006/10/03 15:41:34 mungady Exp $
  *
  * Changes:
  * --------
  * 23-Aug-2004 : Restructured org.jfree.chart.renderer package (DG);
  * 18-Jan-2005 : Added main() method.
  * 15-Jun-2005 : Added new tests for StatisticalLineAndShapeRendererTests (DG);
+ * 08-Oct-2007 : Added MultiShapeRendererTests (DG);
  *
  */
 
@@ -77,6 +76,7 @@ public class RendererCategoryPackageTests extends TestCase {
         suite.addTestSuite(LineAndShapeRendererTests.class);
         suite.addTestSuite(LineRenderer3DTests.class);
         suite.addTestSuite(MinMaxCategoryRendererTests.class);
+        suite.addTestSuite(MultiShapeRendererTests.class);
         suite.addTestSuite(StackedAreaRendererTests.class);
         suite.addTestSuite(StackedBarRendererTests.class);
         suite.addTestSuite(StackedBarRenderer3DTests.class);
