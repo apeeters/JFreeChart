@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: StrokeMap.java,v 1.1.2.1 2006/09/27 17:06:59 mungady Exp $
- *
  * Changes:
  * --------
  * 27-Sep-2006 : Version 1 (DG);

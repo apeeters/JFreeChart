@@ -7,10 +7,8 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: Drawable.java,v 1.4 2005/11/16 15:58:41 taqua Exp $
- *
- * Changes (from 30-May-2002)
- * --------------------------
+ * Changes
+ * -------
  * 25-Jun-2002 : Version 1 (DG);
  * 21-Jun-2007 : Copied from JCommon (DG);
  *
