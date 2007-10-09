@@ -33,8 +33,6 @@
  *                   the StackedXYAreaRenderer class by Richard Atkinson;
  * Contributor(s):   -;
  *
- * $Id: StackedXYAreaRenderer2.java,v 1.6.2.6 2007/02/06 15:32:14 mungady Exp $
- *
  * Changes:
  * --------
  * 30-Apr-2004 : Version 1 (DG);

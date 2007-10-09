@@ -33,8 +33,6 @@
  * Contributor(s):   Richard Atkinson;
  *                   Christian W. Zuckschwerdt;
  *
- * $Id: HighLowRenderer.java,v 1.5.2.3 2006/07/06 10:03:34 mungady Exp $
- *
  * Changes
  * -------
  * 13-Dec-2001 : Version 1 (DG);

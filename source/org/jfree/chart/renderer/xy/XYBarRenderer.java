@@ -35,8 +35,6 @@
  *                   Bill Kelemen;
  *                   Marc van Glabbeek (bug 1775452);
  *
- * $Id: XYBarRenderer.java,v 1.14.2.17 2007/06/15 12:43:24 mungady Exp $
- *
  * Changes
  * -------
  * 13-Dec-2001 : Version 1, makes VerticalXYBarPlot class redundant (DG);
