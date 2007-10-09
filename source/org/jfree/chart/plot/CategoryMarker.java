@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Nicolas Brodu;
  *
- * $Id: CategoryMarker.java,v 1.1.2.4 2006/10/24 15:39:20 mungady Exp $
- *
  * Changes
  * -------
  * 20-May-2005 : Version 1 (DG);

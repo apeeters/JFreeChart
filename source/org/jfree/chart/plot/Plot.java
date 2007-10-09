@@ -37,8 +37,6 @@
  *                   Nicolas Brodu;
  *                   Michal Krause;
  *
- * $Id: Plot.java,v 1.18.2.9 2007/06/07 12:49:36 mungady Exp $
- *
  * Changes (from 21-Jun-2001)
  * --------------------------
  * 21-Jun-2001 : Removed redundant JFreeChart parameter from constructors (DG);

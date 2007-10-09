@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: MeterInterval.java,v 1.4.2.1 2005/10/25 20:52:07 mungady Exp $
- *
  * Changes
  * -------
  * 22-Mar-2005 : Version 1 (DG);

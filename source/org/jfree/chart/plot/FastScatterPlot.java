@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Arnaud Lelievre;
  *
- * $Id: FastScatterPlot.java,v 1.11.2.5 2007/01/11 11:06:04 mungady Exp $
- *
  * Changes (from 29-Oct-2002)
  * --------------------------
  * 29-Oct-2002 : Added standard header (DG);

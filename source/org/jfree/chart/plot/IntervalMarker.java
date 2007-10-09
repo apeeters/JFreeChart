@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: IntervalMarker.java,v 1.6.2.4 2006/10/25 15:47:16 mungady Exp $
- *
  * Changes (since 20-Aug-2002)
  * --------------------------
  * 20-Aug-2002 : Added stroke to constructor in Marker class (DG);

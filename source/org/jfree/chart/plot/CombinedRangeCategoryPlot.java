@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Nicolas Brodu;
  *
- * $Id: CombinedRangeCategoryPlot.java,v 1.13.2.2 2006/09/13 10:32:36 mungady Exp $
- *
  * Changes:
  * --------
  * 16-May-2003 : Version 1 (DG);
