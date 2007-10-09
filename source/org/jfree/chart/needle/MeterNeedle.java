@@ -35,8 +35,6 @@
  *                   Nicolas Brodu (for Astrium and EADS Corporate Research 
  *                   Center);
  *
- * $Id: MeterNeedle.java,v 1.4.2.3 2006/08/02 10:40:57 mungady Exp $
- *
  * Changes:
  * --------
  * 25-Sep-2002 : Version 1, contributed by Bryan Scott (DG);
