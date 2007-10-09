@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: StandardXYZToolTipGenerator.java,v 1.5.2.1 2005/10/25 20:49:02 mungady Exp $
- *
  * Changes
  * -------
  * 11-May-2003 : Version 1, split from StandardXYZItemLabelGenerator (DG);

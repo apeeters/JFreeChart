@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: IntervalCategoryToolTipGenerator.java,v 1.3.2.1 2005/10/25 20:49:02 mungady Exp $
- *
  * Changes
  * -------
  * 11-May-2004 : Version 1, split from IntervalCategoryItemLabelGenerator (DG);

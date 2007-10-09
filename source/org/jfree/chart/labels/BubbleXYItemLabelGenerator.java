@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: BubbleXYItemLabelGenerator.java,v 1.1.2.1 2006/01/27 12:51:21 mungady Exp $
- *
  * Changes
  * -------
  * 13-Dec-2005 : Version 1, based on StandardXYZToolTipGenerator (DG);

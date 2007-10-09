@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: CategoryItemLabelGenerator.java,v 1.1.2.1 2005/10/25 20:49:02 mungady Exp $
- *
  * Changes
  * -------
  * 13-Dec-2001 : Version 1 (DG);

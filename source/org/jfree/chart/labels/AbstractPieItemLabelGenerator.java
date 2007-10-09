@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,18 +27,16 @@
  * ----------------------------------
  * AbstractPieItemLabelGenerator.java
  * ----------------------------------
- * (C) Copyright 2004-2006, by Object Refinery Limited.
+ * (C) Copyright 2004-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: AbstractPieItemLabelGenerator.java,v 1.5.2.2 2006/05/03 10:46:36 mungady Exp $
  *
  * Changes
  * -------
  * 09-Nov-2004 : Version 1, draws out code from StandardPieItemLabelGenerator 
  *               and StandardPieToolTipGenerator (DG);
- * ------------- JFREECHART 1.0.0 ---------------------------------------------
+ * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 03-May-2006 : Fixed bug 1480978, a problem in the clone() method (DG);
  * 
  */

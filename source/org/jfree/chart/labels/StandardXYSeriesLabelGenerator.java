@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: StandardXYSeriesLabelGenerator.java,v 1.5.2.2 2006/11/24 16:36:33 mungady Exp $
- *
  * Changes
  * -------
  * 16-Nov-2004 : Version 1 (DG);

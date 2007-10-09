@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: StandardCategorySeriesLabelGenerator.java,v 1.2.2.2 2006/05/03 15:44:02 mungady Exp $
- *
  * Changes
  * -------
  * 20-Apr-2005 : Version 1 (DG);
