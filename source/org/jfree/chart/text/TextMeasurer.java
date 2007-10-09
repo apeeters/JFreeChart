@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: TextMeasurer.java,v 1.4 2005/10/18 13:17:16 mungady Exp $
- *
  * Changes
  * -------
  * 07-Jan-2004 : Version 1 (DG);

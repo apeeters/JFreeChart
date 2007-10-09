@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: TextAnchor.java,v 1.5 2005/10/18 13:18:34 mungady Exp $
- *
  * Changes:
  * --------
  * 10-Jun-2003 : Version 1 (DG);

@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: TextFragment.java,v 1.13 2007/03/16 10:25:58 mungady Exp $
- *
  * Changes
  * -------
  * 07-Nov-2003 : Version 1 (DG);

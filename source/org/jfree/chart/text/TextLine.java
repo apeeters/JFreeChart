@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: TextLine.java,v 1.11 2005/10/18 13:17:16 mungady Exp $
- *
  * Changes
  * -------
  * 07-Nov-2003 : Version 1 (DG);

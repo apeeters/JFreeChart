@@ -7,8 +7,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: TextBox.java,v 1.12 2005/11/16 15:58:41 taqua Exp $
- *
  * Changes
  * -------
  * 09-Mar-2004 : Version 1 (DG);
