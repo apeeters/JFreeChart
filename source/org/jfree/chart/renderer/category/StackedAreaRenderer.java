@@ -35,8 +35,6 @@
  *                   David Gilbert (for Object Refinery Limited);
  *                   Christian W. Zuckschwerdt;
  *
- * $Id: StackedAreaRenderer.java,v 1.6.2.4 2007/04/20 08:58:05 mungady Exp $
- *
  * Changes:
  * --------
  * 20-Sep-2002 : Version 1, contributed by Dan Rivett;
