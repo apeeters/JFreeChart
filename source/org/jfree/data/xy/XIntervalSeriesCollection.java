@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: XIntervalSeriesCollection.java,v 1.1.2.3 2006/11/27 17:27:52 mungady Exp $
- *
  * Changes
  * -------
  * 20-Oct-2006 : Version 1 (DG);

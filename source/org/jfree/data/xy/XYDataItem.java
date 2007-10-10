@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: XYDataItem.java,v 1.6.2.1 2005/10/25 21:36:51 mungady Exp $
- *
  * Changes
  * -------
  * 05-Aug-2003 : Renamed XYDataPair --> XYDataItem (DG);
