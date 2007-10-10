@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: TimePeriodValues.java,v 1.8.2.2 2006/10/03 15:16:33 mungady Exp $
- *
  * Changes
  * -------
  * 22-Apr-2003 : Version 1 (DG);

@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: MonthConstants.java,v 1.4 2005/11/16 15:58:40 taqua Exp $
- *
  * Changes
  * -------
  * 29-May-2002 : Version 1 (code moved from SerialDate class) (DG);

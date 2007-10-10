@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Benoit Xhenseval;
  *
- * $Id: MovingAverage.java,v 1.5.2.1 2005/10/25 21:35:24 mungady Exp $
- *
  * Changes
  * -------
  * 28-Jan-2003 : Version 1 (DG);

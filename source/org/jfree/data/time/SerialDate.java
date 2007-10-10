@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: SerialDate.java,v 1.8 2006/08/29 13:44:16 mungady Exp $
- *
  * Changes (from 11-Oct-2001)
  * --------------------------
  * 11-Oct-2001 : Re-organised the class and moved it to new package 

@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: SpreadsheetDate.java,v 1.10 2006/08/29 13:59:30 mungady Exp $
- *
  * Changes
  * -------
  * 11-Oct-2001 : Version 1 (DG);

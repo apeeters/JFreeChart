@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: RegularTimePeriod.java,v 1.6.2.2 2006/10/06 14:00:15 mungady Exp $
- *
  * Changes
  * -------
  * 11-Oct-2001 : Version 1 (DG);
