@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: SimpleHistogramBin.java,v 1.4.2.1 2005/10/25 21:34:46 mungady Exp $
- *
  * Changes
  * -------
  * 10-Jan-2005 : Version 1 (DG);

@@ -34,8 +34,6 @@
  *                   Cameron Hayne;
  *                   Rikard Bj?rklind;
  *
- * $Id: HistogramDataset.java,v 1.9.2.7 2006/09/07 15:26:49 mungady Exp $
- *
  * Changes
  * -------
  * 06-Jul-2003 : Version 1, contributed by Jelai Wang (DG);
