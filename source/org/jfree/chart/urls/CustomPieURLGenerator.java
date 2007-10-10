@@ -32,8 +32,6 @@
  * Original Author:  David Basten;
  * Contributors:     -;
  *
- * $Id: CustomPieURLGenerator.java,v 1.3.2.2 2006/11/24 11:05:02 mungady Exp $
- *
  * Changes:
  * --------
  * 04-Feb-2004 : Version 1, contributed by David Basten based on 
