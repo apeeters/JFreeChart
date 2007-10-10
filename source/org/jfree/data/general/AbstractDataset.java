@@ -33,8 +33,6 @@
  * Contributor(s):   Nicolas Brodu (for Astrium and EADS Corporate Research 
  *                   Center);
  *
- * $Id: AbstractDataset.java,v 1.5.2.2 2006/07/26 12:14:20 mungady Exp $
- *
  * Changes (from 21-Aug-2001)
  * --------------------------
  * 21-Aug-2001 : Added standard header. Fixed DOS encoding problem (DG);
