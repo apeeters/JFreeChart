@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: KeyToGroupMap.java,v 1.7.2.2 2005/10/25 21:29:13 mungady Exp $
- *
  * Changes
  * -------
  * 29-Apr-2004 : Version 1 (DG);

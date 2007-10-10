@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: KeyedValueComparator.java,v 1.4.2.1 2005/10/25 21:29:13 mungady Exp $
- *
  * Changes:
  * --------
  * 05-Mar-2003 : Version 1 (DG);

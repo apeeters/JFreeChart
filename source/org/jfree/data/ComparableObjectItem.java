@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: ComparableObjectItem.java,v 1.1.2.1 2006/10/20 15:23:22 mungady Exp $
- *
  * Changes
  * -------
  * 19-Oct-2006 : New class, based on XYDataItem (DG);
