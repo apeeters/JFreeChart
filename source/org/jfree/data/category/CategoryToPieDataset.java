@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Christian W. Zuckschwerdt;
  *
- * $Id: CategoryToPieDataset.java,v 1.4.2.2 2006/07/26 10:28:00 mungady Exp $
- *
  * Changes
  * -------
  * 23-Jan-2003 : Version 1 (DG);
@@ -41,7 +39,7 @@
  * 29-Jan-2004 : Replaced 'extract' int with TableOrder (DG);
  * 11-Jan-2005 : Removed deprecated code in preparation for the 1.0.0 
  *               release (DG);
- * ------------- JFREECHART 1.0.0 RELEASED ------------------------------------
+ * ------------- JFREECHART 1.0.x RELEASED ------------------------------------
  * 26-Jul-2006 : Added serialVersionUID, changed constructor to allow null
  *               for source, and added getSource(), getExtractType() and
  *               getExtractIndex() methods - see feature request 1477915 (DG);
