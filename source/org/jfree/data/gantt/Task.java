@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: Task.java,v 1.4.2.1 2005/10/25 21:31:44 mungady Exp $
- *
  * Changes
  * -------
  * 10-Jan-2003 : Version 1 (DG);

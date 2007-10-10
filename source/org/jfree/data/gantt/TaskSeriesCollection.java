@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Thomas Schuster;
  *
- * $Id: TaskSeriesCollection.java,v 1.9.2.5 2007/03/08 13:57:08 mungady Exp $
- *
  * Changes
  * -------
  * 06-Jun-2002 : Version 1 (DG);
