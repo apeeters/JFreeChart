@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: UnitType.java,v 1.7 2005/10/18 13:24:19 mungady Exp $
- *
  * Changes:
  * --------
  * 11-Feb-2004 : Version 1 (DG);

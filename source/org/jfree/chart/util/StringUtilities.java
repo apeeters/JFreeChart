@@ -32,8 +32,6 @@
  * Original Author:  Thomas Morgner;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *
- * $Id: StringUtils.java,v 1.5 2005/10/18 13:24:19 mungady Exp $
- *
  * Changes
  * -------
  * 21-Jun-2003 : Initial version (TM);

@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: ApplicationFrame.java,v 1.4 2005/11/16 15:58:41 taqua Exp $
- *
  * Changes (from 30-May-2002)
  * --------------------------
  * 30-May-2002 : Added title (DG);

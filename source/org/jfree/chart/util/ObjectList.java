@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: ObjectList.java,v 1.6 2005/11/14 10:56:42 mungady Exp $
- *
  * Changes
  * -------
  * 17-Jul-2003 : Version 1 (DG);

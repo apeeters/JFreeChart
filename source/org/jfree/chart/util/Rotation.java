@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: Rotation.java,v 1.5 2005/11/16 15:58:41 taqua Exp $
- *
  * Changes
  * -------
  * 19-Aug-2003 : Version 1 (DG);

@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: PublicCloneable.java,v 1.3 2005/10/18 13:24:19 mungady Exp $
- *
  * Changes
  * -------
  * 18-Aug-2003 : Version 1 (DG);

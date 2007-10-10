@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Arik Levin;
  *
- * $Id: SerialUtilities.java,v 1.13 2005/11/03 09:55:27 mungady Exp $
- *
  * Changes
  * -------
  * 25-Mar-2003 : Version 1 (DG);

@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: GradientPaintTransformer.java,v 1.4 2007/04/03 12:34:13 mungady Exp $
- *
  * Changes
  * -------
  * 28-Oct-2003 : Version 1 (DG);

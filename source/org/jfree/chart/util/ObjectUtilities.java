@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Thomas Morgner;
  *
- * $Id: ObjectUtilities.java,v 1.17 2006/12/03 15:33:33 taqua Exp $
- *
  * Changes
  * -------
  * 25-Mar-2003 : Version 1 (DG);

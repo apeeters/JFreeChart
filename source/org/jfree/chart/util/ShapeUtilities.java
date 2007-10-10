@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: ShapeUtilities.java,v 1.17 2005/11/02 16:31:50 mungady Exp $
- *
  * Changes
  * -------
  * 13-Aug-2003 : Version 1 (DG);

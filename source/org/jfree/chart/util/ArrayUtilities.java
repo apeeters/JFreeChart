@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Thomas Morgner;
  *
- * $Id: ArrayUtilities.java,v 1.6 2006/07/04 10:20:40 taqua Exp $
- *
  * Changes
  * -------
  * 21-Aug-2003 : Version 1 (DG);

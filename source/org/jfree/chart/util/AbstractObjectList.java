@@ -31,9 +31,7 @@
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Bill Kelemen; 
- *                   Nicolas Brodu
- *
- * $Id: AbstractObjectList.java,v 1.5 2005/10/18 13:24:19 mungady Exp $
+ *                   Nicolas Brodu;
  *
  * Changes
  * -------

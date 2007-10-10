@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: BooleanList.java,v 1.5 2005/10/18 13:24:19 mungady Exp $
- *
  * Changes
  * -------
  * 11-Jun-2003 : Version 1 (DG);

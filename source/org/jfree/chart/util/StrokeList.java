@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: StrokeList.java,v 1.5 2005/10/18 13:24:19 mungady Exp $
- *
  * Changes
  * -------
  * 19-Aug-2003 : Version 1 (DG);

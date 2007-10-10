@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: LengthAdjustmentType.java,v 1.5 2005/11/03 09:55:27 mungady Exp $
- *
  * Changes:
  * --------
  * 21-Jan-2005 : Version 1 (DG);

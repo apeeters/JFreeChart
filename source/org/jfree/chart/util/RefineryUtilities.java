@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Jon Iles;
  *
- * $Id: RefineryUtilities.java,v 1.10 2007/05/21 17:13:59 taqua Exp $
- *
  * Changes (from 26-Oct-2001)
  * --------------------------
  * 26-Oct-2001 : Changed package to com.jrefinery.ui.*;

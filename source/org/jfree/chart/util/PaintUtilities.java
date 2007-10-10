@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: PaintUtilities.java,v 1.9 2005/11/16 15:58:41 taqua Exp $
- *
  * Changes
  * -------
  * 13-Nov-2003 : Version 1 (DG);

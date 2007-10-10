@@ -32,8 +32,6 @@
  * Original Author:  Christian W. Zuckschwerdt;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *
- * $Id: Align.java,v 1.5 2005/10/18 13:18:34 mungady Exp $
- *
  * Changes (from 30-May-2002)
  * --------------------------
  * 30-May-2002 : Added title (DG);
