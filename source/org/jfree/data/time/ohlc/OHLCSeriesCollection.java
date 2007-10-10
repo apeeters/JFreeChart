@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: OHLCSeriesCollection.java,v 1.1.2.1 2006/12/04 17:08:36 mungady Exp $
- *
  * Changes
  * -------
  * 04-Dec-2006 : Version 1 (DG);
