@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: Contributor.java,v 1.4 2005/11/16 15:58:41 taqua Exp $
- *
  * Changes
  * -------
  * 10-Dec-2001 : Version 1 (DG);

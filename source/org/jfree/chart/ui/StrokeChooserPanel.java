@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Dirk Zeitz;
  *
- * $Id: StrokeChooserPanel.java,v 1.5 2005/11/16 15:58:41 taqua Exp $
- *
  * Changes (from 26-Oct-2001)
  * --------------------------
  * 26-Oct-2001 : Changed package to com.jrefinery.ui.*;

@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: Licences.java,v 1.4 2005/11/16 15:58:41 taqua Exp $
- *
  * Changes
  * -------
  * 26-Nov-2001 : Version 1 (DG);

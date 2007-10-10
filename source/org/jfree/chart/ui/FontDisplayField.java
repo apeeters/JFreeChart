@@ -32,10 +32,8 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Arnaud Lelievre;
  *
- * $Id: FontDisplayField.java,v 1.4 2005/11/16 15:58:41 taqua Exp $
- *
  * Changes (from 26-Oct-2001)
- * ----------------------------------
+ * --------------------------
  * 26-Oct-2001 : Changed package to com.jrefinery.ui.*;
  * 14-Oct-2002 : Fixed errors reported by Checkstyle (DG);
  * 08-Sep-2003 : Added internationalization via use of properties resourceBundle (RFE 690236) (AL);

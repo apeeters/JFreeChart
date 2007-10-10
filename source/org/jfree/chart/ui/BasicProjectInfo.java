@@ -32,8 +32,6 @@
  * Original Author:  Thomas Morgner;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *
- * $Id: BasicProjectInfo.java,v 1.7 2006/04/14 13:00:56 taqua Exp $
- *
  * Changes
  * -------
  * 07-Jun-2004 : Added source headers (DG);

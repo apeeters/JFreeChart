@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: ProjectInfo.java,v 1.5 2005/11/16 15:58:41 taqua Exp $
- *
  * Changes (since 27-Jun-2002)
  * ---------------------------
  * 27-Jun-2002 : Added logo, updated source header and Javadocs (DG);
