@@ -38,6 +38,7 @@
  * 18-Jan-2005 : Added main() method.
  * 15-Jun-2005 : Added new tests for StatisticalLineAndShapeRendererTests (DG);
  * 08-Oct-2007 : Added MultiShapeRendererTests (DG);
+ * 11-Oct-2007 : Renamed MultiShapeRendererTests --> ScatterRendererTests (DG);
  *
  */
 
@@ -76,7 +77,7 @@ public class RendererCategoryPackageTests extends TestCase {
         suite.addTestSuite(LineAndShapeRendererTests.class);
         suite.addTestSuite(LineRenderer3DTests.class);
         suite.addTestSuite(MinMaxCategoryRendererTests.class);
-        suite.addTestSuite(MultiShapeRendererTests.class);
+        suite.addTestSuite(ScatterRendererTests.class);
         suite.addTestSuite(StackedAreaRendererTests.class);
         suite.addTestSuite(StackedBarRendererTests.class);
         suite.addTestSuite(StackedBarRenderer3DTests.class);
