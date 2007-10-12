@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: PeriodAxisLabelInfoTests.java,v 1.1.2.1 2006/10/03 15:41:23 mungady Exp $
- *
  * Changes
  * -------
  * 10-Jun-2003 : Version 1 (DG);
