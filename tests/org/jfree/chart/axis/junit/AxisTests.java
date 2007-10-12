@@ -30,9 +30,7 @@
  * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * $Id: AxisTests.java,v 1.1.2.1 2006/10/03 15:41:23 mungady Exp $
+ * Contributor(s):   -
  *
  * Changes
  * -------

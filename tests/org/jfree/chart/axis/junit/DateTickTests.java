@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: DateTickTests.java,v 1.1.2.1 2006/10/03 15:41:23 mungady Exp $
- *
  * Changes
  * -------
  * 13-May-2004 : Version 1 (DG);
