@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: GridArrangementTests.java,v 1.1.2.1 2006/10/03 15:41:44 mungady Exp $
- *
  * Changes
  * -------
  * 08-Mar-2005 : Version 1 (DG);
