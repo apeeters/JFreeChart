@@ -158,9 +158,13 @@ public class SWTTimeSeriesDemo {
         s2.add(new Month(7, 2001), 119.2);
         s2.add(new Month(8, 2001), 116.5);
         s2.add(new Month(9, 2001), 112.7);
-        s2.add(new Month(10, 2001), 101.5);
-        s2.add(new Month(11, 2001), 106.1);
-        s2.add(new Month(12, 2001), 110.3);
+        s2.add(new Month(10, 2001), 180.5);
+        s2.add(new Month(11, 2001), 140.1);
+        s2.add(new Month(12, 2001), 110.3);         
+//        s2.add(new Month(9, 2001), 112.7);
+//        s2.add(new Month(10, 2001), 101.5);
+//        s2.add(new Month(11, 2001), 106.1);
+//        s2.add(new Month(12, 2001), 110.3);
         s2.add(new Month(1, 2002), 111.7);
         s2.add(new Month(2, 2002), 111.0);
         s2.add(new Month(3, 2002), 109.6);
@@ -168,7 +172,6 @@ public class SWTTimeSeriesDemo {
         s2.add(new Month(5, 2002), 111.6);
         s2.add(new Month(6, 2002), 108.8);
         s2.add(new Month(7, 2002), 101.6);
-        
         TimeSeriesCollection dataset = new TimeSeriesCollection();
         dataset.addSeries(s1);
         dataset.addSeries(s2);

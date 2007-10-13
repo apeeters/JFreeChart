@@ -46,6 +46,7 @@
  * 06-Jul-2007 : Implemented clipping (HP);
  * 16-Jul-2007 : Implemented alpha channel (HP);
  * 11-Sep-2007 : Fixed alpha channel lying within awt colors, bug 1737869 (HP);
+ * 13-Oct-2007 : Fixed compositing issues (HP);
  */
 
 package org.jfree.experimental.swt;
@@ -95,8 +96,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.Transform;
 
-import sun.java2d.loops.XORComposite;
-
 /**
  * This is a class utility to draw Graphics2D stuff on a swt composite.
  * It is presently developed to use JFreeChart with the Standard 
@@ -107,6 +106,10 @@ public class SWTGraphics2D extends Graphics2D {
 	/** The swt graphic composite */
 	private GC gc;
 
+	/** A reference to the compositing rule to apply. This is necessary 
+	 * due to the poor compositing interface of the SWT toolkit. */
+	private java.awt.Composite composite;
+	
 	/** A HashMap to store the Swt color resources. */
 	private Map colorsPool = new HashMap();
 
@@ -124,6 +127,7 @@ public class SWTGraphics2D extends Graphics2D {
 	public SWTGraphics2D(GC gc) {
 		super();
 		this.gc = gc;
+		this.composite = AlphaComposite.getInstance(AlphaComposite.SRC, 1.0f);
 	}
 
 	/**
@@ -390,9 +394,9 @@ public class SWTGraphics2D extends Graphics2D {
 	 * @see java.awt.Graphics2D#fill(java.awt.Shape)
 	 */
 	public void fill(Shape shape) {
-		if (!(shape instanceof java.awt.geom.Rectangle2D)) {
-			System.out.println("using fill with shape: "+shape.toString());
-		}
+//		if (!(shape instanceof java.awt.geom.Rectangle2D)) {
+//			System.out.println("using fill with shape: "+shape.toString());
+//		}
 //		if (shape instanceof java.awt.geom.GeneralPath) {
 //			java.awt.geom.GeneralPath gp = (java.awt.geom.GeneralPath) shape;
 //			PathIteratorgp.getPathIterator(this.getTransform());
@@ -425,9 +429,10 @@ public class SWTGraphics2D extends Graphics2D {
 	 * @see java.awt.Graphics2D#setComposite(java.awt.Composite)
 	 */
 	public void setComposite(Composite comp) {
-		//TODO verify we handle properly all compositing rules
+		this.composite = comp;
 		if (comp instanceof AlphaComposite) {
-			int alpha = (int) (((AlphaComposite) comp).getAlpha()*0xFF);
+			AlphaComposite acomp = (AlphaComposite) comp; 
+			int alpha = (int) (acomp.getAlpha()*0xFF);
 			this.gc.setAlpha(alpha);
 		} else {
 			System.out.println("warning, can only handle alpha composite at the moment.");
@@ -645,8 +650,8 @@ public class SWTGraphics2D extends Graphics2D {
 	 * @see java.awt.Graphics2D#getComposite()
 	 */
 	public Composite getComposite() {
-		// TODO verify if we need to handle XOR composite
-		return AlphaComposite.getInstance(AlphaComposite.XOR, this.gc.getAlpha()/0xFF);
+		//return AlphaComposite.getInstance(this.compositingRule, this.gc.getAlpha()/0xFF);
+		return this.composite;
 	}
 
 	/* (non-Javadoc)
@@ -713,8 +718,18 @@ public class SWTGraphics2D extends Graphics2D {
 	public void setColor(Color color) {
 		org.eclipse.swt.graphics.Color swtColor = getSwtColorFromPool(color);
 		gc.setForeground(swtColor);
-		// awt colors can have transparency, handle it.
-		this.gc.setAlpha(this.gc.getAlpha()*color.getAlpha()/255);
+		// handle transparency and compositing.
+		if (this.composite instanceof AlphaComposite) {
+			AlphaComposite acomp = (AlphaComposite) this.composite;
+			switch (acomp.getRule()) {
+			case AlphaComposite.SRC_OVER:
+				this.gc.setAlpha((int) (color.getAlpha()*acomp.getAlpha()));
+				break;
+			default:
+				this.gc.setAlpha(color.getAlpha());
+				break;
+			}
+		}
 	}
 
 	/* (non-Javadoc)
