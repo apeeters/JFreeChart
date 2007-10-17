@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   ;
  *
- * $Id: XYBarDatasetTests.java,v 1.1.2.1 2007/01/25 14:02:05 mungady Exp $
- *
  * Changes
  * -------
  * 25-Jan-2007 : Version 1 (DG);
