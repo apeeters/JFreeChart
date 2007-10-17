@@ -27,17 +27,16 @@
  * -----------------------
  * DialValueIndicator.java
  * -----------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited.
+ * (C) Copyright 2006-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: DialValueIndicator.java,v 1.1.2.3 2006/11/07 16:11:12 mungady Exp $
  *
  * Changes
  * -------
  * 03-Nov-2006 : Version 1 (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 17-Oct-2007 : Updated equals() (DG);
  * 
  */
 
@@ -564,7 +563,7 @@ public class DialValueIndicator extends AbstractDialLayer implements DialLayer,
             return false;
         }
         
-        return true;
+        return super.equals(obj);
     }
     
     /**

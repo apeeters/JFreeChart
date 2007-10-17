@@ -27,12 +27,10 @@
  * ----------------------------
  * DialValueIndicatorTests.java
  * ----------------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: DialValueIndicatorTests.java,v 1.1.2.4 2006/11/07 16:11:12 mungady Exp $
  *
  * Changes
  * -------
@@ -177,6 +175,12 @@ public class DialValueIndicatorTests extends TestCase {
         assertFalse(i1.equals(i2));
         i2.setTextAnchor(TextAnchor.TOP_LEFT);
         assertTrue(i1.equals(i2));
+        
+        // check an inherited attribute
+        i1.setVisible(false);
+        assertFalse(i1.equals(i2));
+        i2.setVisible(false);
+        assertTrue(i1.equals(i2));
     }
 
     /**
@@ -208,7 +212,11 @@ public class DialValueIndicatorTests extends TestCase {
         assertTrue(i1.getClass() == i2.getClass());
         assertTrue(i1.equals(i2));
         
-        // test a customised instance
+        // check that the listener lists are independent
+        MyDialLayerChangeListener l1 = new MyDialLayerChangeListener();
+        i1.addChangeListener(l1);
+        assertTrue(i1.hasListener(l1));
+        assertFalse(i2.hasListener(l1));
     }
 
 

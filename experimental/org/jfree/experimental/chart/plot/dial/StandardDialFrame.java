@@ -32,13 +32,12 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: StandardDialFrame.java,v 1.1.2.4 2007/03/08 16:51:07 mungady Exp $
- *
  * Changes
  * -------
  * 03-Nov-2006 : Version 1 (DG);
  * 08-Mar-2007 : Fix in hashCode() (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 17-Oct-2007 : Updated equals() (DG);
  * 
  */
 
@@ -330,6 +329,13 @@ public class StandardDialFrame extends AbstractDialLayer implements DialFrame,
         
     }
     
+    /**
+     * Returns the outer window.
+     * 
+     * @param frame  the frame.
+     * 
+     * @return The outer window.
+     */
     protected Shape getOuterWindow(Rectangle2D frame) {
         double radiusMargin = 0.02;
         double angleMargin = 1.5;
@@ -428,7 +434,7 @@ public class StandardDialFrame extends AbstractDialLayer implements DialFrame,
         if (!this.stroke.equals(that.stroke)) {
             return false;
         }
-        return true;
+        return super.equals(obj);
     }
     
     /**

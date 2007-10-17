@@ -24,50 +24,42 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
  * in the United States and other countries.]
  *
- * -------------------------
- * DialLayerChangeEvent.java
- * -------------------------
- * (C) Copyright 2006-2007, by Object Refinery Limited.
+ * ------------------------------
+ * MyDialLayerChangeListener.java
+ * ------------------------------
+ * (C) Copyright 2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
  * Changes
  * -------
- * 06-Nov-2006 : Version 1 (DG);
+ * 16-Oct-2007 : Version 1 (DG);
  *
  */
 
-package org.jfree.experimental.chart.plot.dial;
+package org.jfree.experimental.chart.plot.dial.junit;
 
-import org.jfree.chart.event.ChartChangeEvent;
+import org.jfree.experimental.chart.plot.dial.DialLayerChangeEvent;
+import org.jfree.experimental.chart.plot.dial.DialLayerChangeListener;
 
 /**
- * An event that can be forwarded to any {@link DialLayerChangeListener} to 
- * signal a change to a {@link DialLayer}.
+ * A dial layer change listener.
  */
-public class DialLayerChangeEvent extends ChartChangeEvent {
-
-    /** The dial layer that generated the event. */
-    private DialLayer layer;
+public class MyDialLayerChangeListener implements DialLayerChangeListener {
 
     /**
      * Creates a new instance.
-     *
-     * @param layer  the dial layer that generated the event.
      */
-    public DialLayerChangeEvent(DialLayer layer) {
-        super(layer);
-        this.layer = layer;
+    public MyDialLayerChangeListener() {        
     }
-
+    
     /**
-     * Returns the layer that generated the event.
-     *
-     * @return The layer that generated the event.
+     * Receives a change event.
+     * 
+     * @param event  the event.
      */
-    public DialLayer getDialLayer() {
-        return this.layer;
+    public void dialLayerChanged(DialLayerChangeEvent event) { 
     }
-
+    
 }

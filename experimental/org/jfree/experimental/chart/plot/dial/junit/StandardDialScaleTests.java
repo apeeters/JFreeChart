@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,12 +27,10 @@
  * -------------------------
  * SimpleDialScaleTests.java
  * -------------------------
- * (C) Copyright 2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: StandardDialScaleTests.java,v 1.1.2.2 2006/11/06 16:31:01 mungady Exp $
  *
  * Changes
  * -------
@@ -176,6 +174,11 @@ public class StandardDialScaleTests extends TestCase {
                 3.0f, 4.0f, Color.green));
         assertTrue(s1.equals(s2));  
         
+        // check an inherited attribute
+        s1.setVisible(false);
+        assertFalse(s1.equals(s2));
+        s2.setVisible(false);
+        assertTrue(s1.equals(s2));
     }
 
     /**
@@ -223,8 +226,13 @@ public class StandardDialScaleTests extends TestCase {
         assertTrue(s1 != s2);
         assertTrue(s1.getClass() == s2.getClass());
         assertTrue(s1.equals(s2));
+        
+        // check that the listener lists are independent
+        MyDialLayerChangeListener l1 = new MyDialLayerChangeListener();
+        s1.addChangeListener(l1);
+        assertTrue(s1.hasListener(l1));
+        assertFalse(s2.hasListener(l1));
     }
-
 
     /**
      * Serialize an instance, restore it, and check for equality.

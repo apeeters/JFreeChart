@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,12 +27,10 @@
  * -------------------------
  * SimpleDialFrameTests.java
  * -------------------------
- * (C) Copyright 2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: SimpleDialFrameTests.java,v 1.1.2.2 2006/11/06 16:31:01 mungady Exp $
  *
  * Changes
  * -------
@@ -116,6 +114,12 @@ public class SimpleDialFrameTests extends TestCase {
         assertFalse(f1.equals(f2));
         f2.setStroke(new BasicStroke(2.4f));
         assertTrue(f1.equals(f2));
+        
+        // check an inherited attribute
+        f1.setVisible(false);
+        assertFalse(f1.equals(f2));
+        f2.setVisible(false);
+        assertTrue(f1.equals(f2));
     }
 
     /**
@@ -145,8 +149,13 @@ public class SimpleDialFrameTests extends TestCase {
         assertTrue(f1 != f2);
         assertTrue(f1.getClass() == f2.getClass());
         assertTrue(f1.equals(f2));
+        
+        // check that the listener lists are independent
+        MyDialLayerChangeListener l1 = new MyDialLayerChangeListener();
+        f1.addChangeListener(l1);
+        assertTrue(f1.hasListener(l1));
+        assertFalse(f2.hasListener(l1));
     }
-
 
     /**
      * Serialize an instance, restore it, and check for equality.

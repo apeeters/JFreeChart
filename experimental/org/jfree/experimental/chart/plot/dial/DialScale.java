@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,25 +27,25 @@
  * --------------
  * DialScale.java
  * --------------
- * (C) Copyright 2006, by Object Refinery Limited.
+ * (C) Copyright 2006-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: DialScale.java,v 1.1.2.1 2006/11/03 17:03:40 mungady Exp $
- *
  * Changes
  * -------
  * 03-Nov-2006 : Version 1 (DG);
+ * 17-Oct-2007 : Made this an extension of the DialLayer interface (DG);
  * 
  */
 
 package org.jfree.experimental.chart.plot.dial;
 
 /**
- * A dial scale converts data values into angles.
+ * A dial scale is a specialised layer that has the ability to convert data 
+ * values into angles.
  */
-public interface DialScale {
+public interface DialScale extends DialLayer {
     
     /**
      * Converts a data value to an angle (in degrees, using the same 
@@ -54,6 +54,8 @@ public interface DialScale {
      * @param value  the data value.
      *
      * @return The angle in degrees.
+     * 
+     * @see #angleToValue(double)
      */
     public double valueToAngle(double value);
     
@@ -63,6 +65,8 @@ public interface DialScale {
      * @param angle  the angle (in degrees).
      *
      * @return The data value.
+     * 
+     * @see #valueToAngle(double)
      */
     public double angleToValue(double angle);
     

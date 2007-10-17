@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,12 +27,10 @@
  * -----------------
  * DialCapTests.java
  * -----------------
- * (C) Copyright 2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: DialCapTests.java,v 1.1.2.2 2006/11/06 16:31:01 mungady Exp $
  *
  * Changes
  * -------
@@ -116,6 +114,12 @@ public class DialCapTests extends TestCase {
         assertFalse(c1.equals(c2));
         c2.setOutlineStroke(new BasicStroke(1.1f));
         assertTrue(c1.equals(c2));
+        
+        // check an inherited attribute
+        c1.setVisible(false);
+        assertFalse(c1.equals(c2));
+        c2.setVisible(false);
+        assertTrue(c1.equals(c2));
     }
 
     /**
@@ -164,6 +168,12 @@ public class DialCapTests extends TestCase {
         assertTrue(c1 != c2);
         assertTrue(c1.getClass() == c2.getClass());
         assertTrue(c1.equals(c2));
+        
+        // check that the listener lists are independent
+        MyDialLayerChangeListener l1 = new MyDialLayerChangeListener();
+        c1.addChangeListener(l1);
+        assertTrue(c1.hasListener(l1));
+        assertFalse(c2.hasListener(l1));
     }
 
 

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,18 +27,17 @@
  * ----------------------
  * AbstractDialLayer.java
  * ----------------------
- * (C) Copyright 2006, by Object Refinery Limited.
+ * (C) Copyright 2006-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: AbstractDialLayer.java,v 1.1.2.2 2006/11/17 11:06:44 mungady Exp $
- *
  * Changes
  * -------
  * 06-Nov-2006 : Version 1 (DG);
- * 17-Nov-2007 : Added visible flag (DG);
- * 
+ * 17-Nov-2006 : Added visible flag (DG);
+ * 16-Oct-2007 : Implemented equals() and clone() (DG);
+ *
  */
 
 package org.jfree.experimental.chart.plot.dial;
@@ -76,6 +75,8 @@ public abstract class AbstractDialLayer implements DialLayer {
      * and <code>false</code> otherwise.
      * 
      * @return A boolean.
+     * 
+     * @see #setVisible(boolean)
      */
     public boolean isVisible() {
         return this.visible;
@@ -87,10 +88,45 @@ public abstract class AbstractDialLayer implements DialLayer {
      * listeners.
      * 
      * @param visible  the flag.
+     * 
+     * @see #isVisible()
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
         notifyListeners(new DialLayerChangeEvent(this));
+    }
+    
+    /**
+     * Tests this instance for equality with an arbitrary object.
+     * 
+     * @param obj  the object (<code>null</code> permitted).
+     * 
+     * @return A boolean.
+     */
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof AbstractDialLayer)) {
+            return false;
+        }
+        AbstractDialLayer that = (AbstractDialLayer) obj;
+        return this.visible == that.visible;
+    }
+    
+    /**
+     * Returns a clone of this instance.
+     * 
+     * @return A clone.
+     * 
+     * @throws CloneNotSupportedException if there is a problem cloning this
+     *     instance.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        AbstractDialLayer clone = (AbstractDialLayer) super.clone();
+        // we don't clone the listeners
+        clone.listenerList = new EventListenerList();
+        return clone;
     }
     
     /**

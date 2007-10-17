@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,12 +27,10 @@
  * -------------------------
  * SimpleDialRangeTests.java
  * -------------------------
- * (C) Copyright 2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: StandardDialRangeTests.java,v 1.1.2.2 2006/11/06 16:31:01 mungady Exp $
  *
  * Changes
  * -------
@@ -100,12 +98,6 @@ public class StandardDialRangeTests extends TestCase {
         r2.setUpperBound(11.1);
         assertTrue(r1.equals(r2));
         
-        // increment
-        r1.setIncrement(1.5);
-        assertFalse(r1.equals(r2));
-        r2.setIncrement(1.5);
-        assertTrue(r1.equals(r2));
-        
         // paint
         r1.setPaint(new GradientPaint(1.0f, 2.0f, Color.red, 3.0f, 4.0f, 
                 Color.blue));
@@ -114,6 +106,11 @@ public class StandardDialRangeTests extends TestCase {
                 Color.blue));
         assertTrue(r1.equals(r2));
         
+        // check an inherited attribute
+        r1.setVisible(false);
+        assertFalse(r1.equals(r2));
+        r2.setVisible(false);
+        assertTrue(r1.equals(r2));
     }
     
     /**
@@ -143,8 +140,13 @@ public class StandardDialRangeTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+        
+        // check that the listener lists are independent
+        MyDialLayerChangeListener l1 = new MyDialLayerChangeListener();
+        r1.addChangeListener(l1);
+        assertTrue(r1.hasListener(l1));
+        assertFalse(r2.hasListener(l1));
     }
-
 
     /**
      * Serialize an instance, restore it, and check for equality.

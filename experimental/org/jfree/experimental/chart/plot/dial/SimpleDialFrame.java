@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: SimpleDialFrame.java,v 1.1.2.3 2007/03/08 16:51:07 mungady Exp $
- *
  * Changes
  * -------
  * 03-Nov-2006 : Version 1 (DG);
@@ -104,18 +102,26 @@ public class SimpleDialFrame extends AbstractDialLayer implements DialFrame,
      * Returns the radius, relative to the framing rectangle.
      *
      * @return The radius. 
+     * 
+     * @see #setRadius(double)
      */
     public double getRadius() {
         return this.radius;
     }
     
     /**
-     * Sets the radius.
+     * Sets the radius and sends a {@link DialLayerChangeEvent} to all 
+     * registered listeners.
      *
-     * @param radius  the radius.
+     * @param radius  the radius (must be positive).
+     * 
+     * @see #getRadius()
      */
     public void setRadius(double radius) {
-        // TODO: validation
+        if (radius <= 0) { 
+            throw new IllegalArgumentException("" +
+                        "The 'radius' must be positive.");
+        }
         this.radius = radius;
         notifyListeners(new DialLayerChangeEvent(this));
     }
@@ -132,7 +138,8 @@ public class SimpleDialFrame extends AbstractDialLayer implements DialFrame,
     }
     
     /**
-     * Sets the background paint.
+     * Sets the background paint and sends a {@link DialLayerChangeEvent} to
+     * all registered listeners.
      * 
      * @param paint  the paint (<code>null</code> not permitted).
      * 
@@ -158,7 +165,8 @@ public class SimpleDialFrame extends AbstractDialLayer implements DialFrame,
     }
     
     /**
-     * Sets the foreground paint.
+     * Sets the foreground paint and sends a {@link DialLayerChangeEvent} to 
+     * all registered listeners.
      * 
      * @param paint  the paint (<code>null</code> not permitted).
      * 
@@ -184,7 +192,8 @@ public class SimpleDialFrame extends AbstractDialLayer implements DialFrame,
     }
     
     /**
-     * Sets the stroke.
+     * Sets the stroke and sends a {@link DialLayerChangeEvent} to all 
+     * registered listeners.
      * 
      * @param stroke  the stroke (<code>null</code> not permitted).
      * 
@@ -281,7 +290,7 @@ public class SimpleDialFrame extends AbstractDialLayer implements DialFrame,
         if (!this.stroke.equals(that.stroke)) {
             return false;
         }
-        return true;
+        return super.equals(obj);
     }
     
     /**

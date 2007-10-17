@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -32,12 +32,11 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: DialCap.java,v 1.1.2.2 2006/11/06 16:26:06 mungady Exp $
- *
  * Changes
  * -------
  * 03-Nov-2006 : Version 1 (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 17-Oct-2007 : Updated equals() method (DG);
  * 
  */
 
@@ -117,14 +116,17 @@ public class DialCap extends AbstractDialLayer implements DialLayer, Cloneable,
     
     /**
      * Sets the radius of the cap, as a percentage of the dial's framing
-     * rectangle.
+     * rectangle, and sends a {@link DialLayerChangeEvent} to all registered
+     * listeners.
      *
-     * @param radius  the radius.
+     * @param radius  the radius (must be greater than zero).
      *
      * @see #getRadius()
      */
     public void setRadius(double radius) {
-        // TODO: validation
+        if (radius <= 0.0) {
+            throw new IllegalArgumentException("Requires radius > 0.0.");
+        }
         this.radius = radius;
         notifyListeners(new DialLayerChangeEvent(this));
     }
@@ -141,7 +143,8 @@ public class DialCap extends AbstractDialLayer implements DialLayer, Cloneable,
     }
     
     /**
-     * Sets the paint for the cap background.
+     * Sets the paint for the cap background and sends a 
+     * {@link DialLayerChangeEvent} to all registered listeners.
      *
      * @param paint  the paint (<code>null</code> not permitted).
      *
@@ -167,7 +170,8 @@ public class DialCap extends AbstractDialLayer implements DialLayer, Cloneable,
     }
     
     /**
-     * Sets the paint used to draw the outline of the cap.
+     * Sets the paint used to draw the outline of the cap and sends a 
+     * {@link DialLayerChangeEvent} to all registered listeners.
      *
      * @param paint  the paint (<code>null</code> not permitted).
      *
@@ -271,7 +275,7 @@ public class DialCap extends AbstractDialLayer implements DialLayer, Cloneable,
         if (!this.outlineStroke.equals(that.outlineStroke)) {
             return false;
         }
-        return true;
+        return super.equals(obj);
     }
     
     /**

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,12 +27,10 @@
  * ----------------------------
  * DialTextAnnotationTests.java
  * ----------------------------
- * (C) Copyright 2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: DialTextAnnotationTests.java,v 1.1.2.2 2006/11/06 16:31:01 mungady Exp $
  *
  * Changes
  * -------
@@ -43,6 +41,7 @@
 package org.jfree.experimental.chart.plot.dial.junit;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -88,7 +87,42 @@ public class DialTextAnnotationTests extends TestCase {
         DialTextAnnotation a2 = new DialTextAnnotation("A1");
         assertTrue(a1.equals(a2));
         
+        // angle
+        a1.setAngle(1.1);
+        assertFalse(a1.equals(a2));
+        a2.setAngle(1.1);
+        assertTrue(a1.equals(a2));
         
+        // radius
+        a1.setRadius(9.9);
+        assertFalse(a1.equals(a2));
+        a2.setRadius(9.9);
+        assertTrue(a1.equals(a2));
+        
+        // font
+        Font f = new Font("SansSerif", Font.PLAIN, 14);
+        a1.setFont(f);
+        assertFalse(a1.equals(a2));
+        a2.setFont(f);
+        assertTrue(a1.equals(a2));
+        
+        // paint
+        a1.setPaint(Color.red);
+        assertFalse(a1.equals(a2));
+        a2.setPaint(Color.red);
+        assertTrue(a1.equals(a2));
+        
+        // label
+        a1.setLabel("ABC");
+        assertFalse(a1.equals(a2));
+        a2.setLabel("ABC");
+        assertTrue(a1.equals(a2));
+        
+        // check an inherited attribute
+        a1.setVisible(false);
+        assertFalse(a1.equals(a2));
+        a2.setVisible(false);
+        assertTrue(a1.equals(a2));
     }
 
     /**
@@ -120,7 +154,11 @@ public class DialTextAnnotationTests extends TestCase {
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
         
-        // test a customised instance
+        // check that the listener lists are independent
+        MyDialLayerChangeListener l1 = new MyDialLayerChangeListener();
+        a1.addChangeListener(l1);
+        assertTrue(a1.hasListener(l1));
+        assertFalse(a2.hasListener(l1));
        
     }
 

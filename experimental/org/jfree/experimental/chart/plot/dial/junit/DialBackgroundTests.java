@@ -27,12 +27,10 @@
  * ------------------------
  * DialBackgroundTests.java
  * ------------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: DialBackgroundTests.java,v 1.1.2.2 2006/11/06 16:31:01 mungady Exp $
  *
  * Changes
  * -------
@@ -106,6 +104,13 @@ public class DialBackgroundTests extends TestCase {
         b2.setGradientPaintTransformer(new StandardGradientPaintTransformer(
                 GradientPaintTransformType.CENTER_VERTICAL));
         assertTrue(b1.equals(b2));
+        
+        // check an inherited attribute
+        b1.setVisible(false);
+        assertFalse(b1.equals(b2));
+        b2.setVisible(false);
+        assertTrue(b1.equals(b2));
+        
     }
 
     /**
@@ -153,6 +158,12 @@ public class DialBackgroundTests extends TestCase {
         assertTrue(b1 != b2);
         assertTrue(b1.getClass() == b2.getClass());
         assertTrue(b1.equals(b2));
+        
+        // check that the listener lists are independent
+        MyDialLayerChangeListener l1 = new MyDialLayerChangeListener();
+        b1.addChangeListener(l1);
+        assertTrue(b1.hasListener(l1));
+        assertFalse(b2.hasListener(l1));
     }
 
 
