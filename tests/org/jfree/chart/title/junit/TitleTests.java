@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: TitleTests.java,v 1.1.2.1 2006/10/03 15:41:29 mungady Exp $
- *
  * Changes
  * -------
  * 17-Feb-2004 : Version 1 (DG);

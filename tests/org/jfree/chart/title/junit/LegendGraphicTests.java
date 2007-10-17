@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: LegendGraphicTests.java,v 1.1.2.2 2006/12/13 11:23:39 mungady Exp $
- *
  * Changes
  * -------
  * 01-Sep-2005 : Version 1 (DG);
