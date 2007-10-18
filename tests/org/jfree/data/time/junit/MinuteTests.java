@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: MinuteTests.java,v 1.1.2.3 2006/12/11 10:03:22 mungady Exp $
- *
  * Changes
  * -------
  * 29-Jan-2002 : Version 1 (DG);

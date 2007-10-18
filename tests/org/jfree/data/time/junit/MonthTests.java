@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: MonthTests.java,v 1.1.2.2 2006/10/05 10:15:18 mungady Exp $
- *
  * Changes
  * -------
  * 16-Nov-2001 : Version 1 (DG);

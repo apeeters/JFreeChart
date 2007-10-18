@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: DayTests.java,v 1.1.2.2 2006/10/05 13:35:28 mungady Exp $
- *
  * Changes
  * -------
  * 15-Nov-2001 : Version 1 (DG);

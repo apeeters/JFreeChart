@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: MovingAverageTests.java,v 1.1.2.1 2006/10/03 15:41:40 mungady Exp $
- *
  * Changes
  * -------
  * 14-Aug-2003 : Version 1 (DG);
