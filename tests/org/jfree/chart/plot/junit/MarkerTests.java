@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: MarkerTests.java,v 1.1.2.1 2006/10/03 15:41:26 mungady Exp $
- *
  * Changes
  * -------
  * 05-Sep-2006 : Version 1 (DG);
