@@ -27,12 +27,10 @@
  * ---------------------
  * PlotPackageTests.java
  * ---------------------
- * (C) Copyright 2003-2006, by Object Refinery Limited.
+ * (C) Copyright 2003-2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
- *
- * $Id: PlotPackageTests.java,v 1.1.2.1 2006/10/03 15:41:28 mungady Exp $
  *
  * Changes:
  * --------
