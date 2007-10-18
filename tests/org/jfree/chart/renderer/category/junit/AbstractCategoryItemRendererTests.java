@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: AbstractCategoryItemRendererTests.java,v 1.1.2.3 2006/12/07 16:52:37 mungady Exp $
- *
  * Changes
  * -------
  * 12-Feb-2004 : Version 1 (DG);
