@@ -70,7 +70,7 @@ public class StackedBarRenderer3DTests extends TestCase {
     static class MyRenderer extends StackedBarRenderer3D {
         public List createStackedValueList(CategoryDataset dataset, 
             Comparable category, double base, boolean asPercentages) {
-            return createStackedValueList(dataset, category, base, 
+            return super.createStackedValueList(dataset, category, base, 
                     asPercentages);
         }
     }
