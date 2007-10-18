@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * $Id: CategoryToPieDatasetTests.java,v 1.1.2.1 2006/10/03 15:41:48 mungady Exp $
- *
  * Changes
  * -------
  * 26-Jul-2006 : Version 1 (DG);
