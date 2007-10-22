@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,11 +27,12 @@
  * -------------------
  * ChartComposite.java
  * -------------------
- * (C) Copyright 2006, by Henry Proudhon and Contributors.
+ * (C) Copyright 2006, 2007, by Henry Proudhon and Contributors.
  *
  * Original Author:  Henry Proudhon (henry.proudhon AT insa-lyon.fr);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *                   Cedric Chabanois (cchabanois AT no-log.org);
+ *                   Christoph Beck;
  *
  * Changes
  * -------
@@ -41,24 +42,28 @@
  * 30-Nov-2006 : Improved zoom box handling (HP);
  * 06-Dec-2006 : Added (simplified) tool tip support (HP);
  * 11-Dec-2006 : Fixed popup menu location by fgiust, bug 1612770 (HP);
- * 31-Jan-2007 : Fixed some issues with the trace lines, fixed cross hair not being drawn,
- *               added getter and setter methods for the trace lines (HP); 
- * 07-Apr-2007 : Changed this.redraw() into canvas.redraw() to fix redraw problems (HP);
- * 19-May-2007 : Small fix in paintControl to check for null charts, bug 1719260 (HP);
+ * 31-Jan-2007 : Fixed some issues with the trace lines, fixed cross hair not 
+ *               being drawn, added getter and setter methods for the trace 
+ *               lines (HP); 
+ * 07-Apr-2007 : Changed this.redraw() into canvas.redraw() to fix redraw 
+ *               problems (HP);
+ * 19-May-2007 : Small fix in paintControl to check for null charts, bug 
+ *               1719260 (HP);
  * 19-May-2007 : Corrected bug with scaling when the drawing region is larger 
  *               than maximum draw width/height (HP);
- * 23-May-2007 : Added some dispose call to free SWT resources, patch sent by Cédric 
- *               Chabanois (CC);
+ * 23-May-2007 : Added some dispose call to free SWT resources, patch sent by 
+ *               Cédric Chabanois (CC);
  * 06-Jun-2007 : Fixed minor issues with tooltips. bug reported and fix proposed 
  *               by Christoph Beck, bug 1726404 (HP);
- * 04-Jul-2007 : Added addChartMouseListener and removeChartMouseListener methods
- *               as suggested by Christoph Beck, bug 1742002 (HP);
+ * 04-Jul-2007 : Added addChartMouseListener and removeChartMouseListener 
+ *               methods as suggested by Christoph Beck, bug 1742002 (HP);
  * 06-Jul-2007 : Fixed bug in zooming with multiple plots (HP);
- * 06-Jul-2007 : check for null zoom point when restoring auto range and domain bounds (HP);
- * 25-Jul-2007 : pass mouse mouved events to listening ChartMouseListeners (HP);
- * 27-Aug-2007 : refactored class, now implements PaintListener, MouseListener, 
- *               MouseMoveListener. Made the chart field be private again and added 
- *               new method addSWTListener to allow custom behavior. 
+ * 06-Jul-2007 : Check for null zoom point when restoring auto range and domain
+ *               bounds (HP);
+ * 25-Jul-2007 : Pass mouse moved events to listening ChartMouseListeners (HP);
+ * 27-Aug-2007 : Refactored class, now implements PaintListener, MouseListener, 
+ *               MouseMoveListener. Made the chart field be private again and
+ *               added new method addSWTListener to allow custom behavior. 
  */
 
 package org.jfree.experimental.chart.swt;
@@ -140,8 +145,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                                                          SelectionListener,
                                                          MouseListener,
                                                          MouseMoveListener,
-                                                         Printable
-{
+                                                         Printable {
     /** Default setting for buffer usage. */
     public static final boolean DEFAULT_BUFFER_USED = false;
 
@@ -524,14 +528,14 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         this.zoomTriggerDistance = DEFAULT_ZOOM_TRIGGER_DISTANCE;
         this.setDisplayToolTips(tooltips);
         // create the canvas and add the required listeners
-        canvas = new Canvas(this, SWT.NO_BACKGROUND);
-        canvas.addPaintListener(this);
-        canvas.addMouseListener(this);
-        canvas.addMouseMoveListener(this);
+        this.canvas = new Canvas(this, SWT.NO_BACKGROUND);
+        this.canvas.addPaintListener(this);
+        this.canvas.addMouseListener(this);
+        this.canvas.addMouseMoveListener(this);
             
-        if (chart != null) {
-            chart.addChangeListener(this);
-            Plot plot = chart.getPlot();
+        if (this.chart != null) {
+            this.chart.addChangeListener(this);
+            Plot plot = this.chart.getPlot();
             this.domainZoomable = false;
             this.rangeZoomable = false;
             if (plot instanceof Zoomable) {
@@ -683,8 +687,9 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * current chart.
      */
     private void attemptEditChartProperties() {
-        SWTChartEditor editor = new SWTChartEditor(canvas.getDisplay(), this.chart);
-            //ChartEditorManager.getChartEditor( canvas.getDisplay(), this.chart );
+        SWTChartEditor editor = new SWTChartEditor(this.canvas.getDisplay(), 
+                this.chart);
+        // ChartEditorManager.getChartEditor(canvas.getDisplay(), this.chart);
         editor.open();
     }
 
@@ -714,7 +719,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * @throws IOException if there is an I/O error.
      */
     public void doSaveAs() throws IOException {
-        FileDialog fileDialog = new FileDialog(canvas.getShell(), SWT.SAVE);
+        FileDialog fileDialog = new FileDialog(this.canvas.getShell(), 
+                SWT.SAVE);
         String[] extensions = { "*.png" };
         fileDialog.setFilterExtensions(extensions);
         String filename = fileDialog.open();
@@ -726,7 +732,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             }
             //TODO replace getSize by getBounds ?
             ChartUtilities.saveChartAsPNG(new File(filename), this.chart, 
-                    canvas.getSize().x, canvas.getSize().y);
+                    this.canvas.getSize().x, this.canvas.getSize().y);
         }
     }
 
@@ -740,9 +746,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * 
      * @return A point within the rectangle.
      */
-    private org.eclipse.swt.graphics.Point getPointInRectangle(int x, int y, Rectangle area) {
-        x = (int) Math.max(area.x, Math.min(x, area.x + area.width));   
-        y = (int) Math.max(area.y, Math.min(y, area.y + area.height));
+    private org.eclipse.swt.graphics.Point getPointInRectangle(int x, int y, 
+            Rectangle area) {
+        x = Math.max(area.x, Math.min(x, area.x + area.width));   
+        y = Math.max(area.y, Math.min(y, area.y + area.height));
         return new org.eclipse.swt.graphics.Point(x, y);
     }
 
@@ -850,18 +857,19 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 new Point(selection.x, selection.y));
         PlotRenderingInfo plotInfo = this.info.getPlotInfo();
         Rectangle scaledDataArea = getScreenDataArea(
-                (int) (selection.x + selection.width/2), 
-                (int) (selection.y + selection.height/2));
+                (selection.x + selection.width / 2), 
+                (selection.y + selection.height / 2));
         if ((selection.height > 0) && (selection.width > 0)) {
 
             double hLower = (selection.x - scaledDataArea.x) 
                 / (double) scaledDataArea.width;
             double hUpper = (selection.x + selection.width - scaledDataArea.x) 
                 / (double) scaledDataArea.width;
-            double vLower = (scaledDataArea.y + scaledDataArea.height - selection.y - selection.height) 
-                / (double) scaledDataArea.height;
-            double vUpper = (scaledDataArea.y + scaledDataArea.height - selection.y) 
-                / (double) scaledDataArea.height;
+            double vLower = (scaledDataArea.y + scaledDataArea.height 
+                    - selection.y - selection.height) 
+                    / (double) scaledDataArea.height;
+            double vUpper = (scaledDataArea.y + scaledDataArea.height 
+                    - selection.y) / (double) scaledDataArea.height;
             Plot p = this.chart.getPlot();
             if (p instanceof Zoomable) {
                 Zoomable z = (Zoomable) p;
@@ -886,12 +894,12 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      */
     public void chartChanged(ChartChangeEvent event) {
         this.refreshBuffer = true;
-        Plot plot = chart.getPlot();
+        Plot plot = this.chart.getPlot();
         if (plot instanceof Zoomable) {
             Zoomable z = (Zoomable) plot;
             this.orientation = z.getOrientation();
         }
-        canvas.redraw();
+        this.canvas.redraw();
     }
 
     /**
@@ -899,13 +907,13 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      */
     public void forceRedraw() {
         Event ev = new Event();
-        ev.gc = new GC(canvas);
+        ev.gc = new GC(this.canvas);
         ev.x = 0;
         ev.y = 0;
-        ev.width = canvas.getBounds().width;
-        ev.height = canvas.getBounds().height;
+        ev.width = this.canvas.getBounds().width;
+        ev.height = this.canvas.getBounds().height;
         ev.count = 0;
-        canvas.notifyListeners(SWT.Paint, ev);
+        this.canvas.notifyListeners(SWT.Paint, ev);
         ev.gc.dispose();
     }
     
@@ -915,7 +923,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * @param listener  the listener (<code>null</code> not permitted).
      */
     public void addChartMouseListener(ChartMouseListener listener) {
-    	this.chartMouseListeners.add(ChartMouseListener.class, listener);
+        this.chartMouseListeners.add(ChartMouseListener.class, listener);
     }
     
     /**
@@ -925,7 +933,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * @param listener  the listener.
      */
     public void removeChartMouseListener(ChartMouseListener listener) {
-    	this.chartMouseListeners.remove(ChartMouseListener.class, listener);
+        this.chartMouseListeners.remove(ChartMouseListener.class, listener);
     }
     
     /**
@@ -954,8 +962,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             Zoomable z = (Zoomable) p;
             // we need to guard against this.zoomPoint being null
             org.eclipse.swt.graphics.Point zp = 
-            	(this.zoomPoint != null ? this.zoomPoint : new org.eclipse.swt.graphics.Point(0,0));
-            z.zoomDomainAxes(0.0, this.info.getPlotInfo(), SWTUtils.toAwtPoint(zp));
+                (this.zoomPoint != null ? this.zoomPoint : 
+                    new org.eclipse.swt.graphics.Point(0,0));
+            z.zoomDomainAxes(0.0, this.info.getPlotInfo(), 
+                    SWTUtils.toAwtPoint(zp));
         }
     }
 
@@ -968,8 +978,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             Zoomable z = (Zoomable) p;
             // we need to guard against this.zoomPoint being null
             org.eclipse.swt.graphics.Point zp = 
-            	(this.zoomPoint != null ? this.zoomPoint : new org.eclipse.swt.graphics.Point(0,0));
-            z.zoomRangeAxes(0.0, this.info.getPlotInfo(), SWTUtils.toAwtPoint(zp)); 
+                (this.zoomPoint != null ? this.zoomPoint : 
+                    new org.eclipse.swt.graphics.Point(0,0));
+            z.zoomRangeAxes(0.0, this.info.getPlotInfo(), 
+                    SWTUtils.toAwtPoint(zp)); 
         }
     }
 
@@ -1193,14 +1205,12 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 );
             }
             if (this.zoomOutBothMenuItem != null) {
-                this.zoomOutBothMenuItem.setEnabled(
-                    isDomainZoomable & isRangeZoomable
-                );
+                this.zoomOutBothMenuItem.setEnabled(isDomainZoomable 
+                        & isRangeZoomable);
             }
             if (this.zoomResetBothMenuItem != null) {
-                this.zoomResetBothMenuItem.setEnabled(
-                    isDomainZoomable & isRangeZoomable
-                );
+                this.zoomResetBothMenuItem.setEnabled(isDomainZoomable 
+                        & isRangeZoomable);
             }
 
             this.popup.setLocation(x, y);
@@ -1225,7 +1235,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 }
                 catch (PrinterException e) {
                     MessageBox messageBox = new MessageBox( 
-                            canvas.getShell(), SWT.OK | SWT.ICON_ERROR );
+                            this.canvas.getShell(), SWT.OK | SWT.ICON_ERROR );
                     messageBox.setMessage( e.getMessage() );
                     messageBox.open();
                 }
@@ -1374,7 +1384,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * org.eclipse.swt.events.SelectionEvent)
      */
     public void widgetDefaultSelected(SelectionEvent e) {
-        this.widgetSelected(e);
+        widgetSelected(e);
     }
 
     /**
@@ -1458,68 +1468,81 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * @param listener The SWT listener to attach to the canvas.
      */
     public void addSWTListener(SWTEventListener listener) {
-    	if (listener instanceof ControlListener) {
-    		this.canvas.addControlListener((ControlListener) listener);
-    	} else if (listener instanceof DisposeListener) {
-    		this.canvas.addDisposeListener((DisposeListener) listener);
-    	} else if (listener instanceof DragDetectListener) {
-    		this.canvas.addDragDetectListener((DragDetectListener) listener);
-    	} else if (listener instanceof FocusListener) {
-    		this.canvas.addFocusListener((FocusListener) listener);
-    	} else if (listener instanceof HelpListener) {
-    		this.canvas.addHelpListener((HelpListener) listener);
-    	} else if (listener instanceof KeyListener) {
-    		this.canvas.addKeyListener((KeyListener) listener);
-    	} else if (listener instanceof MenuDetectListener) {
-    		this.canvas.addMenuDetectListener((MenuDetectListener) listener);
-    	} else if (listener instanceof MouseListener) {
-    		this.canvas.addMouseListener((MouseListener) listener);
-    	} else if (listener instanceof MouseMoveListener) {
-    		this.canvas.addMouseMoveListener((MouseMoveListener) listener);
-    	} else if (listener instanceof MouseTrackListener) {
-    		this.canvas.addMouseTrackListener((MouseTrackListener) listener);
-    	} else if (listener instanceof MouseWheelListener) {
-    		this.canvas.addMouseWheelListener((MouseWheelListener) listener);
-    	} else if (listener instanceof PaintListener) {
-    		this.canvas.addPaintListener((PaintListener) listener);
-    	} else if (listener instanceof TraverseListener) {
-    		this.canvas.addTraverseListener((TraverseListener) listener);
-    	} 
+        if (listener instanceof ControlListener) {
+            this.canvas.addControlListener((ControlListener) listener);
+        } 
+        else if (listener instanceof DisposeListener) {
+            this.canvas.addDisposeListener((DisposeListener) listener);
+        } 
+        else if (listener instanceof DragDetectListener) {
+            this.canvas.addDragDetectListener((DragDetectListener) listener);
+        } 
+        else if (listener instanceof FocusListener) {
+            this.canvas.addFocusListener((FocusListener) listener);
+        } 
+        else if (listener instanceof HelpListener) {
+            this.canvas.addHelpListener((HelpListener) listener);
+        } 
+        else if (listener instanceof KeyListener) {
+            this.canvas.addKeyListener((KeyListener) listener);
+        } 
+        else if (listener instanceof MenuDetectListener) {
+            this.canvas.addMenuDetectListener((MenuDetectListener) listener);
+        } 
+        else if (listener instanceof MouseListener) {
+            this.canvas.addMouseListener((MouseListener) listener);
+        } 
+        else if (listener instanceof MouseMoveListener) {
+            this.canvas.addMouseMoveListener((MouseMoveListener) listener);
+        } 
+        else if (listener instanceof MouseTrackListener) {
+            this.canvas.addMouseTrackListener((MouseTrackListener) listener);
+        } 
+        else if (listener instanceof MouseWheelListener) {
+            this.canvas.addMouseWheelListener((MouseWheelListener) listener);
+        } 
+        else if (listener instanceof PaintListener) {
+            this.canvas.addPaintListener((PaintListener) listener);
+        } 
+        else if (listener instanceof TraverseListener) {
+            this.canvas.addTraverseListener((TraverseListener) listener);
+        } 
     }
     
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.MouseListener#mouseDoubleClick(org.eclipse.swt.events.MouseEvent)
-	 */
-	public void mouseDoubleClick(MouseEvent event) {
-		// do nothing, override if necessary
-	}
+    /* (non-Javadoc)
+     * @see org.eclipse.swt.events.MouseListener#mouseDoubleClick(
+     * org.eclipse.swt.events.MouseEvent)
+     */
+    public void mouseDoubleClick(MouseEvent event) {
+        // do nothing, override if necessary
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.MouseListener#mouseDown(org.eclipse.swt.events.MouseEvent)
-	 */
-	public void mouseDown(MouseEvent event) {
-    	
+    /* (non-Javadoc)
+     * @see org.eclipse.swt.events.MouseListener#mouseDown(
+     * org.eclipse.swt.events.MouseEvent)
+     */
+    public void mouseDown(MouseEvent event) {
+        
         Rectangle scaledDataArea = getScreenDataArea(event.x, event.y);
         if (scaledDataArea == null) return;
-        zoomPoint = getPointInRectangle(event.x, event.y, scaledDataArea);
-        int x = (int) ((event.x - getClientArea().x) / scaleX);
-        int y = (int) ((event.y - getClientArea().y) / scaleY);
+        this.zoomPoint = getPointInRectangle(event.x, event.y, scaledDataArea);
+        int x = (int) ((event.x - getClientArea().x) / this.scaleX);
+        int y = (int) ((event.y - getClientArea().y) / this.scaleY);
 
-        anchor = new Point2D.Double(x, y);
-        chart.setNotify(true);  // force a redraw 
-        canvas.redraw();
+        this.anchor = new Point2D.Double(x, y);
+        this.chart.setNotify(true);  // force a redraw 
+        this.canvas.redraw();
         
         // new entity code
         ChartEntity entity = null;
-        if (info != null) {
-            EntityCollection entities 
-                    = info.getEntityCollection();
+        if (this.info != null) {
+            EntityCollection entities = this.info.getEntityCollection();
             if (entities != null) {
                 entity = entities.getEntity(x, y);
             }
         }
         
-        Object[] listeners = chartMouseListeners.getListeners(
+        Object[] listeners = this.chartMouseListeners.getListeners(
                 ChartMouseListener.class);
         if (listeners.length == 0) {
             return;
@@ -1527,253 +1550,273 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
         // pass mouse down event if some ChartMouseListener are listening
         java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event); 
-        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), mouseEvent, entity);
+        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), 
+                mouseEvent, entity);
         for (int i = listeners.length - 1; i >= 0; i -= 1) {
             ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
         }
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.MouseListener#mouseUp(org.eclipse.swt.events.MouseEvent)
-	 */
-	public void mouseUp(MouseEvent event) {
+    /* (non-Javadoc)
+     * @see org.eclipse.swt.events.MouseListener#mouseUp(
+     * org.eclipse.swt.events.MouseEvent)
+     */
+    public void mouseUp(MouseEvent event) {
 
-		boolean hZoom, vZoom;
-        if (zoomRectangle == null) {
+        boolean hZoom, vZoom;
+        if (this.zoomRectangle == null) {
             Rectangle screenDataArea = getScreenDataArea(event.x, event.y);
             if (screenDataArea != null) {
-                zoomPoint = getPointInRectangle(event.x, event.y, screenDataArea);
+                this.zoomPoint = getPointInRectangle(event.x, event.y, 
+                        screenDataArea);
             }
-            if (popup != null && event.button == 3) {
-                org.eclipse.swt.graphics.Point pt = canvas.toDisplay(event.x, event.y);
+            if (this.popup != null && event.button == 3) {
+                org.eclipse.swt.graphics.Point pt = this.canvas.toDisplay(
+                        event.x, event.y);
                 displayPopupMenu(pt.x, pt.y);
             }
         }
         else {
             hZoom = false;
             vZoom = false;
-            if (orientation == PlotOrientation.HORIZONTAL) {
-                hZoom = rangeZoomable;
-                vZoom = domainZoomable;
+            if (this.orientation == PlotOrientation.HORIZONTAL) {
+                hZoom = this.rangeZoomable;
+                vZoom = this.domainZoomable;
             }
             else {
-                hZoom = domainZoomable;              
-                vZoom = rangeZoomable;
+                hZoom = this.domainZoomable;              
+                vZoom = this.rangeZoomable;
             }
-            boolean zoomTrigger1 = hZoom 
-                    && Math.abs(zoomRectangle.width) 
-                    >= zoomTriggerDistance;
+            boolean zoomTrigger1 = hZoom && Math.abs(this.zoomRectangle.width) 
+                    >= this.zoomTriggerDistance;
             boolean zoomTrigger2 = vZoom 
-                    && Math.abs(zoomRectangle.height) 
-                    >= zoomTriggerDistance;
+                    && Math.abs(this.zoomRectangle.height) 
+                    >= this.zoomTriggerDistance;
             if (zoomTrigger1 || zoomTrigger2) {
                 // if the box has been drawn backwards, restore the auto bounds
-                if ((hZoom && (zoomRectangle.x + zoomRectangle.width < zoomPoint.x)) 
-                        || (vZoom && (zoomRectangle.y + zoomRectangle.height < zoomPoint.y))) 
+                if ((hZoom && (this.zoomRectangle.x + this.zoomRectangle.width 
+                        < this.zoomPoint.x)) || (vZoom && (this.zoomRectangle.y
+                        + this.zoomRectangle.height < this.zoomPoint.y))) 
                     restoreAutoBounds();
                 else {
-                	zoom(zoomRectangle);
+                    zoom(this.zoomRectangle);
                 }
-                canvas.redraw();
+                this.canvas.redraw();
             }
         }
-        zoomPoint = null;
-        zoomRectangle = null;
-	}
+        this.zoomPoint = null;
+        this.zoomRectangle = null;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.MouseMoveListener#mouseMove(org.eclipse.swt.events.MouseEvent)
-	 */
-	public void mouseMove(MouseEvent event) {
+    /* (non-Javadoc)
+     * @see org.eclipse.swt.events.MouseMoveListener#mouseMove(
+     * org.eclipse.swt.events.MouseEvent)
+     */
+    public void mouseMove(MouseEvent event) {
 
-		// handle axis trace
-		if (horizontalAxisTrace || verticalAxisTrace) {
-			horizontalTraceLineY = event.y;
-			verticalTraceLineX = event.x;
-			canvas.redraw();
-		}
+        // handle axis trace
+        if (this.horizontalAxisTrace || this.verticalAxisTrace) {
+            this.horizontalTraceLineY = event.y;
+            this.verticalTraceLineX = event.x;
+            this.canvas.redraw();
+        }
 
-		// handle tool tips in a simple way
-		if (displayToolTips) {                            
-			String s = getToolTipText(event);
-			if (s == null && canvas.getToolTipText() != null
-					|| s!=null && !s.equals(canvas.getToolTipText()))
-				canvas.setToolTipText(s);
-		}
+        // handle tool tips in a simple way
+        if (this.displayToolTips) {                            
+            String s = getToolTipText(event);
+            if (s == null && this.canvas.getToolTipText() != null
+                    || s!=null && !s.equals(this.canvas.getToolTipText()))
+                this.canvas.setToolTipText(s);
+        }
 
-		// handle zoom box
-		boolean hZoom, vZoom;
-		if (zoomPoint != null) {
-			Rectangle scaledDataArea = getScreenDataArea(zoomPoint.x, zoomPoint.y);
-			org.eclipse.swt.graphics.Point movingPoint 
-			= getPointInRectangle(event.x, event.y, scaledDataArea);
-			if (orientation == PlotOrientation.HORIZONTAL) {
-				hZoom = rangeZoomable;
-				vZoom = domainZoomable;
-			}
-			else {
-				hZoom = domainZoomable;              
-				vZoom = rangeZoomable;
-			}
-			if (hZoom && vZoom) {
-				// selected rectangle shouldn't extend outside the data area...
-				zoomRectangle = new Rectangle(zoomPoint.x, zoomPoint.y, 
-						movingPoint.x - zoomPoint.x, movingPoint.y - zoomPoint.y);                            
-			}
-			else if (hZoom) {
-				zoomRectangle = new Rectangle(zoomPoint.x, scaledDataArea.y,
-						movingPoint.x - zoomPoint.x, scaledDataArea.height);
-			}
-			else if (vZoom) {
-				int ymax = Math.max(movingPoint.y, scaledDataArea.y);
-				zoomRectangle = new Rectangle(
-						scaledDataArea.x, zoomPoint.y,
-						scaledDataArea.width, ymax - zoomPoint.y);
-			}
-			canvas.redraw();
-		}
+        // handle zoom box
+        boolean hZoom, vZoom;
+        if (this.zoomPoint != null) {
+            Rectangle scaledDataArea = getScreenDataArea(this.zoomPoint.x, 
+                    this.zoomPoint.y);
+            org.eclipse.swt.graphics.Point movingPoint 
+                    = getPointInRectangle(event.x, event.y, scaledDataArea);
+            if (this.orientation == PlotOrientation.HORIZONTAL) {
+                hZoom = this.rangeZoomable;
+                vZoom = this.domainZoomable;
+            }
+            else {
+                hZoom = this.domainZoomable;              
+                vZoom = this.rangeZoomable;
+            }
+            if (hZoom && vZoom) {
+                // selected rectangle shouldn't extend outside the data area...
+                this.zoomRectangle = new Rectangle(this.zoomPoint.x, 
+                        this.zoomPoint.y, movingPoint.x - this.zoomPoint.x, 
+                        movingPoint.y - this.zoomPoint.y);                            
+            }
+            else if (hZoom) {
+                this.zoomRectangle = new Rectangle(this.zoomPoint.x, 
+                        scaledDataArea.y, movingPoint.x - this.zoomPoint.x, 
+                        scaledDataArea.height);
+            }
+            else if (vZoom) {
+                int ymax = Math.max(movingPoint.y, scaledDataArea.y);
+                this.zoomRectangle = new Rectangle(
+                        scaledDataArea.x, this.zoomPoint.y,
+                        scaledDataArea.width, ymax - this.zoomPoint.y);
+            }
+            this.canvas.redraw();
+        }
 
-		// new entity code
-		ChartEntity entity = null;
-		int x = (int) ((event.x - getClientArea().x) / scaleX);
-		int y = (int) ((event.y - getClientArea().y) / scaleY);
+        // new entity code
+        ChartEntity entity = null;
+        int x = (int) ((event.x - getClientArea().x) / this.scaleX);
+        int y = (int) ((event.y - getClientArea().y) / this.scaleY);
 
-		if (info != null) {
-			EntityCollection entities 
-			= info.getEntityCollection();
-			if (entities != null) {
-				entity = entities.getEntity(x, y);
-			}
-		}
+        if (this.info != null) {
+            EntityCollection entities = this.info.getEntityCollection();
+            if (entities != null) {
+                entity = entities.getEntity(x, y);
+            }
+        }
 
-		Object[] listeners = chartMouseListeners.getListeners(
-				ChartMouseListener.class);
-		if (listeners.length == 0) {
-			return;
-		}
+        Object[] listeners = this.chartMouseListeners.getListeners(
+                ChartMouseListener.class);
+        if (listeners.length == 0) {
+            return;
+        }
 
-		// pass mouse move event if some ChartMouseListener are listening
-		java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event); 
-		ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), mouseEvent, entity);
-		for (int i = listeners.length - 1; i >= 0; i -= 1) {
-			((ChartMouseListener) listeners[i]).chartMouseMoved(chartEvent);
-		}
-	}
+        // pass mouse move event if some ChartMouseListener are listening
+        java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event); 
+        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), 
+                mouseEvent, entity);
+        for (int i = listeners.length - 1; i >= 0; i -= 1) {
+            ((ChartMouseListener) listeners[i]).chartMouseMoved(chartEvent);
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.PaintListener#paintComponent(org.eclipse.swt.events.PaintEvent)
-	 */
-	public void paintControl(PaintEvent e) {
-		// first determine the size of the chart rendering area...
-		// TODO workout insets for SWT
-		Rectangle available = getBounds();
-		// skip if chart is null
-		if (chart == null) {
-			canvas.drawBackground(e.gc, available.x, available.y, 
-					available.width, available.height);
-			return;
-		}
-		SWTGraphics2D sg2 = new SWTGraphics2D(e.gc);
+    /* (non-Javadoc)
+     * @see org.eclipse.swt.events.PaintListener#paintComponent(
+     * org.eclipse.swt.events.PaintEvent)
+     */
+    public void paintControl(PaintEvent e) {
+        // first determine the size of the chart rendering area...
+        // TODO workout insets for SWT
+        Rectangle available = getBounds();
+        // skip if chart is null
+        if (this.chart == null) {
+            this.canvas.drawBackground(e.gc, available.x, available.y, 
+                    available.width, available.height);
+            return;
+        }
+        SWTGraphics2D sg2 = new SWTGraphics2D(e.gc);
 
-		// work out if scaling is required...
-		boolean scale = false;
-		int drawWidth = available.width;
-		int drawHeight = available.height;
-		if ( drawWidth == 0.0 || drawHeight == 0.0 ) return;
-		scaleX = 1.0;
-		scaleY = 1.0;
-		if (drawWidth < minimumDrawWidth) {
-			scaleX = (double) drawWidth / minimumDrawWidth;
-			drawWidth = minimumDrawWidth;
-			scale = true;
-		}
-		else if (drawWidth > maximumDrawWidth) {
-			scaleX = (double) drawWidth / maximumDrawWidth;
-			drawWidth = maximumDrawWidth;
-			scale = true;
-		}
-		if (drawHeight < minimumDrawHeight) {
-			scaleY = (double) drawHeight / minimumDrawHeight;
-			drawHeight = minimumDrawHeight;
-			scale = true;
-		}
-		else if (drawHeight > maximumDrawHeight) {
-			scaleY = (double) drawHeight / maximumDrawHeight;
-			drawHeight = maximumDrawHeight;
-			scale = true;
-		}
-		// are we using the chart buffer?
-		if (useBuffer) {
-			//SwtGraphics2D sg2 = new SwtGraphics2D( e.gc );
-			chartBuffer = (org.eclipse.swt.graphics.Image) 
-			canvas.getData("double-buffer-image");
-			// do we need to fill the buffer?
-			if (chartBuffer == null
-					|| chartBufferWidth != available.width
-					|| chartBufferHeight != available.height ) {
-				chartBufferWidth = available.width;
-				chartBufferHeight = available.height;
-				if (chartBuffer != null) {
-					chartBuffer.dispose();
-				}
-				chartBuffer = new org.eclipse.swt.graphics.Image( 
-						getDisplay(), chartBufferWidth, 
-						chartBufferHeight);
-				refreshBuffer = true;
-			}
+        // work out if scaling is required...
+        boolean scale = false;
+        int drawWidth = available.width;
+        int drawHeight = available.height;
+        if ( drawWidth == 0.0 || drawHeight == 0.0 ) return;
+        this.scaleX = 1.0;
+        this.scaleY = 1.0;
+        if (drawWidth < this.minimumDrawWidth) {
+            this.scaleX = (double) drawWidth / this.minimumDrawWidth;
+            drawWidth = this.minimumDrawWidth;
+            scale = true;
+        }
+        else if (drawWidth > this.maximumDrawWidth) {
+            this.scaleX = (double) drawWidth / this.maximumDrawWidth;
+            drawWidth = this.maximumDrawWidth;
+            scale = true;
+        }
+        if (drawHeight < this.minimumDrawHeight) {
+            this.scaleY = (double) drawHeight / this.minimumDrawHeight;
+            drawHeight = this.minimumDrawHeight;
+            scale = true;
+        }
+        else if (drawHeight > this.maximumDrawHeight) {
+            this.scaleY = (double) drawHeight / this.maximumDrawHeight;
+            drawHeight = this.maximumDrawHeight;
+            scale = true;
+        }
+        // are we using the chart buffer?
+        if (this.useBuffer) {
+            //SwtGraphics2D sg2 = new SwtGraphics2D( e.gc );
+            this.chartBuffer = (org.eclipse.swt.graphics.Image) 
+                    this.canvas.getData("double-buffer-image");
+            // do we need to fill the buffer?
+            if (this.chartBuffer == null
+                    || this.chartBufferWidth != available.width
+                    || this.chartBufferHeight != available.height ) {
+                this.chartBufferWidth = available.width;
+                this.chartBufferHeight = available.height;
+                if (this.chartBuffer != null) {
+                    this.chartBuffer.dispose();
+                }
+                this.chartBuffer = new org.eclipse.swt.graphics.Image( 
+                        getDisplay(), this.chartBufferWidth, 
+                        this.chartBufferHeight);
+                this.refreshBuffer = true;
+            }
 
-			// do we need to redraw the buffer?
-			if (refreshBuffer) {
-				// Performs the actual drawing here ...
-				GC gci = new GC(chartBuffer);
-				// anti-aliasing
-				if (chart.getAntiAlias()) {
-					gci.setAntialias(SWT.ON);
-				}
-				if (chart.getTextAntiAlias() == RenderingHints.KEY_TEXT_ANTIALIASING) {
-					gci.setTextAntialias(SWT.ON);
-				}
-				SWTGraphics2D sg2d = new SWTGraphics2D(gci);
-				if (scale) {
-					sg2d.scale(scaleX, scaleY);
-					chart.draw(sg2d, new Rectangle2D.Double(0, 0, 
-							drawWidth, drawHeight), getAnchor(), info);                            
-				} else {
-					chart.draw(sg2d, new Rectangle2D.Double(0, 0, 
-							drawWidth, drawHeight), getAnchor(), info);                            
-				}
-				canvas.setData("double-buffer-image", chartBuffer);
-				sg2d.dispose();
-				gci.dispose();
-				refreshBuffer = false;
-			}
+            // do we need to redraw the buffer?
+            if (this.refreshBuffer) {
+                // Performs the actual drawing here ...
+                GC gci = new GC(this.chartBuffer);
+                // anti-aliasing
+                if (this.chart.getAntiAlias()) {
+                    gci.setAntialias(SWT.ON);
+                }
+                if (this.chart.getTextAntiAlias() 
+                        == RenderingHints.KEY_TEXT_ANTIALIASING) {
+                    gci.setTextAntialias(SWT.ON);
+                }
+                SWTGraphics2D sg2d = new SWTGraphics2D(gci);
+                if (scale) {
+                    sg2d.scale(this.scaleX, this.scaleY);
+                    this.chart.draw(sg2d, new Rectangle2D.Double(0, 0, 
+                            drawWidth, drawHeight), getAnchor(), this.info);                            
+                } 
+                else {
+                    this.chart.draw(sg2d, new Rectangle2D.Double(0, 0, 
+                            drawWidth, drawHeight), getAnchor(), this.info);                            
+                }
+                this.canvas.setData("double-buffer-image", this.chartBuffer);
+                sg2d.dispose();
+                gci.dispose();
+                this.refreshBuffer = false;
+            }
 
-			// zap the buffer onto the canvas...
-			sg2.drawImage(chartBuffer, 0, 0);
-		}
-		// or redrawing the chart every time...
-		else {
-			if (chart.getAntiAlias()) {
-				e.gc.setAntialias(SWT.ON);
-			}
-			if (chart.getTextAntiAlias() == RenderingHints.KEY_TEXT_ANTIALIASING) {
-				e.gc.setTextAntialias(SWT.ON);
-			}
-			chart.draw(sg2, new Rectangle2D.Double(0, 0, 
-					getBounds().width, getBounds().height), getAnchor(), info);
-		}
-		Rectangle area = getScreenDataArea();
-		//TODO see if we need to apply some line color and style to the axis traces
-		if (verticalAxisTrace && area.x < verticalTraceLineX 
-				&& area.x + area.width > verticalTraceLineX) 
-			e.gc.drawLine(verticalTraceLineX, area.y, verticalTraceLineX, area.y + area.height);
-		if (horizontalAxisTrace && area.y < horizontalTraceLineY 
-				&& area.y + area.height > horizontalTraceLineY) 
-			e.gc.drawLine(area.x, horizontalTraceLineY, area.x + area.width, horizontalTraceLineY);
-		verticalTraceLineX = 0;
-		horizontalTraceLineY = 0;
-		if (zoomRectangle != null) e.gc.drawRectangle(zoomRectangle);
-		sg2.dispose();
-	}
+            // zap the buffer onto the canvas...
+            sg2.drawImage(this.chartBuffer, 0, 0);
+        }
+        // or redrawing the chart every time...
+        else {
+            if (this.chart.getAntiAlias()) {
+                e.gc.setAntialias(SWT.ON);
+            }
+            if (this.chart.getTextAntiAlias() 
+                    == RenderingHints.KEY_TEXT_ANTIALIASING) {
+                e.gc.setTextAntialias(SWT.ON);
+            }
+            this.chart.draw(sg2, new Rectangle2D.Double(0, 0, 
+                    getBounds().width, getBounds().height), getAnchor(), 
+                    this.info);
+        }
+        Rectangle area = getScreenDataArea();
+        // TODO see if we need to apply some line color and style to the 
+        // axis traces
+        if (this.verticalAxisTrace && area.x < this.verticalTraceLineX 
+                && area.x + area.width > this.verticalTraceLineX) {
+            e.gc.drawLine(this.verticalTraceLineX, area.y, 
+                    this.verticalTraceLineX, area.y + area.height);
+        }
+        if (this.horizontalAxisTrace && area.y < this.horizontalTraceLineY 
+                && area.y + area.height > this.horizontalTraceLineY) {
+            e.gc.drawLine(area.x, this.horizontalTraceLineY, 
+                    area.x + area.width, this.horizontalTraceLineY);
+        }
+        this.verticalTraceLineX = 0;
+        this.horizontalTraceLineY = 0;
+        if (this.zoomRectangle != null) {
+            e.gc.drawRectangle(this.zoomRectangle);
+        }
+        sg2.dispose();
+    }
 
 }
