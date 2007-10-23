@@ -47,6 +47,11 @@
  * 16-Jul-2007 : Implemented alpha channel (HP);
  * 11-Sep-2007 : Fixed alpha channel lying within awt colors, bug 1737869 (HP);
  * 13-Oct-2007 : Fixed compositing issues (HP);
+ * 23-Oct-2007 : Added mechanism for storing RenderingHints (which are 
+ *               still ignored at this point) (DG);
+ * 23-Oct-2007 : Implemented drawPolygon(), drawPolyline(), drawOval(),
+ *               fillOval(), drawArc() and fillArc() (DG);
+ *
  */
 
 package org.jfree.experimental.swt;
@@ -106,6 +111,12 @@ public class SWTGraphics2D extends Graphics2D {
     /** The swt graphic composite */
     private GC gc;
 
+    /** 
+     * The rendering hints.  For now, these are not used, but at least the
+     * basic mechanism is present.
+     */
+    private RenderingHints hints;
+    
     /** A reference to the compositing rule to apply. This is necessary 
      * due to the poor compositing interface of the SWT toolkit. */
     private java.awt.Composite composite;
@@ -127,6 +138,7 @@ public class SWTGraphics2D extends Graphics2D {
     public SWTGraphics2D(GC gc) {
         super();
         this.gc = gc;
+        this.hints = new RenderingHints(null);
         this.composite = AlphaComposite.getInstance(AlphaComposite.SRC, 1.0f);
     }
 
@@ -146,57 +158,94 @@ public class SWTGraphics2D extends Graphics2D {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#setRenderingHint(java.awt.RenderingHints.Key, 
-     * java.lang.Object)
-     */
-    public void setRenderingHint(Key hintKey, Object hintValue) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#getRenderingHint(java.awt.RenderingHints.Key)
+    /**
+     * Returns the current value for the specified hint key, or 
+     * <code>null</code> if no value is set.
+     * 
+     * @param hintKey  the hint key (<code>null</code> permitted).
+     * 
+     * @return The hint value, or <code>null</code>.
+     * 
+     * @see #setRenderingHint(Key, Object)
      */
     public Object getRenderingHint(Key hintKey) {
-        // TODO Auto-generated method stub
-        return null;
+        return this.hints.get(hintKey);
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#setRenderingHints(java.util.Map)
+    /**
+     * Sets the value for a rendering hint.  For now, this graphics context
+     * ignores all hints.
+     * 
+     * @param hintKey  the key (<code>null</code> not permitted).
+     * @param hintValue  the value (must be compatible with the specified key).
+     * 
+     * @throws IllegalArgumentException if <code>hintValue</code> is not
+     *         compatible with the <code>hintKey</code>.
+     *         
+     * @see #getRenderingHint(Key)
      */
-    public void setRenderingHints(Map hints) {
-        // TODO Auto-generated method stub
-
+    public void setRenderingHint(Key hintKey, Object hintValue) {
+        this.hints.put(hintKey, hintValue);
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#addRenderingHints(java.util.Map)
-     */
-    public void addRenderingHints(Map hints) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#getRenderingHints()
+    /**
+     * Returns a copy of the hints collection for this graphics context.
+     * 
+     * @return A copy of the hints collection.
      */
     public RenderingHints getRenderingHints() {
-        // TODO Auto-generated method stub
-        return null;
+        return (RenderingHints) this.hints.clone();
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#getPaint()
+    /**
+     * Adds the hints in the specified map to the graphics context, replacing
+     * any existing hints.  For now, this graphics context ignores all hints.
+     * 
+     * @param hints  the hints (<code>null</code> not permitted).
+     * 
+     * @see #setRenderingHints(Map)
+     */
+    public void addRenderingHints(Map hints) {
+        this.hints.putAll(hints);
+    }
+
+    /**
+     * Replaces the existing hints with those contained in the specified
+     * map.  Note that, for now, this graphics context ignores all hints.
+     * 
+     * @param hints  the hints (<code>null</code> not permitted).
+     * 
+     * @see #addRenderingHints(Map)
+     */
+    public void setRenderingHints(Map hints) {
+        if (hints == null) {
+            throw new NullPointerException("Null 'hints' argument.");
+        }
+        this.hints = new RenderingHints(hints);
+    }
+
+    /**
+     * Returns the current paint for this graphics context.
+     * 
+     * @return The current paint.
+     * 
+     * @see #setPaint(Paint)
      */
     public Paint getPaint() {
+        // TODO: it might be a good idea to keep a reference to the color
+        // specified in setPaint() or setColor(), rather than creating a 
+        // new object every time getPaint() is called.
         return SWTUtils.toAwtColor(this.gc.getForeground());
     }
 
     /**
-     * Set the paint associated with the swt graphic composite.
-     * @see java.awt.Graphics2D#setPaint(java.awt.Paint)
+     * Sets the paint for this graphics context.  For now, this graphics
+     * context only supports instances of {@link Color}.
+     * 
+     * @param paint  the paint (<code>null</code> not permitted).
+     * 
+     * @see #getPaint()
+     * @see #setColor(Color)
      */
     public void setPaint(Paint paint) {
         if (paint instanceof Color) {
@@ -207,15 +256,26 @@ public class SWTGraphics2D extends Graphics2D {
         }
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#getColor()
+    /**
+     * Returns the current color for this graphics context.
+     * 
+     * @return The current color.
+     * 
+     * @see #setColor(Color)
      */
     public Color getColor() {
+        // TODO: it might be a good idea to keep a reference to the color
+        // specified in setPaint() or setColor(), rather than creating a 
+        // new object every time getPaint() is called.
         return SWTUtils.toAwtColor(this.gc.getForeground());
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#setColor(java.awt.Color)
+    /**
+     * Sets the current color for this graphics context.
+     * 
+     * @param color  the color.
+     * 
+     * @see #getColor()
      */
     public void setColor(Color color) {
         org.eclipse.swt.graphics.Color swtColor = getSwtColorFromPool(color);
@@ -235,13 +295,6 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /* (non-Javadoc)
-     * @see java.awt.Graphics2D#getBackground()
-     */
-    public Color getBackground() {
-        return SWTUtils.toAwtColor(this.gc.getBackground());
-    }
-
-    /* (non-Javadoc)
      * @see java.awt.Graphics2D#setBackground(java.awt.Color)
      */
     public void setBackground(Color color) {
@@ -250,6 +303,13 @@ public class SWTGraphics2D extends Graphics2D {
                 this.gc.getDevice(), color);
         this.gc.setBackground(swtColor);
         swtColor.dispose(); 
+    }
+
+    /* (non-Javadoc)
+     * @see java.awt.Graphics2D#getBackground()
+     */
+    public Color getBackground() {
+        return SWTUtils.toAwtColor(this.gc.getBackground());
     }
 
     /* (non-Javadoc)
@@ -264,19 +324,24 @@ public class SWTGraphics2D extends Graphics2D {
      */
     public void setXORMode(Color color) {
         // TODO Auto-generated method stub
-    
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#getComposite()
+    /**
+     * Returns the current composite.
+     * 
+     * @return The current composite.
+     * 
+     * @see #setComposite(Composite)
      */
     public Composite getComposite() {
-        //return AlphaComposite.getInstance(this.compositingRule, this.gc.getAlpha()/0xFF);
         return this.composite;
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#setComposite(java.awt.Composite)
+    /**
+     * Sets the current composite.  This implementation currently supports
+     * only the {@link AlphaComposite} class.
+     * 
+     * @param comp  the composite.
      */
     public void setComposite(Composite comp) {
         this.composite = comp;
@@ -290,23 +355,32 @@ public class SWTGraphics2D extends Graphics2D {
         }
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#getStroke()
+    /**
+     * Returns the current stroke for this graphics context.
+     * 
+     * @return The current stroke.
+     * 
+     * @see #setStroke(Stroke)
      */
     public Stroke getStroke() {
         return new BasicStroke(this.gc.getLineWidth(), this.gc.getLineCap(), 
                 this.gc.getLineJoin());
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#setStroke(java.awt.Stroke)
+    /**
+     * Sets the stroke for this graphics context.  For now, this implementation
+     * only recognises the {@link BasicStroke} class.
+     * 
+     * @param stroke  the stroke (<code>null</code> not permitted).
+     * 
+     * @see #getStroke()
      */
     public void setStroke(Stroke stroke) {
         if (stroke instanceof BasicStroke) {
             BasicStroke bs = (BasicStroke) stroke;
             // linewidth
             this.gc.setLineWidth((int) bs.getLineWidth());
-    
+
             // line join
             switch (bs.getLineJoin()) {
                 case BasicStroke.JOIN_BEVEL :
@@ -319,7 +393,7 @@ public class SWTGraphics2D extends Graphics2D {
                     this.gc.setLineJoin(SWT.JOIN_ROUND);
                     break;
             }
-    
+
             // line cap
             switch (bs.getEndCap()) {
                 case BasicStroke.CAP_BUTT :
@@ -332,10 +406,10 @@ public class SWTGraphics2D extends Graphics2D {
                     this.gc.setLineCap(SWT.CAP_SQUARE);
                     break;
             }
-    
+
             // set the line style to solid by default
             this.gc.setLineStyle(SWT.LINE_SOLID);
-    
+
             // apply dash style if any
             float[] dashes = bs.getDashArray();
             if (dashes != null) {
@@ -468,7 +542,6 @@ public class SWTGraphics2D extends Graphics2D {
      */
     public void rotate(double theta, double x, double y) {
         // TODO Auto-generated method stub
-    
     }
 
     /* (non-Javadoc)
@@ -495,8 +568,15 @@ public class SWTGraphics2D extends Graphics2D {
         swtTransform.dispose();
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics2D#draw(java.awt.Shape)
+    /**
+     * Draws the outline of the specified shape using the current stroke and
+     * paint settings.
+     * 
+     * @param shape  the shape (<code>null</code> not permitted).
+     * 
+     * @see #getPaint()
+     * @see #getStroke()
+     * @see #fill(Shape)
      */
     public void draw(Shape shape) {
         Path path = toSwtPath(shape);
@@ -505,76 +585,135 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Draws a line on the swt graphic composite.
-     * @see java.awt.Graphics#drawLine(int, int, int, int)
+     * Draws a line from (x1, y1) to (x2, y2) using the current stroke
+     * and paint settings.
+     * 
+     * @param x1  the x-coordinate for the starting point.
+     * @param y1  the y-coordinate for the starting point.
+     * @param x2  the x-coordinate for the ending point.
+     * @param y2  the y-coordinate for the ending point.
+     * 
+     * @see #draw(Shape)
      */
     public void drawLine(int x1, int y1, int x2, int y2) {
         this.gc.drawLine(x1, y1, x2, y2);
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#drawPolygon(int[], int[], int)
+    /**
+     * Draws the outline of the polygon specified by the given points, using
+     * the current paint and stroke settings.
+     * 
+     * @param xPoints  the x-coordinates.
+     * @param yPoints  the y-coordinates.
+     * @param npoints  the number of points in the polygon.
+     * 
+     * @see #draw(Shape)
      */
     public void drawPolygon(int [] xPoints, int [] yPoints, int npoints) {
-        // TODO Auto-generated method stub
-    
+        drawPolyline(xPoints, yPoints, npoints);
+        if (npoints > 1) {
+            this.gc.drawLine(xPoints[npoints-1], yPoints[npoints-1], 
+                    xPoints[0], yPoints[0]);            
+        }
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#drawPolyline(int[], int[], int)
+    /**
+     * Draws a sequence of connected lines specified by the given points, using
+     * the current paint and stroke settings.
+     * 
+     * @param xPoints  the x-coordinates.
+     * @param yPoints  the y-coordinates.
+     * @param npoints  the number of points in the polygon.
+     * 
+     * @see #draw(Shape)
      */
     public void drawPolyline(int [] xPoints, int [] yPoints, int npoints) {
-        // TODO Auto-generated method stub
-    
+        if (npoints > 1) {
+            int x0 = xPoints[0];
+            int y0 = yPoints[0];
+            int x1 = 0, y1 = 0;
+            for (int i = 1; i < npoints; i++) {
+                x1 = xPoints[i];
+                y1 = yPoints[i];
+                this.gc.drawLine(x0, y0, x1, y1);
+                x0 = x1;
+                y0 = y1;
+            }
+        }    
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#drawOval(int, int, int, int)
+    /**
+     * Draws an oval that fits within the specified rectangular region.
+     * 
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * @param width  the frame width.
+     * @param height  the frame height.
+     * 
+     * @see #fillOval(int, int, int, int)
+     * @see #draw(Shape)
      */
     public void drawOval(int x, int y, int width, int height) {
-        // TODO Auto-generated method stub
-    
+        this.gc.drawOval(x, y, width - 1, height - 1);
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#drawArc(int, int, int, int, int, int)
+    /**
+     * Draws an arc that is part of an ellipse that fits within the specified
+     * framing rectangle.
+     * 
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * @param width  the frame width.
+     * @param height  the frame height.
+     * @param arcStart  the arc starting point, in degrees.
+     * @param arcAngle  the extent of the arc.
+     * 
+     * @see #fillArc(int, int, int, int, int, int)
      */
     public void drawArc(int x, int y, int width, int height, int arcStart,
             int arcAngle) {
-        // TODO Auto-generated method stub
-    
+        this.gc.drawArc(x, y, width - 1, height - 1, arcStart, arcAngle);
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#drawRoundRect(int, int, int, int, int, int)
+    /**
+     * Draws a rectangle with rounded corners that fits within the specified
+     * framing rectangle.
+     * 
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * @param width  the frame width.
+     * @param height  the frame height.
+     * @param arcWidth  the width of the arc defining the roundedness of the
+     *         rectangle's corners.
+     * @param arcHeight the height of the arc defining the roundedness of the
+     *         rectangle's corners.
+     *         
+     * @see #fillRoundRect(int, int, int, int, int, int)
      */
     public void drawRoundRect(int x, int y, int width, int height,
             int arcWidth, int arcHeight) {
-        // TODO Auto-generated method stub
-    
+        this.gc.drawRoundRectangle(x, y, width - 1, height - 1, arcWidth, 
+                arcHeight);
     }
 
-    /** fill an arbitrary shape on the swt graphic composite 
-         * with the current stroke and paint.
-         * note that for consistency with the awt method, it is needed 
-         * to switch temporarily the foreground and background colors.
-         * @see java.awt.Graphics2D#fill(java.awt.Shape)
-         */
-        public void fill(Shape shape) {
-    //      if (!(shape instanceof java.awt.geom.Rectangle2D)) {
-    //          System.out.println("using fill with shape: "+shape.toString());
-    //      }
-    //      if (shape instanceof java.awt.geom.GeneralPath) {
-    //          java.awt.geom.GeneralPath gp = (java.awt.geom.GeneralPath) shape;
-    //          PathIteratorgp.getPathIterator(this.getTransform());
-    //          System.out.println("general path details:"+gp.getWindingRule());
-    //      }
-            Path path = toSwtPath(shape);
-            switchColors();
-            this.gc.fillPath(path);
-            switchColors();
-            path.dispose();
-        }
+    /** 
+     * Fills the specified shape using the current paint.
+     * 
+     * @param shape  the shape (<code>null</code> not permitted).
+     * 
+     * @see #getPaint()
+     * @see #draw(Shape)
+     */
+    public void fill(Shape shape) {
+        Path path = toSwtPath(shape);
+        // Note that for consistency with the AWT implementation, it is 
+        // necessary to switch temporarily the foreground and background 
+        // colours
+        switchColors();
+        this.gc.fillPath(path);
+        switchColors();
+        path.dispose();
+    }
 
     /**
      * Fill a rectangle area on the swt graphic composite.
@@ -588,12 +727,21 @@ public class SWTGraphics2D extends Graphics2D {
         this.switchColors();
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#clearRect(int, int, int, int)
+    /**
+     * Fills the specified rectangle with the current background colour.
+     * 
+     * @param x  the x-coordinate for the rectangle.
+     * @param y  the y-coordinate for the rectangle.
+     * @param width  the width.
+     * @param height  the height.
+     * 
+     * @see #fillRect(int, int, int, int)
      */
     public void clearRect(int x, int y, int width, int height) {
-        // TODO Auto-generated method stub
-    
+        Paint saved = getPaint();
+        setPaint(getBackground());
+        fillRect(x, y, width, height);
+        setPaint(saved);
     }
 
     /* (non-Javadoc)
@@ -601,33 +749,66 @@ public class SWTGraphics2D extends Graphics2D {
      */
     public void fillPolygon(int [] xPoints, int [] yPoints, int npoints) {
         // TODO Auto-generated method stub
-    
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#fillRoundRect(int, int, int, int, int, int)
+    /**
+     * Draws a rectangle with rounded corners that fits within the specified
+     * framing rectangle.
+     * 
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * @param width  the frame width.
+     * @param height  the frame height.
+     * @param arcWidth  the width of the arc defining the roundedness of the
+     *         rectangle's corners.
+     * @param arcHeight the height of the arc defining the roundedness of the
+     *         rectangle's corners.
+     *         
+     * @see #drawRoundRect(int, int, int, int, int, int)
      */
     public void fillRoundRect(int x, int y, int width, int height,
             int arcWidth, int arcHeight) {
-        // TODO Auto-generated method stub
-    
+        switchColors();
+        this.gc.fillRoundRectangle(x, y, width - 1, height - 1, arcWidth, 
+                arcHeight);
+        switchColors();
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#fillOval(int, int, int, int)
+    /**
+     * Fills an oval that fits within the specified rectangular region.
+     * 
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * @param width  the frame width.
+     * @param height  the frame height.
+     * 
+     * @see #drawOval(int, int, int, int)
+     * @see #fill(Shape)
      */
     public void fillOval(int x, int y, int width, int height) {
-        // TODO Auto-generated method stub
-    
+        switchColors();
+        this.gc.fillOval(x, y, width - 1, height - 1);
+        switchColors();
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Graphics#fillArc(int, int, int, int, int, int)
+    /**
+     * Fills an arc that is part of an ellipse that fits within the specified
+     * framing rectangle.
+     * 
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * @param width  the frame width.
+     * @param height  the frame height.
+     * @param arcStart  the arc starting point, in degrees.
+     * @param arcAngle  the extent of the arc.
+     * 
+     * @see #drawArc(int, int, int, int, int, int)
      */
     public void fillArc(int x, int y, int width, int height, int arcStart,
             int arcAngle) {
-        // TODO Auto-generated method stub
-    
+        switchColors();
+        this.gc.fillArc(x, y, width - 1, height - 1, arcStart, arcAngle);
+        switchColors();
     }
 
     /**
@@ -665,8 +846,8 @@ public class SWTGraphics2D extends Graphics2D {
      * @see java.awt.Graphics2D#getFontRenderContext()
      */
     public FontRenderContext getFontRenderContext() {
-        FontRenderContext fontRenderContext 
-            = new FontRenderContext(new AffineTransform(), true, true);
+        FontRenderContext fontRenderContext = new FontRenderContext(
+                new AffineTransform(), true, true);
         return fontRenderContext;
     }
 
@@ -705,7 +886,6 @@ public class SWTGraphics2D extends Graphics2D {
      */
     public void drawString(AttributedCharacterIterator iterator, int x, int y) {
         // TODO Auto-generated method stub
-
     }
 
     /* (non-Javadoc)
@@ -715,7 +895,6 @@ public class SWTGraphics2D extends Graphics2D {
     public void drawString(AttributedCharacterIterator iterator, float x, 
             float y) {
         // TODO Auto-generated method stub
-
     }
 
     /* (non-Javadoc)
@@ -750,9 +929,8 @@ public class SWTGraphics2D extends Graphics2D {
      */
     public void drawImage(BufferedImage image, BufferedImageOp op, int x, 
             int y) {
-        org.eclipse.swt.graphics.Image im 
-            = new org.eclipse.swt.graphics.Image(this.gc.getDevice(), 
-                    convertToSWT(image));
+        org.eclipse.swt.graphics.Image im = new org.eclipse.swt.graphics.Image(
+                this.gc.getDevice(), convertToSWT(image));
         this.gc.drawImage(im, x, y);
         im.dispose();
     }
@@ -856,11 +1034,23 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
+     * Add given swt resource to the resource pool. All resources added
+     * to the resource pool will be disposed when {@link #dispose()} is called.
+     *  
+     * @param resource the resource to add to the pool.
+     * @return the swt <code>Resource</code> just added.
+     */
+    private Resource addToResourcePool(Resource resource) {
+        this.resourcePool.add(resource);
+        return resource;
+    }
+
+    /**
      * Dispose the resource pool.
      */
     private void disposeResourcePool() {
-        for (Iterator it = this.resourcePool.iterator();it.hasNext();) {
-            Resource resource = (Resource)it.next();
+        for (Iterator it = this.resourcePool.iterator(); it.hasNext();) {
+            Resource resource = (Resource) it.next();
             resource.dispose();
         }
         this.resourcePool.clear();
@@ -882,8 +1072,7 @@ public class SWTGraphics2D extends Graphics2D {
         org.eclipse.swt.graphics.Font swtFont = (org.eclipse.swt.graphics.Font)
         this.fontsPool.get(font);
         if (swtFont == null) {
-            swtFont = new org.eclipse.swt.graphics.Font( 
-                    this.gc.getDevice(), 
+            swtFont = new org.eclipse.swt.graphics.Font(this.gc.getDevice(), 
                     SWTUtils.toSwtFontData(this.gc.getDevice(), font, true));
             addToResourcePool(swtFont);
             this.fontsPool.put(font, swtFont);
@@ -934,7 +1123,7 @@ public class SWTGraphics2D extends Graphics2D {
     /**
      * Converts an AWT <code>Shape</code> into a SWT <code>Path</code>.
      * 
-     * @param shape  the shape.
+     * @param shape  the shape (<code>null</code> not permitted).
      * 
      * @return The path.
      */
@@ -1053,17 +1242,5 @@ public class SWTGraphics2D extends Graphics2D {
             return data;
         }
         return null;
-    }
-
-    /**
-     * Add given swt resource to the resource pool. All resources added
-     * to the resource pool will be dispose when {@link #dispose()} is called
-     *  
-     * @param resource the resource to add to the pool.
-     * @return the swt <code>Resource</code> just added.
-     */
-    private Resource addToResourcePool(Resource resource) {
-        this.resourcePool.add(resource);
-        return resource;
     }
 }
