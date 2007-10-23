@@ -30,11 +30,11 @@
  * (C) Copyright 2006, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Henry Proudhon (henry.proudhon AT insa-lyon.fr);
+ * Contributor(s):   Henry Proudhon (henry.proudhon AT ensmp.fr);
  *
  * Changes
  * -------
- * 30-Jan-2007 : New class derived from TimeSeriesDemo.java (HP);
+ * 30-Jan-2007 : Adapted for SWT from TimeSeriesDemo.java (HP);
  * 
  */
 package org.jfree.experimental.chart.swt.demo;

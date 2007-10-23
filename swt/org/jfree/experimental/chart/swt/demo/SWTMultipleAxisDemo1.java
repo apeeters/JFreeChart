@@ -30,11 +30,11 @@
  * (C) Copyright 2006, 2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Henry Proudhon;
+ * Contributor(s):   Henry Proudhon (henry.proudhon AT ensmp.fr).
  *
  * Changes
  * -------
- * 23-Aug-2006 : New class (HP);
+ * 23-Aug-2006 : Adapted for SWT (HP);
  * 
  */
 
