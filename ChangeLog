@@ -1,3 +1,13 @@
+2007-10-23  David Gilbert  <david.gilbert@object-refinery.com>
+
+	* source/org/jfree/chart/renderer/AbstractRenderer.java
+	(lookupSeriesPaint): Call accessor methods for per-series paint,
+	(lookupSeriesFillPaint): Likewise,
+	(lookupSeriesOutlinePaint): Likewise,
+	(lookupSeriesStroke): Likewise,
+	(lookupSeriesOutlineStroke): Likewise,
+	(lookupSeriesStroke): Likewise.
+
 2007-10-17  David Gilbert  <david.gilbert@object-refinery.com>
 
 	* experimental/org/jfree/experimental/chart/plot/dial/AbstractDialLayer.java
@@ -806,9 +816,9 @@
 
 2007-07-06  Henry Proudhon  <henry.proudhon@insa-lyon.fr>
 	* swt/org/jfree/experimental/swt/SWTGraphics2D.java
-        (getClip): implemented,
+	(getClip): Implemented,
 	* swt/org/jfree/experimental/chart/swt/ChartComposite.java
-        (zoom): fixed bug with multiple plots.
+	(zoom): Fixed bug with multiple plots.
 
 2007-07-04  Henry Proudhon  <henry.proudhon@insa-lyon.fr>
 	* swt/org/jfree/experimental/chart/swt/ChartComposite.java
