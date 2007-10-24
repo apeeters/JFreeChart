@@ -36,6 +36,7 @@
  * -------
  * 03-Nov-2006 : Version 1 (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 24-Oct-2007 : Updated for API changes (DG);
  *
  */
 
@@ -88,8 +89,8 @@ public class DialValueIndicatorTests extends TestCase {
      * Confirm that the equals method can distinguish all the required fields.
      */
     public void testEquals() {
-        DialValueIndicator i1 = new DialValueIndicator(0, "Label");
-        DialValueIndicator i2 = new DialValueIndicator(0, "Label");
+        DialValueIndicator i1 = new DialValueIndicator(0);
+        DialValueIndicator i2 = new DialValueIndicator(0);
         assertTrue(i1.equals(i2));
         
         // dataset index
@@ -187,8 +188,8 @@ public class DialValueIndicatorTests extends TestCase {
      * Two objects that are equal are required to return the same hashCode. 
      */
     public void testHashCode() {
-        DialValueIndicator i1 = new DialValueIndicator(0, "Label");
-        DialValueIndicator i2 = new DialValueIndicator(0, "Label");
+        DialValueIndicator i1 = new DialValueIndicator(0);
+        DialValueIndicator i2 = new DialValueIndicator(0);
         assertTrue(i1.equals(i2));
         int h1 = i1.hashCode();
         int h2 = i2.hashCode();
@@ -200,7 +201,7 @@ public class DialValueIndicatorTests extends TestCase {
      */
     public void testCloning() {
         // test a default instance
-        DialValueIndicator i1 = new DialValueIndicator(0, "Label");
+        DialValueIndicator i1 = new DialValueIndicator(0);
         DialValueIndicator i2 = null;
         try {
             i2 = (DialValueIndicator) i1.clone();
@@ -225,7 +226,7 @@ public class DialValueIndicatorTests extends TestCase {
      */
     public void testSerialization() {
         // test a default instance
-        DialValueIndicator i1 = new DialValueIndicator(0, "Label");
+        DialValueIndicator i1 = new DialValueIndicator(0);
         DialValueIndicator i2 = null;
 
         try {
