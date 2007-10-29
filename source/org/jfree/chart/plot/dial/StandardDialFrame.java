@@ -24,9 +24,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
  * in the United States and other countries.]
  *
- * --------------------
- * SimpleDialFrame.java
- * --------------------
+ * ----------------------
+ * StandardDialFrame.java
+ * ----------------------
  * (C) Copyright 2006, 2007, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -64,7 +64,7 @@ import org.jfree.chart.util.SerialUtilities;
 /**
  * A simple circular frame for the {@link DialPlot} class.
  */
-public class SimpleDialFrame extends AbstractDialLayer implements DialFrame, 
+public class StandardDialFrame extends AbstractDialLayer implements DialFrame, 
         Cloneable, PublicCloneable, Serializable {
     
     /** The outer radius, relative to the framing rectangle. */
@@ -89,9 +89,9 @@ public class SimpleDialFrame extends AbstractDialLayer implements DialFrame,
     private transient Stroke stroke;
     
     /**
-     * Creates a new instance of <code>SimpleDialFrame</code>.
+     * Creates a new instance of <code>StandardDialFrame</code>.
      */
-    public SimpleDialFrame() {
+    public StandardDialFrame() {
         this.backgroundPaint = Color.gray;
         this.foregroundPaint = Color.black;
         this.stroke = new BasicStroke(2.0f);
@@ -274,10 +274,10 @@ public class SimpleDialFrame extends AbstractDialLayer implements DialFrame,
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof SimpleDialFrame)) {
+        if (!(obj instanceof StandardDialFrame)) {
             return false;
         }
-        SimpleDialFrame that = (SimpleDialFrame) obj;
+        StandardDialFrame that = (StandardDialFrame) obj;
         if (!PaintUtilities.equal(this.backgroundPaint, that.backgroundPaint)) {
             return false;
         }
