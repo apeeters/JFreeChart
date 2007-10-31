@@ -65,7 +65,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import org.jfree.util.PublicCloneable;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.SortOrder;
 
 /**
