@@ -66,6 +66,7 @@
  * 11-Jan-2005 : Renamed update(int, Number) --> updateByIndex() (DG);
  * 15-Jan-2007 : Added toArray() method (DG);
  * 20-Jun-2007 : Removed deprecated code and JCommon dependencies (DG);
+ * 31-Oct-2007 : Implemented faster hashCode() (DG);
  * 
  */
 
@@ -469,7 +470,7 @@ public class XYSeries extends Series implements Cloneable, Serializable {
     /**
      * Updates the value of an item in the series and sends a 
      * {@link SeriesChangeEvent} to all registered listeners.
-     * 
+     *
      * @param index  the item (zero based index).
      * @param y  the new value (<code>null</code> permitted).
      * 
@@ -681,7 +682,21 @@ public class XYSeries extends Series implements Cloneable, Serializable {
      */
     public int hashCode() {
         int result = super.hashCode();
-        result = 29 * result + (this.data != null ? this.data.hashCode() : 0);
+        // it is too slow to look at every data item, so let's just look at
+        // the first, middle and last items...
+        int count = getItemCount();
+        if (count > 0) {
+            XYDataItem item = getDataItem(0);
+            result = 29 * result + item.hashCode();
+        }
+        if (count > 1) {
+            XYDataItem item = getDataItem(count - 1);
+            result = 29 * result + item.hashCode();
+        }
+        if (count > 2) {
+            XYDataItem item = getDataItem(count / 2);
+            result = 29 * result + item.hashCode();
+        }
         result = 29 * result + this.maximumItemCount;
         result = 29 * result + (this.autoSort ? 1 : 0);
         result = 29 * result + (this.allowDuplicateXValues ? 1 : 0);
