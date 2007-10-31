@@ -59,17 +59,14 @@
 package org.jfree.data;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
-import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
-import org.jfree.util.SortOrder;
+import org.jfree.chart.util.SortOrder;
 
 /**
  * An ordered list of (key, value) items.  This class provides a default 
