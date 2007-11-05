@@ -32,6 +32,7 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Jeremy Bowman;
  *                   Arnaud Lelievre;
+ *                   Richard West;
  *
  * Changes (from 21-Jun-2001)
  * --------------------------
@@ -144,13 +145,15 @@
  *               ignored) (DG);
  * 13-Mar-2007 : Added null argument checks for setRangeCrosshairPaint() and
  *               setRangeCrosshairStroke(), fixed clipping for 
- *               anntotations (DG);
+ *               annotations (DG);
  * 07-Jun-2007 : Override drawBackground() for new GradientPaint handling (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 06-Jul-2007 : Updated annotation handling (DG);
  * 10-Jul-2007 : Added getRangeAxisIndex(ValueAxis) method (DG);
  * 24-Sep-2007 : Implemented new zoom methods (DG);
  * 25-Oct-2007 : Added some argument checks (DG);
+ * 05-Nov-2007 : Applied patch 1823697, by Richard West, for removal of domain
+ *               and range markers (DG);
  *
  */
 
@@ -957,7 +960,6 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         }
         notifyListeners(new PlotChangeEvent(this));
     }
-    
 
     /**
      * Returns the index of the specified axis, or <code>-1</code> if the axis
@@ -986,7 +988,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         }
         return result;
     }
-    
+
     /**
      * Returns the range axis location.
      *
@@ -2054,6 +2056,67 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     }
     
     /**
+     * Removes a marker for the domain axis and sends a {@link PlotChangeEvent} 
+     * to all registered listeners.
+     *
+     * @param marker  the marker.
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.7
+     */
+    public boolean removeDomainMarker(Marker marker) {
+        return removeDomainMarker(marker, Layer.FOREGROUND);
+    }
+
+    /**
+     * Removes a marker for the domain axis in the specified layer and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param marker the marker (<code>null</code> not permitted).
+     * @param layer the layer (foreground or background).
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.7
+     */
+    public boolean removeDomainMarker(Marker marker, Layer layer) {
+        return removeDomainMarker(0, marker, layer);
+    }
+
+    /**
+     * Removes a marker for a specific dataset/renderer and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param index the dataset/renderer index.
+     * @param marker the marker.
+     * @param layer the layer (foreground or background).
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.7
+     */
+    public boolean removeDomainMarker(int index, Marker marker, Layer layer) {
+        ArrayList markers;
+        if (layer == Layer.FOREGROUND) {
+            markers = (ArrayList) this.foregroundDomainMarkers.get(new Integer(
+                    index));
+        }
+        else {
+            markers = (ArrayList)this.backgroundDomainMarkers.get(new Integer(
+                    index));
+        }
+        boolean removed = markers.remove(marker);
+        if (removed) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
+        return removed;
+    }
+    
+    /**
      * Adds a marker for display (in the foreground) against the range axis and
      * sends a {@link PlotChangeEvent} to all registered listeners. Typically a 
      * marker will be drawn by the renderer as a line perpendicular to the 
@@ -2212,6 +2275,71 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             }
         }
         notifyListeners(new PlotChangeEvent(this));
+    }
+
+    /**
+     * Removes a marker for the range axis and sends a {@link PlotChangeEvent} 
+     * to all registered listeners.
+     *
+     * @param marker the marker.
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.7
+     */
+    public boolean removeRangeMarker(Marker marker) {
+        return removeRangeMarker(marker, Layer.FOREGROUND);
+    }
+
+    /**
+     * Removes a marker for the range axis in the specified layer and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param marker the marker (<code>null</code> not permitted).
+     * @param layer the layer (foreground or background).
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.7
+     */
+    public boolean removeRangeMarker(Marker marker, Layer layer) {
+        return removeRangeMarker(0, marker, layer);
+    }
+
+    /**
+     * Removes a marker for a specific dataset/renderer and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param index the dataset/renderer index.
+     * @param marker the marker.
+     * @param layer the layer (foreground or background).
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.7
+     */
+    public boolean removeRangeMarker(int index, Marker marker, Layer layer) {
+        if (marker == null) {
+            throw new IllegalArgumentException("Null 'marker' argument.");
+        }
+        ArrayList markers;
+        if (layer == Layer.FOREGROUND) {
+            markers = (ArrayList)this.foregroundRangeMarkers.get(new Integer(
+                    index));
+        }
+        else {
+            markers = (ArrayList)this.backgroundRangeMarkers.get(new Integer(
+                    index));
+        }
+
+        boolean removed = markers.remove(marker);
+        if (removed) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
+        return removed;
     }
 
     /**
