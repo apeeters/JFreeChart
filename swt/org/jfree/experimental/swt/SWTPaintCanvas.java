@@ -77,7 +77,7 @@ public class SWTPaintCanvas extends Canvas
             public void paintControl(PaintEvent e) {
                 e.gc.setForeground(e.gc.getDevice().getSystemColor(
                         SWT.COLOR_BLACK));
-                e.gc.setBackground(myColor);
+                e.gc.setBackground(SWTPaintCanvas.this.myColor);
                 e.gc.fillRectangle(getClientArea());
                 e.gc.drawRectangle(getClientArea().x, getClientArea().y, 
                         getClientArea().width - 1, getClientArea().height - 1);
@@ -92,7 +92,7 @@ public class SWTPaintCanvas extends Canvas
      */
     public void setColor(Color color) {
         if (this.myColor != null) {
-            myColor.dispose();
+            this.myColor.dispose();
         }
         //this.myColor = new Color( getDisplay(), color.getRGB() );
         this.myColor = color;
@@ -104,7 +104,7 @@ public class SWTPaintCanvas extends Canvas
      * @return The color.
      */
     public Color getColor() {
-        return myColor;
+        return this.myColor;
     }
     
     /**
@@ -129,6 +129,6 @@ public class SWTPaintCanvas extends Canvas
      * Frees resources.
      */
     public void dispose() {
-        myColor.dispose();
+        this.myColor.dispose();
     }
 }
