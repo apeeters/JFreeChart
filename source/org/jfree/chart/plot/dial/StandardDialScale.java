@@ -38,6 +38,7 @@
  * 17-Nov-2006 : Added flags for tick label visibility (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 24-Oct-2007 : Added tick label formatter (DG);
+ * 19-Nov-2007 : Added some missing accessor methods (DG);
  * 
  */
 
@@ -68,9 +69,14 @@ import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A scale for a {@link DialPlot}.
+ * 
+ * @since 1.0.7
  */
 public class StandardDialScale extends AbstractDialLayer implements DialScale, 
         Cloneable, PublicCloneable, Serializable {
+    
+    /** For serialization. */
+    static final long serialVersionUID = 3715644629665918516L;
     
     /** The minimum data value for the scale. */
     private double lowerBound;
@@ -215,6 +221,62 @@ public class StandardDialScale extends AbstractDialLayer implements DialScale,
         this.minorTickStroke = new BasicStroke(1.0f);
     }
     
+    /**
+     * Returns the lower bound for the scale.
+     * 
+     * @return The lower bound for the scale.
+     * 
+     * @see #setLowerBound(double)
+     * 
+     * @since 1.0.8
+     */
+    public double getLowerBound() {
+        return this.lowerBound;
+    }
+    
+    /**
+     * Sets the lower bound for the scale and sends a 
+     * {@link DialLayerChangeEvent} to all registered listeners.
+     * 
+     * @param lower  the lower bound.
+     * 
+     * @see #getLowerBound()
+     * 
+     * @since 1.0.8
+     */
+    public void setLowerBound(double lower) {
+        this.lowerBound = lower;
+        notifyListeners(new DialLayerChangeEvent(this));        
+    }
+    
+    /**
+     * Returns the upper bound for the scale.
+     * 
+     * @return The upper bound for the scale.
+     * 
+     * @see #setUpperBound(double)
+     * 
+     * @since 1.0.8
+     */
+    public double getUpperBound() {
+        return this.upperBound;
+    }
+    
+    /**
+     * Sets the upper bound for the scale and sends a 
+     * {@link DialLayerChangeEvent} to all registered listeners.
+     * 
+     * @param upper  the upper bound.
+     * 
+     * @see #getUpperBound()
+     * 
+     * @since 1.0.8
+     */
+    public void setUpperBound(double upper) {
+        this.upperBound = upper;
+        notifyListeners(new DialLayerChangeEvent(this));        
+    }
+
     /**
      * Returns the start angle for the scale (in degrees using the same 
      * orientation as Java's <code>Arc2D</code> class).
@@ -485,6 +547,37 @@ public class StandardDialScale extends AbstractDialLayer implements DialScale,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.minorTickPaint = paint;
+        notifyListeners(new DialLayerChangeEvent(this));        
+    }
+    
+    /**
+     * Returns the stroke used to draw the minor tick marks.
+     * 
+     * @return The paint (never <code>null</code>).
+     * 
+     * @see #setMinorTickStroke(Stroke)
+     * 
+     * @since 1.0.8
+     */
+    public Stroke getMinorTickStroke() {
+        return this.minorTickStroke;
+    }
+    
+    /**
+     * Sets the stroke used to draw the minor tick marks and sends a 
+     * {@link DialLayerChangeEvent} to all registered listeners.
+     * 
+     * @param stroke  the stroke (<code>null</code> not permitted).
+     * 
+     * @see #getMinorTickStroke()
+     * 
+     * @since 1.0.8
+     */
+    public void setMinorTickStroke(Stroke stroke) {
+        if (stroke == null) {
+            throw new IllegalArgumentException("Null 'stroke' argument.");
+        }
+        this.minorTickStroke = stroke;
         notifyListeners(new DialLayerChangeEvent(this));        
     }
     
