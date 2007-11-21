@@ -147,6 +147,8 @@
  * 19-Jun-2007 : Removed deprecated code (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 18-Jul-2007 : Added simple label option (DG);
+ * 21-Nov-2007 : Fixed labelling bugs, added debug code, restored default
+ *               white background (DG); 
  *    
  */
 
@@ -163,6 +165,7 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -229,7 +232,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     private static final long serialVersionUID = -795612466005590431L;
     
     /** The default interior gap. */
-    public static final double DEFAULT_INTERIOR_GAP = 0.1;
+    public static final double DEFAULT_INTERIOR_GAP = 0.08;
 
     /** The maximum interior gap (currently 40%). */
     public static final double MAX_INTERIOR_GAP = 0.40;
@@ -270,7 +273,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
 
     /** 
      * The amount of space left around the outside of the pie plot, expressed 
-     * as a percentage. 
+     * as a percentage of the plot area width and height. 
      */
     private double interiorGap;
 
@@ -375,19 +378,19 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     private RectangleInsets simpleLabelOffset;
     
     /** The maximum label width as a percentage of the plot width. */
-    private double maximumLabelWidth = 0.20;
+    private double maximumLabelWidth = 0.14;
     
     /** 
-     * The gap between the labels and the plot as a percentage of the plot 
-     * width. 
+     * The gap between the labels and the link corner, as a percentage of the 
+     * plot width. 
      */
-    private double labelGap = 0.05;
+    private double labelGap = 0.025;
 
     /** A flag that controls whether or not the label links are drawn. */
     private boolean labelLinksVisible;
     
     /** The link margin. */
-    private double labelLinkMargin = 0.05;
+    private double labelLinkMargin = 0.025;
     
     /** The paint used for the label linking lines. */
     private transient Paint labelLinkPaint = Color.black;
@@ -451,6 +454,26 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     protected static ResourceBundle localizationResources =
             ResourceBundle.getBundle("org.jfree.chart.plot.LocalizationBundle");
 
+    /** 
+     * This debug flag controls whether or not an outline is drawn showing the 
+     * interior of the plot region.  This is drawn as a lightGray rectangle 
+     * showing the padding provided by the 'interiorGap' setting.
+     */
+    static final boolean DEBUG_DRAW_INTERIOR = false;
+    
+    /** 
+     * This debug flag controls whether or not an outline is drawn showing the 
+     * link area (in blue) and link ellipse (in yellow).  This controls where 
+     * the label links have 'elbow' points.
+     */
+    static final boolean DEBUG_DRAW_LINK_AREA = false;
+    
+    /**
+     * This debug flag controls whether or not an outline is drawn showing
+     * the pie area (in green).
+     */
+    static final boolean DEBUG_DRAW_PIE_AREA = false;
+    
     /**
      * Creates a new plot.  The dataset is initially set to <code>null</code>.
      */
@@ -465,7 +488,6 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      */
     public PiePlot(PieDataset dataset) {
         super();
-        setBackgroundPaint(new Color(230, 230, 230));
         this.dataset = dataset;
         if (dataset != null) {
             dataset.addChangeListener(this);
@@ -2091,15 +2113,28 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         PiePlotState state = initialise(g2, plotArea, this, null, info);
 
         // adjust the plot area for interior spacing and labels...
-        double labelWidth = 0.0;
+        double labelReserve = 0.0;
         if (this.labelGenerator != null && !this.simpleLabels) {
-            labelWidth = this.labelGap + this.maximumLabelWidth 
-                         + this.labelLinkMargin;    
+            labelReserve = this.labelGap + this.maximumLabelWidth;    
         }
         double gapHorizontal = plotArea.getWidth() * (this.interiorGap 
-                + labelWidth);
-        double gapVertical = plotArea.getHeight() * this.interiorGap;
+                + labelReserve) * 2.0;
+        double gapVertical = plotArea.getHeight() * this.interiorGap * 2.0;
 
+        
+        if (DEBUG_DRAW_INTERIOR) {
+            double hGap = plotArea.getWidth() * this.interiorGap;
+            double vGap = plotArea.getHeight() * this.interiorGap;
+        
+            double igx1 = plotArea.getX() + hGap;
+            double igx2 = plotArea.getMaxX() - hGap;
+            double igy1 = plotArea.getY() + vGap;
+            double igy2 = plotArea.getMaxY() - vGap;
+            g2.setPaint(Color.gray);
+            g2.draw(new Rectangle2D.Double(igx1, igy1, igx2 - igx1, 
+                    igy2 - igy1));
+        }
+        
         double linkX = plotArea.getX() + gapHorizontal / 2;
         double linkY = plotArea.getY() + gapVertical / 2;
         double linkW = plotArea.getWidth() - gapHorizontal;
@@ -2119,6 +2154,14 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         Rectangle2D linkArea = new Rectangle2D.Double(linkX, linkY, linkW, 
                 linkH);
         state.setLinkArea(linkArea);
+
+        if (DEBUG_DRAW_LINK_AREA) {
+            g2.setPaint(Color.blue);
+            g2.draw(linkArea);
+            g2.setPaint(Color.yellow);
+            g2.draw(new Ellipse2D.Double(linkArea.getX(), linkArea.getY(), 
+                    linkArea.getWidth(), linkArea.getHeight()));
+        }
         
         // the explode area defines the max circle/ellipse for the exploded 
         // pie sections.  it is defined by shrinking the linkArea by the 
@@ -2127,8 +2170,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         if (!this.simpleLabels) {
             lm = this.labelLinkMargin;
         }
-        double hh = linkArea.getWidth() * lm;
-        double vv = linkArea.getHeight() * lm;
+        double hh = linkArea.getWidth() * lm * 2.0;
+        double vv = linkArea.getHeight() * lm * 2.0;
         Rectangle2D explodeArea = new Rectangle2D.Double(linkX + hh / 2.0, 
                 linkY + vv / 2.0, linkW - hh, linkH - vv);
        
@@ -2146,6 +2189,10 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                 + h1 / 2.0, explodeArea.getY() + v1 / 2.0, 
                 explodeArea.getWidth() - h1, explodeArea.getHeight() - v1);
 
+        if (DEBUG_DRAW_PIE_AREA) {
+            g2.setPaint(Color.green);
+            g2.draw(pieArea);
+        }
         state.setPieArea(pieArea);
         state.setPieCenterX(pieArea.getCenterX());
         state.setPieCenterY(pieArea.getCenterY());
@@ -2292,8 +2339,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      *
      * @since 1.0.7
      */
-    protected void drawSimpleLabels(Graphics2D g2, List keys, double totalValue, 
-            Rectangle2D plotArea, Rectangle2D pieArea, PiePlotState state) {
+    protected void drawSimpleLabels(Graphics2D g2, List keys, 
+            double totalValue, Rectangle2D plotArea, Rectangle2D pieArea, 
+            PiePlotState state) {
         
         Composite originalComposite = g2.getComposite();
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 
@@ -2341,7 +2389,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                 g2.setFont(this.labelFont);
                 FontMetrics fm = g2.getFontMetrics();
                 Rectangle2D bounds = TextUtilities.getTextBounds(label, g2, fm);
-                Rectangle2D out = this.labelPadding.createOutsetRectangle(bounds);
+                Rectangle2D out = this.labelPadding.createOutsetRectangle(
+                        bounds);
                 Shape bg = ShapeUtilities.createTranslatedShape(out, 
                         x - bounds.getCenterX(), y - bounds.getCenterY());
                 if (this.labelShadowPaint != null) {
@@ -2427,14 +2476,19 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         }
        
         g2.setFont(getLabelFont());
-        float maxLabelWidth = (float) (getMaximumLabelWidth() 
-                * plotArea.getWidth());
+        
+        // calculate the max label width from the plot dimensions, because
+        // a circular pie can leave a lot more room for labels...
+        double marginX = plotArea.getX() + this.interiorGap * plotArea.getWidth();
+        double gap = plotArea.getWidth() * this.labelGap;
+        double ww = linkArea.getX() - gap - marginX;
+        float labelWidth = (float) this.labelPadding.trimWidth(ww);
         
         // draw the labels...
         if (this.labelGenerator != null) {
-            drawLeftLabels(leftKeys, g2, plotArea, linkArea, maxLabelWidth, 
+            drawLeftLabels(leftKeys, g2, plotArea, linkArea, labelWidth, 
                     state);
-            drawRightLabels(rightKeys, g2, plotArea, linkArea, maxLabelWidth, 
+            drawRightLabels(rightKeys, g2, plotArea, linkArea, labelWidth, 
                     state);
         }
         g2.setComposite(originalComposite);
