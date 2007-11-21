@@ -303,7 +303,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setBaseShapesVisible(boolean flag) {
         if (this.baseShapesVisible != flag) {
             this.baseShapesVisible = flag;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -347,7 +347,8 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     }
 
     /**
-     * Sets the 'shapes filled' flag for a series.
+     * Sets the 'shapes filled' flag for a series and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero-based).
      * @param flag  the flag.
@@ -371,7 +372,8 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     }
 
     /**
-     * Sets the base 'shapes filled' flag.
+     * Sets the base 'shapes filled' flag and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param flag  the flag.
      * 
@@ -394,7 +396,8 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
 
     /**
      * Sets the flag that controls whether or not a line is plotted between 
-     * each data point.
+     * each data point and sends a {@link RendererChangeEvent} to all 
+     * registered listeners.
      *
      * @param flag  the flag.
      * 
@@ -403,7 +406,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setPlotLines(boolean flag) {
         if (this.plotLines != flag) {
             this.plotLines = flag;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -419,7 +422,8 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     }
     
     /**
-     * Sets the gap threshold type.
+     * Sets the gap threshold type and sends a {@link RendererChangeEvent} to 
+     * all registered listeners.
      * 
      * @param thresholdType  the type (<code>null</code> not permitted).
      * 
@@ -431,7 +435,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                     "Null 'thresholdType' argument.");
         }
         this.gapThresholdType = thresholdType;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -446,7 +450,8 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     }
 
     /**
-     * Sets the gap threshold for discontinuous lines.
+     * Sets the gap threshold for discontinuous lines and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param t  the threshold.
      * 
@@ -454,7 +459,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      */
     public void setGapThreshold(double t) {
         this.gapThreshold = t;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -470,7 +475,8 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
 
     /**
      * Sets the flag that controls whether or not an image is drawn at each 
-     * data point.
+     * data point and sends a {@link RendererChangeEvent} to all registered 
+     * listeners.
      *
      * @param flag  the flag.
      * 
@@ -479,7 +485,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setPlotImages(boolean flag) {
         if (this.plotImages != flag) {
             this.plotImages = flag;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -557,7 +563,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'line' argument.");   
         }
         this.legendLine = line;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
