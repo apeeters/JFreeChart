@@ -117,6 +117,7 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
  * 12-Jul-2007 : Updated for API changes in super class (DG);
+ * 21-Nov-2007 : Fixed warnings from FindBugs (DG);
  * 
  */
 
@@ -856,7 +857,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                     calendar.set(Calendar.MILLISECOND, value - 1);
                     mm = calendar.getTime();
                 }
-                return calendar.getTime();
+                return mm;
 
             case (DateTickUnit.SECOND) :
                 years = calendar.get(Calendar.YEAR);
@@ -880,7 +881,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                     calendar.set(Calendar.SECOND, value - 1);
                     dd = calendar.getTime();
                 }
-                return calendar.getTime();
+                return dd;
 
             case (DateTickUnit.MINUTE) :
                 years = calendar.get(Calendar.YEAR);
