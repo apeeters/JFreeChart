@@ -32,8 +32,6 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Thomas Morgner;
  *
- * $Id: DefaultKeyedValues.java,v 1.8.2.6 2007/04/30 15:28:04 mungady Exp $
- *
  * Changes:
  * --------
  * 31-Oct-2002 : Version 1 (DG);
@@ -55,6 +53,7 @@
  * 30-Apr-2007 : Added insertValue() methods (DG);
  * 31-Oct-2007 : Performance improvements by using separate lists for keys and 
  *               values (TM);
+ * 21-Nov-2007 : Fixed bug in removeValue() method from previous patch (DG);
  *               
  */
 
@@ -81,8 +80,10 @@ public class DefaultKeyedValues implements KeyedValues,
     /** For serialization. */
     private static final long serialVersionUID = 8468154364608194797L;
     
-    /** Storage for the data. */
+    /** Storage for the keys. */
     private ArrayList keys;
+    
+    /** Storage for the values. */
     private ArrayList values;
     
     /** 
@@ -114,7 +115,7 @@ public class DefaultKeyedValues implements KeyedValues,
      *
      * @param item  the item of interest (zero-based index).
      *
-     * @return The value.
+     * @return The value (possibly <code>null</code>).
      * 
      * @throws IndexOutOfBoundsException if <code>item</code> is out of bounds.
      */
@@ -314,27 +315,25 @@ public class DefaultKeyedValues implements KeyedValues,
     public void removeValue(int index) {
         this.keys.remove(index);
         this.values.remove(index);
-
-        // did we remove the last item? If not, then rebuild the index ..
-        if (index < this.keys.size()) {
-            rebuildIndex();
-        }
+        rebuildIndex();
     }
 
     /**
-     * Removes a value from the collection.  If there is no item with the 
-     * specified key, this method does nothing.
+     * Removes a value from the collection.
      *
      * @param key  the item key (<code>null</code> not permitted).
      * 
      * @throws IllegalArgumentException if <code>key</code> is 
      *     <code>null</code>.
+     * @throws UnknownKeyException if <code>key</code> is not recognised.
      */
     public void removeValue(Comparable key) {
         int index = getIndex(key);
-        if (index >= 0) {
-            removeValue(index);
+        if (index < 0) {
+            throw new UnknownKeyException("The key (" + key 
+                    + ") is not recognised.");
         }
+        removeValue(index);
     }
     
     /**
@@ -354,23 +353,23 @@ public class DefaultKeyedValues implements KeyedValues,
      * @param order  the sort order (<code>null</code> not permitted).
      */
     public void sortByKeys(SortOrder order) {
-      final int size = this.keys.size();
-      final DefaultKeyedValue[] data = new DefaultKeyedValue[size];
+        final int size = this.keys.size();
+        final DefaultKeyedValue[] data = new DefaultKeyedValue[size];
 
-      for (int i = 0; i < size; i++) {
-          data[i] = new DefaultKeyedValue((Comparable) this.keys.get(i), 
-                  (Number) this.values.get(i));
-      }
+        for (int i = 0; i < size; i++) {
+            data[i] = new DefaultKeyedValue((Comparable) this.keys.get(i), 
+                    (Number) this.values.get(i));
+        }
 
-      Comparator comparator = new KeyedValueComparator(
+        Comparator comparator = new KeyedValueComparator(
                 KeyedValueComparatorType.BY_KEY, order);
-      Arrays.sort(data, comparator);
-      clear();
+        Arrays.sort(data, comparator);
+        clear();
 
-      for (int i = 0; i < data.length; i++) {
-          final DefaultKeyedValue value = data[i];
-          addValue(value.getKey(), value.getValue());
-      }
+        for (int i = 0; i < data.length; i++) {
+            final DefaultKeyedValue value = data[i];
+            addValue(value.getKey(), value.getValue());
+        }
     }
 
     /**
