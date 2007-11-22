@@ -74,6 +74,7 @@
  * 29-Jun-2007 : Changed first parameter in constructors from String to 
  *               Comparable (DG);
  * 31-Oct-2007 : Implemented faster hashCode() (DG);
+ * 21-Nov-2007 : Fixed clone() method (bug 1832432) (DG);
  * 
  */
 
@@ -853,7 +854,8 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      *         subclasses may differ.
      */
     public Object clone() throws CloneNotSupportedException {
-        Object clone = createCopy(0, getItemCount() - 1);
+        TimeSeries clone = (TimeSeries) super.clone();
+        clone.data = (List) ObjectUtilities.deepClone(this.data);
         return clone;
     }
 

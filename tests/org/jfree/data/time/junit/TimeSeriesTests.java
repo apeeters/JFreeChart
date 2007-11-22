@@ -44,6 +44,7 @@
  * 24-May-2006 : Added new tests (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 31-Oct-2007 : New hashCode() test (DG);
+ * 21-Nov-2007 : Added testBug1832432() and testClone2() (DG);
  *
  */
 
@@ -203,6 +204,30 @@ public class TimeSeriesTests extends TestCase implements SeriesChangeListener {
         	assertTrue(false);
         }
 
+    }
+    
+    /**
+     * Another test of the clone() method.
+     */
+    public void testClone2() {
+    	TimeSeries s1 = new TimeSeries("S1", Year.class);
+    	s1.add(new Year(2007), 100.0);
+    	s1.add(new Year(2008), null);
+    	s1.add(new Year(2009), 200.0);
+    	TimeSeries s2 = null;
+    	try {
+    		s2 = (TimeSeries) s1.clone();
+    	}
+    	catch (CloneNotSupportedException e) {
+    		e.printStackTrace();
+    	}
+    	assertTrue(s1.equals(s2));
+    	
+    	// check independence
+    	s2.addOrUpdate(new Year(2009), 300.0);
+    	assertFalse(s1.equals(s2));
+    	s1.addOrUpdate(new Year(2009), 300.0);
+    	assertTrue(s1.equals(s2));
     }
 
     /**
@@ -584,6 +609,27 @@ public class TimeSeriesTests extends TestCase implements SeriesChangeListener {
         assertEquals(1, ts.getItemCount());
     }
     
+    /** 
+     * A test for bug 1832432.
+     */
+    public void testBug1832432() {
+        TimeSeries s1 = new TimeSeries("Series");
+        TimeSeries s2 = null;
+        try {
+            s2 = (TimeSeries) s1.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        assertTrue(s1 != s2);
+        assertTrue(s1.getClass() == s2.getClass());
+        assertTrue(s1.equals(s2));
+
+        // test independence
+        s1.add(new Day(1, 1, 2007), 100.0);
+        assertFalse(s1.equals(s2));    	
+    }
+    
     /**
      * Some checks for the getIndex() method.
      */
@@ -625,7 +671,7 @@ public class TimeSeriesTests extends TestCase implements SeriesChangeListener {
         assertEquals(new Year(2006), item.getPeriod());
         pass = false;
         try {
-            item = series.getDataItem(-1);
+            /*item = */series.getDataItem(-1);
         }
         catch (IndexOutOfBoundsException e) {
             pass = true;
@@ -634,7 +680,7 @@ public class TimeSeriesTests extends TestCase implements SeriesChangeListener {
         
         pass = false;
         try {
-            item = series.getDataItem(1);
+            /*item = */series.getDataItem(1);
         }
         catch (IndexOutOfBoundsException e) {
             pass = true;
