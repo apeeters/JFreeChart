@@ -67,6 +67,7 @@
  * 15-Jan-2007 : Added toArray() method (DG);
  * 20-Jun-2007 : Removed deprecated code and JCommon dependencies (DG);
  * 31-Oct-2007 : Implemented faster hashCode() (DG);
+ * 22-Nov-2007 : Reimplemented clone() (DG);
  * 
  */
 
@@ -562,7 +563,7 @@ public class XYSeries extends Series implements Cloneable, Serializable {
      */
     public int indexOf(Number x) {
         if (this.autoSort) {
-            return Collections.binarySearch(this.data, new XYDataItem(x, null));   
+            return Collections.binarySearch(this.data, new XYDataItem(x, null));
         }
         else {
             for (int i = 0; i < this.data.size(); i++) {
@@ -601,12 +602,13 @@ public class XYSeries extends Series implements Cloneable, Serializable {
     /**
      * Returns a clone of the series.
      *
-     * @return A clone of the time series.
+     * @return A clone of the series.
      * 
      * @throws CloneNotSupportedException if there is a cloning problem.
      */
     public Object clone() throws CloneNotSupportedException {
-        Object clone = createCopy(0, getItemCount() - 1);
+        XYSeries clone = (XYSeries) super.clone();
+        clone.data = (List) ObjectUtilities.deepClone(this.data);
         return clone;
     }
 
