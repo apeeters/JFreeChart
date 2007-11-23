@@ -62,6 +62,8 @@ import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A layer that draws a range highlight on a dial plot.
+ * 
+ * @since 1.0.7
  */
 public class StandardDialRange extends AbstractDialLayer implements DialLayer, 
         Cloneable, PublicCloneable, Serializable {

@@ -65,6 +65,8 @@ import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A text annotation for a {@link DialPlot}.
+ * 
+ * @since 1.0.7
  */
 public class DialTextAnnotation extends AbstractDialLayer implements DialLayer, 
         Cloneable, PublicCloneable, Serializable {

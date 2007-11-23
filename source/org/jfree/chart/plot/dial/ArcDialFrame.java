@@ -67,6 +67,8 @@ import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A standard frame for the {@link DialPlot} class.
+ * 
+ * @since 1.0.7
  */
 public class ArcDialFrame extends AbstractDialLayer implements DialFrame, 
         Cloneable, PublicCloneable, Serializable {

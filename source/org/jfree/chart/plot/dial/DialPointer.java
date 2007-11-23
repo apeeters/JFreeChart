@@ -64,6 +64,8 @@ import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A base class for the pointer in a {@link DialPlot}.
+ * 
+ * @since 1.0.7
  */
 public abstract class DialPointer extends AbstractDialLayer 
         implements DialLayer, Cloneable, PublicCloneable, Serializable {
