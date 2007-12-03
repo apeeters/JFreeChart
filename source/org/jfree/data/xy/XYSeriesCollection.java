@@ -51,6 +51,7 @@
  * 27-Nov-2006 : Added clone() override (DG);
  * 08-May-2007 : Added indexOf(XYSeries) method (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 03-Dec-2007 : Added getSeries(Comparable) method (DG);
  *
  */
 
@@ -58,11 +59,13 @@ package org.jfree.data.xy;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
+import org.jfree.data.UnknownKeyException;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 
@@ -228,6 +231,32 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
             throw new IllegalArgumentException("Series index out of bounds");
         }
         return (XYSeries) this.data.get(series);
+    }
+    
+    /**
+     * Returns a series from the collection.
+     * 
+     * @param key  the key (<code>null</code> not permitted).
+     * 
+     * @return The series with the specified key.
+     * 
+     * @throws UnknownKeyException if <code>key</code> is not found in the
+     *         collection.
+     * 
+     * @since 1.0.9
+     */
+    public XYSeries getSeries(Comparable key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Null 'key' argument.");
+        }
+        Iterator iterator = this.data.iterator();
+        while (iterator.hasNext()) {
+            XYSeries series = (XYSeries) iterator.next();
+            if (key.equals(series.getKey())) {
+                return series;
+            }
+        }
+        throw new UnknownKeyException("Key not found: " + key);
     }
 
     /**
