@@ -138,6 +138,8 @@
  * 20-Jun-2007 : Removed JCommon dependency (DG);
  * 07-Jul-2007 : Changed default background color to white. Fixed bug
  *               1749124 (not registering as listener with TextTitle) (DG);
+ * 04-Dec-2007 : In createBufferedImage() methods, make the default image type
+ *               BufferedImage.TYPE_INT_ARGB (thanks to Klaus Rheinwald) (DG);
  * 
  */
 
@@ -1368,7 +1370,7 @@ public class JFreeChart implements Drawable,
      */
     public BufferedImage createBufferedImage(int width, int height, 
                                              ChartRenderingInfo info) {
-        return createBufferedImage(width, height, BufferedImage.TYPE_INT_RGB, 
+        return createBufferedImage(width, height, BufferedImage.TYPE_INT_ARGB,
                 info);
     }
 
@@ -1414,7 +1416,7 @@ public class JFreeChart implements Drawable,
                                              ChartRenderingInfo info) {
 
         BufferedImage image = new BufferedImage(imageWidth, imageHeight, 
-                BufferedImage.TYPE_INT_RGB);
+                BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         double scaleX = imageWidth / drawWidth;
         double scaleY = imageHeight / drawHeight;
@@ -1765,6 +1767,7 @@ class JFreeChartInfo extends ProjectInfo {
                 new Contributor("Paolo Cova", "-"),
                 new Contributor("Mike Duffy", "-"),
                 new Contributor("Don Elliott", "-"),
+                new Contributor("David Forslund", "-"),
                 new Contributor("Jonathan Gabbai", "-"),
                 new Contributor("David Gilbert", 
                         "david.gilbert@object-refinery.com"),

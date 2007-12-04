@@ -80,6 +80,7 @@
  *               baseItemLabelsVisible from Boolean to boolean (DG);
  * 23-Oct-2007 : Updated lookup methods to better handle overridden 
  *               methods (DG);
+ * 04-Dec-2007 : Modified hashCode() implementation (DG);
  * 
  */
 
@@ -111,6 +112,7 @@ import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.text.TextAnchor;
 import org.jfree.chart.util.BooleanList;
+import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.ObjectList;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PaintList;
@@ -2575,9 +2577,35 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public int hashCode() {
         int result = 193; 
-        // FIXME: Need to do better than this
-        result = 37 * result + ObjectUtilities.hashCode(this.baseStroke);    
-        result = 37 * result + ObjectUtilities.hashCode(this.baseOutlineStroke);
+        result = HashUtilities.hashCode(result, this.seriesVisibleList);
+        result = HashUtilities.hashCode(result, this.baseSeriesVisible);
+        result = HashUtilities.hashCode(result, this.seriesVisibleInLegendList);
+        result = HashUtilities.hashCode(result, this.baseSeriesVisibleInLegend);
+        result = HashUtilities.hashCode(result, this.paintList);
+        result = HashUtilities.hashCode(result, this.basePaint);
+        result = HashUtilities.hashCode(result, this.fillPaintList);
+        result = HashUtilities.hashCode(result, this.baseFillPaint);
+        result = HashUtilities.hashCode(result, this.outlinePaintList);
+        result = HashUtilities.hashCode(result, this.baseOutlinePaint);
+        result = HashUtilities.hashCode(result, this.strokeList);
+        result = HashUtilities.hashCode(result, this.baseStroke);   
+        result = HashUtilities.hashCode(result, this.outlineStrokeList);
+        result = HashUtilities.hashCode(result, this.baseOutlineStroke);   
+        // shapeList
+        // baseShape
+        result = HashUtilities.hashCode(result, this.itemLabelsVisibleList);
+        result = HashUtilities.hashCode(result, this.baseItemLabelsVisible);
+        // itemLabelFontList
+        // baseItemLabelFont
+        // itemLabelPaintList
+        // baseItemLabelPaint
+        // positiveItemLabelPositionList
+        // basePositiveItemLabelPosition
+        // negativeItemLabelPositionList
+        // baseNegativeItemLabelPosition
+        // itemLabelAnchorOffset
+        // createEntityList
+        // baseCreateEntities
         return result;
     }
     

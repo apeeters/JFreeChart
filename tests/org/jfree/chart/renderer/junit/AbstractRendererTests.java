@@ -39,6 +39,7 @@
  * 19-Feb-2007 : Added testCloning (DG);
  * 28-Feb-2007 : Added checks for cloning (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 04-Dec-2007 : Added testHashCode() (DG);
  *
  */
 
@@ -102,6 +103,7 @@ public class AbstractRendererTests extends TestCase {
      * Test that the equals() method distinguishes all fields.
      */
     public void testEquals() {
+        
         // have to use a concrete subclass...
         BarRenderer r1 = new BarRenderer();
         BarRenderer r2 = new BarRenderer();
@@ -654,6 +656,107 @@ public class AbstractRendererTests extends TestCase {
         assertEquals(DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE[0], 
                 r.lookupSeriesOutlinePaint(0));
         assertNotNull(r.getSeriesOutlinePaint(0));
+    }
+    
+    /**
+     * Some checks for the hashCode() method.
+     */
+    public void testHashCode() {
+        BarRenderer r1 = new BarRenderer();
+        BarRenderer r2 = new BarRenderer();
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setSeriesVisible(1, Boolean.FALSE);
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setSeriesVisible(1, Boolean.FALSE);
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setBaseSeriesVisible(false);
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setBaseSeriesVisible(false);
+        assertTrue(r1.hashCode() == r2.hashCode());
+
+        r1.setSeriesVisibleInLegend(1, Boolean.FALSE);
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setSeriesVisibleInLegend(1, Boolean.FALSE);
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setBaseSeriesVisibleInLegend(false);
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setBaseSeriesVisibleInLegend(false);
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setSeriesPaint(0, new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setSeriesPaint(0, new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setBasePaint(new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setBasePaint(new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertTrue(r1.hashCode() == r2.hashCode());
+    
+        r1.setSeriesFillPaint(0, new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setSeriesFillPaint(0, new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setBaseFillPaint(new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setBaseFillPaint(new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertTrue(r1.hashCode() == r2.hashCode());
+
+        r1.setSeriesOutlinePaint(0, new GradientPaint(1.0f, 2.0f, Color.RED, 
+                3.0f, 4.0f, Color.BLUE));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setSeriesOutlinePaint(0, new GradientPaint(1.0f, 2.0f, Color.RED, 
+                3.0f, 4.0f, Color.BLUE));
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setBaseOutlinePaint(new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setBaseOutlinePaint(new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 
+                4.0f, Color.BLUE));
+        assertTrue(r1.hashCode() == r2.hashCode());
+
+        r1.setSeriesStroke(0, new BasicStroke(1.1f));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setSeriesStroke(0, new BasicStroke(1.1f));
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setBaseStroke(new BasicStroke(1.5f));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setBaseStroke(new BasicStroke(1.5f));
+        assertTrue(r1.hashCode() == r2.hashCode());
+
+        r1.setSeriesOutlineStroke(1, new BasicStroke(1.5f));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setSeriesOutlineStroke(1, new BasicStroke(1.5f));
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setBaseOutlineStroke(new BasicStroke(2.0f));
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setBaseOutlineStroke(new BasicStroke(2.0f));
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setSeriesItemLabelsVisible(1, true);
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setSeriesItemLabelsVisible(1, true);
+        assertTrue(r1.hashCode() == r2.hashCode());
+        
+        r1.setBaseItemLabelsVisible(true);
+        assertFalse(r1.hashCode() == r2.hashCode());
+        r2.setBaseItemLabelsVisible(true);
+        assertTrue(r1.hashCode() == r2.hashCode());
     }
 
 }
