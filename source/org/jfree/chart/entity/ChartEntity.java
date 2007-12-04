@@ -65,6 +65,8 @@
  * 13-Nov-2007 : Reorganised equals(), implemented hashCode (DG);
  * 04-Dec-2007 : Added 'nohref' attribute in getImageMapAreaTag() method, to 
  *               fix bug 1460195 (DG);
+ * 04-Dec-2007 : Escape the toolTipText and urlText in getImageMapAreaTag() to
+ *               prevent special characters corrupting the HTML (DG);
  *
  */
 
@@ -79,6 +81,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.jfree.chart.HashUtilities;
+import org.jfree.chart.imagemap.ImageMapUtilities;
 import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
 import org.jfree.chart.imagemap.URLTagFragmentGenerator;
 import org.jfree.chart.util.ObjectUtilities;
@@ -319,11 +322,11 @@ public class ChartEntity implements Cloneable, PublicCloneable, Serializable {
                     + getShapeCoords() + "\"");
             if (hasToolTip) {
                 tag.append(toolTipTagFragmentGenerator.generateToolTipFragment(
-                        this.toolTipText));
+                        ImageMapUtilities.htmlEscape(this.toolTipText)));
             }
             if (hasURL) {
                 tag.append(urlTagFragmentGenerator.generateURLFragment(
-                        this.urlText));
+                        ImageMapUtilities.htmlEscape(this.urlText)));
             }
             else {
                 tag.append(" nohref=\"nohref\"");
