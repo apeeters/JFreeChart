@@ -38,7 +38,7 @@
  *
  */
 
-package org.jfree.chart.junit;
+package org.jfree.chart.util.junit;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

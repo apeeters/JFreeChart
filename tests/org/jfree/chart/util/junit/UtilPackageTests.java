@@ -58,6 +58,7 @@ public class UtilPackageTests extends TestCase {
      */
     public static Test suite() {
         TestSuite suite = new TestSuite("org.jfree.chart.util");
+        suite.addTestSuite(HashUtilitiesTests.class);
         suite.addTestSuite(RelativeDateFormatTests.class);
         return suite;
     }
