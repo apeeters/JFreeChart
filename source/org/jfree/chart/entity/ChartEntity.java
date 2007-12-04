@@ -62,6 +62,9 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 06-Feb-2007 : API doc update (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 13-Nov-2007 : Reorganised equals(), implemented hashCode (DG);
+ * 04-Dec-2007 : Added 'nohref' attribute in getImageMapAreaTag() method, to 
+ *               fix bug 1460195 (DG);
  *
  */
 
@@ -75,11 +78,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import org.jfree.chart.HashUtilities;
 import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
 import org.jfree.chart.imagemap.URLTagFragmentGenerator;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
-import org.jfree.chart.util.SerialUtilities; 
+import org.jfree.chart.util.SerialUtilities;
 
 /**
  * A class that captures information about some component of a chart (a bar, 
@@ -321,6 +325,9 @@ public class ChartEntity implements Cloneable, PublicCloneable, Serializable {
                 tag.append(urlTagFragmentGenerator.generateURLFragment(
                         this.urlText));
             }
+            else {
+                tag.append(" nohref=\"nohref\"");
+            }
             // if there is a tool tip, we expect it to generate the title and
             // alt values, so we only add an empty alt if there is no tooltip
             if (!hasToolTip) {
@@ -355,20 +362,32 @@ public class ChartEntity implements Cloneable, PublicCloneable, Serializable {
         if (obj == this) {
             return true;   
         }
-        if (obj instanceof ChartEntity) {
-            ChartEntity that = (ChartEntity) obj;
-            if (!this.area.equals(that.area)) {
-                return false;   
-            }
-            if (!ObjectUtilities.equal(this.toolTipText, that.toolTipText)) {
-                return false;   
-            }
-            if (!ObjectUtilities.equal(this.urlText, that.urlText)) {
-                return false;   
-            }
-            return true;
+        if (!(obj instanceof ChartEntity)) {
+            return false;   
         }
-        return false;
+        ChartEntity that = (ChartEntity) obj;
+        if (!this.area.equals(that.area)) {
+            return false;   
+        }
+        if (!ObjectUtilities.equal(this.toolTipText, that.toolTipText)) {
+            return false;   
+        }
+        if (!ObjectUtilities.equal(this.urlText, that.urlText)) {
+            return false;   
+        }
+        return true;
+    }
+
+    /**
+     * Returns a hash code for this instance.
+     * 
+     * @return A hash code.
+     */
+    public int hashCode() {
+        int result = 37;
+        result = HashUtilities.hashCode(result, this.toolTipText);
+        result = HashUtilities.hashCode(result, this.urlText);
+        return result;
     }
     
     /**
