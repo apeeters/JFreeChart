@@ -44,7 +44,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jfree.chart.HashUtilities;
+import org.jfree.chart.util.HashUtilities;
 
 /**
  * Tests for the {@link HashUtilities} class.
