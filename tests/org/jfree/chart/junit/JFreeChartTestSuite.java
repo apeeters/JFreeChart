@@ -46,6 +46,7 @@
  * 08-Jun-2005 : Added tests for org.jfree.chart.needle package (DG);
  * 26-Jan-2007 : Added tests for org.jfree.data.time.ohlc package (DG);
  * 24-Oct-2007 : Added tests for org.jfree.chart.plot.dial package (DG);
+ * 06-Dec-2007 : Added tests for org.jfree.chart.imagemap package (DG);
  *
  */
 
@@ -59,6 +60,7 @@ import org.jfree.chart.annotations.junit.AnnotationsPackageTests;
 import org.jfree.chart.axis.junit.AxisPackageTests;
 import org.jfree.chart.block.junit.BlockPackageTests;
 import org.jfree.chart.entity.junit.EntityPackageTests;
+import org.jfree.chart.imagemap.junit.ImageMapPackageTests;
 import org.jfree.chart.labels.junit.LabelsPackageTests;
 import org.jfree.chart.needle.junit.NeedlePackageTests;
 import org.jfree.chart.plot.dial.junit.DialPackageTests;
@@ -110,6 +112,7 @@ public class JFreeChartTestSuite extends TestCase {
         suite.addTest(OHLCPackageTests.suite());
         suite.addTest(DataXYPackageTests.suite());
         suite.addTest(DataGanttPackageTests.suite());
+        suite.addTest(ImageMapPackageTests.suite());
         return suite;
     }
     
