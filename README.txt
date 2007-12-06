@@ -1,8 +1,8 @@
-*******************************
-*  JFREECHART: Version 1.0.8  *
-*******************************
+********************************
+*  JFREECHART: Version 1.0.8a  *
+********************************
 
-23 November 2007
+6 December 2007
 
 (C)opyright 2000-2007, by Object Refinery Limited and Contributors.
 
@@ -193,6 +193,10 @@ developers that have made this possible.
 ---------------
 A list of changes in recent versions:
 
+1.0.8a: (06-Dec-2007)
+        - a special bug fix release to address security issues in the HTML
+          image map generation code.
+          
 1.0.8 : (23-Nov-2007)
         - primarily a bug fix release.  See the NEWS and ChangeLog files for a 
           more detailed description of the changes in this release.

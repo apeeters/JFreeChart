@@ -30,21 +30,32 @@
  * (C) Copyright 2003-2007, by Richard Atkinson and Contributors.
  *
  * Original Author:  Richard Atkinson;
+ * Contributors:     David Gilbert (for Object Refinery Limited);
  *
  * Changes
  * -------
  * 12-Aug-2003 : Version 1 (RA);
+ * 04-Dec-2007 : Encode URL text to fix bug 1400917 (DG);
  * 
  */
  
 package org.jfree.chart.imagemap;
 
+import org.jfree.chart.urls.URLUtilities;
+
 /**
  * Generates URLs using the HTML href attribute for image map area tags.
  */
 public class StandardURLTagFragmentGenerator 
-    implements URLTagFragmentGenerator {
+        implements URLTagFragmentGenerator {
 
+    /**
+     * Creates a new instance.
+     */
+    public StandardURLTagFragmentGenerator() {
+        super();
+    }
+	
     /**
      * Generates a URL string to go in an HTML image map.
      *
@@ -53,7 +64,7 @@ public class StandardURLTagFragmentGenerator
      * @return The formatted text
      */
     public String generateURLFragment(String urlText) {
-        return " href=\"" + urlText + "\"";
+        return " href=\"" + URLUtilities.encode(urlText, "UTF-8") + "\"";
     }
 
 }

@@ -1,3 +1,13 @@
+JFreeChart 1.0.8a
+-----------------
+6 December 2007
+
+This special release contains modifications intended to fix security issues
+reported in the HTML image map generating code (thanks to Chad Loder at
+Rapid7).  We encourage users to study the changes and provide any necessary
+feedback.
+
+
 JFreeChart 1.0.8
 ----------------
 23 November 2007

@@ -164,7 +164,10 @@ public class ChartEntity implements Cloneable, PublicCloneable, Serializable {
     }
 
     /**
-     * Returns the tool tip text for the entity.
+     * Returns the tool tip text for the entity.  Be aware that this text
+     * may have been generated from user supplied data, so for security 
+     * reasons some form of filtering should be applied before incorporating 
+     * this text into any HTML output.
      *
      * @return The tool tip text (possibly <code>null</code>).
      */
@@ -182,7 +185,9 @@ public class ChartEntity implements Cloneable, PublicCloneable, Serializable {
     }
 
     /**
-     * Returns the URL text for the entity.
+     * Returns the URL text for the entity.  Be aware that this text
+     * may have been generated from user supplied data, so some form of
+     * filtering should be applied before this "URL" is used in any output.
      *
      * @return The URL text (possibly <code>null</code>).
      */
