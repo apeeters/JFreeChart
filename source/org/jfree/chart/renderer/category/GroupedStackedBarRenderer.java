@@ -43,6 +43,7 @@
  * 22-Sep-2005 : Renamed getMaxBarWidth() --> getMaximumBarWidth() (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 29-Jun-2007 : Simplified entity generation by calling addEntity() (DG);
+ * 20-Dec-2007 : Fix for bug 1848961 (DG);
  * 
  */
  
@@ -73,8 +74,7 @@ import org.jfree.data.general.DatasetUtilities;
  * merged with the {@link StackedBarRenderer} class at some point.
  */
 public class GroupedStackedBarRenderer extends StackedBarRenderer 
-                                       implements Cloneable, PublicCloneable, 
-                                                  Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
             
     /** For serialization. */
     private static final long serialVersionUID = -2725921399005922939L;
@@ -91,7 +91,8 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
     }
     
     /**
-     * Updates the map used to assign each series to a group.
+     * Updates the map used to assign each series to a group, and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      * 
      * @param map  the map (<code>null</code> not permitted).
      */
@@ -100,7 +101,7 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
             throw new IllegalArgumentException("Null 'map' argument.");   
         }
         this.seriesToGroupMap = map;   
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -201,27 +202,25 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
         else {
             space = dataArea.getWidth();
         }
-        double barW0 = domainAxis.getCategoryStart(
-            column, getColumnCount(), dataArea, plot.getDomainAxisEdge()
-        );
+        double barW0 = domainAxis.getCategoryStart(column, getColumnCount(), 
+        		dataArea, plot.getDomainAxisEdge());
         int groupCount = this.seriesToGroupMap.getGroupCount();
         int groupIndex = this.seriesToGroupMap.getGroupIndex(
-            this.seriesToGroupMap.getGroup(plot.getDataset().getRowKey(row))
-        );
+        		this.seriesToGroupMap.getGroup(plot.getDataset(
+        				plot.getIndexOf(this)).getRowKey(row)));
         int categoryCount = getColumnCount();
         if (groupCount > 1) {
             double groupGap = space * getItemMargin() 
                               / (categoryCount * (groupCount - 1));
-            double groupW = calculateSeriesWidth(
-                space, domainAxis, categoryCount, groupCount
-            );
+            double groupW = calculateSeriesWidth(space, domainAxis, 
+            		categoryCount, groupCount);
             barW0 = barW0 + groupIndex * (groupW + groupGap) 
                           + (groupW / 2.0) - (state.getBarWidth() / 2.0);
         }
         else {
-            barW0 = domainAxis.getCategoryMiddle(
-                column, getColumnCount(), dataArea, plot.getDomainAxisEdge()
-            ) - state.getBarWidth() / 2.0;
+            barW0 = domainAxis.getCategoryMiddle(column, getColumnCount(), 
+            		dataArea, plot.getDomainAxisEdge()) 
+            		- state.getBarWidth() / 2.0;
         }
         return barW0;
     }
@@ -258,13 +257,11 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
         }
         
         double value = dataValue.doubleValue();
-        Comparable group 
-            = this.seriesToGroupMap.getGroup(dataset.getRowKey(row));
+        Comparable group = this.seriesToGroupMap.getGroup(
+        		dataset.getRowKey(row));
         PlotOrientation orientation = plot.getOrientation();
-        double barW0 = calculateBarW0(
-            plot, orientation, dataArea, domainAxis, 
-            state, row, column
-        );
+        double barW0 = calculateBarW0(plot, orientation, dataArea, domainAxis, 
+                state, row, column);
 
         double positiveBase = 0.0;
         double negativeBase = 0.0;
@@ -354,14 +351,14 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
         if (obj == this) {
             return true;   
         }
-        if (obj instanceof GroupedStackedBarRenderer && super.equals(obj)) {
-            GroupedStackedBarRenderer r = (GroupedStackedBarRenderer) obj;
-            if (!r.seriesToGroupMap.equals(this.seriesToGroupMap)) {
-                return false;   
-            }
-            return true;
+        if (!(obj instanceof GroupedStackedBarRenderer)) {
+        	return false;
         }
-        return false;
+        GroupedStackedBarRenderer that = (GroupedStackedBarRenderer) obj;
+        if (!this.seriesToGroupMap.equals(that.seriesToGroupMap)) {
+            return false;   
+        }
+        return super.equals(obj);
     }
     
 }
