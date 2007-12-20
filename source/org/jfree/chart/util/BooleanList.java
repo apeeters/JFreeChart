@@ -99,7 +99,7 @@ public class BooleanList extends AbstractObjectList {
     /**
      * Returns a hash code value for the object.
      *
-     * @return the hashcode
+     * @return The hashcode.
      */
     public int hashCode() {
         return super.hashCode();

@@ -38,6 +38,8 @@
  * 13-Aug-2003 : Version 1, based on ObjectList (DG);
  * 24-Aug-2003 : Fixed size (BK);
  * 15-Sep-2003 : Fix serialization for subclasses (ShapeList, PaintList) (NB);
+ * 20-Dec-2007 : Implement default hashCode() (DG);
+ *
  */
 
 package org.jfree.chart.util;
@@ -198,10 +200,25 @@ public class AbstractObjectList implements Cloneable, Serializable {
     /**
      * Returns a hash code value for the object.
      *
-     * @return the hashcode
+     * @return The hashcode.
      */
     public int hashCode() {
-        return super.hashCode();
+    	int result = 127;
+    	int size = size();
+    	result = HashUtilities.hashCode(result, size());
+        // for efficiency, we just use the first, last and middle items to
+        // compute a hashCode...
+        if (size > 0) {
+            result = HashUtilities.hashCode(result, this.objects[0]);
+            if (size > 1) {
+                result = HashUtilities.hashCode(result, this.objects[size - 1]);
+                if (size > 2) {
+                    result = HashUtilities.hashCode(result, 
+                    		this.objects[size / 2]);
+                }
+            }
+        }
+        return result;
     }
 
     /**
