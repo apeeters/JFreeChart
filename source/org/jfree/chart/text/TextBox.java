@@ -1,8 +1,7 @@
-/**
- * ------------
+/* ------------
  * TextBox.java
  * ------------
- * (C) Copyright 2004, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -15,6 +14,8 @@
  *               Spacer class (DG);
  * 22-Feb-2005 : Replaced Spacer with RectangleInsets (DG);
  * 20-Jun-2007 : Copied from JCommon (DG);
+ * 14-Feb-2008 : Fixed alignment of text content with respect to insets - see
+ *               bug report 1892707 (DG);
  *
  */
 
@@ -267,13 +268,13 @@ public class TextBox implements Serializable {
         double h = this.interiorGap.extendHeight(d1.getHeight());
         Size2D d2 = new Size2D(w, h);
         Rectangle2D bounds = RectangleAnchor.createRectangle(d2, x, y, anchor);
-        
+        double xx = bounds.getX();
+        double yy = bounds.getY();
+
         if (this.shadowPaint != null) {
             Rectangle2D shadow = new Rectangle2D.Double(
-                bounds.getX() + this.shadowXOffset, 
-                bounds.getY() + this.shadowYOffset,
-                bounds.getWidth(), bounds.getHeight()
-            );
+                    xx + this.shadowXOffset, yy + this.shadowYOffset,
+                    bounds.getWidth(), bounds.getHeight());
             g2.setPaint(this.shadowPaint);
             g2.fill(shadow);
         }
@@ -288,10 +289,10 @@ public class TextBox implements Serializable {
             g2.draw(bounds);
         }
         
-        this.textBlock.draw(
-            g2, (float) bounds.getCenterX(), (float) bounds.getCenterY(), 
-            TextBlockAnchor.CENTER
-        );
+        this.textBlock.draw(g2, 
+        		(float) (xx + this.interiorGap.calculateLeftInset(w)), 
+        		(float) (yy + this.interiorGap.calculateTopInset(h)), 
+        		TextBlockAnchor.TOP_LEFT);
         
     }
     

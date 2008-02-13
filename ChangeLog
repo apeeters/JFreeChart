@@ -1,3 +1,9 @@
+2008-02-14  David Gilbert  <david.gilbert@object-refinery.com>
+
+    Fixes bug 1892707:
+    * source/org/jfree/chart/text/TextBox.java
+    (draw): Correct alignment of content with respect to interior padding.
+
 2007-12-20  David Gilbert  <david.gilbert@object-refinery.com>
 
     Fixes bug 1848961:
