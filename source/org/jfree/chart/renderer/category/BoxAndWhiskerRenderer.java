@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,12 +27,13 @@
  * --------------------------
  * BoxAndWhiskerRenderer.java
  * --------------------------
- * (C) Copyright 2003-2007, by David Browning and Contributors.
+ * (C) Copyright 2003-2008, by David Browning and Contributors.
  *
  * Original Author:  David Browning (for the Australian Institute of Marine 
  *                   Science);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *                   Tim Bardzil;
+ *                   Rob Van der Sanden (patches 1866446 and 1888422);
  *
  * Changes
  * -------
@@ -65,6 +66,11 @@
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 29-Jun-2007 : Simplified entity generation by calling addEntity() (DG);
+ * 03-Jan-2008 : Check visibility of average marker before drawing it (DG);
+ * 15-Jan-2008 : Add getMaximumBarWidth() and setMaximumBarWidth() 
+ *               methods (RVdS);
+ * 14-Feb-2008 : Fix bar position for horizontal chart, see patch 
+ *               1888422 (RVdS);
  *
  */
 
@@ -126,6 +132,12 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
     
     /** The margin between items (boxes) within a category. */
     private double itemMargin;
+    
+    /** 
+     * The maximum bar width as percentage of the available space in the plot,
+     * where 0.05 is five percent.
+     */
+    private double maximumBarWidth;
 
     /**
      * Default constructor.
@@ -134,6 +146,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
         this.artifactPaint = Color.black;
         this.fillBox = true;
         this.itemMargin = 0.20;
+        this.maximumBarWidth = 1.0;
     }
 
     /**
@@ -161,7 +174,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.artifactPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -185,7 +198,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
      */
     public void setFillBox(boolean flag) {
         this.fillBox = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -210,7 +223,37 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
      */
     public void setItemMargin(double margin) {
         this.itemMargin = margin;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns the maximum bar width as a percentage of the available drawing 
+     * space.
+     * 
+     * @return The maximum bar width.
+     *
+     * @see #setMaximumBarWidth(double)
+     * 
+     * @since 1.0.10
+     */
+    public double getMaximumBarWidth() {
+        return this.maximumBarWidth;
+    }
+
+    /**
+     * Sets the maximum bar width, which is specified as a percentage of the 
+     * available space for all bars, and sends a {@link RendererChangeEvent}
+     * to all registered listeners.
+     * 
+     * @param percent  the maximum Bar Width (a percentage).
+     *
+     * @see #getMaximumBarWidth()
+     * 
+     * @since 1.0.10
+     */
+    public void setMaximumBarWidth(double percent) {
+        this.maximumBarWidth = percent;
+        fireChangeEvent();
     }
 
     /**
@@ -296,6 +339,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             else if (orientation == PlotOrientation.VERTICAL) {
                 space = dataArea.getWidth();
             }
+            double maxWidth = space * getMaximumBarWidth();
             double categoryMargin = 0.0;
             double currentItemMargin = 0.0;
             if (columns > 1) {
@@ -308,11 +352,11 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
                                      - domainAxis.getUpperMargin()
                                      - categoryMargin - currentItemMargin);
             if ((rows * columns) > 0) {
-                state.setBarWidth(used / (dataset.getColumnCount() 
-                        * dataset.getRowCount()));
+                state.setBarWidth(Math.min(used / (dataset.getColumnCount() 
+                        * dataset.getRowCount()), maxWidth));
             }
             else {
-                state.setBarWidth(used);
+                state.setBarWidth(Math.min(used, maxWidth));
             }
         }
         
@@ -403,7 +447,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
         int categoryCount = getColumnCount();
 
         if (seriesCount > 1) {
-            double seriesGap = dataArea.getWidth() * getItemMargin()
+            double seriesGap = dataArea.getHeight() * getItemMargin()
                                / (categoryCount * (seriesCount - 1));
             double usedWidth = (state.getBarWidth() * seriesCount) 
                                + (seriesGap * (seriesCount - 1));
@@ -475,10 +519,15 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             double xxMean = rangeAxis.valueToJava2D(xMean.doubleValue(), 
                     dataArea, location);
             aRadius = state.getBarWidth() / 4;
-            Ellipse2D.Double avgEllipse = new Ellipse2D.Double(xxMean 
-                    - aRadius, yy + aRadius, aRadius * 2, aRadius * 2);
-            g2.fill(avgEllipse);
-            g2.draw(avgEllipse);
+            // here we check that the average marker will in fact be visible
+            // before drawing it...
+            if ((xxMean > (dataArea.getMinX() - aRadius)) 
+                    && (xxMean < (dataArea.getMaxX() + aRadius))) {
+                Ellipse2D.Double avgEllipse = new Ellipse2D.Double(xxMean 
+                        - aRadius, yy + aRadius, aRadius * 2, aRadius * 2);
+                g2.fill(avgEllipse);
+                g2.draw(avgEllipse);
+            }
         }
 
         // draw median...
@@ -614,10 +663,15 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             yyAverage = rangeAxis.valueToJava2D(yMean.doubleValue(), 
                     dataArea, location);
             aRadius = state.getBarWidth() / 4;
-            Ellipse2D.Double avgEllipse = new Ellipse2D.Double(xx + aRadius, 
-                    yyAverage - aRadius, aRadius * 2, aRadius * 2);
-            g2.fill(avgEllipse);
-            g2.draw(avgEllipse);
+            // here we check that the average marker will in fact be visible
+            // before drawing it...
+            if ((yyAverage > (dataArea.getMinY() - aRadius)) 
+                    && (yyAverage < (dataArea.getMaxY() + aRadius))) {
+                Ellipse2D.Double avgEllipse = new Ellipse2D.Double(xx + aRadius, 
+                        yyAverage - aRadius, aRadius * 2, aRadius * 2);
+                g2.fill(avgEllipse);
+                g2.draw(avgEllipse);
+            }
         }
 
         // draw median...
@@ -803,11 +857,14 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
         if (!PaintUtilities.equal(this.artifactPaint, that.artifactPaint)) {
             return false;
         }
-        if (!(this.fillBox == that.fillBox)) {
+        if (this.fillBox != that.fillBox) {
             return false;   
         }
-        if (!(this.itemMargin == that.itemMargin)) {
+        if (this.itemMargin != that.itemMargin) {
             return false;   
+        }
+        if (this.maximumBarWidth != that.maximumBarWidth) {
+            return false;
         }
         return true;
     }
