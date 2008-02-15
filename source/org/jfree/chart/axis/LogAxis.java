@@ -30,7 +30,7 @@
  * (C) Copyright 2006-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
+ * Contributor(s):   Andrew Mickish (patch 1868745);
  *
  * Changes
  * -------
@@ -42,7 +42,10 @@
  *               class (DG);
  * 14-Feb-2008 : Changed default minorTickCount to 9 - see bug report 
  *               1892419 (DG);
- *
+ * 15-Feb-2008 : Applied a variation of patch 1868745 by Andrew Mickish to
+ *               fix a labelling bug when the axis appears at the top or
+ *               right of the chart (DG);
+ * 
  */
 
 package org.jfree.chart.axis;
@@ -520,6 +523,13 @@ public class LogAxis extends ValueAxis {
         List ticks = new ArrayList();
         Font tickLabelFont = getTickLabelFont();
         g2.setFont(tickLabelFont);
+    	TextAnchor textAnchor;
+        if (edge == RectangleEdge.TOP) {
+        	textAnchor = TextAnchor.BOTTOM_CENTER;
+        }
+        else {
+        	textAnchor = TextAnchor.TOP_CENTER;
+        }
         
         if (isAutoTickUnitSelection()) {
             selectAutoTickUnit(g2, dataArea, edge);
@@ -531,7 +541,7 @@ public class LogAxis extends ValueAxis {
             double v = calculateValue(current);
             if (range.contains(v)) {
                 ticks.add(new NumberTick(TickType.MAJOR, v, createTickLabel(v), 
-                        TextAnchor.TOP_CENTER, TextAnchor.CENTER, 0.0));
+                        textAnchor, TextAnchor.CENTER, 0.0));
             }
             // add minor ticks (for gridlines)
             double next = Math.pow(this.base, current 
@@ -539,8 +549,8 @@ public class LogAxis extends ValueAxis {
             for (int i = 1; i < this.minorTickCount; i++) {
                 double minorV = v + i * ((next - v) / this.minorTickCount);
                 if (range.contains(minorV)) {
-                    ticks.add(new NumberTick(TickType.MINOR, minorV, 
-                        "", TextAnchor.TOP_CENTER, TextAnchor.CENTER, 0.0));
+                    ticks.add(new NumberTick(TickType.MINOR, minorV, "", 
+                    		textAnchor, TextAnchor.CENTER, 0.0));
                 }
             }
             current = current + this.tickUnit.getSize();
@@ -564,6 +574,13 @@ public class LogAxis extends ValueAxis {
         List ticks = new ArrayList();
         Font tickLabelFont = getTickLabelFont();
         g2.setFont(tickLabelFont);
+    	TextAnchor textAnchor;
+        if (edge == RectangleEdge.RIGHT) {
+        	textAnchor = TextAnchor.CENTER_LEFT;
+        }
+        else {
+        	textAnchor = TextAnchor.CENTER_RIGHT;
+        }
         
         if (isAutoTickUnitSelection()) {
             selectAutoTickUnit(g2, dataArea, edge);
@@ -575,7 +592,7 @@ public class LogAxis extends ValueAxis {
             double v = calculateValue(current);
             if (range.contains(v)) {
                 ticks.add(new NumberTick(TickType.MINOR, v, createTickLabel(v), 
-                        TextAnchor.CENTER_RIGHT, TextAnchor.CENTER, 0.0));
+                        textAnchor, TextAnchor.CENTER, 0.0));
             }
             // add minor ticks (for gridlines)
             double next = Math.pow(this.base, current 
@@ -584,7 +601,7 @@ public class LogAxis extends ValueAxis {
                 double minorV = v + i * ((next - v) / this.minorTickCount);
                 if (range.contains(minorV)) {
                     ticks.add(new NumberTick(TickType.MINOR, minorV, "", 
-                            TextAnchor.CENTER_RIGHT, TextAnchor.CENTER, 0.0));
+                            textAnchor, TextAnchor.CENTER, 0.0));
                 }
             }
             current = current + this.tickUnit.getSize();
@@ -635,14 +652,16 @@ public class LogAxis extends ValueAxis {
         // start with the current tick unit...
         TickUnitSource tickUnits = getStandardTickUnits();
         TickUnit unit1 = tickUnits.getCeilingTickUnit(getTickUnit());
-        double unit1Width = exponentLengthToJava2D(unit1.getSize(), dataArea, edge);
+        double unit1Width = exponentLengthToJava2D(unit1.getSize(), dataArea, 
+                edge);
 
         // then extrapolate...
         double guess = (tickLabelWidth / unit1Width) * unit1.getSize();
 
         NumberTickUnit unit2 = (NumberTickUnit) 
                 tickUnits.getCeilingTickUnit(guess);
-        double unit2Width = exponentLengthToJava2D(unit2.getSize(), dataArea, edge);
+        double unit2Width = exponentLengthToJava2D(unit2.getSize(), dataArea, 
+                edge);
 
         tickLabelWidth = estimateMaximumTickLabelWidth(g2, unit2);
         if (tickLabelWidth > unit2Width) {
