@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------------------
  * DefaultIntervalCategoryDataset.java
  * -----------------------------------
- * (C) Copyright 2002-2007, by Jeremy Bowman and Contributors.
+ * (C) Copyright 2002-2008, by Jeremy Bowman and Contributors.
  *
  * Original Author:  Jeremy Bowman;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -39,6 +39,8 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 08-Mar-2007 : Added equals() and clone() overrides (DG);
  * 20-Jun-2007 : Removed deprecated code (DG);
+ * 25-Feb-2008 : Fix for the special case where the dataset is empty, see bug 
+ *               1897580 (DG)
  *
  */
 
@@ -62,7 +64,7 @@ import org.jfree.data.general.AbstractSeriesDataset;
  * first dimension is the series, and the second dimension is the category.
  */
 public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
-                                            implements IntervalCategoryDataset {
+        implements IntervalCategoryDataset {
 
     /** The series keys. */
     private Comparable[] seriesKeys;
@@ -77,10 +79,13 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
     private Number[][] endData;
 
     /**
-     * Creates a new dataset.
+     * Creates a new dataset using the specified data values and automatically
+     * generated series and category keys.
      *
-     * @param starts  the starting values for the intervals.
-     * @param ends  the ending values for the intervals.
+     * @param starts  the starting values for the intervals (<code>null</code>
+     *                not permitted).
+     * @param ends  the ending values for the intervals (<code>null</code> not
+     *                permitted).
      */
     public DefaultIntervalCategoryDataset(double[][] starts, double[][] ends) {
         this(DataUtilities.createNumberArray2D(starts),
@@ -109,7 +114,8 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
      * Category names are generated automatically ("Category 1", "Category 2",
      * etc).
      *
-     * @param seriesNames  the series names.
+     * @param seriesNames  the series names (if <code>null</code>, series names
+     *         will be generated automatically).
      * @param starts  the start values data, indexed as data[series][category].
      * @param ends  the end values data, indexed as data[series][category].
      */
@@ -126,8 +132,10 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
      * from the arrays, and uses the supplied names for the series and the
      * supplied objects for the categories.
      *
-     * @param seriesKeys the series keys.
-     * @param categoryKeys  the categories.
+     * @param seriesKeys  the series keys (if <code>null</code>, series keys
+     *         will be generated automatically).
+     * @param categoryKeys  the category keys (if <code>null</code>, category 
+     *         keys will be generated automatically).
      * @param starts  the start values data, indexed as data[series][category].
      * @param ends  the end values data, indexed as data[series][category].
      */
@@ -196,8 +204,8 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
 
             }
             else {
-                this.seriesKeys = null;
-                this.categoryKeys = null;
+                this.seriesKeys = new Comparable[0];
+                this.categoryKeys = new Comparable[0];
             }
         }
 
@@ -327,7 +335,7 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
         if (categoryKeys == null) {
             throw new IllegalArgumentException("Null 'categoryKeys' argument.");
         }
-        if (categoryKeys.length != this.startData[0].length) {
+        if (categoryKeys.length != getCategoryCount()) {
             throw new IllegalArgumentException(
                     "The number of categories does not match the data.");
         }

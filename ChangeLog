@@ -1,6 +1,15 @@
+2008-02-26  David Gilbert  <david.gilbert@object-refinery.com>
+
+    Bug 1897580:
+    * source/org/jfree/data/DefaultIntervalCategoryDataset.java
+    (DefaultIntervalCategoryDataset(Comparable[], Comparable[], Number[][], 
+    Number[][]): Initialise seriesKeys and categoryKeys to empty arrays instead
+    of null for empty dataset,
+    (setCategoryKeys): Fixed argument check to handle empty dataset.
+    
 2008-02-19  David Gilbert  <david.gilbert@object-refinery.com>
 
-    * org/jfree/chart/util/LogFormat.java
+    * source/org/jfree/chart/util/LogFormat.java
     (powerLabel): New field,
     (LogFormat(double, String, boolean)): Delegate to new constructor,
     (LogFormat(double, String, String, boolean)): New constructor,
@@ -11,13 +20,13 @@
 2008-02-18  David Gilbert  <david.gilbert@object-refinery.com>
 
     Bug 1880114:
-    * org/jfree/chart/renderer/xy/VectorRenderer.java
+    * source/org/jfree/chart/renderer/xy/VectorRenderer.java
     (drawItem): Modify arrow-head for plot orientation.
 
 2008-02-18  David Gilbert  <david.gilbert@object-refinery.com>
 
     Patch 1871902 by Martin Hoeller:
-    * org/jfree/chart/plot/PolarPlot.java
+    * source/org/jfree/chart/plot/PolarPlot.java
     (DEFAULT_ANGLE_TICK_UNIT_SIZE): New field,
     (angleTickUnit): Likewise,
     (PolarPlot(XYDataset, ValueAxis, PolarItemRenderer)): Initialise 
