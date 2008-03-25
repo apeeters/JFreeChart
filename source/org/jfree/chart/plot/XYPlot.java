@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------
  * XYPlot.java
  * -----------
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Craig MacFarlane;
@@ -196,7 +196,10 @@
  * 12-Nov-2007 : Fixed bug in equals() method for domain and range tick
  *               band paint attributes (DG);
  * 27-Nov-2007 : Added new setFixedDomain/RangeAxisSpace() methods (DG);
- *
+ * 04-Jan-2008 : Fix for quadrant painting error - see patch 1849564 (DG);
+ * 25-Mar-2008 : Added new methods with optional notification - see patch
+ *               1913751 (DG);
+ * 
  */
 
 package org.jfree.chart.plot;
@@ -269,11 +272,8 @@ import org.jfree.data.xy.XYDataset;
  * The {@link org.jfree.chart.ChartFactory} class contains static methods for
  * creating pre-configured charts.
  */
-public class XYPlot extends Plot implements ValueAxisPlot,
-                                            Zoomable,
-                                            RendererChangeListener,
-                                            Cloneable, PublicCloneable,
-                                            Serializable {
+public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
+        RendererChangeListener, Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 7044148245716569264L;
@@ -2164,6 +2164,26 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      * @see #addRangeMarker(int, Marker, Layer)
      */
     public void addDomainMarker(int index, Marker marker, Layer layer) {
+    	addDomainMarker(index, marker, layer, true);
+    }
+
+    /**
+     * Adds a marker for a specific dataset/renderer and, if requested, sends a 
+     * {@link PlotChangeEvent} to all registered listeners.
+     * <P>
+     * Typically a marker will be drawn by the renderer as a line perpendicular
+     * to the domain axis (that the renderer is mapped to), however this is
+     * entirely up to the renderer.
+     *
+     * @param index  the dataset/renderer index.
+     * @param marker  the marker.
+     * @param layer  the layer (foreground or background).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.0.10
+     */
+    public void addDomainMarker(int index, Marker marker, Layer layer, 
+    		boolean notify) {
         if (marker == null) {
             throw new IllegalArgumentException("Null 'marker' not permitted.");
         }
@@ -2190,7 +2210,9 @@ public class XYPlot extends Plot implements ValueAxisPlot,
             markers.add(marker);
         }
         marker.addChangeListener(this);
-        notifyListeners(new PlotChangeEvent(this));
+        if (notify) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
     }
 
     /**
@@ -2238,17 +2260,36 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      * @since 1.0.7
      */
     public boolean removeDomainMarker(int index, Marker marker, Layer layer) {
+    	return removeDomainMarker(index, marker, layer, true);
+    }
+
+    /**
+     * Removes a marker for a specific dataset/renderer and, if requested, 
+     * sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param index  the dataset/renderer index.
+     * @param marker  the marker.
+     * @param layer  the layer (foreground or background).
+     * @param notify  notify listeners?
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.10
+     */
+    public boolean removeDomainMarker(int index, Marker marker, Layer layer,
+    		boolean notify) {
         ArrayList markers;
         if (layer == Layer.FOREGROUND) {
             markers = (ArrayList) this.foregroundDomainMarkers.get(new Integer(
                     index));
         }
         else {
-            markers = (ArrayList)this.backgroundDomainMarkers.get(new Integer(
+            markers = (ArrayList) this.backgroundDomainMarkers.get(new Integer(
                     index));
         }
         boolean removed = markers.remove(marker);
-        if (removed) {
+        if (removed && notify) {
             notifyListeners(new PlotChangeEvent(this));
         }
         return removed;
@@ -2328,6 +2369,25 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      * @see #addDomainMarker(int, Marker, Layer)
      */
     public void addRangeMarker(int index, Marker marker, Layer layer) {
+    	addRangeMarker(index, marker, layer, true);
+    }
+    
+    /**
+     * Adds a marker for a specific dataset/renderer and, if requested, sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     * <P>
+     * Typically a marker will be drawn by the renderer as a line perpendicular
+     * to the range axis, however this is entirely up to the renderer.
+     *
+     * @param index  the dataset/renderer index.
+     * @param marker  the marker.
+     * @param layer  the layer (foreground or background).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.0.10
+     */
+    public void addRangeMarker(int index, Marker marker, Layer layer, 
+    		boolean notify) {
         Collection markers;
         if (layer == Layer.FOREGROUND) {
             markers = (Collection) this.foregroundRangeMarkers.get(
@@ -2348,7 +2408,9 @@ public class XYPlot extends Plot implements ValueAxisPlot,
             markers.add(marker);
         }
         marker.addChangeListener(this);
-        notifyListeners(new PlotChangeEvent(this));
+        if (notify) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
     }
 
     /**
@@ -2431,21 +2493,40 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      * @since 1.0.7
      */
     public boolean removeRangeMarker(int index, Marker marker, Layer layer) {
+    	return removeRangeMarker(index, marker, layer, true);
+    }
+    
+    /**
+     * Removes a marker for a specific dataset/renderer and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param index  the dataset/renderer index.
+     * @param marker  the marker.
+     * @param layer  the layer (foreground or background).
+     * @param notify  notify listeners?
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.10
+     */
+    public boolean removeRangeMarker(int index, Marker marker, Layer layer,
+    		boolean notify) {
         if (marker == null) {
             throw new IllegalArgumentException("Null 'marker' argument.");
         }
         ArrayList markers;
         if (layer == Layer.FOREGROUND) {
-            markers = (ArrayList)this.foregroundRangeMarkers.get(new Integer(
+            markers = (ArrayList) this.foregroundRangeMarkers.get(new Integer(
                     index));
         }
         else {
-            markers = (ArrayList)this.backgroundRangeMarkers.get(new Integer(
+            markers = (ArrayList) this.backgroundRangeMarkers.get(new Integer(
                     index));
         }
 
         boolean removed = markers.remove(marker);
-        if (removed) {
+        if (removed && notify) {
             notifyListeners(new PlotChangeEvent(this));
         }
         return removed;
@@ -2461,11 +2542,26 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      * @see #removeAnnotation(XYAnnotation)
      */
     public void addAnnotation(XYAnnotation annotation) {
+        addAnnotation(annotation, true);	
+    }
+    
+    /**
+     * Adds an annotation to the plot and, if requested, sends a 
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param annotation  the annotation (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.0.10
+     */
+    public void addAnnotation(XYAnnotation annotation, boolean notify) {
         if (annotation == null) {
             throw new IllegalArgumentException("Null 'annotation' argument.");
         }
         this.annotations.add(annotation);
-        notifyListeners(new PlotChangeEvent(this));
+        if (notify) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
     }
 
     /**
@@ -2480,11 +2576,26 @@ public class XYPlot extends Plot implements ValueAxisPlot,
      * @see #getAnnotations()
      */
     public boolean removeAnnotation(XYAnnotation annotation) {
+    	return removeAnnotation(annotation, true);
+    }
+
+    /**
+     * Removes an annotation from the plot and sends a {@link PlotChangeEvent}
+     * to all registered listeners.
+     *
+     * @param annotation  the annotation (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @return A boolean (indicates whether or not the annotation was removed).
+     * 
+     * @since 1.0.10
+     */
+    public boolean removeAnnotation(XYAnnotation annotation, boolean notify) {
         if (annotation == null) {
             throw new IllegalArgumentException("Null 'annotation' argument.");
         }
         boolean removed = this.annotations.remove(annotation);
-        if (removed) {
+        if (removed && notify) {
             notifyListeners(new PlotChangeEvent(this));
         }
         return removed;
@@ -2921,11 +3032,11 @@ public class XYPlot extends Plot implements ValueAxisPlot,
         boolean somethingToDraw = false;
 
         ValueAxis xAxis = getDomainAxis();
-        double x = this.quadrantOrigin.getX();
+        double x = xAxis.getRange().constrain(this.quadrantOrigin.getX());
         double xx = xAxis.valueToJava2D(x, area, getDomainAxisEdge());
 
         ValueAxis yAxis = getRangeAxis();
-        double y = this.quadrantOrigin.getY();
+        double y = yAxis.getRange().constrain(this.quadrantOrigin.getY());
         double yy = yAxis.valueToJava2D(y, area, getRangeAxisEdge());
 
         double xmin = xAxis.getLowerBound();
