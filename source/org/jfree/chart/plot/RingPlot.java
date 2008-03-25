@@ -160,7 +160,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      */
     public void setSeparatorsVisible(boolean visible) {
         this.separatorsVisible = visible;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -187,7 +187,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.separatorStroke = stroke;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -214,7 +214,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.separatorPaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -243,7 +243,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      */
     public void setInnerSeparatorExtension(double percent) {
         this.innerSeparatorExtension = percent;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -271,7 +271,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      */
     public void setOuterSeparatorExtension(double percent) {
         this.outerSeparatorExtension = percent;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -298,7 +298,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      */
     public void setSectionDepth(double sectionDepth) {
         this.sectionDepth = sectionDepth;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**

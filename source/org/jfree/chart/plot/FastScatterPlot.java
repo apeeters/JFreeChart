@@ -232,7 +232,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
      */
     public void setData(float[][] data) {
         this.data = data;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -270,7 +270,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'axis' argument.");
         }
         this.domainAxis = axis;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -299,7 +299,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'axis' argument.");
         }
         this.rangeAxis = axis;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -327,7 +327,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.paint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -355,7 +355,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
     public void setDomainGridlinesVisible(boolean visible) {
         if (this.domainGridlinesVisible != visible) {
             this.domainGridlinesVisible = visible;
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -384,7 +384,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.domainGridlineStroke = stroke;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -412,7 +412,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.domainGridlinePaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -439,7 +439,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
     public void setRangeGridlinesVisible(boolean visible) {
         if (this.rangeGridlinesVisible != visible) {
             this.rangeGridlinesVisible = visible;
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -468,7 +468,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.rangeGridlineStroke = stroke;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -496,7 +496,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeGridlinePaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**

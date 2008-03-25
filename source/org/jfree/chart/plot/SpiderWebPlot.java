@@ -390,7 +390,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setWebFilled(boolean flag) {
         this.webFilled = flag;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
   
     /**
@@ -420,7 +420,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'order' argument");
         }
         this.dataExtractOrder = order;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -444,7 +444,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setHeadPercent(double percent) {
         this.headPercent = percent;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -475,7 +475,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setStartAngle(double angle) {
         this.startAngle = angle;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -499,7 +499,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setMaxValue(double value) {
         this.maxValue = value;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -527,7 +527,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'direction' argument.");
         }
         this.direction = direction;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -558,7 +558,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
         }
         if (this.interiorGap != percent) {
             this.interiorGap = percent;
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -583,7 +583,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setAxisLabelGap(double gap) {
         this.axisLabelGap = gap;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -613,7 +613,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.axisLinePaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -643,7 +643,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.axisLineStroke = stroke;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     //// SERIES PAINT /////////////////////////
@@ -670,7 +670,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setSeriesPaint(Paint paint) {
         this.seriesPaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -717,7 +717,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setSeriesPaint(int series, Paint paint) {
         this.seriesPaintList.setPaint(series, paint);
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -744,7 +744,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.baseSeriesPaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     //// SERIES OUTLINE PAINT ////////////////////////////
@@ -767,7 +767,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setSeriesOutlinePaint(Paint paint) {
         this.seriesOutlinePaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -799,7 +799,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setSeriesOutlinePaint(int series, Paint paint) {
         this.seriesOutlinePaintList.setPaint(series, paint);
-        notifyListeners(new PlotChangeEvent(this));  
+        fireChangeEvent();  
     }
 
     /**
@@ -822,7 +822,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.baseSeriesOutlinePaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     //// SERIES OUTLINE STROKE /////////////////////
@@ -845,7 +845,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setSeriesOutlineStroke(Stroke stroke) {
         this.seriesOutlineStroke = stroke;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -880,7 +880,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setSeriesOutlineStroke(int series, Stroke stroke) {
         this.seriesOutlineStrokeList.setStroke(series, stroke);
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -903,7 +903,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.baseSeriesOutlineStroke = stroke;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -930,7 +930,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'shape' argument.");
         }
         this.legendItemShape = shape;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -957,7 +957,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'font' argument.");
         }
         this.labelFont = font;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -984,7 +984,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.labelPaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1038,7 +1038,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setToolTipGenerator(CategoryToolTipGenerator generator) {
         this.toolTipGenerator = generator;
-        this.notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -1066,7 +1066,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
      */
     public void setURLGenerator(CategoryURLGenerator generator) {
         this.urlGenerator = generator;
-        this.notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**

@@ -224,7 +224,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
         }
         if (this.labelType != type) {
             this.labelType = type;
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -254,7 +254,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'font' not allowed.");
         }
         this.labelFont = font;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -281,7 +281,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rosePaint = paint;
-        notifyListeners(new PlotChangeEvent(this));        
+        fireChangeEvent();        
     }
 
     /**
@@ -309,7 +309,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.roseCenterPaint = paint;
-        notifyListeners(new PlotChangeEvent(this));        
+        fireChangeEvent();        
     }
     
     /**
@@ -337,7 +337,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.roseHighlightPaint = paint;
-        notifyListeners(new PlotChangeEvent(this));        
+        fireChangeEvent();        
     }
     
     /**
@@ -360,7 +360,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      */
     public void setDrawBorder(boolean status) {
         this.drawBorder = status;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -498,7 +498,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
         if ((needle != null) && (index < this.seriesNeedle.length)) {
             this.seriesNeedle[index] = needle;
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
 
     }
 

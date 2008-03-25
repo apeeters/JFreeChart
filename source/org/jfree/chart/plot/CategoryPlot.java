@@ -555,7 +555,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'orientation' argument.");
         }
         this.orientation = orientation;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -582,7 +582,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'offset' argument.");   
         }
         this.axisOffset = offset;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -669,7 +669,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             axis.addChangeListener(this);
         }
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -685,7 +685,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         for (int i = 0; i < axes.length; i++) {
             setDomainAxis(i, axes[i], false);   
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -801,7 +801,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         }
         this.domainAxisLocations.set(index, location);
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -855,7 +855,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             }
         }
         this.domainAxes.clear();
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -946,7 +946,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             axis.addChangeListener(this);
         }
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -962,7 +962,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         for (int i = 0; i < axes.length; i++) {
             setRangeAxis(i, axes[i], false);   
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1082,7 +1082,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         }
         this.rangeAxisLocations.set(index, location);
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -1133,7 +1133,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             }
         }
         this.rangeAxes.clear();
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1400,7 +1400,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         configureRangeAxes();
         
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -1414,7 +1414,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         for (int i = 0; i < renderers.length; i++) {
             setRenderer(i, renderers[i], false);   
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -1474,7 +1474,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'order' argument.");   
         }
         this.renderingOrder = order;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1505,7 +1505,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'order' argument.");
         }
         this.columnRenderingOrder = order;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -1536,7 +1536,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'order' argument.");
         }
         this.rowRenderingOrder = order;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -1564,7 +1564,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     public void setDomainGridlinesVisible(boolean visible) {
         if (this.domainGridlinesVisible != visible) {
             this.domainGridlinesVisible = visible;
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -1592,7 +1592,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'position' argument.");   
         }
         this.domainGridlinePosition = position;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1619,7 +1619,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'stroke' not permitted.");
         }
         this.domainGridlineStroke = stroke;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1646,7 +1646,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'paint' argument.");   
         }
         this.domainGridlinePaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1672,7 +1672,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     public void setRangeGridlinesVisible(boolean visible) {
         if (this.rangeGridlinesVisible != visible) {
             this.rangeGridlinesVisible = visible;
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -1700,7 +1700,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'stroke' argument.");   
         }
         this.rangeGridlineStroke = stroke;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1727,7 +1727,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'paint' argument.");   
         }
         this.rangeGridlinePaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -1752,7 +1752,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      */
     public void setFixedLegendItems(LegendItemCollection items) {
         this.fixedLegendItems = items;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -1986,7 +1986,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         }
         marker.addChangeListener(this);
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -2015,7 +2015,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             }
             this.foregroundDomainMarkers.clear();
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -2086,7 +2086,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
                 markers.clear();
             }
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -2163,7 +2163,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         }
         boolean removed = markers.remove(marker);
         if (removed && notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
         return removed;
     }
@@ -2254,7 +2254,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         }
         marker.addChangeListener(this);
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -2283,7 +2283,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             }
             this.foregroundRangeMarkers.clear();
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -2356,7 +2356,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
                 markers.clear();
             }
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -2446,7 +2446,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
 
         boolean removed = markers.remove(marker);
         if (removed && notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
         return removed;
     }
@@ -2472,7 +2472,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     public void setRangeCrosshairVisible(boolean flag) {
         if (this.rangeCrosshairVisible != flag) {
             this.rangeCrosshairVisible = flag;
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -2500,7 +2500,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
 
         if (this.rangeCrosshairLockedOnData != flag) {
             this.rangeCrosshairLockedOnData = flag;
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
 
     }
@@ -2544,7 +2544,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     public void setRangeCrosshairValue(double value, boolean notify) {
         this.rangeCrosshairValue = value;
         if (isRangeCrosshairVisible() && notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -2577,7 +2577,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.rangeCrosshairStroke = stroke;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -2606,7 +2606,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeCrosshairPaint = paint;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -2645,7 +2645,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         }
         this.annotations.add(annotation);
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -2681,7 +2681,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         }
         boolean removed = this.annotations.remove(annotation);
         if (removed && notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
         return removed;
     }
@@ -2692,7 +2692,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      */
     public void clearAnnotations() {
         this.annotations.clear();
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -3526,7 +3526,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      */
     public void setWeight(int weight) {
         this.weight = weight;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -3566,7 +3566,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     public void setFixedDomainAxisSpace(AxisSpace space, boolean notify) {
         this.fixedDomainAxisSpace = space;
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -3607,7 +3607,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     public void setFixedRangeAxisSpace(AxisSpace space, boolean notify) {
         this.fixedRangeAxisSpace = space;
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -3676,7 +3676,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      */
     public void setDrawSharedDomainAxis(boolean draw) {
         this.drawSharedDomainAxis = draw;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -3851,7 +3851,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     public void setAnchorValue(double value, boolean notify) {
         this.anchorValue = value;
         if (notify) {
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
     

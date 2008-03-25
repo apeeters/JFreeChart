@@ -138,7 +138,7 @@ public class CombinedRangeCategoryPlot extends CategoryPlot
      */
     public void setGap(double gap) {
         this.gap = gap;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -187,7 +187,7 @@ public class CombinedRangeCategoryPlot extends CategoryPlot
         if (axis != null) {
             axis.configure();
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -223,7 +223,7 @@ public class CombinedRangeCategoryPlot extends CategoryPlot
             if (range2 != null) {
                 range2.configure();
             }
-            notifyListeners(new PlotChangeEvent(this));
+            fireChangeEvent();
         }
     }
 

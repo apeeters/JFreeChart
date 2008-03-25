@@ -188,7 +188,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         if (background != null) {
             background.addChangeListener(this);
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -218,7 +218,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         if (cap != null) {
             cap.addChangeListener(this);
         }
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -247,7 +247,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         this.dialFrame.removeChangeListener(this);
         this.dialFrame = frame;
         frame.addChangeListener(this);
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -317,7 +317,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         this.viewY = y;
         this.viewW = w;
         this.viewH = h;
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -332,7 +332,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         }
         this.layers.add(layer);
         layer.addChangeListener(this);
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -361,7 +361,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
             layer.removeChangeListener(this);
         }
         this.layers.remove(index);
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -387,7 +387,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         }
         this.pointers.add(pointer);
         pointer.addChangeListener(this);
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -416,7 +416,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
             pointer.removeChangeListener(this);
         }
         this.pointers.remove(index);
-        notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -657,7 +657,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         this.layers.add(scale);
         this.scales.set(index, scale);
         scale.addChangeListener(this);
-        notifyListeners(new PlotChangeEvent(this));         
+        fireChangeEvent();         
     }
     
     /**
@@ -683,7 +683,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
      */
     public void mapDatasetToScale(int index, int scaleIndex) {
         this.datasetToScaleMap.set(index, new Integer(scaleIndex));  
-        notifyListeners(new PlotChangeEvent(this)); 
+        fireChangeEvent(); 
     }
     
     /**
@@ -730,7 +730,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
      * @param event  the event.
      */
     public void dialLayerChanged(DialLayerChangeEvent event) {
-        this.notifyListeners(new PlotChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
