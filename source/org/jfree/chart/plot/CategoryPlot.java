@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------
  * CategoryPlot.java
  * -----------------
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Jeremy Bowman;
@@ -154,6 +154,10 @@
  * 25-Oct-2007 : Added some argument checks (DG);
  * 05-Nov-2007 : Applied patch 1823697, by Richard West, for removal of domain
  *               and range markers (DG);
+ * 14-Nov-2007 : Added missing event notifications (DG);
+ * 25-Mar-2008 : Added new methods with optional notification - see patch
+ *               1913751 (DG);
+ * 
  *
  */
 
@@ -1612,7 +1616,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      */
     public void setDomainGridlineStroke(Stroke stroke) {
         if (stroke == null) {
-            throw new IllegalArgumentException("Null 'stroke' not permitted.");   
+            throw new IllegalArgumentException("Null 'stroke' not permitted.");
         }
         this.domainGridlineStroke = stroke;
         notifyListeners(new PlotChangeEvent(this));
@@ -1897,6 +1901,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * domain axis, however this is entirely up to the renderer.
      *
      * @param marker  the marker (<code>null</code> not permitted).
+     * 
+     * @see #removeDomainMarker(Marker)
      */
     public void addDomainMarker(CategoryMarker marker) {
         addDomainMarker(marker, Layer.FOREGROUND); 
@@ -1905,19 +1911,22 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     /**
      * Adds a marker for display against the domain axis and sends a 
      * {@link PlotChangeEvent} to all registered listeners.  Typically a marker 
-     * will be drawn by the renderer as a line perpendicular to the domain axis, 
-     * however this is entirely up to the renderer.
+     * will be drawn by the renderer as a line perpendicular to the domain 
+     * axis, however this is entirely up to the renderer.
      *
      * @param marker  the marker (<code>null</code> not permitted).
      * @param layer  the layer (foreground or background) (<code>null</code> 
      *               not permitted).
+     *               
+     * @see #removeDomainMarker(Marker, Layer)
      */
     public void addDomainMarker(CategoryMarker marker, Layer layer) {
         addDomainMarker(0, marker, layer);
     }
 
     /**
-     * Adds a marker for display by a particular renderer.
+     * Adds a marker for display by a particular renderer and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
      * <P>
      * Typically a marker will be drawn by the renderer as a line perpendicular
      * to a domain axis, however this is entirely up to the renderer.
@@ -1925,8 +1934,31 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @param index  the renderer index.
      * @param marker  the marker (<code>null</code> not permitted).
      * @param layer  the layer (<code>null</code> not permitted).
+     * 
+     * @see #removeDomainMarker(int, Marker, Layer)
      */
     public void addDomainMarker(int index, CategoryMarker marker, Layer layer) {
+        addDomainMarker(index, marker, layer, true);
+    }
+    	
+    /**
+     * Adds a marker for display by a particular renderer and, if requested,
+     * sends a {@link PlotChangeEvent} to all registered listeners.
+     * <P>
+     * Typically a marker will be drawn by the renderer as a line perpendicular
+     * to a domain axis, however this is entirely up to the renderer.
+     *
+     * @param index  the renderer index.
+     * @param marker  the marker (<code>null</code> not permitted).
+     * @param layer  the layer (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.0.10
+     * 
+     * @see #removeDomainMarker(int, Marker, Layer, boolean)
+     */
+    public void addDomainMarker(int index, CategoryMarker marker, Layer layer,
+    		boolean notify) {
         if (marker == null) {
             throw new IllegalArgumentException("Null 'marker' not permitted.");
         }
@@ -1953,7 +1985,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             markers.add(marker);            
         }
         marker.addChangeListener(this);
-        notifyListeners(new PlotChangeEvent(this));
+        if (notify) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
     }
 
     /**
@@ -2100,17 +2134,35 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @since 1.0.7
      */
     public boolean removeDomainMarker(int index, Marker marker, Layer layer) {
+    	return removeDomainMarker(index, marker, layer, true);
+    }
+
+    /**
+     * Removes a marker for a specific dataset/renderer and, if requested, 
+     * sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param index the dataset/renderer index.
+     * @param marker the marker.
+     * @param layer the layer (foreground or background).
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.10
+     */
+    public boolean removeDomainMarker(int index, Marker marker, Layer layer,
+    		boolean notify) {
         ArrayList markers;
         if (layer == Layer.FOREGROUND) {
             markers = (ArrayList) this.foregroundDomainMarkers.get(new Integer(
                     index));
         }
         else {
-            markers = (ArrayList)this.backgroundDomainMarkers.get(new Integer(
+            markers = (ArrayList) this.backgroundDomainMarkers.get(new Integer(
                     index));
         }
         boolean removed = markers.remove(marker);
-        if (removed) {
+        if (removed && notify) {
             notifyListeners(new PlotChangeEvent(this));
         }
         return removed;
@@ -2123,6 +2175,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * range axis, however this is entirely up to the renderer.
      *
      * @param marker  the marker (<code>null</code> not permitted).
+     * 
+     * @see #removeRangeMarker(Marker)
      */
     public void addRangeMarker(Marker marker) {
         addRangeMarker(marker, Layer.FOREGROUND); 
@@ -2137,13 +2191,16 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @param marker  the marker (<code>null</code> not permitted).
      * @param layer  the layer (foreground or background) (<code>null</code> 
      *               not permitted).
+     *               
+     * @see #removeRangeMarker(Marker, Layer)
      */
     public void addRangeMarker(Marker marker, Layer layer) {
         addRangeMarker(0, marker, layer);
     }
 
     /**
-     * Adds a marker for display by a particular renderer.
+     * Adds a marker for display by a particular renderer and sends a 
+     * {@link PlotChangeEvent} to all registered listeners.
      * <P>
      * Typically a marker will be drawn by the renderer as a line perpendicular
      * to a range axis, however this is entirely up to the renderer.
@@ -2151,8 +2208,31 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @param index  the renderer index.
      * @param marker  the marker.
      * @param layer  the layer.
+     * 
+     * @see #removeRangeMarker(int, Marker, Layer)
      */
     public void addRangeMarker(int index, Marker marker, Layer layer) {
+    	addRangeMarker(index, marker, layer, true);
+    }
+
+    /**
+     * Adds a marker for display by a particular renderer and sends a 
+     * {@link PlotChangeEvent} to all registered listeners.
+     * <P>
+     * Typically a marker will be drawn by the renderer as a line perpendicular
+     * to a range axis, however this is entirely up to the renderer.
+     *
+     * @param index  the renderer index.
+     * @param marker  the marker.
+     * @param layer  the layer.
+     * @param notify  notify listeners?
+     * 
+     * @since 1.0.10
+     * 
+     * @see #removeRangeMarker(int, Marker, Layer, boolean)
+     */
+    public void addRangeMarker(int index, Marker marker, Layer layer,
+    		boolean notify) {
         Collection markers;
         if (layer == Layer.FOREGROUND) {
             markers = (Collection) this.foregroundRangeMarkers.get(
@@ -2173,7 +2253,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             markers.add(marker);            
         }
         marker.addChangeListener(this);
-        notifyListeners(new PlotChangeEvent(this));
+        if (notify) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
     }
 
     /**
@@ -2287,6 +2369,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      *         removed.
      *
      * @since 1.0.7
+     * 
+     * @see #addRangeMarker(Marker)
      */
     public boolean removeRangeMarker(Marker marker) {
         return removeRangeMarker(marker, Layer.FOREGROUND);
@@ -2303,6 +2387,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      *         removed.
      *
      * @since 1.0.7
+     * 
+     * @see #addRangeMarker(Marker, Layer)
      */
     public boolean removeRangeMarker(Marker marker, Layer layer) {
         return removeRangeMarker(0, marker, layer);
@@ -2320,23 +2406,46 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      *         removed.
      *
      * @since 1.0.7
+     * 
+     * @see #addRangeMarker(int, Marker, Layer)
      */
     public boolean removeRangeMarker(int index, Marker marker, Layer layer) {
+    	return removeRangeMarker(index, marker, layer, true);
+    }
+
+    /**
+     * Removes a marker for a specific dataset/renderer and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param index  the dataset/renderer index.
+     * @param marker  the marker.
+     * @param layer  the layer (foreground or background).
+     * @param notify  notify listeners.
+     *
+     * @return A boolean indicating whether or not the marker was actually 
+     *         removed.
+     *
+     * @since 1.0.10
+     * 
+     * @see #addRangeMarker(int, Marker, Layer, boolean)
+     */
+    public boolean removeRangeMarker(int index, Marker marker, Layer layer,
+    		boolean notify) {
         if (marker == null) {
             throw new IllegalArgumentException("Null 'marker' argument.");
         }
         ArrayList markers;
         if (layer == Layer.FOREGROUND) {
-            markers = (ArrayList)this.foregroundRangeMarkers.get(new Integer(
+            markers = (ArrayList) this.foregroundRangeMarkers.get(new Integer(
                     index));
         }
         else {
-            markers = (ArrayList)this.backgroundRangeMarkers.get(new Integer(
+            markers = (ArrayList) this.backgroundRangeMarkers.get(new Integer(
                     index));
         }
 
         boolean removed = markers.remove(marker);
-        if (removed) {
+        if (removed && notify) {
             notifyListeners(new PlotChangeEvent(this));
         }
         return removed;
@@ -2518,11 +2627,26 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @see #removeAnnotation(CategoryAnnotation)
      */
     public void addAnnotation(CategoryAnnotation annotation) {
+    	addAnnotation(annotation, true);
+    }
+    
+    /**
+     * Adds an annotation to the plot and, if requested, sends a 
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param annotation  the annotation (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     * 
+     * @since 1.0.10
+     */
+    public void addAnnotation(CategoryAnnotation annotation, boolean notify) {
         if (annotation == null) {
-            throw new IllegalArgumentException("Null 'annotation' argument.");   
+            throw new IllegalArgumentException("Null 'annotation' argument.");
         }
         this.annotations.add(annotation);
-        notifyListeners(new PlotChangeEvent(this));
+        if (notify) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
     }
 
     /**
@@ -2536,11 +2660,27 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @see #addAnnotation(CategoryAnnotation)
      */
     public boolean removeAnnotation(CategoryAnnotation annotation) {
+    	return removeAnnotation(annotation, true);
+    }
+
+    /**
+     * Removes an annotation from the plot and, if requested, sends a 
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param annotation  the annotation (<code>null</code> not permitted).
+     * @param notify  notify listeners?
+     *
+     * @return A boolean (indicates whether or not the annotation was removed).
+     * 
+     * @since 1.0.10
+     */
+    public boolean removeAnnotation(CategoryAnnotation annotation, 
+    		boolean notify) {
         if (annotation == null) {
             throw new IllegalArgumentException("Null 'annotation' argument.");
         }
         boolean removed = this.annotations.remove(annotation);
-        if (removed) {
+        if (removed && notify) {
             notifyListeners(new PlotChangeEvent(this));
         }
         return removed;
@@ -3377,7 +3517,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     }
 
     /**
-     * Sets the weight for the plot.
+     * Sets the weight for the plot and sends a {@link PlotChangeEvent} to all
+     * registered listeners.
      *
      * @param weight  the weight.
      * 
@@ -3385,7 +3526,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      */
     public void setWeight(int weight) {
         this.weight = weight;
-        // TODO: notify?
+        notifyListeners(new PlotChangeEvent(this));
     }
     
     /**
@@ -3400,15 +3541,33 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     }
 
     /**
-     * Sets the fixed domain axis space.
+     * Sets the fixed domain axis space and sends a {@link PlotChangeEvent} to
+     * all registered listeners.
      *
      * @param space  the space (<code>null</code> permitted).
      * 
      * @see #getFixedDomainAxisSpace()
      */
     public void setFixedDomainAxisSpace(AxisSpace space) {
+        setFixedDomainAxisSpace(space, true);
+    }
+
+    /**
+     * Sets the fixed domain axis space and sends a {@link PlotChangeEvent} to
+     * all registered listeners.
+     *
+     * @param space  the space (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getFixedDomainAxisSpace()
+     * 
+     * @since 1.0.7
+     */
+    public void setFixedDomainAxisSpace(AxisSpace space, boolean notify) {
         this.fixedDomainAxisSpace = space;
-        // TODO: notify?
+        if (notify) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
     }
 
     /**
@@ -3423,15 +3582,33 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     }
 
     /**
-     * Sets the fixed range axis space.
+     * Sets the fixed range axis space and sends a {@link PlotChangeEvent} to 
+     * all registered listeners.
      *
      * @param space  the space (<code>null</code> permitted).
      * 
      * @see #getFixedRangeAxisSpace()
      */
     public void setFixedRangeAxisSpace(AxisSpace space) {
+        setFixedRangeAxisSpace(space, true);
+    }
+
+    /**
+     * Sets the fixed range axis space and sends a {@link PlotChangeEvent} to 
+     * all registered listeners.
+     *
+     * @param space  the space (<code>null</code> permitted).
+     * @param notify  notify listeners?
+     * 
+     * @see #getFixedRangeAxisSpace()
+     *
+     * @since 1.0.7
+     */
+    public void setFixedRangeAxisSpace(AxisSpace space, boolean notify) {
         this.fixedRangeAxisSpace = space;
-        // TODO: fire event?
+        if (notify) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
     }
 
     /**
