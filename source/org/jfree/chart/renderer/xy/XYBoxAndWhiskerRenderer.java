@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------------
  * XYBoxAndWhiskerRenderer.java
  * ----------------------------
- * (C) Copyright 2003, 2004, 2007, by David Browning and Contributors.
+ * (C) Copyright 2003-2008, by David Browning and Contributors.
  *
  * Original Author:  David Browning (for Australian Institute of Marine 
  *                   Science);
@@ -69,6 +69,8 @@
  *               plot orientation (DG);
  * 13-Jun-2007 : Replaced deprecated method call (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 03-Jan-2008 : Check visibility of average marker before drawing it (DG);
+ * 27-Mar-2008 : If boxPaint is null, revert to itemPaint (DG);
  *
  */
 
@@ -188,7 +190,7 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
     public void setBoxWidth(double width) {
         if (width != this.boxWidth) {
             this.boxWidth = width;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -213,7 +215,7 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      */
     public void setBoxPaint(Paint paint) {
         this.boxPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -237,7 +239,7 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      */
     public void setFillBox(boolean flag) {
         this.fillBox = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -254,7 +256,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
 
     /**
      * Sets the paint used to paint the various artifacts such as outliers, 
-     * farout symbol, median line and the averages ellipse.
+     * farout symbol, median line and the averages ellipse, and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      * 
      * @param paint  the paint (<code>null</code> not permitted).
      * 
@@ -265,7 +268,31 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.artifactPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
+    }
+    
+    /**
+     * Returns the box paint or, if this is <code>null</code>, the item
+     * paint.
+     * 
+     * @param series  the series index.
+     * @param item  the item index.
+     * 
+     * @return The paint used to fill the box for the specified item (never 
+     *         <code>null</code>).
+     *
+     * @since 1.0.10
+     */
+    protected Paint lookupBoxPaint(int series, int item) {
+    	Paint p = getBoxPaint();
+    	if (p != null) {
+    		return p;
+    	}
+    	else {
+    		// TODO: could change this to itemFillPaint().  For backwards
+    		// compatibility, it might require a useFillPaint flag.
+    		return getItemPaint(series, item);
+    	}
     }
 
     /**
@@ -279,7 +306,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      *              information etc).
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
-     * @param dataset  the dataset.
+     * @param dataset  the dataset (must be an instance of 
+     *                 {@link BoxAndWhiskerXYDataset}).
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
      * @param crosshairState  crosshair information for the plot 
@@ -322,7 +350,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      *              information etc).
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
-     * @param dataset  the dataset.
+     * @param dataset  the dataset (must be an instance of 
+     *                 {@link BoxAndWhiskerXYDataset}).
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
      * @param crosshairState  crosshair information for the plot 
@@ -397,10 +426,7 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
             }
         }
 
-        Paint p = getBoxPaint();
-        if (p != null) {
-            g2.setPaint(p);
-        }
+        g2.setPaint(getItemPaint(series, item));
         Stroke s = getItemStroke(series, item);
         g2.setStroke(s);
 
@@ -424,12 +450,12 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
             box = new Rectangle2D.Double(yyQ3Median, xx - width / 2, 
                     yyQ1Median - yyQ3Median, width);
         }
-        if (getBoxPaint() != null) {
-            g2.setPaint(getBoxPaint());
-        }
         if (this.fillBox) {
+            g2.setPaint(lookupBoxPaint(series, item));
             g2.fill(box);   
         }
+        g2.setStroke(getItemOutlineStroke(series, item));
+        g2.setPaint(getItemOutlinePaint(series, item));
         g2.draw(box);
 
         // draw median
@@ -440,11 +466,16 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
         // draw average - SPECIAL AIMS REQUIREMENT
         if (yAverage != null) {
             double aRadius = width / 4;
-            Ellipse2D.Double avgEllipse = new Ellipse2D.Double(
-                    yyAverage - aRadius, xx - aRadius, aRadius * 2, 
-                    aRadius * 2);
-            g2.fill(avgEllipse);
-            g2.draw(avgEllipse);
+            // here we check that the average marker will in fact be visible
+            // before drawing it...
+            if ((yyAverage > (dataArea.getMinX() - aRadius)) 
+                    && (yyAverage < (dataArea.getMaxX() + aRadius))) {
+                Ellipse2D.Double avgEllipse = new Ellipse2D.Double(
+                        yyAverage - aRadius, xx - aRadius, aRadius * 2, 
+                        aRadius * 2);
+                g2.fill(avgEllipse);
+                g2.draw(avgEllipse);
+            }
         }
         
         // FIXME: draw outliers
@@ -466,7 +497,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      *              information etc).
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
-     * @param dataset  the dataset.
+     * @param dataset  the dataset (must be an instance of 
+     *                 {@link BoxAndWhiskerXYDataset}).
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
      * @param crosshairState  crosshair information for the plot 
@@ -544,12 +576,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
             }
         }
 
-        Paint p = getBoxPaint();
-        if (p != null) {
-            g2.setPaint(p);
-        }
+        g2.setPaint(getItemPaint(series, item));
         Stroke s = getItemStroke(series, item);
-
         g2.setStroke(s);
 
         // draw the upper shadow
@@ -573,8 +601,11 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
                     yyQ3Median - yyQ1Median);
         }
         if (this.fillBox) {
+            g2.setPaint(lookupBoxPaint(series, item));
             g2.fill(box);   
         }
+        g2.setStroke(getItemOutlineStroke(series, item));
+        g2.setPaint(getItemOutlinePaint(series, item));
         g2.draw(box);
 
         // draw median
@@ -588,10 +619,15 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
         // draw average - SPECIAL AIMS REQUIREMENT
         if (yAverage != null) {
             aRadius = width / 4;
-            Ellipse2D.Double avgEllipse = new Ellipse2D.Double(xx - aRadius, 
-                    yyAverage - aRadius, aRadius * 2, aRadius * 2);
-            g2.fill(avgEllipse);
-            g2.draw(avgEllipse);
+            // here we check that the average marker will in fact be visible
+            // before drawing it...
+            if ((yyAverage > (dataArea.getMinY() - aRadius)) 
+                    && (yyAverage < (dataArea.getMaxY() + aRadius))) {
+                Ellipse2D.Double avgEllipse = new Ellipse2D.Double(xx - aRadius, 
+                        yyAverage - aRadius, aRadius * 2, aRadius * 2);
+                g2.fill(avgEllipse);
+                g2.draw(avgEllipse);
+            }
         }
 
         List outliers = new ArrayList();
