@@ -102,7 +102,9 @@
  * 15-Mar-2007 : Added calculateStackTotal() method (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 27-Mar-2008 : Fixed bug in findCumulativeRangeBounds() method (DG);
- * 28-Mar-2008 : Fixed sample count in sampleFunction2D() method (DG); 
+ * 28-Mar-2008 : Fixed sample count in sampleFunction2D() method, renamed
+ *               iterateXYRangeBounds() --> iterateRangeBounds(XYDataset), and
+ *               fixed a bug in findRangeBounds(XYDataset, false) (DG); 
  * 
  */
 
@@ -642,7 +644,9 @@ public final class DatasetUtilities {
 
     /**
      * Iterates over the items in an {@link XYDataset} to find
-     * the range of x-values. 
+     * the range of x-values.  If the dataset is an instance of 
+     * {@link IntervalXYDataset}, the starting and ending x-values 
+     * will be used for the bounds calculation.
      *  
      * @param dataset  the dataset (<code>null</code> not permitted).
      * 
@@ -657,9 +661,9 @@ public final class DatasetUtilities {
      * the range of x-values. 
      *  
      * @param dataset  the dataset (<code>null</code> not permitted).
-     * @param includeInterval  a flag that determines, for an IntervalXYDataset,
-     *                         whether the x-interval or just the x-value is 
-     *                         used to determine the overall range.
+     * @param includeInterval  a flag that determines, for an 
+     *          {@link IntervalXYDataset}, whether the x-interval or just the 
+     *          x-value is used to determine the overall range.
      *   
      * @return The range (possibly <code>null</code>).
      */
@@ -760,7 +764,6 @@ public final class DatasetUtilities {
      * @param includeInterval  a flag that determines whether or not the
      *                         y-interval is taken into account.
      * 
-     *
      * @return The range (possibly <code>null</code>).
      */
     public static Range findRangeBounds(XYDataset dataset, 
@@ -774,7 +777,7 @@ public final class DatasetUtilities {
             result = info.getRangeBounds(includeInterval);
         }
         else {
-            result = iterateXYRangeBounds(dataset);
+            result = iterateRangeBounds(dataset, includeInterval);
         }
         return result;
     }
@@ -834,8 +837,28 @@ public final class DatasetUtilities {
      * @param dataset  the dataset (<code>null</code> not permitted).
      * 
      * @return The range (possibly <code>null</code>).
+     * 
+     * @since 1.0.10
      */
-    public static Range iterateXYRangeBounds(XYDataset dataset) {
+    public static Range iterateRangeBounds(XYDataset dataset) {
+        return iterateRangeBounds(dataset, true);
+    }
+    
+    /**
+     * Iterates over the data item of the xy dataset to find
+     * the range bounds.
+     * 
+     * @param dataset  the dataset (<code>null</code> not permitted).
+     * @param includeInterval  a flag that determines, for an 
+     *          {@link IntervalXYDataset}, whether the y-interval or just the 
+     *          y-value is used to determine the overall range.
+     *          
+     * @return The range (possibly <code>null</code>).
+     * 
+     * @since 1.0.10
+     */
+    public static Range iterateRangeBounds(XYDataset dataset, 
+    		boolean includeInterval) {
         double minimum = Double.POSITIVE_INFINITY;
         double maximum = Double.NEGATIVE_INFINITY;
         int seriesCount = dataset.getSeriesCount();
@@ -844,13 +867,13 @@ public final class DatasetUtilities {
             for (int item = 0; item < itemCount; item++) {
                 double lvalue;
                 double uvalue;
-                if (dataset instanceof IntervalXYDataset) {
+                if (includeInterval && dataset instanceof IntervalXYDataset) {
                     IntervalXYDataset intervalXYData 
                         = (IntervalXYDataset) dataset;
                     lvalue = intervalXYData.getStartYValue(series, item);
                     uvalue = intervalXYData.getEndYValue(series, item);
                 }
-                else if (dataset instanceof OHLCDataset) {
+                else if (includeInterval && dataset instanceof OHLCDataset) {
                     OHLCDataset highLowData = (OHLCDataset) dataset;
                     lvalue = highLowData.getLowValue(series, item);
                     uvalue = highLowData.getHighValue(series, item);
