@@ -739,7 +739,7 @@ public final class DatasetUtilities {
             result = info.getRangeBounds(includeInterval);
         }
         else {
-            result = iterateCategoryRangeBounds(dataset, includeInterval);
+            result = iterateRangeBounds(dataset, includeInterval);
         }
         return result;
     }
@@ -781,7 +781,21 @@ public final class DatasetUtilities {
         }
         return result;
     }
-    
+
+    /**
+     * Iterates over the data item of the category dataset to find
+     * the range bounds.
+     * 
+     * @param dataset  the dataset (<code>null</code> not permitted).
+     * 
+     * @return The range (possibly <code>null</code>).
+     * 
+     * @since 1.0.10
+     */
+    public static Range iterateRangeBounds(CategoryDataset dataset) {
+        return iterateRangeBounds(dataset, true);
+    }
+
     /**
      * Iterates over the data item of the category dataset to find
      * the range bounds.
@@ -791,8 +805,10 @@ public final class DatasetUtilities {
      *                         y-interval is taken into account.
      * 
      * @return The range (possibly <code>null</code>).
+     * 
+     * @since 1.0.10
      */
-    public static Range iterateCategoryRangeBounds(CategoryDataset dataset, 
+    public static Range iterateRangeBounds(CategoryDataset dataset, 
             boolean includeInterval) {
         double minimum = Double.POSITIVE_INFINITY;
         double maximum = Double.NEGATIVE_INFINITY;
