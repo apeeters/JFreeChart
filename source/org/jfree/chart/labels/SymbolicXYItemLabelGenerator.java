@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------------
  * SymbolicXYItemLabelGenerator.java
  * ---------------------------------
- * (C) Copyright 2001-2007, by Anthony Boulestreau and Contributors.
+ * (C) Copyright 2001-2008, by Anthony Boulestreau and Contributors.
  *
  * Original Author:  Anthony Boulestreau;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -44,6 +44,7 @@
  * 20-Apr-2005 : Renamed XYLabelGenerator --> XYItemLabelGenerator (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 31-Mar-2008 : Added hashCode() method to appease FindBugs (DG);
  *
  */
 
@@ -63,10 +64,7 @@ import org.jfree.data.xy.YisSymbolic;
  * {@link XYDataset}.
  */
 public class SymbolicXYItemLabelGenerator implements XYItemLabelGenerator, 
-                                                     XYToolTipGenerator,
-                                                     Cloneable, 
-                                                     PublicCloneable,
-                                                     Serializable {
+        XYToolTipGenerator, Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 3963400354475494395L;
@@ -163,6 +161,16 @@ public class SymbolicXYItemLabelGenerator implements XYItemLabelGenerator,
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Returns a hash code for this instance.
+     * 
+     * @return A hash code.
+     */
+    public int hashCode() {
+        int result = 127;
+        return result;
     }
     
 }

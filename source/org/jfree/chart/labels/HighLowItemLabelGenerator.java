@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------------
  * HighLowItemLabelGenerator.java
  * ------------------------------
- * (C) Copyright 2001-2007, by Object Refinery Limited.
+ * (C) Copyright 2001-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   David Basten;
@@ -47,6 +47,7 @@
  *               getYValue() (DG);
  * 20-Apr-2005 : Renamed XYLabelGenerator --> XYItemLabelGenerator (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 31-Mar-2008 : Added hashCode() method to appease FindBugs (DG);
  *
  */
 
@@ -57,6 +58,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 
+import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.xy.OHLCDataset;
 import org.jfree.data.xy.XYDataset;
@@ -66,10 +68,7 @@ import org.jfree.data.xy.XYDataset;
  * {@link OHLCDataset}.
  */
 public class HighLowItemLabelGenerator implements XYItemLabelGenerator, 
-                                                  XYToolTipGenerator,
-                                                  Cloneable, 
-                                                  PublicCloneable,
-                                                  Serializable {
+        XYToolTipGenerator, Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 5617111754832211830L;
@@ -100,13 +99,11 @@ public class HighLowItemLabelGenerator implements XYItemLabelGenerator,
                                      NumberFormat numberFormatter) {
         if (dateFormatter == null) {
             throw new IllegalArgumentException(
-                "Null 'dateFormatter' argument."
-            );   
+                    "Null 'dateFormatter' argument.");   
         }
         if (numberFormatter == null) {
             throw new IllegalArgumentException(
-                "Null 'numberFormatter' argument."
-            );
+                    "Null 'numberFormatter' argument.");
         }
         this.dateFormatter = dateFormatter;
         this.numberFormatter = numberFormatter;
@@ -221,6 +218,18 @@ public class HighLowItemLabelGenerator implements XYItemLabelGenerator,
             return false;   
         }
         return true;
+    }
+    
+    /**
+     * Returns a hash code for this instance.
+     * 
+     * @return A hash code.
+     */
+    public int hashCode() {
+        int result = 127;
+        result = HashUtilities.hashCode(result, this.dateFormatter);
+        result = HashUtilities.hashCode(result, this.numberFormatter);
+        return result;
     }
     
 }
