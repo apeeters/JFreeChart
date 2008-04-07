@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------
  * XYPlotTests.java
  * ----------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -43,6 +43,8 @@
  * 07-Feb-2007 : Added test1654215() (DG);
  * 24-May-2007 : Added testDrawSeriesWithZeroItems() (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 07-Apr-2008 : Added testRemoveDomainMarker() and 
+ *               testRemoveRangeMarker() (DG);
  * 
  */
 
@@ -74,8 +76,10 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.axis.AxisLocation;
+import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.event.MarkerChangeListener;
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.plot.IntervalMarker;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotOrientation;
@@ -372,6 +376,17 @@ public class XYPlotTests extends TestCase {
         plot2.setQuadrantPaint(3, new GradientPaint(4.0f, 5.0f, Color.red,
                 6.0f, 7.0f, Color.blue));
         assertTrue(plot1.equals(plot2));  
+        
+        plot1.setDomainTickBandPaint(Color.red);
+        assertFalse(plot1.equals(plot2));
+        plot2.setDomainTickBandPaint(Color.red);
+        assertTrue(plot1.equals(plot2));
+        
+        plot1.setRangeTickBandPaint(Color.blue);
+        assertFalse(plot1.equals(plot2));
+        plot2.setRangeTickBandPaint(Color.blue);
+        assertTrue(plot1.equals(plot2));
+        
     }
 
     /**
@@ -516,6 +531,16 @@ public class XYPlotTests extends TestCase {
         assertFalse(p1.equals(p2));
         p2.mapDatasetToRangeAxis(2, 1);
         assertTrue(p1.equals(p2));
+
+        p1.getRenderer().setBaseOutlinePaint(Color.cyan);
+        assertFalse(p1.equals(p2));
+        p2.getRenderer().setBaseOutlinePaint(Color.cyan);
+        assertTrue(p1.equals(p2));
+        
+        p1.getRenderer(1).setBaseOutlinePaint(Color.red);
+        assertFalse(p1.equals(p2));
+        p2.getRenderer(1).setBaseOutlinePaint(Color.red);
+        assertTrue(p1.equals(p2));
         
     }
     
@@ -557,6 +582,37 @@ public class XYPlotTests extends TestCase {
             ObjectInput in = new ObjectInputStream(
                 new ByteArrayInputStream(buffer.toByteArray())
             );
+            p2 = (XYPlot) in.readObject();
+            in.close();
+        }
+        catch (Exception e) {
+            fail(e.toString());
+        }
+        assertEquals(p1, p2);
+
+    }
+
+    /**
+     * Serialize an instance, restore it, and check for equality.  This test 
+     * uses a {@link DateAxis} and a {@link StandardXYToolTipGenerator}.
+     */
+    public void testSerialization2() {
+
+        IntervalXYDataset data1 = createDataset1();
+        XYItemRenderer renderer1 = new XYBarRenderer(0.20);
+        renderer1.setBaseToolTipGenerator(
+                StandardXYToolTipGenerator.getTimeSeriesInstance());
+        XYPlot p1 = new XYPlot(data1, new DateAxis("Date"), null, renderer1);
+        XYPlot p2 = null;
+
+        try {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            ObjectOutput out = new ObjectOutputStream(buffer);
+            out.writeObject(p1);
+            out.close();
+
+            ObjectInput in = new ObjectInputStream(
+                    new ByteArrayInputStream(buffer.toByteArray()));
             p2 = (XYPlot) in.readObject();
             in.close();
         }
@@ -961,6 +1017,24 @@ public class XYPlotTests extends TestCase {
             success = false;
         }
         assertTrue(success);
+    }
+    
+    /**
+     * Check that removing a marker that isn't assigned to the plot returns 
+     * false.
+     */
+    public void testRemoveDomainMarker() {
+    	XYPlot plot = new XYPlot();
+    	assertFalse(plot.removeDomainMarker(new ValueMarker(0.5)));
+    }
+
+    /**
+     * Check that removing a marker that isn't assigned to the plot returns 
+     * false.
+     */
+    public void testRemoveRangeMarker() {
+    	XYPlot plot = new XYPlot();
+    	assertFalse(plot.removeRangeMarker(new ValueMarker(0.5)));
     }
 
 }
