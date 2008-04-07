@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * XYBlockRenderer.java
  * --------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited.
+ * (C) Copyright 2006-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -39,6 +39,7 @@
  * 09-Mar-2007 : Fixed cloning (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 03-Aug-2007 : Fix for bug 1766646 (DG);
+ * 07-Apr-2008 : Added entity collection code (DG);
  * 
  */
 
@@ -51,6 +52,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
@@ -121,7 +123,8 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
     }
     
     /**
-     * Sets the width of the blocks used to represent each data item.
+     * Sets the width of the blocks used to represent each data item and
+     * sends a {@link RendererChangeEvent} to all registered listeners.
      * 
      * @param width  the new width, in data/axis units (must be > 0.0).
      * 
@@ -134,7 +137,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
         }
         this.blockWidth = width;
         updateOffsets();
-        this.notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -149,7 +152,8 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
     }
     
     /**
-     * Sets the height of the blocks used to represent each data item.
+     * Sets the height of the blocks used to represent each data item and
+     * sends a {@link RendererChangeEvent} to all registered listeners.
      * 
      * @param height  the new height, in data/axis units (must be > 0.0).
      * 
@@ -162,7 +166,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
         }
         this.blockHeight = height;
         updateOffsets();
-        this.notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -194,7 +198,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
         }
         this.blockAnchor = anchor;
         updateOffsets();
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -210,7 +214,8 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
     }
     
     /**
-     * Sets the paint scale used by the renderer.
+     * Sets the paint scale used by the renderer and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      * 
      * @param scale  the scale (<code>null</code> not permitted).
      * 
@@ -222,7 +227,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'scale' argument.");
         }
         this.paintScale = scale;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
     
     /**
@@ -374,6 +379,12 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
         g2.fill(block);
         g2.setStroke(new BasicStroke(1.0f));
         g2.draw(block);
+        
+        EntityCollection entities = state.getEntityCollection();
+        if (entities != null) {
+            addEntity(entities, block, dataset, series, item, 0.0, 0.0);
+        }
+
     }
     
     /**

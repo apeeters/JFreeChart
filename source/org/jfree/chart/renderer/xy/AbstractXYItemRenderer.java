@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------
  * AbstractXYItemRenderer.java
  * ---------------------------
- * (C) Copyright 2002-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2002-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard Atkinson;
@@ -103,6 +103,8 @@
  * 27-Jun-2007 : Removed drawDomainGridline() method - use drawDomainLine()
  *               instead (DG);
  * 12-Nov-2007 : Fixed domain and range band drawing methods (DG);
+ * 07-Apr-2008 : Updated various methods to use fireChangeEvent(), plus 
+ *               minor API doc update (DG);
  *
  */
 
@@ -337,7 +339,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public void setSeriesItemLabelGenerator(int series,
                                             XYItemLabelGenerator generator) {
         this.itemLabelGeneratorList.set(series, generator);
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -357,7 +359,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             XYItemLabelGenerator generator, boolean notify) {
         this.itemLabelGeneratorList.set(series, generator);
         if (notify) {
-            notifyListeners(new RendererChangeEvent(this));        
+            fireChangeEvent();        
         }
     }
 
@@ -395,7 +397,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             boolean notify) {
         this.baseItemLabelGenerator = generator;
         if (notify) {
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -459,7 +461,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             XYToolTipGenerator generator, boolean notify) {
         this.toolTipGeneratorList.set(series, generator);
         if (notify) {
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -501,7 +503,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             boolean notify) {
         this.baseToolTipGenerator = generator;
         if (notify) {
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -572,7 +574,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             boolean notify) {
         this.toolTipGeneratorList.set(series, generator);
         if (notify) {
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
     
@@ -617,7 +619,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public void setBaseURLGenerator(XYURLGenerator generator, boolean notify) {
         this.baseURLGenerator = generator;
         if (notify) {
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
     
@@ -636,7 +638,8 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     }
 
     /**
-     * Adds an annotation to the specified layer.
+     * Adds an annotation to the specified layer and sends a 
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param annotation  the annotation (<code>null</code> not permitted).
      * @param layer  the layer (<code>null</code> not permitted).
@@ -647,11 +650,11 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         }
         if (layer.equals(Layer.FOREGROUND)) {
             this.foregroundAnnotations.add(annotation);
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
         else if (layer.equals(Layer.BACKGROUND)) {
             this.backgroundAnnotations.add(annotation);
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
         else {
             // should never get here
@@ -671,7 +674,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public boolean removeAnnotation(XYAnnotation annotation) {
         boolean removed = this.foregroundAnnotations.remove(annotation);
         removed = removed & this.backgroundAnnotations.remove(annotation);
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
         return removed;
     }
 
@@ -682,7 +685,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public void removeAnnotations() {
         this.foregroundAnnotations.clear();
         this.backgroundAnnotations.clear();
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -733,7 +736,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             throw new IllegalArgumentException("Null 'generator' argument.");
         }
         this.legendItemLabelGenerator = generator;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -758,7 +761,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public void setLegendItemToolTipGenerator(
             XYSeriesLabelGenerator generator) {
         this.legendItemToolTipGenerator = generator;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -782,7 +785,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      */
     public void setLegendItemURLGenerator(XYSeriesLabelGenerator generator) {
         this.legendItemURLGenerator = generator;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -991,7 +994,8 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
 
         PlotOrientation orientation = plot.getOrientation();
         Line2D line = null;
-        double v = axis.valueToJava2D(value, dataArea, plot.getDomainAxisEdge());
+        double v = axis.valueToJava2D(value, dataArea, 
+                plot.getDomainAxisEdge());
         if (orientation == PlotOrientation.HORIZONTAL) {
             line = new Line2D.Double(dataArea.getMinX(), v, dataArea.getMaxX(), 
                     v);
@@ -1286,7 +1290,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                         dataArea.getMaxX(), v);
             }
 
-            Composite originalComposite = g2.getComposite();
+            final Composite originalComposite = g2.getComposite();
             g2.setComposite(AlphaComposite.getInstance(
                     AlphaComposite.SRC_OVER, marker.getAlpha()));
             g2.setPaint(marker.getPaint());
@@ -1344,7 +1348,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                         high - low);
             }
 
-            Composite originalComposite = g2.getComposite();
+            final Composite originalComposite = g2.getComposite();
             g2.setComposite(AlphaComposite.getInstance(
                     AlphaComposite.SRC_OVER, marker.getAlpha()));
             Paint p = marker.getPaint();
@@ -1721,8 +1725,10 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param dataset  the dataset.
      * @param series  the series.
      * @param item  the item.
-     * @param entityX  the entity's center x-coordinate in user space.
-     * @param entityY  the entity's center y-coordinate in user space.
+     * @param entityX  the entity's center x-coordinate in user space (only 
+     *                 used if <code>area</code> is <code>null</code>).
+     * @param entityY  the entity's center y-coordinate in user space (only 
+     *                 used if <code>area</code> is <code>null</code>).
      */
     protected void addEntity(EntityCollection entities, Shape area,
                              XYDataset dataset, int series, int item,
