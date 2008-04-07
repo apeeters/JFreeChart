@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------
  * DefaultKeyedValue.java
  * ----------------------
- * (C) Copyright 2002-2007, by Object Refinery Limited.
+ * (C) Copyright 2002-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -42,7 +42,9 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 11-Jun-2007 : Added toString() method to help with debugging (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
- *
+ * 15-Feb-2008 : Prevent null key (DG);
+ * 07-Apr-2008 : Removed to-do item (DG);
+ * 
  */
 
 package org.jfree.data;
@@ -71,10 +73,14 @@ public class DefaultKeyedValue implements KeyedValue,
     /**
      * Creates a new (key, value) item.
      *
-     * @param key  the key (should be immutable).
+     * @param key  the key (should be immutable, <code>null</code> not 
+     *         permitted).
      * @param value  the value (<code>null</code> permitted).
      */
     public DefaultKeyedValue(Comparable key, Number value) {
+    	if (key == null) {
+    		throw new IllegalArgumentException("Null 'key' argument.");
+    	}
         this.key = key;
         this.value = value;
     }
@@ -82,7 +88,7 @@ public class DefaultKeyedValue implements KeyedValue,
     /**
      * Returns the key.
      *
-     * @return The key.
+     * @return The key (never <code>null</code>).
      */
     public Comparable getKey() {
         return this.key;
@@ -120,13 +126,9 @@ public class DefaultKeyedValue implements KeyedValue,
         if (!(obj instanceof DefaultKeyedValue)) {
             return false;
         }
-        // TODO: modify this so that we check for equality with any KeyedValue
-        // rather than specifically a DefaultKeyedValue
         DefaultKeyedValue that = (DefaultKeyedValue) obj;
         
-        // TODO: the following checks for null should be handled in a utility 
-        // method
-        if (this.key != null ? !this.key.equals(that.key) : that.key != null) {
+        if (!this.key.equals(that.key)) {
             return false;
         }
         if (this.value != null 
