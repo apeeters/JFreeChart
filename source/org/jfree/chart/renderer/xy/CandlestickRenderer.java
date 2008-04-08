@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------
  * CandlestickRenderer.java
  * ------------------------
- * (C) Copyright 2001-2007, by Object Refinery Limited.
+ * (C) Copyright 2001-2008, by Object Refinery Limited.
  *
  * Original Authors:  David Gilbert (for Object Refinery Limited);
  *                    Sylvain Vieujot;
@@ -81,6 +81,7 @@
  *               dependencies (DG);
  * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
  * 08-Oct-2007 : Added new volumePaint field (DG);
+ * 08-Apr-2008 : Added findRangeBounds() method override (DG);
  *
  */
 
@@ -113,6 +114,8 @@ import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.SerialUtilities;
+import org.jfree.data.Range;
+import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.OHLCDataset;
 import org.jfree.data.xy.XYDataset;
@@ -255,7 +258,8 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     }
 
     /**
-     * Sets the candle width.
+     * Sets the candle width and sends a {@link RendererChangeEvent} to all
+     * registered listeners.
      * <P>
      * If you set the width to a negative value, the renderer will calculate
      * the candle width automatically based on the space available on the chart.
@@ -269,7 +273,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setCandleWidth(double width) {
         if (width != this.candleWidth) {
             this.candleWidth = width;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -285,7 +289,8 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     }
 
     /**
-     * Sets the maximum candle width (in milliseconds).
+     * Sets the maximum candle width (in milliseconds) and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param millis  The maximum width.
      *
@@ -297,7 +302,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      */
     public void setMaxCandleWidthInMilliseconds(double millis) {
         this.maxCandleWidthInMilliseconds = millis;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -312,7 +317,8 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     }
 
     /**
-     * Sets the method of automatically calculating the candle width.
+     * Sets the method of automatically calculating the candle width and
+     * sends a {@link RendererChangeEvent} to all registered listeners.
      * <p>
      * <code>WIDTHMETHOD_AVERAGE</code>: Divides the entire display (ignoring
      * scale factor) by the number of items, and uses this as the available
@@ -339,7 +345,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setAutoWidthMethod(int autoWidthMethod) {
         if (this.autoWidthMethod != autoWidthMethod) {
             this.autoWidthMethod = autoWidthMethod;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -371,7 +377,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setAutoWidthFactor(double autoWidthFactor) {
         if (this.autoWidthFactor != autoWidthFactor) {
             this.autoWidthFactor = autoWidthFactor;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -389,7 +395,8 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
 
     /**
      * Sets the amount of space to leave on the left and right of each candle
-     * when automatically calculating widths.
+     * when automatically calculating widths and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param autoWidthGap The gap.
      *
@@ -402,7 +409,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setAutoWidthGap(double autoWidthGap) {
         if (this.autoWidthGap != autoWidthGap) {
             this.autoWidthGap = autoWidthGap;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -429,7 +436,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      */
     public void setUpPaint(Paint paint) {
         this.upPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -453,7 +460,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      */
     public void setDownPaint(Paint paint) {
         this.downPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -482,7 +489,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setDrawVolume(boolean flag) {
         if (this.drawVolume != flag) {
             this.drawVolume = flag;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -516,7 +523,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.volumePaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -549,6 +556,24 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         if (this.useOutlinePaint != use) {
             this.useOutlinePaint = use;
             fireChangeEvent();
+        }
+    }
+
+    /**
+     * Returns the range of values the renderer requires to display all the
+     * items from the specified dataset.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     *
+     * @return The range (<code>null</code> if the dataset is <code>null</code>
+     *         or empty).
+     */
+    public Range findRangeBounds(XYDataset dataset) {
+        if (dataset != null) {
+            return DatasetUtilities.findRangeBounds(dataset, true);
+        }
+        else {
+            return null;
         }
     }
 
