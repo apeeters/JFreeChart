@@ -155,17 +155,17 @@ public class DatasetUtilitiesTests extends TestCase {
      */
     public void testIterateCategoryRangeBounds() {
         CategoryDataset dataset = createCategoryDataset1();
-        Range r = DatasetUtilities.iterateCategoryRangeBounds(dataset, false);
+        Range r = DatasetUtilities.iterateRangeBounds(dataset, false);
         assertEquals(1.0, r.getLowerBound(), EPSILON);
         assertEquals(6.0, r.getUpperBound(), EPSILON);           
     }
 
     /**
-     * Some tests for the iterateXYRangeBounds() method.
+     * Some tests for the iterateRangeBounds() method.
      */
-    public void testIterateXYRangeBounds() {
+    public void testIterateRangeBounds() {
         XYDataset dataset = createXYDataset1();
-        Range r = DatasetUtilities.iterateXYRangeBounds(dataset);
+        Range r = DatasetUtilities.iterateRangeBounds(dataset);
         assertEquals(100.0, r.getLowerBound(), EPSILON);
         assertEquals(105.0, r.getUpperBound(), EPSILON);           
     }
@@ -173,13 +173,13 @@ public class DatasetUtilitiesTests extends TestCase {
     /**
      * Check the range returned when a series contains a null value.
      */
-    public void testIterateXYRangeBounds2() {
+    public void testIterateRangeBounds2() {
         XYSeries s1 = new XYSeries("S1");
         s1.add(1.0, 1.1);
         s1.add(2.0, null);
         s1.add(3.0, 3.3);
         XYSeriesCollection dataset = new XYSeriesCollection(s1);
-        Range r = DatasetUtilities.iterateXYRangeBounds(dataset);
+        Range r = DatasetUtilities.iterateRangeBounds(dataset);
         assertEquals(1.1, r.getLowerBound(), EPSILON);
         assertEquals(3.3, r.getUpperBound(), EPSILON);
     }
