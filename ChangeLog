@@ -1,3 +1,9 @@
+2008-04-10  David Gilbert  <david.gilbert@object-refinery.com>
+
+    * source/org/jfree/data/xy/XIntervalSeries.java
+    (getXLowValue): New method,
+    (getXHighValue): Likewise.
+
 2008-04-08  David Gilbert  <david.gilbert@object-refinery.com>
 
     * source/org/jfree/chart/renderer/xy/CandlestickRenderer.java
