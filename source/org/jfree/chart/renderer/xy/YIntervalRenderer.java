@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ----------------------
  * YIntervalRenderer.java
  * ----------------------
- * (C) Copyright 2002-2007, by Object Refinery Limited.
+ * (C) Copyright 2002-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -45,7 +45,8 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
  * 06-Jul-2007 : Override getLegendItem() (DG);
- * 
+ * 11-Apr-2008 : New override for findRangeBounds() (DG);
+ *
  */
 
 package org.jfree.chart.renderer.xy;
@@ -68,26 +69,47 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.ShapeUtilities;
+import org.jfree.data.Range;
+import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
 
 /**
- * A renderer that draws a line connecting the start and end Y values for an 
+ * A renderer that draws a line connecting the start and end Y values for an
  * {@link XYPlot}.
  */
-public class YIntervalRenderer extends AbstractXYItemRenderer 
-                               implements XYItemRenderer, 
+public class YIntervalRenderer extends AbstractXYItemRenderer
+                               implements XYItemRenderer,
                                           Cloneable,
                                           PublicCloneable,
                                           Serializable {
 
+    /** For serialization. */
     private static final long serialVersionUID = -2951586537224143260L;
-    
+
     /**
      * The default constructor.
      */
     public YIntervalRenderer() {
         super();
+    }
+
+    /**
+     * Returns the range of values the renderer requires to display all the
+     * items from the specified dataset.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     *
+     * @return The range (<code>null</code> if the dataset is <code>null</code>
+     *         or empty).
+     */
+    public Range findRangeBounds(XYDataset dataset) {
+        if (dataset != null) {
+            return DatasetUtilities.findRangeBounds(dataset, true);
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -97,28 +119,28 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
      * @param state  the renderer state.
      * @param dataArea  the area within which the plot is being drawn.
      * @param info  collects information about the drawing.
-     * @param plot  the plot (can be used to obtain standard color 
+     * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot 
+     * @param crosshairState  crosshair information for the plot
      *                        (<code>null</code> permitted).
      * @param pass  the pass index (ignored here).
      */
-    public void drawItem(Graphics2D g2, 
+    public void drawItem(Graphics2D g2,
                          XYItemRendererState state,
                          Rectangle2D dataArea,
                          PlotRenderingInfo info,
-                         XYPlot plot, 
-                         ValueAxis domainAxis, 
+                         XYPlot plot,
+                         ValueAxis domainAxis,
                          ValueAxis rangeAxis,
-                         XYDataset dataset, 
-                         int series, 
+                         XYDataset dataset,
+                         int series,
                          int item,
-                         CrosshairState crosshairState, 
+                         CrosshairState crosshairState,
                          int pass) {
 
         // setup for collecting optional entity info...
@@ -135,14 +157,14 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
 
         RectangleEdge xAxisLocation = plot.getDomainAxisEdge();
         RectangleEdge yAxisLocation = plot.getRangeAxisEdge();
-        
+
         double xx = domainAxis.valueToJava2D(x, dataArea, xAxisLocation);
         double yyLow = rangeAxis.valueToJava2D(yLow, dataArea, yAxisLocation);
         double yyHigh = rangeAxis.valueToJava2D(yHigh, dataArea, yAxisLocation);
 
         Paint p = getItemPaint(series, item);
         Stroke s = getItemStroke(series, item);
-        
+
         Line2D line = null;
         Shape shape = getItemShape(series, item);
         Shape top = null;
@@ -167,12 +189,12 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
 
         // add an entity for the item...
         if (entities != null) {
-            addEntity(entities, line.getBounds(), dataset, series, item, 0.0, 
+            addEntity(entities, line.getBounds(), dataset, series, item, 0.0,
                     0.0);
         }
 
     }
-    
+
     /**
      * Returns a default legend item for the specified series.  Subclasses
      * should override this method to generate customised items.
@@ -216,9 +238,9 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
 
     /**
      * Returns a clone of the renderer.
-     * 
+     *
      * @return A clone.
-     * 
+     *
      * @throws CloneNotSupportedException  if the renderer cannot be cloned.
      */
     public Object clone() throws CloneNotSupportedException {
