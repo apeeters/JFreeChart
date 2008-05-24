@@ -52,6 +52,8 @@
  * 23-Oct-2007 : Implemented drawPolygon(), drawPolyline(), drawOval(),
  *               fillOval(), drawArc() and fillArc() (DG);
  * 27-Nov-2007 : Implemented a couple of drawImage() methods (DG);
+ * 24-May-2008 : Use color from pool for setBackground method (HP);
+ * 24-May-2008 : New resource pool for tansform objects;
  *
  */
 
@@ -124,7 +126,10 @@ public class SWTGraphics2D extends Graphics2D {
     /** A HashMap to store the Swt font resources. */
     private Map fontsPool = new HashMap();
 
-    /** A HashMap to store the Swt color resources. */
+    /** A HashMap to store the Swt transform resources. */
+    private Map transformsPool = new HashMap();
+
+    /** A List to store the Swt resources. */
     private List resourcePool = new ArrayList();
 
     /**
@@ -295,11 +300,8 @@ public class SWTGraphics2D extends Graphics2D {
      * @see java.awt.Graphics2D#setBackground(java.awt.Color)
      */
     public void setBackground(Color color) {
-        this.gc.getBackground().dispose();
-        org.eclipse.swt.graphics.Color swtColor = SWTUtils.toSwtColor(
-                this.gc.getDevice(), color);
+        org.eclipse.swt.graphics.Color swtColor = getSwtColorFromPool(color);
         this.gc.setBackground(swtColor);
-        swtColor.dispose(); 
     }
 
     /* (non-Javadoc)
@@ -489,7 +491,8 @@ public class SWTGraphics2D extends Graphics2D {
      * @see java.awt.Graphics2D#setTransform(java.awt.geom.AffineTransform)
      */
     public void setTransform(AffineTransform Tx) {
-        this.gc.setTransform(toSwtTransform(Tx));
+        Transform transform = getSwtTransformFromPool(Tx);
+        this.gc.setTransform(transform);
     }
 
     /* (non-Javadoc)
@@ -498,10 +501,8 @@ public class SWTGraphics2D extends Graphics2D {
     public void transform(AffineTransform Tx) {
         Transform swtTransform = new Transform(this.gc.getDevice()); 
         this.gc.getTransform(swtTransform);
-        Transform swtMatrix = toSwtTransform(Tx);
-        swtTransform.multiply(swtMatrix);
+        swtTransform.multiply(getSwtTransformFromPool(Tx));
         this.gc.setTransform(swtTransform);
-        swtMatrix.dispose();
         swtTransform.dispose();
     }
 
@@ -1102,8 +1103,9 @@ public class SWTGraphics2D extends Graphics2D {
             Resource resource = (Resource) it.next();
             resource.dispose();
         }
-        this.resourcePool.clear();
+        this.fontsPool.clear();
         this.colorsPool.clear();
+        this.transformsPool.clear();
         this.resourcePool.clear();
     }
 
@@ -1157,6 +1159,31 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
+     * Internal method to convert a AWT transform object into 
+     * a SWT transform resource. If a corresponding SWT transform
+     * instance is already in the pool, it will be used 
+     * instead of creating a new one. This is used in 
+     * {@link #setTransform()} for instance. 
+     * 
+     * @param awtTransform The AWT transform to convert.
+     * @return A SWT transform instance.
+     */
+    private Transform getSwtTransformFromPool(AffineTransform awtTransform) {
+    	Transform t = (Transform) this.transformsPool.get(awtTransform);
+    	if (t == null) {
+    		t = new Transform(this.gc.getDevice());
+            double[] matrix = new double[6];
+            awtTransform.getMatrix(matrix);
+            t.setElements((float) matrix[0], (float) matrix[1],
+                    (float) matrix[2], (float) matrix[3],
+                    (float) matrix[4], (float) matrix[5]); 
+    		addToResourcePool(t);
+    		this.transformsPool.put(awtTransform, t);
+    	}
+    	return t;
+    }
+    
+    /**
      * Perform a switch between foreground and background 
      * color of gc. This is needed for consistency with 
      * the awt behaviour, and is required notably for the 
@@ -1208,22 +1235,22 @@ public class SWTGraphics2D extends Graphics2D {
         return path;
     }
 
-    /**
-     * Converts an AWT transform into the equivalent SWT transform.
-     * 
-     * @param awtTransform  the AWT transform.
-     * 
-     * @return The SWT transform.
-     */
-    private Transform toSwtTransform(AffineTransform awtTransform) {
-        Transform t = new Transform(this.gc.getDevice());
-        double[] matrix = new double[6];
-        awtTransform.getMatrix(matrix);
-        t.setElements((float) matrix[0], (float) matrix[1],
-                (float) matrix[2], (float) matrix[3],
-                (float) matrix[4], (float) matrix[5]); 
-        return t;
-    }
+//    /**
+//     * Converts an AWT transform into the equivalent SWT transform.
+//     * 
+//     * @param awtTransform  the AWT transform.
+//     * 
+//     * @return The SWT transform.
+//     */
+//    private Transform toSwtTransform(AffineTransform awtTransform) {
+//        Transform t = new Transform(this.gc.getDevice());
+//        double[] matrix = new double[6];
+//        awtTransform.getMatrix(matrix);
+//        t.setElements((float) matrix[0], (float) matrix[1],
+//                (float) matrix[2], (float) matrix[3],
+//                (float) matrix[4], (float) matrix[5]); 
+//        return t;
+//    }
 
     /**
      * Converts an SWT transform into the equivalent AWT transform.

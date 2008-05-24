@@ -67,6 +67,7 @@
  * 24-May-2008 : Corrected the axis traces which were inverted (HP);
  * 24-May-2008 : Fixed double listener registration, bug 1945818 and added 
  *               unregistration as suggested by paulb on the forum (HP); 
+ * 24-May-2008 : Also release the buffer image resources when widget is disposed (HP); 
  */
 
 package org.jfree.experimental.chart.swt;
@@ -537,7 +538,6 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         this.canvas.addMouseMoveListener(this);
             
         if (this.chart != null) {
-            this.chart.addChangeListener(this);
             Plot plot = this.chart.getPlot();
             this.domainZoomable = false;
             this.rangeZoomable = false;
@@ -1826,6 +1826,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 	 * @see org.eclipse.swt.widgets.Widget#dispose()
 	 */
 	public void dispose() {
+		if (this.chartBuffer != null) this.chartBuffer.dispose();
 		// de-register the composite as a listener for the chart.
         if (this.chart != null) {
             this.chart.removeChangeListener(this);
