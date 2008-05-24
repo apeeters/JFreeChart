@@ -27,7 +27,7 @@
  * -------------------
  * ChartComposite.java
  * -------------------
- * (C) Copyright 2006, 2007, by Henry Proudhon and Contributors.
+ * (C) Copyright 2006, 2007, 2008 by Henry Proudhon and Contributors.
  *
  * Original Author:  Henry Proudhon (henry.proudhon AT ensmp.fr);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -64,6 +64,9 @@
  * 27-Aug-2007 : Refactored class, now implements PaintListener, MouseListener, 
  *               MouseMoveListener. Made the chart field be private again and
  *               added new method addSWTListener to allow custom behavior. 
+ * 24-May-2008 : Corrected the axis traces which were inverted (HP);
+ * 24-May-2008 : Fixed double listener registration, bug 1945818 and added 
+ *               unregistration as suggested by paulb on the forum (HP); 
  */
 
 package org.jfree.experimental.chart.swt;
@@ -146,7 +149,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                                                          MouseListener,
                                                          MouseMoveListener,
                                                          Printable {
-    /** Default setting for buffer usage. */
+	/** Default setting for buffer usage. */
     public static final boolean DEFAULT_BUFFER_USED = false;
 
     /** The default panel width. */
@@ -1801,12 +1804,12 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         Rectangle area = getScreenDataArea();
         // TODO see if we need to apply some line color and style to the 
         // axis traces
-        if (this.verticalAxisTrace && area.x < this.verticalTraceLineX 
+        if (this.horizontalAxisTrace && area.x < this.verticalTraceLineX 
                 && area.x + area.width > this.verticalTraceLineX) {
             e.gc.drawLine(this.verticalTraceLineX, area.y, 
                     this.verticalTraceLineX, area.y + area.height);
         }
-        if (this.horizontalAxisTrace && area.y < this.horizontalTraceLineY 
+        if (this.verticalAxisTrace && area.y < this.horizontalTraceLineY 
                 && area.y + area.height > this.horizontalTraceLineY) {
             e.gc.drawLine(area.x, this.horizontalTraceLineY, 
                     area.x + area.width, this.horizontalTraceLineY);
@@ -1818,5 +1821,17 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         }
         sg2.dispose();
     }
+
+    /* (non-Javadoc)
+	 * @see org.eclipse.swt.widgets.Widget#dispose()
+	 */
+	public void dispose() {
+		// de-register the composite as a listener for the chart.
+        if (this.chart != null) {
+            this.chart.removeChangeListener(this);
+            this.chart.removeProgressListener(this);
+        }
+		super.dispose();
+	}
 
 }
