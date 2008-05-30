@@ -1,3 +1,19 @@
+2008-05-30  Henry Proudhon  <henry.proudhon@ensmp.fr>
+
+    * source/swt/org/jfree/experimental/chart/swt/ChartComposite.java: 
+    (ChartComposite): removed duplicate code.
+
+2008-05-24  Henry Proudhon  <henry.proudhon@ensmp.fr>
+
+    * source/swt/org/jfree/experimental/chart/swt/ChartComposite.java: 
+    (paintControl): Corrected the axis traces which were inverted,
+    (chart): Fixed listener registered twice,
+    (dispose): release the buffer image resources.
+    * source/swt/org/jfree/experimental/swt/SWTGraphics2D.java
+    (setTransform): use resource from pool if possible,
+    (getSwtTransformFromPool): New method,
+    (disposeResourcePool): dispose transform resources.
+
 2008-04-18  David Gilbert  <david.gilbert@object-refinery.com>
 
     Patch 1943021 (Brian Cabana):

@@ -68,6 +68,8 @@
  * 24-May-2008 : Fixed double listener registration, bug 1945818 and added 
  *               unregistration as suggested by paulb on the forum (HP); 
  * 24-May-2008 : Also release the buffer image resources when widget is disposed (HP); 
+ * 30-May-2008 : Removed duplicate code in constructor (previously moved to the 
+ *               setChart method as suggested by Christoph Beck (HP);
  */
 
 package org.jfree.experimental.chart.swt;
@@ -536,18 +538,6 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         this.canvas.addPaintListener(this);
         this.canvas.addMouseListener(this);
         this.canvas.addMouseMoveListener(this);
-            
-        if (this.chart != null) {
-            Plot plot = this.chart.getPlot();
-            this.domainZoomable = false;
-            this.rangeZoomable = false;
-            if (plot instanceof Zoomable) {
-                Zoomable z = (Zoomable) plot;
-                this.domainZoomable = z.isDomainZoomable();
-                this.rangeZoomable = z.isRangeZoomable();
-                this.orientation = z.getOrientation();
-            }
-        }
 
         // set up popup menu...
         this.popup = null;
