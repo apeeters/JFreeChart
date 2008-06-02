@@ -54,6 +54,7 @@
  * 16-Mar-2005 : Fixed bug where equal(Shape, Shape) fails for two Polygon
  *               instances (DG);
  * 20-Jun-2007 : Copied from JCommon (DG);
+ * 02-Jun-2008 : Fixed bug in equal(GeneralPath, GeneralPath) (DG);
  *
  */
 
@@ -271,7 +272,7 @@ public class ShapeUtilities {
             return false;
         }
         PathIterator iterator1 = p1.getPathIterator(null);
-        PathIterator iterator2 = p1.getPathIterator(null);
+        PathIterator iterator2 = p2.getPathIterator(null);
         double[] d1 = new double[6];
         double[] d2 = new double[6];
         boolean done = iterator1.isDone() && iterator2.isDone();

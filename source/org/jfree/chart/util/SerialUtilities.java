@@ -40,6 +40,7 @@
  * 22-Feb-2005 : Added support for Arc2D - see patch 1147035 by Arik Levin (DG);
  * 29-Jul-2005 : Added support for AttributedString (DG);
  * 21-Jun-2007 : Copied from JCommon (DG);
+ * 02-Jun-2008 : Fixed bug 1977609 in readShape() for GeneralPath (DG);
  *
  */
 
@@ -314,21 +315,18 @@ public class SerialUtilities {
                             gp.lineTo(args[0], args[1]);
                             break;
                         case PathIterator.SEG_CUBICTO :
-                            gp.curveTo(
-                                args[0], args[1], args[2],
-                                args[3], args[4], args[5]
-                            );
+                            gp.curveTo(args[0], args[1], args[2],
+                                    args[3], args[4], args[5]);
                             break;
                         case PathIterator.SEG_QUADTO :
                             gp.quadTo(args[0], args[1], args[2], args[3]);
                             break;
                         case PathIterator.SEG_CLOSE :
-                            //result = gp;
+                            gp.closePath();
                             break;
                         default :
                             throw new RuntimeException(
-                                "JFreeChart - No path exists"
-                            );
+                                    "JFreeChart - No path exists");
                     }
                     gp.setWindingRule(stream.readInt());
                     hasNext = stream.readBoolean();
