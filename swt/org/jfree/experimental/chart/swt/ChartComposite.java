@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------
  * ChartComposite.java
  * -------------------
- * (C) Copyright 2006, 2007, 2008 by Henry Proudhon and Contributors.
+ * (C) Copyright 2006-2008, by Henry Proudhon and Contributors.
  *
  * Original Author:  Henry Proudhon (henry.proudhon AT ensmp.fr);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -53,23 +53,27 @@
  *               than maximum draw width/height (HP);
  * 23-May-2007 : Added some dispose call to free SWT resources, patch sent by 
  *               Cédric Chabanois (CC);
- * 06-Jun-2007 : Fixed minor issues with tooltips. bug reported and fix proposed 
- *               by Christoph Beck, bug 1726404 (HP);
+ * 06-Jun-2007 : Fixed minor issues with tooltips. bug reported and fix 
+ *               proposed by Christoph Beck, bug 1726404 (HP);
  * 04-Jul-2007 : Added addChartMouseListener and removeChartMouseListener 
  *               methods as suggested by Christoph Beck, bug 1742002 (HP);
  * 06-Jul-2007 : Fixed bug in zooming with multiple plots (HP);
  * 06-Jul-2007 : Check for null zoom point when restoring auto range and domain
  *               bounds (HP);
  * 25-Jul-2007 : Pass mouse moved events to listening ChartMouseListeners (HP);
- * 27-Aug-2007 : Refactored class, now implements PaintListener, MouseListener, 
+ * 27-Aug-2007 : Refactored class, now implements PaintListener, MouseListener,
  *               MouseMoveListener. Made the chart field be private again and
  *               added new method addSWTListener to allow custom behavior. 
  * 24-May-2008 : Corrected the axis traces which were inverted (HP);
  * 24-May-2008 : Fixed double listener registration, bug 1945818 and added 
  *               unregistration as suggested by paulb on the forum (HP); 
- * 24-May-2008 : Also release the buffer image resources when widget is disposed (HP); 
- * 30-May-2008 : Removed duplicate code in constructor (previously moved to the 
- *               setChart method as suggested by Christoph Beck (HP);
+ * 24-May-2008 : Also release the buffer image resources when widget is 
+                 disposed (HP); 
+ * 30-May-2008 : Removed duplicate code in constructor (previously moved to the
+ *               setChart method as suggested by Christoph Beck) (HP);
+ * 02-Jun-2008 : Added SWT.DOUBLE_BUFFERED in constructor, plus 
+ *               getChartRenderingInfo(), is/setDomainZoomable() and 
+ *               is/setRangeZoomable() (DG);
  */
 
 package org.jfree.experimental.chart.swt;
@@ -152,7 +156,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                                                          MouseListener,
                                                          MouseMoveListener,
                                                          Printable {
-	/** Default setting for buffer usage. */
+    /** Default setting for buffer usage. */
     public static final boolean DEFAULT_BUFFER_USED = false;
 
     /** The default panel width. */
@@ -387,22 +391,21 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * @param chart  the chart.
      */
     public ChartComposite(Composite comp, int style, JFreeChart chart) {
-        this( 
-                comp, 
-                style,
-                chart,
-                DEFAULT_WIDTH,
-                DEFAULT_HEIGHT,
-                DEFAULT_MINIMUM_DRAW_WIDTH,
-                DEFAULT_MINIMUM_DRAW_HEIGHT,
-                DEFAULT_MAXIMUM_DRAW_WIDTH,
-                DEFAULT_MAXIMUM_DRAW_HEIGHT,
-                DEFAULT_BUFFER_USED,
-                true,  // properties
-                true,  // save
-                true,  // print
-                true,  // zoom
-                true   // tooltips
+        this(comp, 
+             style,
+             chart,
+             DEFAULT_WIDTH,
+             DEFAULT_HEIGHT,
+             DEFAULT_MINIMUM_DRAW_WIDTH,
+             DEFAULT_MINIMUM_DRAW_HEIGHT,
+             DEFAULT_MAXIMUM_DRAW_WIDTH,
+             DEFAULT_MAXIMUM_DRAW_HEIGHT,
+             DEFAULT_BUFFER_USED,
+             true,  // properties
+             true,  // save
+             true,  // print
+             true,  // zoom
+             true   // tooltips
         );
     }
 
@@ -521,9 +524,9 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             boolean zoom,
             boolean tooltips) {
         super(comp, style);
-        this.setChart(jfreechart);
+        setChart(jfreechart);
         this.chartMouseListeners = new EventListenerList();
-        this.setLayout(new FillLayout());
+        setLayout(new FillLayout());
         this.info = new ChartRenderingInfo();
         this.useBuffer = usingBuffer;
         this.refreshBuffer = false;
@@ -532,9 +535,9 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         this.maximumDrawWidth = maximumDrawW;
         this.maximumDrawHeight = maximumDrawH;
         this.zoomTriggerDistance = DEFAULT_ZOOM_TRIGGER_DISTANCE;
-        this.setDisplayToolTips(tooltips);
+        setDisplayToolTips(tooltips);
         // create the canvas and add the required listeners
-        this.canvas = new Canvas(this, SWT.NO_BACKGROUND);
+        this.canvas = new Canvas(this, SWT.DOUBLE_BUFFERED | SWT.NO_BACKGROUND);
         this.canvas.addPaintListener(this);
         this.canvas.addMouseListener(this);
         this.canvas.addMouseMoveListener(this);
@@ -632,6 +635,73 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     }
 
     /**
+     * Returns the chart rendering info from the most recent chart redraw.
+     *
+     * @return The chart rendering info (possibly <code>null</code>).
+     */
+    public ChartRenderingInfo getChartRenderingInfo() {
+        return this.info;
+    }
+    
+    /**
+     * Returns the flag that determines whether or not zooming is enabled for 
+     * the domain axis.
+     * 
+     * @return A boolean.
+     */
+    public boolean isDomainZoomable() {
+        return this.domainZoomable;
+    }
+    
+    /**
+     * Sets the flag that controls whether or not zooming is enable for the 
+     * domain axis.  A check is made to ensure that the current plot supports
+     * zooming for the domain values.
+     *
+     * @param flag  <code>true</code> enables zooming if possible.
+     */
+    public void setDomainZoomable(boolean flag) {
+        if (flag) {
+            Plot plot = this.chart.getPlot();
+            if (plot instanceof Zoomable) {
+                Zoomable z = (Zoomable) plot;
+                this.domainZoomable = flag && (z.isDomainZoomable());  
+            }
+        }
+        else {
+            this.domainZoomable = false;
+        }
+    }
+
+    /**
+     * Returns the flag that determines whether or not zooming is enabled for 
+     * the range axis.
+     * 
+     * @return A boolean.
+     */
+    public boolean isRangeZoomable() {
+        return this.rangeZoomable;
+    }
+    
+    /**
+     * A flag that controls mouse-based zooming on the vertical axis.
+     *
+     * @param flag  <code>true</code> enables zooming.
+     */
+    public void setRangeZoomable(boolean flag) {
+        if (flag) {
+            Plot plot = this.chart.getPlot();
+            if (plot instanceof Zoomable) {
+                Zoomable z = (Zoomable) plot;
+                this.rangeZoomable = flag && (z.isRangeZoomable());  
+            }
+        }
+        else {
+            this.rangeZoomable = false;
+        }
+    }
+
+    /**
      * Returns the zoom in factor.
      * 
      * @return The zoom in factor.
@@ -682,7 +752,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     private void attemptEditChartProperties() {
         SWTChartEditor editor = new SWTChartEditor(this.canvas.getDisplay(), 
                 this.chart);
-        // ChartEditorManager.getChartEditor(canvas.getDisplay(), this.chart);
+        //ChartEditorManager.getChartEditor(canvas.getDisplay(), this.chart);
         editor.open();
     }
 
@@ -714,7 +784,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     public void doSaveAs() throws IOException {
         FileDialog fileDialog = new FileDialog(this.canvas.getShell(), 
                 SWT.SAVE);
-        String[] extensions = { "*.png" };
+        String[] extensions = {"*.png"};
         fileDialog.setFilterExtensions(extensions);
         String filename = fileDialog.open();
         if (filename != null) {
@@ -955,8 +1025,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             Zoomable z = (Zoomable) p;
             // we need to guard against this.zoomPoint being null
             org.eclipse.swt.graphics.Point zp = 
-                (this.zoomPoint != null ? this.zoomPoint : 
-                    new org.eclipse.swt.graphics.Point(0,0));
+                    (this.zoomPoint != null ? this.zoomPoint 
+                    : new org.eclipse.swt.graphics.Point(0, 0));
             z.zoomDomainAxes(0.0, this.info.getPlotInfo(), 
                     SWTUtils.toAwtPoint(zp));
         }
@@ -971,8 +1041,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             Zoomable z = (Zoomable) p;
             // we need to guard against this.zoomPoint being null
             org.eclipse.swt.graphics.Point zp = 
-                (this.zoomPoint != null ? this.zoomPoint : 
-                    new org.eclipse.swt.graphics.Point(0,0));
+                    (this.zoomPoint != null ? this.zoomPoint 
+                    : new org.eclipse.swt.graphics.Point(0, 0));
             z.zoomRangeAxes(0.0, this.info.getPlotInfo(), 
                     SWTUtils.toAwtPoint(zp)); 
         }
@@ -1123,7 +1193,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     /**
      * @param displayToolTips the displayToolTips to set
      */
-    public void setDisplayToolTips( boolean displayToolTips ) {
+    public void setDisplayToolTips(boolean displayToolTips) {
         this.displayToolTips = displayToolTips;
     }
 
@@ -1193,9 +1263,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             }
 
             if (this.zoomInBothMenuItem != null) {
-                this.zoomInBothMenuItem.setEnabled(
-                    isDomainZoomable & isRangeZoomable
-                );
+                this.zoomInBothMenuItem.setEnabled(isDomainZoomable 
+                        & isRangeZoomable);
             }
             if (this.zoomOutBothMenuItem != null) {
                 this.zoomOutBothMenuItem.setEnabled(isDomainZoomable 
@@ -1227,9 +1296,9 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                     job.print();
                 }
                 catch (PrinterException e) {
-                    MessageBox messageBox = new MessageBox( 
-                            this.canvas.getShell(), SWT.OK | SWT.ICON_ERROR );
-                    messageBox.setMessage( e.getMessage() );
+                    MessageBox messageBox = new MessageBox(
+                            this.canvas.getShell(), SWT.OK | SWT.ICON_ERROR);
+                    messageBox.setMessage(e.getMessage());
                     messageBox.open();
                 }
             }
@@ -1406,22 +1475,22 @@ public class ChartComposite extends Composite implements ChartChangeListener,
          * this helps to handle the mouse events and besides, 
          * those values are unused AFAIK. */
         else if (command.equals(ZOOM_IN_BOTH_COMMAND)) {
-            zoomInBoth( e.x, e.y );
+            zoomInBoth(e.x, e.y);
         }
         else if (command.equals(ZOOM_IN_DOMAIN_COMMAND)) {
-            zoomInDomain( e.x, e.y );
+            zoomInDomain(e.x, e.y);
         }
         else if (command.equals(ZOOM_IN_RANGE_COMMAND)) {
-            zoomInRange( e.x, e.y );
+            zoomInRange(e.x, e.y);
         }
         else if (command.equals(ZOOM_OUT_BOTH_COMMAND)) {
-            zoomOutBoth( e.x, e.y );
+            zoomOutBoth(e.x, e.y);
         }
         else if (command.equals(ZOOM_OUT_DOMAIN_COMMAND)) {
-            zoomOutDomain( e.x, e.y );
+            zoomOutDomain(e.x, e.y);
         }
         else if (command.equals(ZOOM_OUT_RANGE_COMMAND)) {
-            zoomOutRange( e.x, e.y );
+            zoomOutRange(e.x, e.y);
         }
         else if (command.equals(ZOOM_RESET_BOTH_COMMAND)) {
             restoreAutoBounds();
@@ -1442,7 +1511,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         }
         /*
         CairoImage image = new CairoImage( 
-                this.getBounds().width, this.getBounds().height );
+                this.getBounds().width, this.getBounds().height);
         Graphics2D g2 = image.createGraphics2D();
         double x = pageFormat.getImageableX();
         double y = pageFormat.getImageableY();
@@ -1618,7 +1687,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         if (this.displayToolTips) {                            
             String s = getToolTipText(event);
             if (s == null && this.canvas.getToolTipText() != null
-                    || s!=null && !s.equals(this.canvas.getToolTipText()))
+                    || s != null && !s.equals(this.canvas.getToolTipText()))
                 this.canvas.setToolTipText(s);
         }
 
@@ -1704,7 +1773,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         boolean scale = false;
         int drawWidth = available.width;
         int drawHeight = available.height;
-        if ( drawWidth == 0.0 || drawHeight == 0.0 ) return;
+        if (drawWidth == 0.0 || drawHeight == 0.0) return;
         this.scaleX = 1.0;
         this.scaleY = 1.0;
         if (drawWidth < this.minimumDrawWidth) {
@@ -1729,19 +1798,19 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         }
         // are we using the chart buffer?
         if (this.useBuffer) {
-            //SwtGraphics2D sg2 = new SwtGraphics2D( e.gc );
+            //SwtGraphics2D sg2 = new SwtGraphics2D(e.gc);
             this.chartBuffer = (org.eclipse.swt.graphics.Image) 
                     this.canvas.getData("double-buffer-image");
             // do we need to fill the buffer?
             if (this.chartBuffer == null
                     || this.chartBufferWidth != available.width
-                    || this.chartBufferHeight != available.height ) {
+                    || this.chartBufferHeight != available.height) {
                 this.chartBufferWidth = available.width;
                 this.chartBufferHeight = available.height;
                 if (this.chartBuffer != null) {
                     this.chartBuffer.dispose();
                 }
-                this.chartBuffer = new org.eclipse.swt.graphics.Image( 
+                this.chartBuffer = new org.eclipse.swt.graphics.Image(
                         getDisplay(), this.chartBufferWidth, 
                         this.chartBufferHeight);
                 this.refreshBuffer = true;
