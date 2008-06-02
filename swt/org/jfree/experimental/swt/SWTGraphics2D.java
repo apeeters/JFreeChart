@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------
  * SWTGraphics2D.java
  * ------------------
- * (C) Copyright 2006, 2007, by Henry Proudhon and Contributors.
+ * (C) Copyright 2006-2008, by Henry Proudhon and Contributors.
  *
  * Original Author:  Henry Proudhon (henry.proudhon AT ensmp.fr);
  * Contributor(s):   Cedric Chabanois (cchabanois AT no-log.org);
@@ -287,7 +287,7 @@ public class SWTGraphics2D extends Graphics2D {
             AlphaComposite acomp = (AlphaComposite) this.composite;
             switch (acomp.getRule()) {
             case AlphaComposite.SRC_OVER:
-                this.gc.setAlpha((int) (color.getAlpha()*acomp.getAlpha()));
+                this.gc.setAlpha((int) (color.getAlpha() * acomp.getAlpha()));
                 break;
             default:
                 this.gc.setAlpha(color.getAlpha());
@@ -346,7 +346,7 @@ public class SWTGraphics2D extends Graphics2D {
         this.composite = comp;
         if (comp instanceof AlphaComposite) {
             AlphaComposite acomp = (AlphaComposite) comp; 
-            int alpha = (int) (acomp.getAlpha()*0xFF);
+            int alpha = (int) (acomp.getAlpha() * 0xFF);
             this.gc.setAlpha(alpha);
         } 
         else {
@@ -530,7 +530,7 @@ public class SWTGraphics2D extends Graphics2D {
     public void rotate(double theta) {
         Transform swtTransform = new Transform(this.gc.getDevice()); 
         this.gc.getTransform(swtTransform);
-        swtTransform.rotate( (float) (theta * 180 / Math.PI));
+        swtTransform.rotate((float) (theta * 180 / Math.PI));
         this.gc.setTransform(swtTransform);
         swtTransform.dispose();
     }
@@ -610,7 +610,7 @@ public class SWTGraphics2D extends Graphics2D {
     public void drawPolygon(int [] xPoints, int [] yPoints, int npoints) {
         drawPolyline(xPoints, yPoints, npoints);
         if (npoints > 1) {
-            this.gc.drawLine(xPoints[npoints-1], yPoints[npoints-1], 
+            this.gc.drawLine(xPoints[npoints - 1], yPoints[npoints - 1], 
                     xPoints[0], yPoints[0]);            
         }
     }
@@ -875,7 +875,7 @@ public class SWTGraphics2D extends Graphics2D {
      */
     public void drawString(String text, float x, float y) {
         float fm = this.gc.getFontMetrics().getAscent();
-        this.gc.drawString(text, (int) x, (int) ( y - fm ), true);
+        this.gc.drawString(text, (int) x, (int) (y - fm), true);
     }
 
     /* (non-Javadoc)
@@ -1235,23 +1235,6 @@ public class SWTGraphics2D extends Graphics2D {
         return path;
     }
 
-//    /**
-//     * Converts an AWT transform into the equivalent SWT transform.
-//     * 
-//     * @param awtTransform  the AWT transform.
-//     * 
-//     * @return The SWT transform.
-//     */
-//    private Transform toSwtTransform(AffineTransform awtTransform) {
-//        Transform t = new Transform(this.gc.getDevice());
-//        double[] matrix = new double[6];
-//        awtTransform.getMatrix(matrix);
-//        t.setElements((float) matrix[0], (float) matrix[1],
-//                (float) matrix[2], (float) matrix[3],
-//                (float) matrix[4], (float) matrix[5]); 
-//        return t;
-//    }
-
     /**
      * Converts an SWT transform into the equivalent AWT transform.
      * 
@@ -1265,4 +1248,5 @@ public class SWTGraphics2D extends Graphics2D {
         AffineTransform awtTransform = new AffineTransform(elements);
         return awtTransform;
     }
+
 }
