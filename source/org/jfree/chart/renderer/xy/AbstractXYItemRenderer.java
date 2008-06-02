@@ -92,7 +92,7 @@
  * 06-Feb-2007 : Added new updateCrosshairValues() method that takes into
  *               account multiple axis plots (see bug 1086307) (DG);
  * 20-Feb-2007 : Fixed equals() method implementation (DG);
- * 01-Mar-2007 : Fixed interval marker drawing (patch 1670686 thanks to 
+ * 01-Mar-2007 : Fixed interval marker drawing (patch 1670686 thanks to
  *               Sergei Ivanov) (DG);
  * 22-Mar-2007 : Modified the tool tip generator look up (DG);
  * 23-Mar-2007 : Added drawDomainLine() method (DG);
@@ -103,7 +103,7 @@
  * 27-Jun-2007 : Removed drawDomainGridline() method - use drawDomainLine()
  *               instead (DG);
  * 12-Nov-2007 : Fixed domain and range band drawing methods (DG);
- * 07-Apr-2008 : Updated various methods to use fireChangeEvent(), plus 
+ * 07-Apr-2008 : Updated various methods to use fireChangeEvent(), plus
  *               minor API doc update (DG);
  *
  */
@@ -166,9 +166,7 @@ import org.jfree.data.xy.XYDataset;
  * implementations.
  */
 public abstract class AbstractXYItemRenderer extends AbstractRenderer
-                                             implements XYItemRenderer,
-                                                        Cloneable,
-                                                        Serializable {
+        implements XYItemRenderer, Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 8019124836026607990L;
@@ -190,7 +188,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
 
     /** A list of URL generators (one per series). */
     private ObjectList urlGeneratorList;
-    
+
     /** The URL text generator. */
     private XYURLGenerator baseURLGenerator;
 
@@ -320,7 +318,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param series  the series index (zero based).
      *
      * @return The generator (possibly <code>null</code>).
-     * 
+     *
      * @see #setSeriesItemLabelGenerator(int, XYItemLabelGenerator)
      */
     public XYItemLabelGenerator getSeriesItemLabelGenerator(int series) {
@@ -333,7 +331,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      *
      * @param series  the series index (zero based).
      * @param generator  the generator (<code>null</code> permitted).
-     * 
+     *
      * @see #getSeriesItemLabelGenerator(int)
      */
     public void setSeriesItemLabelGenerator(int series,
@@ -343,23 +341,23 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     }
 
     /**
-     * Sets the item label generator for the specified series and, if 
+     * Sets the item label generator for the specified series and, if
      * requested, sends a {@link RendererChangeEvent} to all registered
      * listeners.
-     * 
+     *
      * @param series  the series index.
      * @param generator  the label generator (<code>null</code> permitted);
      * @param notify  notify listeners?
-     * 
+     *
      * @see #getSeriesItemLabelGenerator(int)
      *
      * @since 1.2.0
      */
-    public void setSeriesItemLabelGenerator(int series, 
+    public void setSeriesItemLabelGenerator(int series,
             XYItemLabelGenerator generator, boolean notify) {
         this.itemLabelGeneratorList.set(series, generator);
         if (notify) {
-            fireChangeEvent();        
+            fireChangeEvent();
         }
     }
 
@@ -388,12 +386,12 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      *
      * @param generator  the generator (<code>null</code> permitted).
      * @param notify  notify listeners?
-     * 
+     *
      * @since 1.2.0
-     * 
+     *
      * @see #getBaseItemLabelGenerator()
      */
-    public void setBaseItemLabelGenerator(XYItemLabelGenerator generator, 
+    public void setBaseItemLabelGenerator(XYItemLabelGenerator generator,
             boolean notify) {
         this.baseItemLabelGenerator = generator;
         if (notify) {
@@ -404,8 +402,8 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     // TOOL TIP GENERATOR
 
     /**
-     * Returns the tool tip generator for a data item.  If, for some reason, 
-     * you want a different generator for individual items, you can override 
+     * Returns the tool tip generator for a data item.  If, for some reason,
+     * you want a different generator for individual items, you can override
      * this method.
      *
      * @param series  the series index (zero based).
@@ -428,7 +426,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param series  the series index (zero based).
      *
      * @return The generator (possibly <code>null</code>).
-     * 
+     *
      * @see #setSeriesToolTipGenerator(int, XYToolTipGenerator)
      */
     public XYToolTipGenerator getSeriesToolTipGenerator(int series) {
@@ -454,7 +452,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param series  the series index (zero based).
      * @param generator  the generator (<code>null</code> permitted).
      * @param notify  notify listeners?
-     * 
+     *
      * @since 1.2.0
      */
     public void setSeriesToolTipGenerator(int series,
@@ -469,7 +467,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * Returns the base tool tip generator.
      *
      * @return The generator (possibly <code>null</code>).
-     * 
+     *
      * @see #setBaseToolTipGenerator(XYToolTipGenerator)
      */
     public XYToolTipGenerator getBaseToolTipGenerator() {
@@ -481,7 +479,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * to all registered listeners.
      *
      * @param generator  the generator (<code>null</code> permitted).
-     * 
+     *
      * @see #getBaseToolTipGenerator()
      */
     public void setBaseToolTipGenerator(XYToolTipGenerator generator) {
@@ -489,17 +487,17 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     }
 
     /**
-     * Sets the default tool tip generator and, if requested, sends a 
+     * Sets the default tool tip generator and, if requested, sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param generator  the generator (<code>null</code> permitted).
      * @param notify  notify listeners?
-     * 
+     *
      * @see #getBaseToolTipGenerator()
-     * 
+     *
      * @since 1.2.0
      */
-    public void setBaseToolTipGenerator(XYToolTipGenerator generator, 
+    public void setBaseToolTipGenerator(XYToolTipGenerator generator,
             boolean notify) {
         this.baseToolTipGenerator = generator;
         if (notify) {
@@ -511,47 +509,47 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
 
     /**
      * Returns the URL generator for the specified item.
-     * 
+     *
      * @param series  the series index.
      * @param item  the item index.
-     * 
+     *
      * @return The generator (possibly <code>null</code>).
-     * 
+     *
      * @since 1.2.0
      */
     public XYURLGenerator getURLGenerator(int series, int item) {
-        XYURLGenerator generator 
+        XYURLGenerator generator
                 = (XYURLGenerator) this.urlGeneratorList.get(series);
         if (generator == null) {
             generator = this.baseURLGenerator;
         }
         return generator;
     }
-    
+
     /**
      * Returns the URL generator for the specified series, if one is defined.
-     * 
+     *
      * @param series  the series index.
-     * 
+     *
      * @return The URL generator (possibly <code>null</code>).
-     * 
+     *
      * @see #setSeriesURLGenerator(int, XYURLGenerator)
-     * 
+     *
      * @since 1.2.0
      */
     public XYURLGenerator getSeriesURLGenerator(int series) {
         return (XYURLGenerator) this.urlGeneratorList.get(series);
     }
-    
+
     /**
-     * Sets the URL generator for the specified series and sends a 
+     * Sets the URL generator for the specified series and sends a
      * {@link RendererChangeEvent} to all registered listeners.
-     * 
+     *
      * @param series  the series index.
      * @param generator  the generator (<code>null</code> permitted)
-     * 
+     *
      * @see #getSeriesURLGenerator(int)
-     * 
+     *
      * @since 1.2.0
      */
     public void setSeriesURLGenerator(int series, XYURLGenerator generator) {
@@ -561,59 +559,59 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     /**
      * Sets the URL generator for the specified series and, if requested,
      * sends a {@link RendererChangeEvent} to all registered listeners.
-     * 
+     *
      * @param series  the series index.
      * @param generator  the generator (<code>null</code> permitted).
      * @param notify  notify listeners?
-     * 
+     *
      * @see #getSeriesURLGenerator(int)
-     * 
+     *
      * @since 1.2.0
      */
-    public void setSeriesURLGenerator(int series, XYURLGenerator generator, 
+    public void setSeriesURLGenerator(int series, XYURLGenerator generator,
             boolean notify) {
         this.toolTipGeneratorList.set(series, generator);
         if (notify) {
             fireChangeEvent();
         }
     }
-    
+
     /**
      * Returns the default URL generator.
-     * 
+     *
      * @return The default URL generator (possibly <code>null</code>).
-     * 
+     *
      * @see #setBaseURLGenerator(XYURLGenerator)
-     * 
+     *
      * @since 1.2.0
      */
     public XYURLGenerator getBaseURLGenerator() {
         return this.baseURLGenerator;
     }
-    
+
     /**
      * Sets the default URL generator and sends a {@link RendererChangeEvent}
      * to all registered listeners.
-     * 
+     *
      * @param generator  the generator (<code>null</code> permitted).
-     * 
+     *
      * @see #getBaseURLGenerator()
-     * 
+     *
      * @since 1.2.0
      */
     public void setBaseURLGenerator(XYURLGenerator generator) {
         setBaseURLGenerator(generator, true);
     }
-    
+
     /**
-     * Sets the default URL generator and, if requested, sends a 
+     * Sets the default URL generator and, if requested, sends a
      * {@link RendererChangeEvent} to all registered listeners.
-     * 
+     *
      * @param generator  the generator (<code>null</code> permitted).
      * @param notify  notify listener?
      *
      * @see #getBaseURLGenerator()
-     * 
+     *
      * @since 1.2.0
      */
     public void setBaseURLGenerator(XYURLGenerator generator, boolean notify) {
@@ -622,9 +620,9 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             fireChangeEvent();
         }
     }
-    
+
     // ANNOTATIONS
-    
+
     /**
      * Adds an annotation and sends a {@link RendererChangeEvent} to all
      * registered listeners.  The annotation is added to the foreground
@@ -638,7 +636,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     }
 
     /**
-     * Adds an annotation to the specified layer and sends a 
+     * Adds an annotation to the specified layer and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param annotation  the annotation (<code>null</code> not permitted).
@@ -693,7 +691,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * when no area is specified.
      *
      * @return A radius.
-     * 
+     *
      * @see #setDefaultEntityRadius(int)
      */
     public int getDefaultEntityRadius() {
@@ -705,7 +703,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * when no area is specified.
      *
      * @param radius  the radius.
-     * 
+     *
      * @see #getDefaultEntityRadius()
      */
     public void setDefaultEntityRadius(int radius) {
@@ -796,7 +794,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      *
      * @return The range (<code>null</code> if the dataset is <code>null</code>
      *         or empty).
-     *         
+     *
      * @see #findRangeBounds(XYDataset)
      */
     public Range findDomainBounds(XYDataset dataset) {
@@ -816,7 +814,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      *
      * @return The range (<code>null</code> if the dataset is <code>null</code>
      *         or empty).
-     *         
+     *
      * @see #findDomainBounds(XYDataset)
      */
     public Range findRangeBounds(XYDataset dataset) {
@@ -919,11 +917,11 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                 plot.getDomainAxisEdge());
         Rectangle2D band;
         if (plot.getOrientation() == PlotOrientation.VERTICAL) {
-            band = new Rectangle2D.Double(Math.min(x1, x2), dataArea.getMinY(), 
+            band = new Rectangle2D.Double(Math.min(x1, x2), dataArea.getMinY(),
                     Math.abs(x2 - x1), dataArea.getWidth());
         }
         else {
-            band = new Rectangle2D.Double(dataArea.getMinX(), Math.min(x1, x2), 
+            band = new Rectangle2D.Double(dataArea.getMinX(), Math.min(x1, x2),
                     dataArea.getWidth(), Math.abs(x2 - x1));
         }
         Paint paint = plot.getDomainTickBandPaint();
@@ -949,7 +947,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public void fillRangeGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
             Rectangle2D dataArea, double start, double end) {
 
-        double y1 = axis.valueToJava2D(start, dataArea, 
+        double y1 = axis.valueToJava2D(start, dataArea,
                 plot.getRangeAxisEdge());
         double y2 = axis.valueToJava2D(end, dataArea, plot.getRangeAxisEdge());
         Rectangle2D band;
@@ -981,7 +979,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param value  the value at which the grid line should be drawn.
      * @param paint  the paint (<code>null</code> not permitted).
      * @param stroke  the stroke (<code>null</code> not permitted).
-     * 
+     *
      * @since 1.0.5
      */
     public void drawDomainLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
@@ -994,14 +992,14 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
 
         PlotOrientation orientation = plot.getOrientation();
         Line2D line = null;
-        double v = axis.valueToJava2D(value, dataArea, 
+        double v = axis.valueToJava2D(value, dataArea,
                 plot.getDomainAxisEdge());
         if (orientation == PlotOrientation.HORIZONTAL) {
-            line = new Line2D.Double(dataArea.getMinX(), v, dataArea.getMaxX(), 
+            line = new Line2D.Double(dataArea.getMinX(), v, dataArea.getMaxX(),
                     v);
         }
         else if (orientation == PlotOrientation.VERTICAL) {
-            line = new Line2D.Double(v, dataArea.getMinY(), v, 
+            line = new Line2D.Double(v, dataArea.getMinY(), v,
                     dataArea.getMaxY());
         }
 
@@ -1725,9 +1723,9 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param dataset  the dataset.
      * @param series  the series.
      * @param item  the item.
-     * @param entityX  the entity's center x-coordinate in user space (only 
+     * @param entityX  the entity's center x-coordinate in user space (only
      *                 used if <code>area</code> is <code>null</code>).
-     * @param entityY  the entity's center y-coordinate in user space (only 
+     * @param entityY  the entity's center y-coordinate in user space (only
      *                 used if <code>area</code> is <code>null</code>).
      */
     protected void addEntity(EntityCollection entities, Shape area,
