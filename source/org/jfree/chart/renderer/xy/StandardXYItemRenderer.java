@@ -104,6 +104,7 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 27-Jun-2007 : Updated constructor for method changes in XYItemRenderer (DG);
  * 02-Jul-2007 : Removed override field (DG);
+ * 02-Jun-2008 : Fixed tooltips at lower edges of data area (DG);
  *
  */
 
@@ -921,7 +922,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                 rangeAxisIndex, transX1, transY1, orientation);
 
         // add an entity for the item...
-        if (entities != null && dataArea.contains(xx, yy)) {
+        if (entities != null && isPointInRect(dataArea, xx, yy)) {
             addEntity(entities, entityArea, dataset, series, item, xx, yy);
         }
 

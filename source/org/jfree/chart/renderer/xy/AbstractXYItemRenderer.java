@@ -105,6 +105,7 @@
  * 12-Nov-2007 : Fixed domain and range band drawing methods (DG);
  * 07-Apr-2008 : Updated various methods to use fireChangeEvent(), plus
  *               minor API doc update (DG);
+ * 02-Jun-2008 : Added isPointInRect() method (DG);
  *
  */
 
@@ -1734,10 +1735,19 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         if (!getItemCreateEntity(series, item)) {
             return;
         }
-        if (area == null) {
-            area = new Ellipse2D.Double(entityX - this.defaultEntityRadius,
-                    entityY - this.defaultEntityRadius,
-                    this.defaultEntityRadius * 2, this.defaultEntityRadius * 2);
+        Shape hotspot = area;
+        if (hotspot == null) {
+        	double w = this.defaultEntityRadius * 2;
+        	if (getPlot().getOrientation() == PlotOrientation.VERTICAL) {
+        		hotspot = new Ellipse2D.Double(
+        				entityX - this.defaultEntityRadius,
+        				entityY - this.defaultEntityRadius, w, w);
+        	}
+        	else {
+        		hotspot = new Ellipse2D.Double(
+        				entityY - this.defaultEntityRadius,
+        	            entityX - this.defaultEntityRadius, w, w);
+        	}
         }
         String tip = null;
         XYToolTipGenerator generator = getToolTipGenerator(series, item);
@@ -1752,6 +1762,25 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         XYItemEntity entity = new XYItemEntity(area, dataset, series, item,
                 tip, url);
         entities.add(entity);
+    }
+
+    /**
+     * Returns <code>true</code> if the specified point (x, y) falls within or
+     * on the boundary of the specified rectangle.
+     *
+     * @param rect  the rectangle (<code>null</code> not permitted).
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.10
+     */
+    public static boolean isPointInRect(Rectangle2D rect, double x, double y) {
+        // TODO: For JFreeChart 1.2.0, this method should go in the
+    	//       ShapeUtilities class
+    	return (x >= rect.getMinX() && x <= rect.getMaxX()
+        		&& y >= rect.getMinY() && y <= rect.getMaxY());
     }
 
 }

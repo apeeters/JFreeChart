@@ -62,6 +62,7 @@
  *               items that are not displayed (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Removed some series override attributes (DG);
+ * 02-Jun-2008 : Fixed tooltips at lower edges of data area (DG);
  *
  */
 
@@ -1021,11 +1022,11 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
         int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);
         updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,
-                rangeAxisIndex, transX1, transY1, plot.getOrientation());
+                rangeAxisIndex, transX1, transY1, orientation);
 
         // add an entity for the item, but only if it falls within the data
         // area...
-        if (entities != null && dataArea.contains(xx, yy)) {
+        if (entities != null && isPointInRect(dataArea, xx, yy)) {
             addEntity(entities, entityArea, dataset, series, item, xx, yy);
         }
     }
@@ -1067,7 +1068,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
                 Shape shape = lookupSeriesShape(series);
                 boolean shapeIsFilled = getItemShapeFilled(series, 0);
                 Paint fillPaint = (this.useFillPaint
-                    ? lookupSeriesFillPaint(series) : lookupSeriesPaint(series));
+                    ? lookupSeriesFillPaint(series)
+                    : lookupSeriesPaint(series));
                 boolean shapeOutlineVisible = this.drawOutlines;
                 Paint outlinePaint = (this.useOutlinePaint
                     ? lookupSeriesOutlinePaint(series)
