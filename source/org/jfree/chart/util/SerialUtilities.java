@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------------
  * SerialUtilities.java
  * --------------------
- * (C) Copyright 2000-2007, by Object Refinery Limited.
+ * (C) Copyright 2000-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Arik Levin;
@@ -40,7 +40,7 @@
  * 22-Feb-2005 : Added support for Arc2D - see patch 1147035 by Arik Levin (DG);
  * 29-Jul-2005 : Added support for AttributedString (DG);
  * 21-Jun-2007 : Copied from JCommon (DG);
- * 
+ *
  */
 
 package org.jfree.chart.util;
@@ -82,15 +82,15 @@ public class SerialUtilities {
     /**
      * Returns <code>true</code> if a class implements <code>Serializable</code>
      * and <code>false</code> otherwise.
-     * 
+     *
      * @param c  the class.
-     * 
+     *
      * @return A boolean.
      */
     public static boolean isSerializable(Class c) {
         return Serializable.class.isAssignableFrom(c);
     }
-    
+
     /**
      * Reads a <code>Paint</code> object that has been serialised by the
      * {@link SerialUtilities#writePaint(Paint, ObjectOutputStream)} method.
@@ -106,7 +106,7 @@ public class SerialUtilities {
         throws IOException, ClassNotFoundException {
 
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         Paint result = null;
         boolean isNull = stream.readBoolean();
@@ -138,11 +138,11 @@ public class SerialUtilities {
      *
      * @throws IOException if there is an I/O error.
      */
-    public static void writePaint(Paint paint, ObjectOutputStream stream) 
+    public static void writePaint(Paint paint, ObjectOutputStream stream)
             throws IOException {
 
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         if (paint != null) {
             stream.writeBoolean(false);
@@ -182,7 +182,7 @@ public class SerialUtilities {
             throws IOException, ClassNotFoundException {
 
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         Stroke result = null;
         boolean isNull = stream.readBoolean();
@@ -195,7 +195,7 @@ public class SerialUtilities {
                 float miterLimit = stream.readFloat();
                 float[] dash = (float[]) stream.readObject();
                 float dashPhase = stream.readFloat();
-                result = new BasicStroke(width, cap, join, miterLimit, dash, 
+                result = new BasicStroke(width, cap, join, miterLimit, dash,
                         dashPhase);
             }
             else {
@@ -208,8 +208,8 @@ public class SerialUtilities {
 
     /**
      * Serialises a <code>Stroke</code> object.  This code handles the
-     * <code>BasicStroke</code> class which is the only <code>Stroke</code> 
-     * implementation provided by the JDK (and isn't directly 
+     * <code>BasicStroke</code> class which is the only <code>Stroke</code>
+     * implementation provided by the JDK (and isn't directly
      * <code>Serializable</code>).
      *
      * @param stroke  the stroke object (<code>null</code> permitted).
@@ -217,11 +217,11 @@ public class SerialUtilities {
      *
      * @throws IOException if there is an I/O error.
      */
-    public static void writeStroke(Stroke stroke, ObjectOutputStream stream) 
+    public static void writeStroke(Stroke stroke, ObjectOutputStream stream)
             throws IOException {
 
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         if (stroke != null) {
             stream.writeBoolean(false);
@@ -246,7 +246,7 @@ public class SerialUtilities {
     }
 
     /**
-     * Reads a <code>Shape</code> object that has been serialised by the 
+     * Reads a <code>Shape</code> object that has been serialised by the
      * {@link #writeShape(Shape, ObjectOutputStream)} method.
      *
      * @param stream  the input stream (<code>null</code> not permitted).
@@ -260,7 +260,7 @@ public class SerialUtilities {
             throws IOException, ClassNotFoundException {
 
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         Shape result = null;
         boolean isNull = stream.readBoolean();
@@ -296,7 +296,7 @@ public class SerialUtilities {
                 double ae = stream.readDouble(); // Angle Extent
                 int at = stream.readInt();       // Arc type
                 result = new Arc2D.Double(x, y, w, h, as, ae, at);
-            }            
+            }
             else if (c.equals(GeneralPath.class)) {
                 GeneralPath gp = new GeneralPath();
                 float[] args = new float[6];
@@ -306,31 +306,31 @@ public class SerialUtilities {
                     for (int i = 0; i < 6; i++) {
                         args[i] = stream.readFloat();
                     }
-                    switch (type) { 
-                        case PathIterator.SEG_MOVETO :  
+                    switch (type) {
+                        case PathIterator.SEG_MOVETO :
                             gp.moveTo(args[0], args[1]);
                             break;
-                        case PathIterator.SEG_LINETO :                           
+                        case PathIterator.SEG_LINETO :
                             gp.lineTo(args[0], args[1]);
-                            break; 
+                            break;
                         case PathIterator.SEG_CUBICTO :
                             gp.curveTo(
-                                args[0], args[1], args[2], 
+                                args[0], args[1], args[2],
                                 args[3], args[4], args[5]
                             );
                             break;
                         case PathIterator.SEG_QUADTO :
                             gp.quadTo(args[0], args[1], args[2], args[3]);
-                            break;                  
+                            break;
                         case PathIterator.SEG_CLOSE :
                             //result = gp;
                             break;
-                        default : 
+                        default :
                             throw new RuntimeException(
                                 "JFreeChart - No path exists"
-                            ); 
-                    } 
-                    gp.setWindingRule(stream.readInt());    
+                            );
+                    }
+                    gp.setWindingRule(stream.readInt());
                     hasNext = stream.readBoolean();
                 }
                 result = gp;
@@ -351,11 +351,11 @@ public class SerialUtilities {
      *
      * @throws IOException if there is an I/O error.
      */
-    public static void writeShape(Shape shape, ObjectOutputStream stream) 
+    public static void writeShape(Shape shape, ObjectOutputStream stream)
             throws IOException {
 
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         if (shape != null) {
             stream.writeBoolean(false);
@@ -423,7 +423,7 @@ public class SerialUtilities {
     }
 
     /**
-     * Reads a <code>Point2D</code> object that has been serialised by the 
+     * Reads a <code>Point2D</code> object that has been serialised by the
      * {@link #writePoint2D(Point2D, ObjectOutputStream)} method.
      *
      * @param stream  the input stream (<code>null</code> not permitted).
@@ -436,7 +436,7 @@ public class SerialUtilities {
         throws IOException {
 
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         Point2D result = null;
         boolean isNull = stream.readBoolean();
@@ -457,11 +457,11 @@ public class SerialUtilities {
      *
      * @throws IOException if there is an I/O error.
      */
-    public static void writePoint2D(Point2D p, ObjectOutputStream stream) 
+    public static void writePoint2D(Point2D p, ObjectOutputStream stream)
             throws IOException {
 
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         if (p != null) {
             stream.writeBoolean(false);
@@ -472,10 +472,10 @@ public class SerialUtilities {
             stream.writeBoolean(true);
         }
     }
-    
+
     /**
-     * Reads a <code>AttributedString</code> object that has been serialised by 
-     * the {@link SerialUtilities#writeAttributedString(AttributedString, 
+     * Reads a <code>AttributedString</code> object that has been serialised by
+     * the {@link SerialUtilities#writeAttributedString(AttributedString,
      * ObjectOutputStream)} method.
      *
      * @param stream  the input stream (<code>null</code> not permitted).
@@ -486,11 +486,11 @@ public class SerialUtilities {
      * @throws ClassNotFoundException  if there is a problem loading a class.
      */
     public static AttributedString readAttributedString(
-            ObjectInputStream stream) throws IOException, 
+            ObjectInputStream stream) throws IOException,
             ClassNotFoundException {
-        
+
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         AttributedString result = null;
         boolean isNull = stream.readBoolean();
@@ -510,7 +510,7 @@ public class SerialUtilities {
         }
         return result;
     }
-    
+
     /**
      * Serialises an <code>AttributedString</code> object.
      *
@@ -519,11 +519,11 @@ public class SerialUtilities {
      *
      * @throws IOException if there is an I/O error.
      */
-    public static void writeAttributedString(AttributedString as, 
+    public static void writeAttributedString(AttributedString as,
             ObjectOutputStream stream) throws IOException {
-        
+
         if (stream == null) {
-            throw new IllegalArgumentException("Null 'stream' argument.");   
+            throw new IllegalArgumentException("Null 'stream' argument.");
         }
         if (as != null) {
             stream.writeBoolean(false);
@@ -537,7 +537,7 @@ public class SerialUtilities {
                 current = aci.next();
             }
             stream.writeObject(plainStr.toString());
-            
+
             // then write the attributes and limits for each run
             current = aci.first();
             int begin = aci.getBeginIndex();
@@ -546,11 +546,11 @@ public class SerialUtilities {
                 // is not CharacterIterator.DONE, it will know to read the
                 // run limits and attributes
                 stream.writeChar(current);
-                
+
                 // now write the limit, adjusted as if beginIndex is zero
                 int limit = aci.getRunLimit();
                 stream.writeInt(limit - begin);
-                
+
                 // now write the attribute set
                 Map atts = new HashMap(aci.getAttributes());
                 stream.writeObject(atts);
@@ -558,7 +558,7 @@ public class SerialUtilities {
             }
             // write a character that signals to the reader that all runs
             // are done...
-            stream.writeChar(CharacterIterator.DONE);  
+            stream.writeChar(CharacterIterator.DONE);
         }
         else {
             // write a flag that indicates a null
