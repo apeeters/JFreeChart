@@ -36,6 +36,7 @@
  * -------
  * 29-Sep-2004 : Version 1 (DG);
  * 07-Jan-2005 : Added hashCode() test (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -57,6 +58,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.annotations.XYShapeAnnotation;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Some tests for the {@link XYShapeAnnotation} class.
@@ -165,7 +167,6 @@ public class XYShapeAnnotationTests extends TestCase {
      * Confirm that cloning works.
      */
     public void testCloning() {
-
         XYShapeAnnotation a1 = new XYShapeAnnotation(
                 new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0),
                 new BasicStroke(1.2f), Color.red, Color.blue);
@@ -179,6 +180,16 @@ public class XYShapeAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        XYShapeAnnotation a1 = new XYShapeAnnotation(
+                new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0),
+                new BasicStroke(1.2f), Color.red, Color.blue);
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
     /**

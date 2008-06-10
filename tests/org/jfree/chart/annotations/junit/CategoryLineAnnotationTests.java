@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 29-Jul-2005 : Version 1 (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -54,6 +55,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.annotations.CategoryLineAnnotation;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link CategoryLineAnnotationTests} class.
@@ -162,6 +164,16 @@ public class CategoryLineAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        CategoryLineAnnotation a1 = new CategoryLineAnnotation(
+                "Category 1", 1.0, "Category 2", 2.0, Color.red,
+                new BasicStroke(1.0f));
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
     /**

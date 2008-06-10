@@ -36,6 +36,7 @@
  * -------
  * 19-Aug-2003 : Version 1 (DG);
  * 07-Jan-2005 : Added hashCode() test (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -57,6 +58,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.annotations.XYLineAnnotation;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link XYLineAnnotation} class.
@@ -86,12 +88,10 @@ public class XYLineAnnotationTests extends TestCase {
      */
     public void testEquals() {
         Stroke stroke = new BasicStroke(2.0f);
-        XYLineAnnotation a1 = new XYLineAnnotation(
-            10.0, 20.0, 100.0, 200.0, stroke, Color.blue
-        );
-        XYLineAnnotation a2 = new XYLineAnnotation(
-            10.0, 20.0, 100.0, 200.0, stroke, Color.blue
-        );
+        XYLineAnnotation a1 = new XYLineAnnotation(10.0, 20.0, 100.0, 200.0,
+                stroke, Color.blue);
+        XYLineAnnotation a2 = new XYLineAnnotation(10.0, 20.0, 100.0, 200.0,
+                stroke, Color.blue);
         assertTrue(a1.equals(a2));
         assertTrue(a2.equals(a1));
 
@@ -136,12 +136,10 @@ public class XYLineAnnotationTests extends TestCase {
      */
     public void testHashCode() {
         Stroke stroke = new BasicStroke(2.0f);
-        XYLineAnnotation a1 = new XYLineAnnotation(
-            10.0, 20.0, 100.0, 200.0, stroke, Color.blue
-        );
-        XYLineAnnotation a2 = new XYLineAnnotation(
-            10.0, 20.0, 100.0, 200.0, stroke, Color.blue
-        );
+        XYLineAnnotation a1 = new XYLineAnnotation(10.0, 20.0, 100.0, 200.0,
+                stroke, Color.blue);
+        XYLineAnnotation a2 = new XYLineAnnotation(10.0, 20.0, 100.0, 200.0,
+                stroke, Color.blue);
         assertTrue(a1.equals(a2));
         int h1 = a1.hashCode();
         int h2 = a2.hashCode();
@@ -153,9 +151,8 @@ public class XYLineAnnotationTests extends TestCase {
      */
     public void testCloning() {
         Stroke stroke = new BasicStroke(2.0f);
-        XYLineAnnotation a1 = new XYLineAnnotation(
-            10.0, 20.0, 100.0, 200.0, stroke, Color.blue
-        );
+        XYLineAnnotation a1 = new XYLineAnnotation(10.0, 20.0, 100.0, 200.0,
+                stroke, Color.blue);
         XYLineAnnotation a2 = null;
         try {
             a2 = (XYLineAnnotation) a1.clone();
@@ -166,6 +163,16 @@ public class XYLineAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        Stroke stroke = new BasicStroke(2.0f);
+        XYLineAnnotation a1 = new XYLineAnnotation(10.0, 20.0, 100.0, 200.0,
+                stroke, Color.blue);
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
     /**

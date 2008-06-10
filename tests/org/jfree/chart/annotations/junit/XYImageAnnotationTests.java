@@ -38,6 +38,7 @@
  * 01-Dec-2006 : Updated testEquals() for new field (DG);
  * 09-Jan-2007 : Comment out failing test (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -51,6 +52,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYImageAnnotation;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
 
 /**
@@ -120,6 +122,15 @@ public class XYImageAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        XYImageAnnotation a1 = new XYImageAnnotation(10.0, 20.0,
+                JFreeChart.INFO.getLogo());
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
 // FIXME: Make this test pass

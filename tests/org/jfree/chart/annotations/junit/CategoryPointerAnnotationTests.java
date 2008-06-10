@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 02-Oct-2006 : Version 1 (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -55,6 +56,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.annotations.CategoryPointerAnnotation;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link CategoryPointerAnnotation} class.
@@ -186,6 +188,15 @@ public class CategoryPointerAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        CategoryPointerAnnotation a1 = new CategoryPointerAnnotation("Label",
+                "A", 20.0, Math.PI);
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
     /**

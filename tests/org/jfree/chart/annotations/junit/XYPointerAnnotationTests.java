@@ -38,6 +38,7 @@
  * 13-Oct-2003 : Expanded test for equals() method (DG);
  * 07-Jan-2005 : Added hashCode() test (DG);
  * 20-Feb-2006 : Added 'x' and 'y' checks to testEquals() (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -58,6 +59,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.annotations.XYPointerAnnotation;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link XYPointerAnnotation} class.
@@ -177,7 +179,6 @@ public class XYPointerAnnotationTests extends TestCase {
      * Confirm that cloning works.
      */
     public void testCloning() {
-
         XYPointerAnnotation a1 = new XYPointerAnnotation("Label", 10.0, 20.0,
                 Math.PI);
         XYPointerAnnotation a2 = null;
@@ -190,6 +191,15 @@ public class XYPointerAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        XYPointerAnnotation a1 = new XYPointerAnnotation("Label", 10.0, 20.0,
+                Math.PI);
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
     /**

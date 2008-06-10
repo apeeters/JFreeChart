@@ -36,6 +36,7 @@
  * -------
  * 19-Aug-2003 : Version 1 (DG);
  * 07-Jan-2005 : Added hashCode() test (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -54,6 +55,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.annotations.CategoryTextAnnotation;
 import org.jfree.chart.axis.CategoryAnchor;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link CategoryTextAnnotation} class.
@@ -132,8 +134,7 @@ public class CategoryTextAnnotationTests extends TestCase {
      */
     public void testCloning() {
         CategoryTextAnnotation a1 = new CategoryTextAnnotation(
-            "Test", "Category", 1.0
-        );
+                "Test", "Category", 1.0);
         CategoryTextAnnotation a2 = null;
         try {
             a2 = (CategoryTextAnnotation) a1.clone();
@@ -144,6 +145,15 @@ public class CategoryTextAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        CategoryTextAnnotation a1 = new CategoryTextAnnotation(
+                "Test", "Category", 1.0);
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
     /**

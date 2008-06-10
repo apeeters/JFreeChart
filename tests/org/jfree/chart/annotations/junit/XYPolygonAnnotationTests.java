@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 10-Jul-2006 : Version 1 (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -56,6 +57,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.annotations.XYPolygonAnnotation;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link XYPolygonAnnotation} class.
@@ -162,6 +164,16 @@ public class XYPolygonAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        Stroke stroke1 = new BasicStroke(2.0f);
+        XYPolygonAnnotation a1 = new XYPolygonAnnotation(new double[] {1.0,
+                2.0, 3.0, 4.0, 5.0, 6.0}, stroke1, Color.red, Color.blue);
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
     /**

@@ -38,6 +38,7 @@
  * 07-Jan-2005 : Added hashCode() test (DG);
  * 26-Jan-2006 : Extended equals() test (DG);
  * 20-Jun-2007 : Removed JCommon tests (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -59,6 +60,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link XYTextAnnotation} class.
@@ -171,6 +173,14 @@ public class XYTextAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        XYTextAnnotation a1 = new XYTextAnnotation("Text", 10.0, 20.0);
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
     /**

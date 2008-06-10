@@ -38,6 +38,7 @@
  * 01-Oct-2004 : Fixed bugs in tests (DG);
  * 07-Jan-2005 : Added hashCode() test (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -59,6 +60,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.Drawable;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link XYDrawableAnnotation} class.
@@ -132,6 +134,34 @@ public class XYDrawableAnnotationTests extends TestCase {
         XYDrawableAnnotation a2 = new XYDrawableAnnotation(10.0, 20.0, 100.0,
                 200.0, new TestDrawable());
         assertTrue(a1.equals(a2));
+
+        a1 = new XYDrawableAnnotation(11.0, 20.0, 100.0, 200.0,
+                new TestDrawable());
+        assertFalse(a1.equals(a2));
+        a2 = new XYDrawableAnnotation(11.0, 20.0, 100.0, 200.0,
+                new TestDrawable());
+        assertTrue(a1.equals(a2));
+
+        a1 = new XYDrawableAnnotation(11.0, 22.0, 100.0, 200.0,
+                new TestDrawable());
+        assertFalse(a1.equals(a2));
+        a2 = new XYDrawableAnnotation(11.0, 22.0, 100.0, 200.0,
+                new TestDrawable());
+        assertTrue(a1.equals(a2));
+
+        a1 = new XYDrawableAnnotation(11.0, 22.0, 101.0, 200.0,
+                new TestDrawable());
+        assertFalse(a1.equals(a2));
+        a2 = new XYDrawableAnnotation(11.0, 22.0, 101.0, 200.0,
+                new TestDrawable());
+        assertTrue(a1.equals(a2));
+
+        a1 = new XYDrawableAnnotation(11.0, 22.0, 101.0, 202.0,
+                new TestDrawable());
+        assertFalse(a1.equals(a2));
+        a2 = new XYDrawableAnnotation(11.0, 22.0, 101.0, 202.0,
+                new TestDrawable());
+        assertTrue(a1.equals(a2));
     }
 
     /**
@@ -164,6 +194,15 @@ public class XYDrawableAnnotationTests extends TestCase {
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
         assertTrue(a1.equals(a2));
+    }
+
+    /**
+     * Checks that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        XYDrawableAnnotation a1 = new XYDrawableAnnotation(10.0, 20.0, 100.0,
+                200.0, new TestDrawable());
+        assertTrue(a1 instanceof PublicCloneable);
     }
 
     /**
