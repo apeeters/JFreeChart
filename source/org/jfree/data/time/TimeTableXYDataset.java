@@ -70,7 +70,11 @@ import org.jfree.data.xy.TableXYDataset;
 
 /**
  * A dataset for regular time periods that implements the
- * {@link TableXYDataset} interface.
+ * {@link TableXYDataset} interface.  Note that the {@link TableXYDataset}
+ * interface requires all series to share the same set of x-values.  When
+ * adding a new item <code>(x, y)</code> to one series, all other series
+ * automatically get a new item <code>(x, null)</code> unless a non-null item
+ * has already been specified.
  *
  * @see org.jfree.data.xy.TableXYDataset
  */
@@ -150,6 +154,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      * into consideration.
      *
      * @return The flag.
+     *
+     * @see #setDomainIsPointsInTime(boolean)
      */
     public boolean getDomainIsPointsInTime() {
         return this.domainIsPointsInTime;
@@ -161,6 +167,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      * registered listeners.
      *
      * @param flag  the new value of the flag.
+     *
+     * @see #getDomainIsPointsInTime()
      */
     public void setDomainIsPointsInTime(boolean flag) {
         this.domainIsPointsInTime = flag;
@@ -172,6 +180,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      * value.
      *
      * @return The anchor position (never <code>null</code>).
+     *
+     * @see #setXPosition(TimePeriodAnchor)
      */
     public TimePeriodAnchor getXPosition() {
         return this.xPosition;
@@ -182,6 +192,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      * then sends a {@link DatasetChangeEvent} to all registered listeners.
      *
      * @param anchor  the anchor position (<code>null</code> not permitted).
+     *
+     * @see #getXPosition()
      */
     public void setXPosition(TimePeriodAnchor anchor) {
         if (anchor == null) {
@@ -193,25 +205,29 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
 
     /**
      * Adds a new data item to the dataset and sends a
-     * {@link org.jfree.data.general.DatasetChangeEvent} to all registered
-     * listeners.
+     * {@link DatasetChangeEvent} to all registered listeners.
      *
      * @param period  the time period.
      * @param y  the value for this period.
      * @param seriesName  the name of the series to add the value.
+     *
+     * @see #remove(TimePeriod, String)
      */
     public void add(TimePeriod period, double y, String seriesName) {
         add(period, new Double(y), seriesName, true);
     }
 
     /**
-     * Adds a new data item to the dataset.
+     * Adds a new data item to the dataset and, if requested, sends a
+     * {@link DatasetChangeEvent} to all registered listeners.
      *
      * @param period  the time period (<code>null</code> not permitted).
      * @param y  the value for this period (<code>null</code> permitted).
      * @param seriesName  the name of the series to add the value
      *                    (<code>null</code> not permitted).
      * @param notify  whether dataset listener are notified or not.
+     *
+     * @see #remove(TimePeriod, String, boolean)
      */
     public void add(TimePeriod period, Number y, String seriesName,
                     boolean notify) {
@@ -228,19 +244,24 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      *                (<code>null</code> not permitted).
      * @param seriesName  the (existing!) series name to remove the value
      *                    (<code>null</code> not permitted).
+     *
+     * @see #add(TimePeriod, double, String)
      */
     public void remove(TimePeriod period, String seriesName) {
         remove(period, seriesName, true);
     }
 
     /**
-     * Removes an existing data item from the dataset.
+     * Removes an existing data item from the dataset and, if requested,
+     * sends a {@link DatasetChangeEvent} to all registered listeners.
      *
      * @param period  the (existing!) time period of the value to remove
      *                (<code>null</code> not permitted).
      * @param seriesName  the (existing!) series name to remove the value
      *                    (<code>null</code> not permitted).
      * @param notify  whether dataset listener are notified or not.
+     *
+     * @see #add(TimePeriod, double, String)
      */
     public void remove(TimePeriod period, String seriesName, boolean notify) {
         this.values.removeValue(period, seriesName);
@@ -350,6 +371,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      * @param item  the item within a series (zero-based index).
      *
      * @return The starting X value for the specified series and item.
+     *
+     * @see #getStartXValue(int, int)
      */
     public Number getStartX(int series, int item) {
         return new Double(getStartXValue(series, item));
@@ -376,6 +399,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      * @param item  the item within a series (zero-based index).
      *
      * @return The ending X value for the specified series and item.
+     *
+     * @see #getEndXValue(int, int)
      */
     public Number getEndX(int series, int item) {
         return new Double(getEndXValue(series, item));
