@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,13 +27,15 @@
  * ----------------------------------------
  * StandardToolTipTagFragmentGenerator.java
  * ----------------------------------------
- * (C) Copyright 2003-2007, by Richard Atkinson and Contributors.
+ * (C) Copyright 2003-2008, by Richard Atkinson and Contributors.
  *
  * Original Author:  Richard Atkinson;
+ * Contributors:     David Gilbert (for Object Refinery Limited);
  *
  * Changes
  * -------
  * 12-Aug-2003 : Version 1 (RA);
+ * 04-Dec-2007 : Escape tool tip text to fix bug 1400917 (DG);
  * 
  */
  
@@ -43,8 +45,15 @@ package org.jfree.chart.imagemap;
  * Generates tooltips using the HTML title attribute for image map area tags.
  */
 public class StandardToolTipTagFragmentGenerator 
-    implements ToolTipTagFragmentGenerator {
+        implements ToolTipTagFragmentGenerator {
 
+    /**
+     * Creates a new instance.
+     */
+    public StandardToolTipTagFragmentGenerator() {
+        super();
+    }
+	
     /**
      * Generates a tooltip string to go in an HTML image map.
      *
@@ -53,7 +62,8 @@ public class StandardToolTipTagFragmentGenerator
      * @return The formatted HTML area tag attribute(s).
      */
     public String generateToolTipFragment(String toolTipText) {
-        return " title=\"" + toolTipText + "\" alt=\"\"";
+        return " title=\"" + ImageMapUtilities.htmlEscape(toolTipText) 
+            + "\" alt=\"\"";
     }
 
 }
