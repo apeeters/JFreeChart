@@ -1,5 +1,16 @@
 2008-06-10  David Gilbert  <david.gilbert@object-refinery.com>
 
+    * source/org/jfree/data/time/DateRange.java
+    (lowerDate): Changed from Date to long,
+    (upperDate): Likewise,
+    (DateRange(Date, Date)): Updated for field type change,
+    (DateRange(long, long)): Likewise,
+    (getLowerDate): Likewise,
+    (getUpperDate): Likewise,
+    (toString): Likewise.
+
+2008-06-10  David Gilbert  <david.gilbert@object-refinery.com>
+
     * source/org/jfree/chart/axis/DateTickUnit.java
     (addToDate(Date)): Deprecated.
 

@@ -37,6 +37,7 @@
  * 22-Apr-2002 : Version 1 based on code by Bill Kelemen (DG);
  * 07-Oct-2002 : Fixed errors reported by Checkstyle (DG);
  * 23-Sep-2003 : Minor Javadoc update (DG);
+ * 28-May-2008 : Fixed problem with immutability (DG);
  *
  */
 
@@ -58,10 +59,10 @@ public class DateRange extends Range implements Serializable {
     private static final long serialVersionUID = -4705682568375418157L;
 
     /** The lower bound for the range. */
-    private Date lowerDate;
+    private long lowerDate;
 
     /** The upper bound for the range. */
-    private Date upperDate;
+    private long upperDate;
 
     /**
      * Default constructor.
@@ -77,11 +78,9 @@ public class DateRange extends Range implements Serializable {
      * @param upper  the upper bound (<code>null</code> not permitted).
      */
     public DateRange(Date lower, Date upper) {
-
         super(lower.getTime(), upper.getTime());
-        this.lowerDate = lower;
-        this.upperDate = upper;
-
+        this.lowerDate = lower.getTime();
+        this.upperDate = upper.getTime();
     }
 
     /**
@@ -93,8 +92,8 @@ public class DateRange extends Range implements Serializable {
      */
     public DateRange(double lower, double upper) {
         super(lower, upper);
-        this.lowerDate = new Date((long) lower);
-        this.upperDate = new Date((long) upper);
+        this.lowerDate = (long) lower;
+        this.upperDate = (long) upper;
     }
 
     /**
@@ -115,7 +114,7 @@ public class DateRange extends Range implements Serializable {
      * @return The lower date for the range.
      */
     public Date getLowerDate() {
-        return this.lowerDate;
+        return new Date(this.lowerDate);
     }
 
     /**
@@ -124,7 +123,7 @@ public class DateRange extends Range implements Serializable {
      * @return The upper date for the range.
      */
     public Date getUpperDate() {
-        return this.upperDate;
+        return new Date(this.upperDate);
     }
 
     /**
@@ -134,8 +133,8 @@ public class DateRange extends Range implements Serializable {
      */
     public String toString() {
         DateFormat df = DateFormat.getDateTimeInstance();
-        return "[" + df.format(this.lowerDate) + " --> "
-            + df.format(this.upperDate) + "]";
+        return "[" + df.format(getLowerDate()) + " --> "
+            + df.format(getUpperDate()) + "]";
     }
 
 }
