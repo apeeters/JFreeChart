@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------
  * SimpleTimePeriod.java
  * ---------------------
- * (C) Copyright 2002-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2002-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -49,17 +49,17 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * An arbitrary period of time, measured to millisecond precision using 
+ * An arbitrary period of time, measured to millisecond precision using
  * <code>java.util.Date</code>.
  * <p>
- * This class is intentionally immutable (that is, once constructed, you cannot 
+ * This class is intentionally immutable (that is, once constructed, you cannot
  * alter the start and end attributes).
  */
 public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 8684672361131829554L;
-    
+
     /** The start date/time. */
     private Date start;
 
@@ -73,9 +73,9 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
      * @param end  the end date/time in milliseconds.
      */
     public SimpleTimePeriod(long start, long end) {
-        this(new Date(start), new Date(end));   
+        this(new Date(start), new Date(end));
     }
-    
+
     /**
      * Creates a new time allocation.
      *
@@ -109,7 +109,7 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
     }
 
     /**
-     * Tests this time period instance for equality with an arbitrary object.  
+     * Tests this time period instance for equality with an arbitrary object.
      * The object is considered equal if it is an instance of {@link TimePeriod}
      * and it has the same start and end dates.
      *
@@ -126,26 +126,26 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
         }
         TimePeriod that = (TimePeriod) obj;
         if (!this.start.equals(that.getStart())) {
-            return false;   
+            return false;
         }
         if (!this.end.equals(that.getEnd())) {
-            return false;   
+            return false;
         }
         return true;
     }
-    
+
     /**
      * Returns an integer that indicates the relative ordering of two
      * time periods.
-     * 
+     *
      * @param obj  the object (<code>null</code> not permitted).
-     * 
+     *
      * @return An integer.
-     * 
+     *
      * @throws ClassCastException if <code>obj</code> is not an instance of
      *                            {@link TimePeriod}.
      */
-    public int compareTo(Object obj) {        
+    public int compareTo(Object obj) {
         TimePeriod that = (TimePeriod) obj;
         long t0 = getStart().getTime();
         long t1 = getEnd().getTime();
@@ -154,39 +154,39 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
         long t3 = that.getEnd().getTime();
         long m1 = t2 + (t3 - t2) / 2L;
         if (m0 < m1) {
-            return -1;   
+            return -1;
         }
         else if (m0 > m1) {
-            return 1;   
+            return 1;
         }
         else {
             if (t0 < t2) {
                 return -1;
             }
             else if (t0 > t2) {
-                return 1;   
+                return 1;
             }
             else {
                 if (t1 < t3) {
-                    return -1;   
+                    return -1;
                 }
                 else if (t1 > t3) {
-                    return 1;   
+                    return 1;
                 }
                 else {
-                    return 0;   
+                    return 0;
                 }
             }
         }
     }
-    
+
     /**
      * Returns a hash code for this object instance.  The approach described by
      * Joshua Bloch in "Effective Java" has been used here - see:
      * <p>
      * <code>http://developer.java.sun.com/
      * developer/Books/effectivejava/Chapter3.pdf</code>
-     * 
+     *
      * @return A hash code.
      */
     public int hashCode() {

@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------------
  * SpreadsheetDate.java
  * --------------------
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -37,9 +37,9 @@
  * 11-Oct-2001 : Version 1 (DG);
  * 05-Nov-2001 : Added getDescription() and setDescription() methods (DG);
  * 12-Nov-2001 : Changed name from ExcelDate.java to SpreadsheetDate.java (DG);
- *               Fixed a bug in calculating day, month and year from serial 
+ *               Fixed a bug in calculating day, month and year from serial
  *               number (DG);
- * 24-Jan-2002 : Fixed a bug in calculating the serial number from the day, 
+ * 24-Jan-2002 : Fixed a bug in calculating the serial number from the day,
  *               month and year.  Thanks to Trevor Hills for the report (DG);
  * 29-May-2002 : Added equals(Object) method (SourceForge ID 558850) (DG);
  * 03-Oct-2002 : Fixed errors reported by Checkstyle (DG);
@@ -81,10 +81,10 @@ public class SpreadsheetDate extends SerialDate {
 
     /** For serialization. */
     private static final long serialVersionUID = -2039586705374454461L;
-    
-    /** 
-     * The day number (1-Jan-1900 = 2, 2-Jan-1900 = 3, ..., 31-Dec-9999 = 
-     * 2958465). 
+
+    /**
+     * The day number (1-Jan-1900 = 2, 2-Jan-1900 = 3, ..., 31-Dec-9999 =
+     * 2958465).
      */
     private final int serial;
 
@@ -115,7 +115,7 @@ public class SpreadsheetDate extends SerialDate {
             );
         }
 
-        if ((month >= MonthConstants.JANUARY) 
+        if ((month >= MonthConstants.JANUARY)
                 && (month <= MonthConstants.DECEMBER)) {
             this.month = month;
         }
@@ -177,11 +177,11 @@ public class SpreadsheetDate extends SerialDate {
 
       final int ss2 = calcSerial(1, 1, this.year);
 
-      int[] daysToEndOfPrecedingMonth 
+      int[] daysToEndOfPrecedingMonth
           = AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH;
 
       if (isLeapYear(this.year)) {
-          daysToEndOfPrecedingMonth 
+          daysToEndOfPrecedingMonth
               = LEAP_YEAR_AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH;
       }
 
@@ -195,7 +195,7 @@ public class SpreadsheetDate extends SerialDate {
       this.month = mm - 1;
 
       // what's left is d(+1);
-      this.day = this.serial - ss2 
+      this.day = this.serial - ss2
                  - daysToEndOfPrecedingMonth[this.month] + 1;
 
     }
@@ -252,9 +252,9 @@ public class SpreadsheetDate extends SerialDate {
     /**
      * Returns a code representing the day of the week.
      * <P>
-     * The codes are defined in the {@link SerialDate} class as: 
-     * <code>SUNDAY</code>, <code>MONDAY</code>, <code>TUESDAY</code>, 
-     * <code>WEDNESDAY</code>, <code>THURSDAY</code>, <code>FRIDAY</code>, and 
+     * The codes are defined in the {@link SerialDate} class as:
+     * <code>SUNDAY</code>, <code>MONDAY</code>, <code>TUESDAY</code>,
+     * <code>WEDNESDAY</code>, <code>THURSDAY</code>, <code>FRIDAY</code>, and
      * <code>SATURDAY</code>.
      *
      * @return A code representing the day of the week.
@@ -288,7 +288,7 @@ public class SpreadsheetDate extends SerialDate {
 
     /**
      * Returns a hash code for this object instance.
-     * 
+     *
      * @return A hash code.
      */
     public int hashCode() {
@@ -296,12 +296,12 @@ public class SpreadsheetDate extends SerialDate {
     }
 
     /**
-     * Returns the difference (in days) between this date and the specified 
+     * Returns the difference (in days) between this date and the specified
      * 'other' date.
      *
      * @param other  the date being compared to.
      *
-     * @return The difference (in days) between this date and the specified 
+     * @return The difference (in days) between this date and the specified
      *         'other' date.
      */
     public int compare(final SerialDate other) {
@@ -310,16 +310,16 @@ public class SpreadsheetDate extends SerialDate {
 
     /**
      * Implements the method required by the Comparable interface.
-     * 
+     *
      * @param other  the other object (usually another SerialDate).
-     * 
-     * @return A negative integer, zero, or a positive integer as this object 
+     *
+     * @return A negative integer, zero, or a positive integer as this object
      *         is less than, equal to, or greater than the specified object.
      */
     public int compareTo(final Object other) {
-        return compare((SerialDate) other);    
+        return compare((SerialDate) other);
     }
-    
+
     /**
      * Returns true if this SerialDate represents the same date as the
      * specified SerialDate.
@@ -386,8 +386,8 @@ public class SpreadsheetDate extends SerialDate {
     }
 
     /**
-     * Returns <code>true</code> if this {@link SerialDate} is within the 
-     * specified range (INCLUSIVE).  The date order of d1 and d2 is not 
+     * Returns <code>true</code> if this {@link SerialDate} is within the
+     * specified range (INCLUSIVE).  The date order of d1 and d2 is not
      * important.
      *
      * @param d1  a boundary date for the range.
@@ -406,32 +406,32 @@ public class SpreadsheetDate extends SerialDate {
      *
      * @param d1  one boundary date for the range.
      * @param d2  a second boundary date for the range.
-     * @param include  a code that controls whether or not the start and end 
+     * @param include  a code that controls whether or not the start and end
      *                 dates are included in the range.
      *
-     * @return <code>true</code> if this SerialDate is within the specified 
+     * @return <code>true</code> if this SerialDate is within the specified
      *         range.
      */
-    public boolean isInRange(final SerialDate d1, final SerialDate d2, 
+    public boolean isInRange(final SerialDate d1, final SerialDate d2,
                              final int include) {
         final int s1 = d1.toSerial();
         final int s2 = d2.toSerial();
         final int start = Math.min(s1, s2);
         final int end = Math.max(s1, s2);
-        
+
         final int s = toSerial();
         if (include == SerialDate.INCLUDE_BOTH) {
             return (s >= start && s <= end);
         }
         else if (include == SerialDate.INCLUDE_FIRST) {
-            return (s >= start && s < end);            
+            return (s >= start && s < end);
         }
         else if (include == SerialDate.INCLUDE_SECOND) {
-            return (s > start && s <= end);            
+            return (s > start && s <= end);
         }
         else {
-            return (s > start && s < end);            
-        }    
+            return (s > start && s < end);
+        }
     }
 
     /**
