@@ -1,5 +1,10 @@
 2008-06-10  David Gilbert  <david.gilbert@object-refinery.com>
 
+    * source/org/jfree/chart/axis/DateTickUnit.java
+    (addToDate(Date)): Deprecated.
+
+2008-06-10  David Gilbert  <david.gilbert@object-refinery.com>
+
     * source/org/jfree/chart/imagemap/DynamicDriveToolTipTagFragmentGenerator.java
     (generateToolTipFragment): Escape text,
     * source/org/jfree/chart/imagemap/OverLIBToolTipTagFragmentGenerator.java
