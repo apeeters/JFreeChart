@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------------
  * TimePeriodValue.java
  * --------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited.
+ * (C) Copyright 2003-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -36,6 +36,7 @@
  * -------
  * 22-Apr-2003 : Version 1 (DG);
  * 03-Oct-2006 : Added null argument check to constructor (DG);
+ * 07-Apr-2008 : Added a toString() override for debugging (DG);
  *
  */
 
@@ -50,7 +51,7 @@ public class TimePeriodValue implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 3390443360845711275L;
-    
+
     /** The time period. */
     private TimePeriod period;
 
@@ -62,8 +63,8 @@ public class TimePeriodValue implements Cloneable, Serializable {
      *
      * @param period  the time period (<code>null</code> not permitted).
      * @param value  the value associated with the time period.
-     * 
-     * @throws IllegalArgumentException if <code>period</code> is 
+     *
+     * @throws IllegalArgumentException if <code>period</code> is
      *     <code>null</code>.
      */
     public TimePeriodValue(TimePeriod period, Number value) {
@@ -79,8 +80,8 @@ public class TimePeriodValue implements Cloneable, Serializable {
      *
      * @param period  the time period (<code>null</code> not permitted).
      * @param value  the value associated with the time period.
-     * 
-     * @throws IllegalArgumentException if <code>period</code> is 
+     *
+     * @throws IllegalArgumentException if <code>period</code> is
      *     <code>null</code>.
      */
     public TimePeriodValue(TimePeriod period, double value) {
@@ -100,7 +101,7 @@ public class TimePeriodValue implements Cloneable, Serializable {
      * Returns the value.
      *
      * @return The value (possibly <code>null</code>).
-     * 
+     *
      * @see #setValue(Number)
      */
     public Number getValue() {
@@ -111,7 +112,7 @@ public class TimePeriodValue implements Cloneable, Serializable {
      * Sets the value for this data item.
      *
      * @param value  the new value (<code>null</code> permitted).
-     * 
+     *
      * @see #getValue()
      */
     public void setValue(Number value) {
@@ -135,11 +136,11 @@ public class TimePeriodValue implements Cloneable, Serializable {
 
         TimePeriodValue timePeriodValue = (TimePeriodValue) obj;
 
-        if (this.period != null ? !this.period.equals(timePeriodValue.period) 
+        if (this.period != null ? !this.period.equals(timePeriodValue.period)
                 : timePeriodValue.period != null) {
             return false;
         }
-        if (this.value != null ? !this.value.equals(timePeriodValue.value) 
+        if (this.value != null ? !this.value.equals(timePeriodValue.value)
                 : timePeriodValue.value != null) {
             return false;
         }
@@ -162,7 +163,7 @@ public class TimePeriodValue implements Cloneable, Serializable {
     /**
      * Clones the object.
      * <P>
-     * Note: no need to clone the period or value since they are immutable 
+     * Note: no need to clone the period or value since they are immutable
      * classes.
      *
      * @return A clone.
@@ -176,6 +177,16 @@ public class TimePeriodValue implements Cloneable, Serializable {
             e.printStackTrace();
         }
         return clone;
+    }
+
+    /**
+     * Returns a string representing this instance, primarily for use in
+     * debugging.
+     *
+     * @return A string.
+     */
+    public String toString() {
+        return "TimePeriodValue[" + getPeriod() + "," + getValue() + "]";
     }
 
 }
