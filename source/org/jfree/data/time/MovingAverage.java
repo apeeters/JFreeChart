@@ -299,13 +299,11 @@ public class MovingAverage {
     public static XYSeries createMovingAverage(XYDataset source,
             int series, String name, double period, double skip) {
 
-
         if (source == null) {
             throw new IllegalArgumentException("Null source (XYDataset).");
         }
         if (period < Double.MIN_VALUE) {
             throw new IllegalArgumentException("period must be positive.");
-
         }
         if (skip < 0.0) {
             throw new IllegalArgumentException("skip must be >= 0.0.");
