@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------------------
  * StandardURLTagFragmentGenerator.java
  * ------------------------------------
- * (C) Copyright 2003-2007, by Richard Atkinson and Contributors.
+ * (C) Copyright 2003-2008, by Richard Atkinson and Contributors.
  *
  * Original Author:  Richard Atkinson;
  *
@@ -43,16 +43,24 @@ package org.jfree.chart.imagemap;
  * Generates URLs using the HTML href attribute for image map area tags.
  */
 public class StandardURLTagFragmentGenerator 
-    implements URLTagFragmentGenerator {
+        implements URLTagFragmentGenerator {
 
+    /**
+     * Creates a new instance.
+     */
+    public StandardURLTagFragmentGenerator() {
+        super();
+    }
+	
     /**
      * Generates a URL string to go in an HTML image map.
      *
-     * @param urlText  the URL.
+     * @param urlText  the URL text (fully escaped).
      * 
      * @return The formatted text
      */
     public String generateURLFragment(String urlText) {
+        // the URL text should already have been escaped by the URL generator
         return " href=\"" + urlText + "\"";
     }
 
