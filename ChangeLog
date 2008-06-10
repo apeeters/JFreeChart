@@ -1,5 +1,15 @@
 2008-06-10  David Gilbert  <david.gilbert@object-refinery.com>
 
+    * source/org/jfree/data/time/SimpleTimePeriod.java
+    (start): Changed from Date to long,
+    (end): Likewise,
+    (getStartMillis): New method,
+    (getEndMillis): Likewise,
+    (getStart): Returns new date instance,
+    (getEnd): Likewise.
+
+2008-06-10  David Gilbert  <david.gilbert@object-refinery.com>
+
     Bug 1864222:
     * source/org/jfree/data/time/TimeSeries.java
     (createCopy(RegularTimePeriod, RegularTimePeriod)): Handle empty range.

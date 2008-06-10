@@ -40,6 +40,7 @@
  * 21-Oct-2003 : Added hashCode() method (DG);
  * 27-Jan-2005 : Implemented Comparable, to enable this class to be used
  *               in the TimeTableXYDataset class (DG);
+ * 02-Jun-2008 : Fixed problem with fields being mutable (DG);
  *
  */
 
@@ -61,10 +62,10 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
     private static final long serialVersionUID = 8684672361131829554L;
 
     /** The start date/time. */
-    private Date start;
+    private long start;
 
     /** The end date/time. */
-    private Date end;
+    private long end;
 
     /**
      * Creates a new time allocation.
@@ -73,7 +74,11 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
      * @param end  the end date/time in milliseconds.
      */
     public SimpleTimePeriod(long start, long end) {
-        this(new Date(start), new Date(end));
+        if (start > end) {
+            throw new IllegalArgumentException("Requires start <= end.");
+        }
+        this.start = start;
+        this.end = end;
     }
 
     /**
@@ -83,11 +88,7 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
      * @param end  the end date/time (<code>null</code> not permitted).
      */
     public SimpleTimePeriod(Date start, Date end) {
-        if (start.getTime() > end.getTime()) {
-            throw new IllegalArgumentException("Requires end >= start.");
-        }
-        this.start = start;
-        this.end = end;
+        this(start.getTime(), end.getTime());
     }
 
     /**
@@ -96,7 +97,18 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
      * @return The start date/time (never <code>null</code>).
      */
     public Date getStart() {
-        return this.start;
+        return new Date(this.start);
+    }
+
+    /**
+     * Returns the start date/time in milliseconds.
+     *
+     * @return The start.
+     *
+     * @since 1.0.10.
+     */
+    public long getStartMillis() {
+    	return this.start;
     }
 
     /**
@@ -105,7 +117,18 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
      * @return The end date/time (never <code>null</code>).
      */
     public Date getEnd() {
-        return this.end;
+        return new Date(this.end);
+    }
+
+    /**
+     * Returns the end date/time in milliseconds.
+     *
+     * @return The end.
+     *
+     * @since 1.0.10.
+     */
+    public long getEndMillis() {
+    	return this.end;
     }
 
     /**
@@ -125,10 +148,10 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
             return false;
         }
         TimePeriod that = (TimePeriod) obj;
-        if (!this.start.equals(that.getStart())) {
+        if (!this.getStart().equals(that.getStart())) {
             return false;
         }
-        if (!this.end.equals(that.getEnd())) {
+        if (!this.getEnd().equals(that.getEnd())) {
             return false;
         }
         return true;
@@ -191,8 +214,8 @@ public class SimpleTimePeriod implements TimePeriod, Comparable, Serializable {
      */
     public int hashCode() {
         int result = 17;
-        result = 37 * result + this.start.hashCode();
-        result = 37 * result + this.end.hashCode();
+        result = 37 * result + (int) this.start;
+        result = 37 * result + (int) this.end;
         return result;
     }
 
