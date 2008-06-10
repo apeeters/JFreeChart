@@ -346,7 +346,7 @@ public class WeekTests extends TestCase {
         try {
             TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
             Calendar c = new GregorianCalendar(zone);
-            assertEquals(-603216000000L, w.getFirstMillisecond(c));
+            assertEquals(-603302400000L, w.getFirstMillisecond(c));
         }
         finally {
             Locale.setDefault(saved);
@@ -407,7 +407,7 @@ public class WeekTests extends TestCase {
         try {
             TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
             Calendar c = new GregorianCalendar(zone);
-            assertEquals(-629827200001L, w.getLastMillisecond(c));
+            assertEquals(-629913600001L, w.getLastMillisecond(c));
         }
         finally {
             Locale.setDefault(saved);
