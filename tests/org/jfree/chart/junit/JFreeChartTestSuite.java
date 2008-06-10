@@ -66,6 +66,7 @@ import org.jfree.chart.renderer.junit.RendererPackageTests;
 import org.jfree.chart.renderer.xy.junit.RendererXYPackageTests;
 import org.jfree.chart.title.junit.TitlePackageTests;
 import org.jfree.chart.urls.junit.UrlsPackageTests;
+import org.jfree.chart.util.junit.UtilPackageTests;
 import org.jfree.data.category.junit.DataCategoryPackageTests;
 import org.jfree.data.gantt.junit.DataGanttPackageTests;
 import org.jfree.data.junit.DataPackageTests;
@@ -100,6 +101,7 @@ public class JFreeChartTestSuite extends TestCase {
         suite.addTest(RendererXYPackageTests.suite());
         suite.addTest(TitlePackageTests.suite());
         suite.addTest(UrlsPackageTests.suite());
+        suite.addTest(UtilPackageTests.suite());
         suite.addTest(DataPackageTests.suite());
         suite.addTest(DataCategoryPackageTests.suite());
         suite.addTest(DataStatisticsPackageTests.suite());
