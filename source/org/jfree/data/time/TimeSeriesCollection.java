@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * -------------------------
  * TimeSeriesCollection.java
  * -------------------------
- * (C) Copyright 2001-2007, by Object Refinery Limited.
+ * (C) Copyright 2001-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -36,7 +36,7 @@
  * -------
  * 11-Oct-2001 : Version 1 (DG);
  * 18-Oct-2001 : Added implementation of IntervalXYDataSource so that bar plots
- *               (using numerical axes) can be plotted from time series 
+ *               (using numerical axes) can be plotted from time series
  *               data (DG);
  * 22-Oct-2001 : Renamed DataSource.java --> Dataset.java etc. (DG);
  * 15-Nov-2001 : Added getSeries() method.  Changed name from TimeSeriesDataset
@@ -44,34 +44,34 @@
  * 07-Dec-2001 : TimeSeries --> BasicTimeSeries (DG);
  * 01-Mar-2002 : Added a time zone offset attribute, to enable fast calculation
  *               of the time period start and end values (DG);
- * 29-Mar-2002 : The collection now registers itself with all the time series 
- *               objects as a SeriesChangeListener.  Removed redundant 
+ * 29-Mar-2002 : The collection now registers itself with all the time series
+ *               objects as a SeriesChangeListener.  Removed redundant
  *               calculateZoneOffset method (DG);
  * 06-Jun-2002 : Added a setting to control whether the x-value supplied in the
  *               getXValue() method comes from the START, MIDDLE, or END of the
- *               time period.  This is a workaround for JFreeChart, where the 
- *               current date axis always labels the start of a time 
+ *               time period.  This is a workaround for JFreeChart, where the
+ *               current date axis always labels the start of a time
  *               period (DG);
  * 24-Jun-2002 : Removed unnecessary import (DG);
- * 24-Aug-2002 : Implemented DomainInfo interface, and added the 
+ * 24-Aug-2002 : Implemented DomainInfo interface, and added the
  *               DomainIsPointsInTime flag (DG);
  * 07-Oct-2002 : Fixed errors reported by Checkstyle (DG);
  * 16-Oct-2002 : Added remove methods (DG);
  * 10-Jan-2003 : Changed method names in RegularTimePeriod class (DG);
- * 13-Mar-2003 : Moved to com.jrefinery.data.time package and implemented 
+ * 13-Mar-2003 : Moved to com.jrefinery.data.time package and implemented
  *               Serializable (DG);
  * 04-Sep-2003 : Added getSeries(String) method (DG);
- * 15-Sep-2003 : Added a removeAllSeries() method to match 
+ * 15-Sep-2003 : Added a removeAllSeries() method to match
  *               XYSeriesCollection (DG);
  * 05-May-2004 : Now extends AbstractIntervalXYDataset (DG);
- * 15-Jul-2004 : Switched getX() with getXValue() and getY() with 
+ * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
  *               getYValue() (DG);
  * 06-Oct-2004 : Updated for changed in DomainInfo interface (DG);
- * 11-Jan-2005 : Removed deprecated code in preparation for the 1.0.0 
+ * 11-Jan-2005 : Removed deprecated code in preparation for the 1.0.0
  *               release (DG);
  * 28-Mar-2005 : Fixed bug in getSeries(int) method (1170825) (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 13-Dec-2005 : Deprecated the 'domainIsPointsInTime' flag as it is 
+ * 13-Dec-2005 : Deprecated the 'domainIsPointsInTime' flag as it is
  *               redundant.  Fixes bug 1243050 (DG);
  * 04-May-2007 : Override getDomainOrder() to indicate that items are sorted
  *               by x-value (ascending) (DG);
@@ -101,30 +101,27 @@ import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
 
 /**
- * A collection of time series objects.  This class implements the 
- * {@link org.jfree.data.xy.XYDataset} interface, as well as the extended 
+ * A collection of time series objects.  This class implements the
+ * {@link org.jfree.data.xy.XYDataset} interface, as well as the extended
  * {@link IntervalXYDataset} interface.  This makes it a convenient dataset for
  * use with the {@link org.jfree.chart.plot.XYPlot} class.
  */
 public class TimeSeriesCollection extends AbstractIntervalXYDataset
-                                  implements XYDataset,
-                                             IntervalXYDataset,
-                                             DomainInfo,
-                                             Serializable {
+        implements XYDataset, IntervalXYDataset, DomainInfo, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 834149929022371137L;
-    
+
     /** Storage for the time series. */
     private List data;
 
     /** A working calendar (to recycle) */
     private Calendar workingCalendar;
-    
-    /** 
+
+    /**
      * The point within each time period that is used for the X value when this
-     * collection is used as an {@link org.jfree.data.xy.XYDataset}.  This can 
-     * be the start, middle or end of the time period.   
+     * collection is used as an {@link org.jfree.data.xy.XYDataset}.  This can
+     * be the start, middle or end of the time period.
      */
     private TimePeriodAnchor xPosition;
 
@@ -138,7 +135,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     /**
      * Constructs an empty dataset, tied to a specific timezone.
      *
-     * @param zone  the timezone (<code>null</code> permitted, will use 
+     * @param zone  the timezone (<code>null</code> permitted, will use
      *              <code>TimeZone.getDefault()</code> in that case).
      */
     public TimeSeriesCollection(TimeZone zone) {
@@ -159,9 +156,9 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
      * Constructs a dataset containing a single series (more can be added),
      * tied to a specific timezone.
      *
-     * @param series  a series to add to the collection (<code>null</code> 
+     * @param series  a series to add to the collection (<code>null</code>
      *                permitted).
-     * @param zone  the timezone (<code>null</code> permitted, will use 
+     * @param zone  the timezone (<code>null</code> permitted, will use
      *              <code>TimeZone.getDefault()</code> in that case).
      */
     public TimeSeriesCollection(TimeSeries series, TimeZone zone) {
@@ -178,7 +175,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         this.xPosition = TimePeriodAnchor.START;
 
     }
-    
+
     /**
      * Returns the order of the domain values in this dataset.
      *
@@ -187,12 +184,12 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     public DomainOrder getDomainOrder() {
         return DomainOrder.ASCENDING;
     }
-    
+
     /**
-     * Returns the position within each time period that is used for the X 
-     * value when the collection is used as an 
+     * Returns the position within each time period that is used for the X
+     * value when the collection is used as an
      * {@link org.jfree.data.xy.XYDataset}.
-     * 
+     *
      * @return The anchor position (never <code>null</code>).
      */
     public TimePeriodAnchor getXPosition() {
@@ -200,10 +197,10 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     }
 
     /**
-     * Sets the position within each time period that is used for the X values 
-     * when the collection is used as an {@link XYDataset}, then sends a 
+     * Sets the position within each time period that is used for the X values
+     * when the collection is used as an {@link XYDataset}, then sends a
      * {@link DatasetChangeEvent} is sent to all registered listeners.
-     * 
+     *
      * @param anchor  the anchor position (<code>null</code> not permitted).
      */
     public void setXPosition(TimePeriodAnchor anchor) {
@@ -211,12 +208,12 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
             throw new IllegalArgumentException("Null 'anchor' argument.");
         }
         this.xPosition = anchor;
-        notifyListeners(new DatasetChangeEvent(this, this));    
+        notifyListeners(new DatasetChangeEvent(this, this));
     }
-    
+
     /**
-     * Returns a list of all the series in the collection.  
-     * 
+     * Returns a list of all the series in the collection.
+     *
      * @return The list (which is unmodifiable).
      */
     public List getSeries() {
@@ -235,11 +232,11 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     /**
      * Returns the index of the specified series, or -1 if that series is not
      * present in the dataset.
-     * 
+     *
      * @param series  the series (<code>null</code> not permitted).
-     * 
+     *
      * @return The series index.
-     * 
+     *
      * @since 1.0.6
      */
     public int indexOf(TimeSeries series) {
@@ -263,13 +260,13 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         }
         return (TimeSeries) this.data.get(series);
     }
-    
+
     /**
-     * Returns the series with the specified key, or <code>null</code> if 
+     * Returns the series with the specified key, or <code>null</code> if
      * there is no such series.
-     * 
+     *
      * @param key  the series key (<code>null</code> permitted).
-     * 
+     *
      * @return The series with the given key.
      */
     public TimeSeries getSeries(String key) {
@@ -282,11 +279,11 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
                 result = series;
             }
         }
-        return result;   
+        return result;
     }
 
     /**
-     * Returns the key for a series.  
+     * Returns the key for a series.
      *
      * @param series  the index of the series (zero-based).
      *
@@ -314,7 +311,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     }
 
     /**
-     * Removes the specified series from the collection and sends a 
+     * Removes the specified series from the collection and sends a
      * {@link DatasetChangeEvent} to all registered listeners.
      *
      * @param series  the series (<code>null</code> not permitted).
@@ -341,7 +338,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     }
 
     /**
-     * Removes all the series from the collection and sends a 
+     * Removes all the series from the collection and sends a
      * {@link DatasetChangeEvent} to all registered listeners.
      */
     public void removeAllSeries() {
@@ -360,7 +357,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     }
 
     /**
-     * Returns the number of items in the specified series.  This method is 
+     * Returns the number of items in the specified series.  This method is
      * provided for convenience.
      *
      * @param series  the series index (zero-based).
@@ -370,13 +367,13 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     public int getItemCount(int series) {
         return getSeries(series).getItemCount();
     }
-    
+
     /**
      * Returns the x-value (as a double primitive) for an item within a series.
-     * 
+     *
      * @param series  the series (zero-based index).
      * @param item  the item (zero-based index).
-     * 
+     *
      * @return The x-value.
      */
     public double getXValue(int series, int item) {
@@ -400,7 +397,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         RegularTimePeriod period = dp.getPeriod();
         return new Long(getX(period));
     }
-    
+
     /**
      * Returns the x-value for a time period.
      *
@@ -417,7 +414,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
             result = period.getMiddleMillisecond(this.workingCalendar);
         }
         else if (this.xPosition == TimePeriodAnchor.END) {
-            result = period.getLastMillisecond(this.workingCalendar); 
+            result = period.getLastMillisecond(this.workingCalendar);
         }
         return result;
     }
@@ -492,13 +489,13 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
 
 
     /**
-     * Returns the indices of the two data items surrounding a particular 
-     * millisecond value.  
-     * 
+     * Returns the indices of the two data items surrounding a particular
+     * millisecond value.
+     *
      * @param series  the series index.
      * @param milliseconds  the time.
-     * 
-     * @return An array containing the (two) indices of the items surrounding 
+     *
+     * @return An array containing the (two) indices of the items surrounding
      *         the time.
      */
     public int[] getSurroundingItems(int series, long milliseconds) {
@@ -517,13 +514,13 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         }
         return result;
     }
-    
+
     /**
      * Returns the minimum x-value in the dataset.
      *
      * @param includeInterval  a flag that determines whether or not the
      *                         x-interval is taken into account.
-     * 
+     *
      * @return The minimum value.
      */
     public double getDomainLowerBound(boolean includeInterval) {
@@ -532,7 +529,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         if (r != null) {
             result = r.getLowerBound();
         }
-        return result;        
+        return result;
     }
 
     /**
@@ -540,7 +537,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
      *
      * @param includeInterval  a flag that determines whether or not the
      *                         x-interval is taken into account.
-     * 
+     *
      * @return The maximum value.
      */
     public double getDomainUpperBound(boolean includeInterval) {
@@ -557,7 +554,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
      *
      * @param includeInterval  a flag that determines whether or not the
      *                         x-interval is taken into account.
-     * 
+     *
      * @return The range.
      */
     public Range getDomainBounds(boolean includeInterval) {
@@ -583,7 +580,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         }
         return result;
     }
-    
+
     /**
      * Tests this time series collection for equality with another object.
      *
@@ -616,11 +613,11 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     public int hashCode() {
         int result;
         result = this.data.hashCode();
-        result = 29 * result + (this.workingCalendar != null 
+        result = 29 * result + (this.workingCalendar != null
                 ? this.workingCalendar.hashCode() : 0);
-        result = 29 * result + (this.xPosition != null 
+        result = 29 * result + (this.xPosition != null
                 ? this.xPosition.hashCode() : 0);
         return result;
     }
-    
+
 }
