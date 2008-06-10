@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------
  * HourTests.java
  * --------------
- * (C) Copyright 2002-2007, by Object Refinery Limited.
+ * (C) Copyright 2002-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -117,7 +117,7 @@ public class HourTests extends TestCase {
     }
 
     /**
-     * In GMT, the 4pm on 21 Mar 2002 is java.util.Date(1,014,307,200,000L).  
+     * In GMT, the 4pm on 21 Mar 2002 is java.util.Date(1,014,307,200,000L).
      * Use this to check the hour constructor.
      */
     public void testDateConstructor1() {
@@ -155,7 +155,7 @@ public class HourTests extends TestCase {
     }
 
     /**
-     * Set up an hour equal to hour zero, 1 January 1900.  Request the 
+     * Set up an hour equal to hour zero, 1 January 1900.  Request the
      * previous hour, it should be null.
      */
     public void testFirstHourPrevious() {
@@ -167,7 +167,7 @@ public class HourTests extends TestCase {
     }
 
     /**
-     * Set up an hour equal to hour zero, 1 January 1900.  Request the next 
+     * Set up an hour equal to hour zero, 1 January 1900.  Request the next
      * hour, it should be null.
      */
     public void testFirstHourNext() {
@@ -191,7 +191,7 @@ public class HourTests extends TestCase {
     }
 
     /**
-     * Set up an hour equal to hour zero, 1 January 1900.  Request the next 
+     * Set up an hour equal to hour zero, 1 January 1900.  Request the next
      * hour, it should be null.
      */
     public void testLastHourNext() {
@@ -240,7 +240,7 @@ public class HourTests extends TestCase {
     }
 
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         Hour h1 = new Hour(7, 9, 10, 1999);
@@ -258,7 +258,7 @@ public class HourTests extends TestCase {
         Hour h = new Hour(7, 9, 10, 1999);
         assertFalse(h instanceof Cloneable);
     }
-    
+
 /**
      * Some checks for the getFirstMillisecond() method.
      */
@@ -272,7 +272,7 @@ public class HourTests extends TestCase {
         Locale.setDefault(saved);
         TimeZone.setDefault(savedZone);
     }
-    
+
     /**
      * Some checks for the getFirstMillisecond(TimeZone) method.
      */
@@ -281,27 +281,7 @@ public class HourTests extends TestCase {
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar c = new GregorianCalendar(zone);
         assertEquals(-623293200000L, h.getFirstMillisecond(c));
-        
-        // try null calendar
-        boolean pass = false;
-        try {
-            h.getFirstMillisecond((Calendar) null);
-        }
-        catch (NullPointerException e) {
-            pass = true;
-        }
-        assertTrue(pass);            
-    }
-    
-    /**
-     * Some checks for the getFirstMillisecond(TimeZone) method.
-     */
-    public void testGetFirstMillisecondWithCalendar() {
-        Hour h = new Hour(2, 15, 4, 2000);
-        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
-        assertEquals(955764000000L, h.getFirstMillisecond(calendar));
-        
+
         // try null calendar
         boolean pass = false;
         try {
@@ -311,7 +291,27 @@ public class HourTests extends TestCase {
             pass = true;
         }
         assertTrue(pass);
-    }    
+    }
+
+    /**
+     * Some checks for the getFirstMillisecond(TimeZone) method.
+     */
+    public void testGetFirstMillisecondWithCalendar() {
+        Hour h = new Hour(2, 15, 4, 2000);
+        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(955764000000L, h.getFirstMillisecond(calendar));
+
+        // try null calendar
+        boolean pass = false;
+        try {
+            h.getFirstMillisecond((Calendar) null);
+        }
+        catch (NullPointerException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
 
     /**
      * Some checks for the getLastMillisecond() method.
@@ -326,7 +326,7 @@ public class HourTests extends TestCase {
         Locale.setDefault(saved);
         TimeZone.setDefault(savedZone);
     }
-    
+
     /**
      * Some checks for the getLastMillisecond(TimeZone) method.
      */
@@ -335,27 +335,7 @@ public class HourTests extends TestCase {
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar c = new GregorianCalendar(zone);
         assertEquals(-614959200001L, h.getLastMillisecond(c));
-        
-        // try null calendar
-        boolean pass = false;
-        try {
-            h.getLastMillisecond((Calendar) null);
-        }
-        catch (NullPointerException e) {
-            pass = true;
-        }
-        assertTrue(pass);            
-    }
-    
-    /**
-     * Some checks for the getLastMillisecond(TimeZone) method.
-     */
-    public void testGetLastMillisecondWithCalendar() {
-        Hour h = new Hour(21, 21, 4, 2001);
-        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
-        assertEquals(987890399999L, h.getLastMillisecond(calendar));
-        
+
         // try null calendar
         boolean pass = false;
         try {
@@ -365,8 +345,28 @@ public class HourTests extends TestCase {
             pass = true;
         }
         assertTrue(pass);
-    } 
-    
+    }
+
+    /**
+     * Some checks for the getLastMillisecond(TimeZone) method.
+     */
+    public void testGetLastMillisecondWithCalendar() {
+        Hour h = new Hour(21, 21, 4, 2001);
+        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(987890399999L, h.getLastMillisecond(calendar));
+
+        // try null calendar
+        boolean pass = false;
+        try {
+            h.getLastMillisecond((Calendar) null);
+        }
+        catch (NullPointerException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
+
     /**
      * Some checks for the getSerialIndex() method.
      */
@@ -376,7 +376,7 @@ public class HourTests extends TestCase {
         h = new Hour(1, 1, 1, 1900);
         assertEquals(49L, h.getSerialIndex());
     }
-    
+
     /**
      * Some checks for the testNext() method.
      */
@@ -390,7 +390,7 @@ public class HourTests extends TestCase {
         h = new Hour(23, 31, 12, 9999);
         assertNull(h.next());
     }
-    
+
     /**
      * Some checks for the getStart() method.
      */
@@ -402,9 +402,9 @@ public class HourTests extends TestCase {
         cal.set(Calendar.MILLISECOND, 0);
         Hour h = new Hour(3, 16, 1, 2006);
         assertEquals(cal.getTime(), h.getStart());
-        Locale.setDefault(saved);        
+        Locale.setDefault(saved);
     }
-    
+
     /**
      * Some checks for the getEnd() method.
      */
@@ -416,7 +416,7 @@ public class HourTests extends TestCase {
         cal.set(Calendar.MILLISECOND, 999);
         Hour h = new Hour(1, 8, 1, 2006);
         assertEquals(cal.getTime(), h.getEnd());
-        Locale.setDefault(saved);                
+        Locale.setDefault(saved);
     }
 
 }

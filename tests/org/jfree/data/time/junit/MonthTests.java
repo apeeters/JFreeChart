@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------
  * MonthTests.java
  * ---------------
- * (C) Copyright 2001-2007, by Object Refinery Limited.
+ * (C) Copyright 2001-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,7 +35,7 @@
  * Changes
  * -------
  * 16-Nov-2001 : Version 1 (DG);
- * 14-Feb-2002 : Order of parameters in Month(int, int) constructor 
+ * 14-Feb-2002 : Order of parameters in Month(int, int) constructor
  *               changed (DG);
  * 26-Jun-2002 : Removed unnecessary import (DG);
  * 17-Oct-2002 : Fixed errors reported by Checkstyle (DG);
@@ -136,7 +136,7 @@ public class MonthTests extends TestCase {
     }
 
     /**
-     * In GMT, the end of Feb 2000 is java.util.Date(951,868,799,999L).  Use 
+     * In GMT, the end of Feb 2000 is java.util.Date(951,868,799,999L).  Use
      * this to check the Month constructor.
      */
     public void testDateConstructor1() {
@@ -183,7 +183,7 @@ public class MonthTests extends TestCase {
     }
 
     /**
-     * Set up a month equal to Jan 1900.  Request the next month, it should be 
+     * Set up a month equal to Jan 1900.  Request the next month, it should be
      * Feb 1900.
      */
     public void testJan1900Next() {
@@ -274,9 +274,9 @@ public class MonthTests extends TestCase {
         assertEquals(m1, m2);
 
     }
-    
+
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         Month m1 = new Month(2, 2003);
@@ -286,7 +286,7 @@ public class MonthTests extends TestCase {
         int h2 = m2.hashCode();
         assertEquals(h1, h2);
     }
-    
+
     /**
      * The {@link Month} class is immutable, so should not be {@link Cloneable}.
      */
@@ -294,7 +294,7 @@ public class MonthTests extends TestCase {
         Month m = new Month(2, 2003);
         assertFalse(m instanceof Cloneable);
     }
-    
+
     /**
      * Some checks for the getFirstMillisecond() method.
      */
@@ -308,7 +308,7 @@ public class MonthTests extends TestCase {
         Locale.setDefault(saved);
         TimeZone.setDefault(savedZone);
     }
-    
+
     /**
      * Some checks for the getFirstMillisecond(TimeZone) method.
      */
@@ -317,27 +317,7 @@ public class MonthTests extends TestCase {
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar c = new GregorianCalendar(zone);
         assertEquals(-628444800000L, m.getFirstMillisecond(c));
-        
-        // try null calendar
-        boolean pass = false;
-        try {
-            m.getFirstMillisecond((Calendar) null);
-        }
-        catch (NullPointerException e) {
-            pass = true;
-        }
-        assertTrue(pass);            
-    }
-    
-    /**
-     * Some checks for the getFirstMillisecond(TimeZone) method.
-     */
-    public void testGetFirstMillisecondWithCalendar() {
-        Month m = new Month(1, 2001);
-        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
-        assertEquals(978307200000L, m.getFirstMillisecond(calendar));
-        
+
         // try null calendar
         boolean pass = false;
         try {
@@ -347,7 +327,27 @@ public class MonthTests extends TestCase {
             pass = true;
         }
         assertTrue(pass);
-    }    
+    }
+
+    /**
+     * Some checks for the getFirstMillisecond(TimeZone) method.
+     */
+    public void testGetFirstMillisecondWithCalendar() {
+        Month m = new Month(1, 2001);
+        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(978307200000L, m.getFirstMillisecond(calendar));
+
+        // try null calendar
+        boolean pass = false;
+        try {
+            m.getFirstMillisecond((Calendar) null);
+        }
+        catch (NullPointerException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
 
     /**
      * Some checks for the getLastMillisecond() method.
@@ -362,7 +362,7 @@ public class MonthTests extends TestCase {
         Locale.setDefault(saved);
         TimeZone.setDefault(savedZone);
     }
-    
+
     /**
      * Some checks for the getLastMillisecond(TimeZone) method.
      */
@@ -371,27 +371,7 @@ public class MonthTests extends TestCase {
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar c = new GregorianCalendar(zone);
         assertEquals(-626025600001L, m.getLastMillisecond(c));
-        
-        // try null calendar
-        boolean pass = false;
-        try {
-            m.getLastMillisecond((Calendar) null);
-        }
-        catch (NullPointerException e) {
-            pass = true;
-        }
-        assertTrue(pass);            
-    }
-    
-    /**
-     * Some checks for the getLastMillisecond(TimeZone) method.
-     */
-    public void testGetLastMillisecondWithCalendar() {
-        Month m = new Month(3, 2001);
-        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
-        assertEquals(986083199999L, m.getLastMillisecond(calendar));
-        
+
         // try null calendar
         boolean pass = false;
         try {
@@ -401,8 +381,28 @@ public class MonthTests extends TestCase {
             pass = true;
         }
         assertTrue(pass);
-    } 
-    
+    }
+
+    /**
+     * Some checks for the getLastMillisecond(TimeZone) method.
+     */
+    public void testGetLastMillisecondWithCalendar() {
+        Month m = new Month(3, 2001);
+        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(986083199999L, m.getLastMillisecond(calendar));
+
+        // try null calendar
+        boolean pass = false;
+        try {
+            m.getLastMillisecond((Calendar) null);
+        }
+        catch (NullPointerException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
+
     /**
      * Some checks for the getSerialIndex() method.
      */
@@ -412,7 +412,7 @@ public class MonthTests extends TestCase {
         m = new Month(1, 1900);
         assertEquals(22801L, m.getSerialIndex());
     }
-    
+
     /**
      * Some checks for the testNext() method.
      */
@@ -424,7 +424,7 @@ public class MonthTests extends TestCase {
         m = new Month(12, 9999);
         assertNull(m.next());
     }
-    
+
     /**
      * Some checks for the getStart() method.
      */
@@ -436,9 +436,9 @@ public class MonthTests extends TestCase {
         cal.set(Calendar.MILLISECOND, 0);
         Month m = new Month(3, 2006);
         assertEquals(cal.getTime(), m.getStart());
-        Locale.setDefault(saved);        
+        Locale.setDefault(saved);
     }
-    
+
     /**
      * Some checks for the getEnd() method.
      */
@@ -450,7 +450,7 @@ public class MonthTests extends TestCase {
         cal.set(Calendar.MILLISECOND, 999);
         Month m = new Month(1, 2006);
         assertEquals(cal.getTime(), m.getEnd());
-        Locale.setDefault(saved);                
+        Locale.setDefault(saved);
     }
 
 }

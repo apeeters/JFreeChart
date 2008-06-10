@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------------------
  * SimpleTimePeriodTests.java
  * --------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited.
+ * (C) Copyright 2003-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -109,16 +109,16 @@ public class SimpleTimePeriodTests extends TestCase {
         );
         assertTrue(p1.equals(p2));
         assertTrue(p2.equals(p1));
-        
+
         p1 = new SimpleTimePeriod(new Date(1002L), new Date(1004L));
         assertFalse(p1.equals(p2));
         p2 = new SimpleTimePeriod(new Date(1002L), new Date(1004L));
         assertTrue(p1.equals(p2));
-        
+
         p1 = new SimpleTimePeriod(new Date(1002L), new Date(1003L));
         assertFalse(p1.equals(p2));
         p2 = new SimpleTimePeriod(new Date(1002L), new Date(1003L));
-        assertTrue(p1.equals(p2));   
+        assertTrue(p1.equals(p2));
     }
 
     /**
@@ -145,9 +145,9 @@ public class SimpleTimePeriodTests extends TestCase {
         }
         assertEquals(p1, p2);
     }
-    
+
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         SimpleTimePeriod s1 = new SimpleTimePeriod(
@@ -162,7 +162,7 @@ public class SimpleTimePeriodTests extends TestCase {
         assertEquals(h1, h2);
     }
 
-    /** 
+    /**
      * This class is immutable, so it should not implement Cloneable.
      */
     public void testClone() {
@@ -171,7 +171,7 @@ public class SimpleTimePeriodTests extends TestCase {
         );
         assertFalse(s1 instanceof Cloneable);
     }
-    
+
     /**
      * Some checks for the compareTo() method.
      */
@@ -183,11 +183,11 @@ public class SimpleTimePeriodTests extends TestCase {
             new Date(10L), new Date(20L)
         );
         assertEquals(0, s1.compareTo(s2));
-        
+
         s1 = new SimpleTimePeriod(new Date(9L), new Date(21L));
         s2 = new SimpleTimePeriod(new Date(10L), new Date(20L));
         assertEquals(-1, s1.compareTo(s2));
-        
+
         s1 = new SimpleTimePeriod(new Date(11L), new Date(19L));
         s2 = new SimpleTimePeriod(new Date(10L), new Date(20L));
         assertEquals(1, s1.compareTo(s2));
@@ -195,7 +195,7 @@ public class SimpleTimePeriodTests extends TestCase {
         s1 = new SimpleTimePeriod(new Date(9L), new Date(19L));
         s2 = new SimpleTimePeriod(new Date(10L), new Date(20L));
         assertEquals(-1, s1.compareTo(s2));
-    
+
         s1 = new SimpleTimePeriod(new Date(11L), new Date(21));
         s2 = new SimpleTimePeriod(new Date(10L), new Date(20L));
         assertEquals(1, s1.compareTo(s2));
@@ -208,5 +208,5 @@ public class SimpleTimePeriodTests extends TestCase {
         s2 = new SimpleTimePeriod(new Date(10L), new Date(20L));
         assertEquals(1, s1.compareTo(s2));
     }
-    
+
 }

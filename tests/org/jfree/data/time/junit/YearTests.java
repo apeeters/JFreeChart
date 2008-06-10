@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------
  * YearTests.java
  * --------------
- * (C) Copyright 2001-2007, by Object Refinery Limited.
+ * (C) Copyright 2001-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -116,7 +116,7 @@ public class YearTests extends TestCase {
     }
 
     /**
-     * In GMT, the end of 2001 is java.util.Date(1009843199999L).  Use this to 
+     * In GMT, the end of 2001 is java.util.Date(1009843199999L).  Use this to
      * check the year constructor.
      */
     public void testDateConstructor1() {
@@ -137,7 +137,7 @@ public class YearTests extends TestCase {
     }
 
     /**
-     * In Los Angeles, the end of 2001 is java.util.Date(1009871999999L).  Use 
+     * In Los Angeles, the end of 2001 is java.util.Date(1009871999999L).  Use
      * this to check the year constructor.
      */
     public void testDateConstructor2() {
@@ -175,7 +175,7 @@ public class YearTests extends TestCase {
     }
 
     /**
-     * Set up a year equal to 9999.  Request the previous year, it should be 
+     * Set up a year equal to 9999.  Request the previous year, it should be
      * 9998.
      */
     public void test9999Previous() {
@@ -255,7 +255,7 @@ public class YearTests extends TestCase {
         assertEquals(y1, y2);
 
     }
-    
+
     /**
      * The {@link Year} class is immutable, so should not be {@link Cloneable}.
      */
@@ -263,9 +263,9 @@ public class YearTests extends TestCase {
         Year y = new Year(1999);
         assertFalse(y instanceof Cloneable);
     }
-    
+
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         Year y1 = new Year(1988);
@@ -275,7 +275,7 @@ public class YearTests extends TestCase {
         int h2 = y2.hashCode();
         assertEquals(h1, h2);
     }
-    
+
     /**
      * Some checks for the getFirstMillisecond() method.
      */
@@ -290,7 +290,7 @@ public class YearTests extends TestCase {
         Locale.setDefault(saved);
         TimeZone.setDefault(savedZone);
     }
-    
+
     /**
      * Some checks for the getFirstMillisecond(TimeZone) method.
      */
@@ -299,27 +299,7 @@ public class YearTests extends TestCase {
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar c = new GregorianCalendar(zone);
         assertEquals(-631123200000L, y.getFirstMillisecond(c));
-        
-        // try null calendar
-        boolean pass = false;
-        try {
-            y.getFirstMillisecond((Calendar) null);
-        }
-        catch (NullPointerException e) {
-            pass = true;
-        }
-        assertTrue(pass);            
-    }
-    
-    /**
-     * Some checks for the getFirstMillisecond(TimeZone) method.
-     */
-    public void testGetFirstMillisecondWithCalendar() {
-        Year y = new Year(2001);
-        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
-        assertEquals(978307200000L, y.getFirstMillisecond(calendar));
-        
+
         // try null calendar
         boolean pass = false;
         try {
@@ -329,7 +309,27 @@ public class YearTests extends TestCase {
             pass = true;
         }
         assertTrue(pass);
-    }    
+    }
+
+    /**
+     * Some checks for the getFirstMillisecond(TimeZone) method.
+     */
+    public void testGetFirstMillisecondWithCalendar() {
+        Year y = new Year(2001);
+        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(978307200000L, y.getFirstMillisecond(calendar));
+
+        // try null calendar
+        boolean pass = false;
+        try {
+            y.getFirstMillisecond((Calendar) null);
+        }
+        catch (NullPointerException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
 
     /**
      * Some checks for the getLastMillisecond() method.
@@ -345,7 +345,7 @@ public class YearTests extends TestCase {
         Locale.setDefault(saved);
         TimeZone.setDefault(savedZone);
     }
-    
+
     /**
      * Some checks for the getLastMillisecond(TimeZone) method.
      */
@@ -354,27 +354,7 @@ public class YearTests extends TestCase {
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar c = new GregorianCalendar(zone);
         assertEquals(-599587200001L, y.getLastMillisecond(c));
-        
-        // try null calendar
-        boolean pass = false;
-        try {
-            y.getLastMillisecond((Calendar) null);
-        }
-        catch (NullPointerException e) {
-            pass = true;
-        }
-        assertTrue(pass);            
-    }
-    
-    /**
-     * Some checks for the getLastMillisecond(TimeZone) method.
-     */
-    public void testGetLastMillisecondWithCalendar() {
-        Year y = new Year(2001);
-        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
-        assertEquals(1009843199999L, y.getLastMillisecond(calendar));
-        
+
         // try null calendar
         boolean pass = false;
         try {
@@ -384,8 +364,28 @@ public class YearTests extends TestCase {
             pass = true;
         }
         assertTrue(pass);
-    } 
-    
+    }
+
+    /**
+     * Some checks for the getLastMillisecond(TimeZone) method.
+     */
+    public void testGetLastMillisecondWithCalendar() {
+        Year y = new Year(2001);
+        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(1009843199999L, y.getLastMillisecond(calendar));
+
+        // try null calendar
+        boolean pass = false;
+        try {
+            y.getLastMillisecond((Calendar) null);
+        }
+        catch (NullPointerException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
+
     /**
      * Some checks for the getSerialIndex() method.
      */
@@ -393,7 +393,7 @@ public class YearTests extends TestCase {
         Year y = new Year(2000);
         assertEquals(2000L, y.getSerialIndex());
     }
-    
+
     /**
      * Some checks for the testNext() method.
      */
@@ -404,7 +404,7 @@ public class YearTests extends TestCase {
         y = new Year(9999);
         assertNull(y.next());
     }
-    
+
     /**
      * Some checks for the getStart() method.
      */
@@ -416,9 +416,9 @@ public class YearTests extends TestCase {
         cal.set(Calendar.MILLISECOND, 0);
         Year y = new Year(2006);
         assertEquals(cal.getTime(), y.getStart());
-        Locale.setDefault(saved);        
+        Locale.setDefault(saved);
     }
-    
+
     /**
      * Some checks for the getEnd() method.
      */
@@ -430,7 +430,7 @@ public class YearTests extends TestCase {
         cal.set(Calendar.MILLISECOND, 999);
         Year y = new Year(2006);
         assertEquals(cal.getTime(), y.getEnd());
-        Locale.setDefault(saved);                
+        Locale.setDefault(saved);
     }
-    
+
 }

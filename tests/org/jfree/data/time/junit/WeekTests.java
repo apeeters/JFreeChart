@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------
  * WeekTests.java
  * --------------
- * (C) Copyright 2002-2007, by Object Refinery Limited.
+ * (C) Copyright 2002-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -120,12 +120,12 @@ public class WeekTests extends TestCase {
         Week w2 = new Week(1, 2002);
         assertTrue(w1.equals(w2));
         assertTrue(w2.equals(w1));
-        
+
         w1 = new Week(2, 2002);
         assertFalse(w1.equals(w2));
         w2 = new Week(2, 2002);
         assertTrue(w1.equals(w2));
-        
+
         w1 = new Week(2, 2003);
         assertFalse(w1.equals(w2));
         w2 = new Week(2, 2003);
@@ -189,9 +189,9 @@ public class WeekTests extends TestCase {
         assertEquals(w1, w2);
 
     }
-    
+
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         Week w1 = new Week(2, 2003);
@@ -201,7 +201,7 @@ public class WeekTests extends TestCase {
         int h2 = w2.hashCode();
         assertEquals(h1, h2);
     }
-    
+
     /**
      * The {@link Week} class is immutable, so should not be {@link Cloneable}.
      */
@@ -209,21 +209,21 @@ public class WeekTests extends TestCase {
         Week w = new Week(1, 1999);
         assertFalse(w instanceof Cloneable);
     }
-    
+
     /**
      * The first week in 2005 should span the range:
-     * 
+     *
      * TimeZone         | Start Millis  | End Millis    | Start Date  | End Date
      * -----------------+---------------+---------------+-------------+------------
      * Europe/London    | 1104710400000 | 1105315199999 |  3-Jan-2005 | 9-Jan-2005
      * Europe/Paris     | 1104706800000 | 1105311599999 |  3-Jan-2005 | 2-Jan-2005
      * America/New_York | 1104037200000 | 1104641999999 | 26-Dec-2004 | 1-Jan-2005
-     * 
-     * In London and Paris, Monday is the first day of the week, while in the 
+     *
+     * In London and Paris, Monday is the first day of the week, while in the
      * US it is Sunday.
-     * 
+     *
      * Previously, we were using these values, but see Java Bug ID 4960215:
-     * 
+     *
      * TimeZone         | Start Millis  | End Millis    | Start Date  | End Date
      * -----------------+---------------+---------------+-------------+------------
      * Europe/London    | 1104105600000 | 1104710399999 | 27-Dec-2004 | 2-Jan-2005
@@ -245,24 +245,24 @@ public class WeekTests extends TestCase {
         Calendar c3 = Calendar.getInstance(
                 TimeZone.getTimeZone("America/New_York"), Locale.US);
         assertEquals(1104037200000L, w1.getFirstMillisecond(c3));
-        assertEquals(1104641999999L, w1.getLastMillisecond(c3));   
+        assertEquals(1104641999999L, w1.getLastMillisecond(c3));
     }
 
     /**
      * The 53rd week in 2004 in London and Paris should span the range:
-     * 
+     *
      * TimeZone         | Start Millis  | End Millis    | Start Date  | End Date
      * -----------------+---------------+---------------+-------------+------------
      * Europe/London    | 1104105600000 | 1104710399999 | 27-Dec-2004 | 02-Jan-2005
      * Europe/Paris     | 1104102000000 | 1104706799999 | 27-Dec-2004 | 02-Jan-2005
      *
      * The 53rd week in 2005 in New York should span the range:
-     * 
+     *
      * TimeZone         | Start Millis  | End Millis    | Start Date  | End Date
      * -----------------+---------------+---------------+-------------+------------
      * America/New_York | 1135486800000 | 1136091599999 | 25-Dec-2005 | 31-Dec-2005
-     * 
-     * In London and Paris, Monday is the first day of the week, while in the 
+     *
+     * In London and Paris, Monday is the first day of the week, while in the
      * US it is Sunday.
      */
     public void testWeek532005() {
@@ -281,19 +281,19 @@ public class WeekTests extends TestCase {
         Calendar c3 = Calendar.getInstance(
                 TimeZone.getTimeZone("America/New_York"), Locale.US);
         assertEquals(1135486800000L, w1.getFirstMillisecond(c3));
-        assertEquals(1136091599999L, w1.getLastMillisecond(c3));   
+        assertEquals(1136091599999L, w1.getLastMillisecond(c3));
     }
 
     /**
      * A test case for bug 1448828.
      */
     public void testBug1448828() {
-        Week w = new Week(new Date(1136109830000l), 
+        Week w = new Week(new Date(1136109830000l),
                 TimeZone.getTimeZone("GMT"));
         assertEquals(2005, w.getYearValue());
         assertEquals(52, w.getWeek());
     }
-    
+
     /**
      * A test case for bug 1498805.
      */
@@ -305,7 +305,7 @@ public class WeekTests extends TestCase {
         assertEquals(53, w.getWeek());
         assertEquals(new Year(2004), w.getYear());
     }
-    
+
     /**
      * Some checks for the getFirstMillisecond() method.
      */
@@ -319,7 +319,7 @@ public class WeekTests extends TestCase {
         Locale.setDefault(saved);
         TimeZone.setDefault(savedZone);
     }
-    
+
     /**
      * Some checks for the getFirstMillisecond(TimeZone) method.
      */
@@ -328,27 +328,7 @@ public class WeekTests extends TestCase {
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar c = new GregorianCalendar(zone);
         assertEquals(-603216000000L, w.getFirstMillisecond(c));
-        
-        // try null calendar
-        boolean pass = false;
-        try {
-            w.getFirstMillisecond((Calendar) null);
-        }
-        catch (NullPointerException e) {
-            pass = true;
-        }
-        assertTrue(pass);            
-    }
-    
-    /**
-     * Some checks for the getFirstMillisecond(TimeZone) method.
-     */
-    public void testGetFirstMillisecondWithCalendar() {
-        Week w = new Week(1, 2001);
-        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
-        assertEquals(978307200000L, w.getFirstMillisecond(calendar));
-        
+
         // try null calendar
         boolean pass = false;
         try {
@@ -358,7 +338,27 @@ public class WeekTests extends TestCase {
             pass = true;
         }
         assertTrue(pass);
-    }    
+    }
+
+    /**
+     * Some checks for the getFirstMillisecond(TimeZone) method.
+     */
+    public void testGetFirstMillisecondWithCalendar() {
+        Week w = new Week(1, 2001);
+        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(978307200000L, w.getFirstMillisecond(calendar));
+
+        // try null calendar
+        boolean pass = false;
+        try {
+            w.getFirstMillisecond((Calendar) null);
+        }
+        catch (NullPointerException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
 
     /**
      * Some checks for the getLastMillisecond() method.
@@ -373,7 +373,7 @@ public class WeekTests extends TestCase {
         Locale.setDefault(saved);
         TimeZone.setDefault(savedZone);
     }
-    
+
     /**
      * Some checks for the getLastMillisecond(TimeZone) method.
      */
@@ -382,27 +382,7 @@ public class WeekTests extends TestCase {
         TimeZone zone = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar c = new GregorianCalendar(zone);
         assertEquals(-629827200001L, w.getLastMillisecond(c));
-        
-        // try null calendar
-        boolean pass = false;
-        try {
-            w.getLastMillisecond((Calendar) null);
-        }
-        catch (NullPointerException e) {
-            pass = true;
-        }
-        assertTrue(pass);            
-    }
-    
-    /**
-     * Some checks for the getLastMillisecond(TimeZone) method.
-     */
-    public void testGetLastMillisecondWithCalendar() {
-        Week w = new Week(52, 2001);
-        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
-        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
-        assertEquals(1009756799999L, w.getLastMillisecond(calendar));
-        
+
         // try null calendar
         boolean pass = false;
         try {
@@ -412,8 +392,28 @@ public class WeekTests extends TestCase {
             pass = true;
         }
         assertTrue(pass);
-    } 
-    
+    }
+
+    /**
+     * Some checks for the getLastMillisecond(TimeZone) method.
+     */
+    public void testGetLastMillisecondWithCalendar() {
+        Week w = new Week(52, 2001);
+        GregorianCalendar calendar = new GregorianCalendar(Locale.GERMANY);
+        calendar.setTimeZone(TimeZone.getTimeZone("Europe/Frankfurt"));
+        assertEquals(1009756799999L, w.getLastMillisecond(calendar));
+
+        // try null calendar
+        boolean pass = false;
+        try {
+            w.getLastMillisecond((Calendar) null);
+        }
+        catch (NullPointerException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
+
     /**
      * Some checks for the getSerialIndex() method.
      */
@@ -423,7 +423,7 @@ public class WeekTests extends TestCase {
         w = new Week(1, 1900);
         assertEquals(100701L, w.getSerialIndex());
     }
-    
+
     /**
      * Some checks for the testNext() method.
      */
@@ -435,7 +435,7 @@ public class WeekTests extends TestCase {
         w = new Week(53, 9999);
         assertNull(w.next());
     }
-    
+
     /**
      * Some checks for the getStart() method.
      */
@@ -447,9 +447,9 @@ public class WeekTests extends TestCase {
         cal.set(Calendar.MILLISECOND, 0);
         Week w = new Week(3, 2006);
         assertEquals(cal.getTime(), w.getStart());
-        Locale.setDefault(saved);        
+        Locale.setDefault(saved);
     }
-    
+
     /**
      * Some checks for the getEnd() method.
      */
@@ -461,9 +461,9 @@ public class WeekTests extends TestCase {
         cal.set(Calendar.MILLISECOND, 999);
         Week w = new Week(1, 2006);
         assertEquals(cal.getTime(), w.getEnd());
-        Locale.setDefault(saved);                
+        Locale.setDefault(saved);
     }
-    
+
     /**
      * A test for a problem in constructing a new Week instance.
      */
@@ -474,7 +474,7 @@ public class WeekTests extends TestCase {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Copenhagen"));
         GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance(
                 TimeZone.getDefault(), Locale.getDefault());
-        
+
         // first day of week is monday
         assertEquals(Calendar.MONDAY, cal.getFirstDayOfWeek());
         cal.set(2007, Calendar.AUGUST, 26, 1, 0, 0);
@@ -490,16 +490,16 @@ public class WeekTests extends TestCase {
         assertEquals(Calendar.SUNDAY, cal.getFirstDayOfWeek());
         cal.set(2007, Calendar.AUGUST, 26, 1, 0, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        
+
         t = cal.getTime();
         w = new Week(t, TimeZone.getTimeZone("Europe/Copenhagen"));
         assertEquals(35, w.getWeek());
-        w = new Week(t, TimeZone.getTimeZone("Europe/Copenhagen"), 
+        w = new Week(t, TimeZone.getTimeZone("Europe/Copenhagen"),
                 new Locale("da", "DK"));
         assertEquals(34, w.getWeek());
 
         Locale.setDefault(savedLocale);
         TimeZone.setDefault(savedZone);
     }
-    
+
 }
