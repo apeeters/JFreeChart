@@ -42,7 +42,6 @@
 
 package org.jfree.data.time.junit;
 
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
