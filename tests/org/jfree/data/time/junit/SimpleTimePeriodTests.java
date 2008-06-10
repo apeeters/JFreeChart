@@ -36,6 +36,7 @@
  * -------
  * 13-Mar-2003 : Version 1 (DG);
  * 21-Oct-2003 : Added hashCode() test (DG);
+ * 02-Jun-2008 : Added a test for immutability (DG);
  *
  */
 
@@ -91,9 +92,8 @@ public class SimpleTimePeriodTests extends TestCase {
      * SourceForge Bug ID: 558850.
      */
     public void testEqualsSelf() {
-        SimpleTimePeriod p = new SimpleTimePeriod(
-            new Date(1000L), new Date(1001L)
-        );
+        SimpleTimePeriod p = new SimpleTimePeriod(new Date(1000L),
+        		new Date(1001L));
         assertTrue(p.equals(p));
     }
 
@@ -101,12 +101,10 @@ public class SimpleTimePeriodTests extends TestCase {
      * Test the equals() method.
      */
     public void testEquals() {
-        SimpleTimePeriod p1 = new SimpleTimePeriod(
-            new Date(1000L), new Date(1004L)
-        );
-        SimpleTimePeriod p2 = new SimpleTimePeriod(
-            new Date(1000L), new Date(1004L)
-        );
+        SimpleTimePeriod p1 = new SimpleTimePeriod(new Date(1000L),
+        		new Date(1004L));
+        SimpleTimePeriod p2 = new SimpleTimePeriod(new Date(1000L),
+        		new Date(1004L));
         assertTrue(p1.equals(p2));
         assertTrue(p2.equals(p1));
 
@@ -125,9 +123,8 @@ public class SimpleTimePeriodTests extends TestCase {
      * Serialize an instance, restore it, and check for equality.
      */
     public void testSerialization() {
-        SimpleTimePeriod p1 = new SimpleTimePeriod(
-            new Date(1000L), new Date(1001L)
-        );
+        SimpleTimePeriod p1 = new SimpleTimePeriod(new Date(1000L),
+        		new Date(1001L));
         SimpleTimePeriod p2 = null;
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -135,13 +132,12 @@ public class SimpleTimePeriodTests extends TestCase {
             out.writeObject(p1);
             out.close();
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             p2 = (SimpleTimePeriod) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(p1, p2);
     }
@@ -150,12 +146,10 @@ public class SimpleTimePeriodTests extends TestCase {
      * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
-        SimpleTimePeriod s1 = new SimpleTimePeriod(
-            new Date(10L), new Date(20L)
-        );
-        SimpleTimePeriod s2 = new SimpleTimePeriod(
-            new Date(10L), new Date(20L)
-        );
+        SimpleTimePeriod s1 = new SimpleTimePeriod(new Date(10L),
+        		new Date(20L));
+        SimpleTimePeriod s2 = new SimpleTimePeriod(new Date(10L),
+        		new Date(20L));
         assertTrue(s1.equals(s2));
         int h1 = s1.hashCode();
         int h2 = s2.hashCode();
@@ -166,22 +160,38 @@ public class SimpleTimePeriodTests extends TestCase {
      * This class is immutable, so it should not implement Cloneable.
      */
     public void testClone() {
-        SimpleTimePeriod s1 = new SimpleTimePeriod(
-            new Date(10L), new Date(20L)
-        );
+        SimpleTimePeriod s1 = new SimpleTimePeriod(new Date(10L),
+        		new Date(20));
         assertFalse(s1 instanceof Cloneable);
+    }
+
+    /**
+     * Some simple checks for immutability.
+     */
+    public void testImmutable() {
+    	SimpleTimePeriod p1 = new SimpleTimePeriod(new Date(10L),
+    			new Date(20L));
+    	SimpleTimePeriod p2 = new SimpleTimePeriod(new Date(10L),
+    			new Date(20L));
+    	assertEquals(p1, p2);
+    	p1.getStart().setTime(11L);
+    	assertEquals(p1, p2);
+
+    	Date d1 = new Date(10L);
+    	Date d2 = new Date(20L);
+    	p1 = new SimpleTimePeriod(d1, d2);
+    	d1.setTime(11L);
+    	assertEquals(new Date(10L), p1.getStart());
     }
 
     /**
      * Some checks for the compareTo() method.
      */
     public void testCompareTo() {
-        SimpleTimePeriod s1 = new SimpleTimePeriod(
-            new Date(10L), new Date(20L)
-        );
-        SimpleTimePeriod s2 = new SimpleTimePeriod(
-            new Date(10L), new Date(20L)
-        );
+        SimpleTimePeriod s1 = new SimpleTimePeriod(new Date(10L),
+        		new Date(20L));
+        SimpleTimePeriod s2 = new SimpleTimePeriod(new Date(10L),
+        		new Date(20L));
         assertEquals(0, s1.compareTo(s2));
 
         s1 = new SimpleTimePeriod(new Date(9L), new Date(21L));

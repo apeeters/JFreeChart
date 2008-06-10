@@ -112,13 +112,12 @@ public class DateRangeTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             r2 = (DateRange) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(r1, r2);
     }
@@ -130,6 +129,19 @@ public class DateRangeTests extends TestCase {
     public void testClone() {
         DateRange r1 = new DateRange(new Date(1000L), new Date(2000L));
         assertFalse(r1 instanceof Cloneable);
+    }
+
+    /**
+     * Confirm that a DateRange is immutable.
+     */
+    public void testImmutable() {
+    	Date d1 = new Date(10L);
+    	Date d2 = new Date(20L);
+    	DateRange r = new DateRange(d1, d2);
+    	d1.setTime(11L);
+    	assertEquals(new Date(10L), r.getLowerDate());
+    	r.getUpperDate().setTime(22L);
+    	assertEquals(new Date(20L), r.getUpperDate());
     }
 
 }

@@ -37,6 +37,7 @@
  * 29-Jan-2002 : Version 1 (DG);
  * 17-Oct-2002 : Fixed errors reported by Checkstyle (DG);
  * 21-Oct-2003 : Added hashCode test (DG);
+ * 28-May-2008 : Added test for immutability (DG);
  *
  */
 
@@ -48,6 +49,7 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -93,13 +95,12 @@ public class FixedMillisecondTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             m2 = (FixedMillisecond) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(m1, m2);
 
@@ -126,4 +127,13 @@ public class FixedMillisecondTests extends TestCase {
         assertFalse(m instanceof Cloneable);
     }
 
+    /**
+     * A check for immutability.
+     */
+    public void testImmutability() {
+    	Date d = new Date(20L);
+    	FixedMillisecond fm = new FixedMillisecond(d);
+    	d.setTime(22L);
+    	assertEquals(20L, fm.getFirstMillisecond());
+    }
 }
