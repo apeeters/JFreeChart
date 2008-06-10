@@ -269,7 +269,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
      *
      * @return The series with the given key.
      */
-    public TimeSeries getSeries(String key) {
+    public TimeSeries getSeries(Comparable key) {
         TimeSeries result = null;
         Iterator iterator = this.data.iterator();
         while (iterator.hasNext()) {
