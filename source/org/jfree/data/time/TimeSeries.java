@@ -75,6 +75,8 @@
  *               Comparable (DG);
  * 31-Oct-2007 : Implemented faster hashCode() (DG);
  * 21-Nov-2007 : Fixed clone() method (bug 1832432) (DG);
+ * 10-Jan-2008 : Fixed createCopy(RegularTimePeriod, RegularTimePeriod) (bug
+ *               1864222) (DG);
  *
  */
 
@@ -672,7 +674,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      */
     public TimeSeriesDataItem addOrUpdate(RegularTimePeriod period,
                                           double value) {
-        return this.addOrUpdate(period, new Double(value));
+        return addOrUpdate(period, new Double(value));
     }
 
     /**
@@ -903,8 +905,10 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * Creates a new timeseries by copying a subset of the data in this time
      * series.
      *
-     * @param start  the first time period to copy.
-     * @param end  the last time period to copy.
+     * @param start  the first time period to copy (<code>null</code> not
+     *         permitted).
+     * @param end  the last time period to copy (<code>null</code> not
+     *         permitted).
      *
      * @return A time series containing a copy of this time series from start
      *         until end.
@@ -937,7 +941,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
             endIndex = -(endIndex + 1); // this is first item AFTER end period
             endIndex = endIndex - 1;    // so this is last item BEFORE end
         }
-        if (endIndex < 0) {
+        if ((endIndex < 0)  || (endIndex < startIndex)) {
             emptyRange = true;
         }
         if (emptyRange) {
@@ -966,15 +970,13 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
             return false;
         }
         TimeSeries s = (TimeSeries) object;
-        if (!ObjectUtilities.equal(
-            getDomainDescription(), s.getDomainDescription()
-        )) {
+        if (!ObjectUtilities.equal(getDomainDescription(),
+                s.getDomainDescription())) {
             return false;
         }
 
-        if (!ObjectUtilities.equal(
-            getRangeDescription(), s.getRangeDescription()
-        )) {
+        if (!ObjectUtilities.equal(getRangeDescription(),
+                s.getRangeDescription())) {
             return false;
         }
 

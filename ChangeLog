@@ -1,5 +1,11 @@
 2008-06-10  David Gilbert  <david.gilbert@object-refinery.com>
 
+    Bug 1864222:
+    * source/org/jfree/data/time/TimeSeries.java
+    (createCopy(RegularTimePeriod, RegularTimePeriod)): Handle empty range.
+    
+2008-06-10  David Gilbert  <david.gilbert@object-refinery.com>
+
     * source/org/jfree/data/time/FixedMillisecond.java
     (time): Changed from Date to long.
 
