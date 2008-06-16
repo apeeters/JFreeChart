@@ -37,6 +37,7 @@
  * 06-Jan-2005 : Version 1 (DG);
  * 22-Aug-2006 : Added testDrawWithEmptyDataset() method (DG);
  * 30-Nov-2006 : Extended testEquals() (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -62,6 +63,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StackedXYAreaRenderer2;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.Range;
 import org.jfree.data.xy.DefaultTableXYDataset;
 import org.jfree.data.xy.TableXYDataset;
@@ -156,6 +158,14 @@ public class StackedXYAreaRenderer2Tests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        StackedXYAreaRenderer2 r1 = new StackedXYAreaRenderer2();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

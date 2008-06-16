@@ -39,6 +39,7 @@
  *               StackedXYAreaRendererTests, improved testEquals() method,
  *               added check for auto range calculation (DG);
  * 10-Nov-2006 : Added testBug1593156() (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -66,6 +67,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StackedXYAreaRenderer;
 import org.jfree.chart.renderer.xy.XYAreaRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.Range;
 import org.jfree.data.xy.DefaultTableXYDataset;
 import org.jfree.data.xy.TableXYDataset;
@@ -144,6 +146,14 @@ public class StackedXYAreaRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        StackedXYAreaRenderer r1 = new StackedXYAreaRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

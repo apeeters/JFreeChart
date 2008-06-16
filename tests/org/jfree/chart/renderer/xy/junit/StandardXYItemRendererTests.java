@@ -41,6 +41,7 @@
  * 17-May-2007 : Added testGetLegendItemSeriesIndex() (DG);
  * 08-Jun-2007 : Added testNoDisplayedItem() (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -72,6 +73,7 @@ import org.jfree.chart.junit.TestUtilities;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.UnitType;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -198,7 +200,14 @@ public class StandardXYItemRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setSeriesShapesFilled(1, Boolean.TRUE);
         assertTrue(r1.equals(r2));
+    }
 
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        StandardXYItemRenderer r1 = new StandardXYItemRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

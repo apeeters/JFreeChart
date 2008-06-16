@@ -37,6 +37,7 @@
  * 10-Sep-2004 : Version 1 (DG);
  * 06-Jan-2005 : Added test for auto range calculation (DG);
  * 06-Dec-2006 : Confirm serialization of GradientPaint (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -61,6 +62,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StackedXYBarRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.Range;
 import org.jfree.data.xy.TableXYDataset;
 
@@ -134,6 +136,14 @@ public class StackedXYBarRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        StackedXYBarRenderer r1 = new StackedXYBarRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
