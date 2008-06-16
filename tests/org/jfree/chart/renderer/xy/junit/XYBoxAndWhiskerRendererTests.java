@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------------------
@@ -84,28 +84,28 @@ public class XYBoxAndWhiskerRendererTests extends TestCase {
      * Check that the equals() method distinguishes all fields.
      */
     public void testEquals() {
-        
+
         XYBoxAndWhiskerRenderer r1 = new XYBoxAndWhiskerRenderer();
         XYBoxAndWhiskerRenderer r2 = new XYBoxAndWhiskerRenderer();
         assertEquals(r1, r2);
-        
-        r1.setArtifactPaint(new GradientPaint(1.0f, 2.0f, Color.green, 
+
+        r1.setArtifactPaint(new GradientPaint(1.0f, 2.0f, Color.green,
                 3.0f, 4.0f, Color.red));
         assertFalse(r1.equals(r2));
-        r2.setArtifactPaint(new GradientPaint(1.0f, 2.0f, Color.green, 
+        r2.setArtifactPaint(new GradientPaint(1.0f, 2.0f, Color.green,
                 3.0f, 4.0f, Color.red));
         assertEquals(r1, r2);
-        
+
         r1.setBoxWidth(0.55);
         assertFalse(r1.equals(r2));
         r2.setBoxWidth(0.55);
         assertEquals(r1, r2);
-        
+
         r1.setFillBox(!r1.getFillBox());
         assertFalse(r1.equals(r2));
         r2.setFillBox(!r2.getFillBox());
         assertEquals(r1, r2);
-        
+
         r1.setBoxPaint(Color.yellow);
         assertFalse(r1.equals(r2));
         r2.setBoxPaint(Color.yellow);
@@ -116,11 +116,11 @@ public class XYBoxAndWhiskerRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setBoxPaint(null);
         assertEquals(r1, r2);
-        
+
     }
 
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         XYBoxAndWhiskerRenderer r1 = new XYBoxAndWhiskerRenderer();
@@ -130,7 +130,7 @@ public class XYBoxAndWhiskerRendererTests extends TestCase {
         int h2 = r2.hashCode();
         assertEquals(h1, h2);
     }
-    
+
     /**
      * Confirm that cloning works.
      */
