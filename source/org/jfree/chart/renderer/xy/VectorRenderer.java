@@ -39,6 +39,7 @@
  * 25-May-2007 : Moved from experimental to the main source tree (DG);
  * 18-Feb-2008 : Fixed bug 1880114, arrows for horizontal plot
  *               orientation (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -55,6 +56,7 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.Range;
 import org.jfree.data.xy.VectorXYDataset;
 import org.jfree.data.xy.XYDataset;
@@ -66,7 +68,7 @@ import org.jfree.data.xy.XYDataset;
  * @since 1.0.6
  */
 public class VectorRenderer extends AbstractXYItemRenderer
-        implements XYItemRenderer, Cloneable, Serializable {
+        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
 
     /** The length of the base. */
     private double baseLength = 0.10;
@@ -271,8 +273,8 @@ public class VectorRenderer extends AbstractXYItemRenderer
             p.lineTo((float) leftx, (float) lefty);
         }
         else {  // orientation is HORIZONTAL
-        	p.moveTo((float) yy1, (float) xx1);
-        	p.lineTo((float) righty, (float) rightx);
+            p.moveTo((float) yy1, (float) xx1);
+            p.lineTo((float) righty, (float) rightx);
             p.lineTo((float) by, (float) bx);
             p.lineTo((float) lefty, (float) leftx);
         }
