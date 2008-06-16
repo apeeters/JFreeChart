@@ -1,5 +1,10 @@
 2006-06-16  David Gilbert  <david.gilbert@object-refinery.com>
 
+    * source/org/jfree/chart/labels/IntervalXYItemLabelGenerator.java: 
+    New class.
+
+2006-06-16  David Gilbert  <david.gilbert@object-refinery.com>
+
     * source/org/jfree/chart/labels/AbstractXYItemLabelGenerator.java
     (nullXString): Removed,
     (getNullYString): New method,
