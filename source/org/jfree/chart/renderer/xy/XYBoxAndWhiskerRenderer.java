@@ -119,10 +119,7 @@ import org.jfree.data.xy.XYDataset;
  * This renderer does not include any code to calculate the crosshair point.
  */
 public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
-                                     implements XYItemRenderer,
-                                                Cloneable,
-                                                PublicCloneable,
-                                                Serializable {
+        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -8020170108532232324L;
@@ -284,15 +281,15 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      * @since 1.0.10
      */
     protected Paint lookupBoxPaint(int series, int item) {
-    	Paint p = getBoxPaint();
-    	if (p != null) {
-    		return p;
-    	}
-    	else {
-    		// TODO: could change this to itemFillPaint().  For backwards
-    		// compatibility, it might require a useFillPaint flag.
-    		return getItemPaint(series, item);
-    	}
+        Paint p = getBoxPaint();
+        if (p != null) {
+            return p;
+        }
+        else {
+            // TODO: could change this to itemFillPaint().  For backwards
+            // compatibility, it might require a useFillPaint flag.
+            return getItemPaint(series, item);
+        }
     }
 
     /**
