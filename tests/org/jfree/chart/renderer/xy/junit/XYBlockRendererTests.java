@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * -------------------------
  * XYBlockRendererTests.java
  * -------------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -87,13 +87,13 @@ public class XYBlockRendererTests extends TestCase {
      * Test that the equals() method distinguishes all fields.
      */
     public void testEquals() {
-        
+
         // default instances
         XYBlockRenderer r1 = new XYBlockRenderer();
         XYBlockRenderer r2 = new XYBlockRenderer();
         assertTrue(r1.equals(r2));
         assertTrue(r2.equals(r1));
-        
+
         // blockHeight
         r1.setBlockHeight(2.0);
         assertFalse(r1.equals(r2));
@@ -105,17 +105,17 @@ public class XYBlockRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setBlockWidth(2.0);
         assertTrue(r1.equals(r2));
-        
+
         // paintScale
         r1.setPaintScale(new GrayPaintScale(0.0, 1.0));
         assertFalse(r1.equals(r2));
         r2.setPaintScale(new GrayPaintScale(0.0, 1.0));
         assertTrue(r1.equals(r2));
-        
+
     }
 
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         XYBlockRenderer r1 = new XYBlockRenderer();
@@ -125,7 +125,7 @@ public class XYBlockRendererTests extends TestCase {
         int h2 = r2.hashCode();
         assertEquals(h1, h2);
     }
-    
+
     /**
      * Confirm that cloning works.
      */
@@ -143,7 +143,7 @@ public class XYBlockRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
-        
+
         // check independence
         scale1.add(0.5, Color.red);
         assertFalse(r1.equals(r2));

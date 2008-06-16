@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ------------------------
  * XYAreaRendererTests.java
  * ------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -94,7 +94,7 @@ public class XYAreaRendererTests extends TestCase {
         XYAreaRenderer r1 = new XYAreaRenderer();
         XYAreaRenderer r2 = new XYAreaRenderer();
         assertEquals(r1, r2);
-        
+
         r1 = new XYAreaRenderer(XYAreaRenderer.AREA_AND_SHAPES);
         assertFalse(r1.equals(r2));
         r2 = new XYAreaRenderer(XYAreaRenderer.AREA_AND_SHAPES);
@@ -124,7 +124,7 @@ public class XYAreaRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setOutline(true);
         assertTrue(r1.equals(r2));
-        
+
         r1.setLegendArea(new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0));
         assertFalse(r1.equals(r2));
         r2.setLegendArea(new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0));
@@ -132,7 +132,7 @@ public class XYAreaRendererTests extends TestCase {
     }
 
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         XYAreaRenderer r1 = new XYAreaRenderer();
@@ -142,7 +142,7 @@ public class XYAreaRendererTests extends TestCase {
         int h2 = r2.hashCode();
         assertEquals(h1, h2);
     }
-    
+
     /**
      * Confirm that cloning works.
      */
@@ -160,7 +160,7 @@ public class XYAreaRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
-        
+
         // check independence
         rect1.setRect(4.0, 3.0, 2.0, 1.0);
         assertFalse(r1.equals(r2));
@@ -183,8 +183,7 @@ public class XYAreaRendererTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             r2 = (XYAreaRenderer) in.readObject();
             in.close();
         }
@@ -196,32 +195,32 @@ public class XYAreaRendererTests extends TestCase {
     }
 
     /**
-     * Draws the chart with a <code>null</code> info object to make sure that 
+     * Draws the chart with a <code>null</code> info object to make sure that
      * no exceptions are thrown (particularly by code in the renderer).
      */
     public void testDrawWithNullInfo() {
         boolean success = false;
         try {
             DefaultTableXYDataset dataset = new DefaultTableXYDataset();
-        
+
             XYSeries s1 = new XYSeries("Series 1", true, false);
             s1.add(5.0, 5.0);
             s1.add(10.0, 15.5);
             s1.add(15.0, 9.5);
             s1.add(20.0, 7.5);
             dataset.addSeries(s1);
-        
+
             XYSeries s2 = new XYSeries("Series 2", true, false);
             s2.add(5.0, 5.0);
             s2.add(10.0, 15.5);
             s2.add(15.0, 9.5);
             s2.add(20.0, 3.5);
             dataset.addSeries(s2);
-            XYPlot plot = new XYPlot(dataset, 
-                    new NumberAxis("X"), new NumberAxis("Y"), 
+            XYPlot plot = new XYPlot(dataset,
+                    new NumberAxis("X"), new NumberAxis("Y"),
                     new XYAreaRenderer());
             JFreeChart chart = new JFreeChart(plot);
-            /* BufferedImage image = */ chart.createBufferedImage(300, 200, 
+            /* BufferedImage image = */ chart.createBufferedImage(300, 200,
                     null);
             success = true;
         }
@@ -244,7 +243,7 @@ public class XYAreaRendererTests extends TestCase {
         s2.add(1.0, 1.1);
         d1.addSeries(s1);
         d1.addSeries(s2);
-        
+
         XYSeriesCollection d2 = new XYSeriesCollection();
         XYSeries s3 = new XYSeries("S3");
         s3.add(1.0, 1.1);
