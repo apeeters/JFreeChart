@@ -1,5 +1,16 @@
 2006-06-16  David Gilbert  <david.gilbert@object-refinery.com>
 
+    * source/org/jfree/chart/renderer/xy/YIntervalRenderer.java
+    (additionalItemLabelGenerator): New field,
+    (YIntervalRenderer): Initialise new field,
+    (getAdditionalItemLabelGenerator): New method,
+    (setAdditionalItemLabelGenerator): Likewise,
+    (drawItem): Added additional item label support,
+    (drawAdditionalItemLabel): New method,
+    (equals): Include new field.
+
+2006-06-16  David Gilbert  <david.gilbert@object-refinery.com>
+
     * source/org/jfree/chart/renderer/xy/HighLowRenderer.java
     (tickLength): New field,
     (HighLowRenderer): Initialise tickLength,
