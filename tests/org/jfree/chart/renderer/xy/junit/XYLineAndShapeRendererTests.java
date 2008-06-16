@@ -38,6 +38,7 @@
  * 07-Jan-2005 : Added check for findRangeBounds() method (DG);
  * 21-Feb-2007 : Check independence in testCloning() (DG);
  * 17-May-2007 : Added testGetLegendItemSeriesIndex() (DG);
+ * 22-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -64,6 +65,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.urls.TimeSeriesURLGenerator;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.Range;
 import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -223,6 +225,14 @@ public class XYLineAndShapeRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setSeriesShapesFilled(1, true);
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYLineAndShapeRenderer r1 = new XYLineAndShapeRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

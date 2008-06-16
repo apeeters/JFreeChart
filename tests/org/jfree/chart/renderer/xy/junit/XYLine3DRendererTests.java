@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 30-Apr-2007 : Version 1 (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -54,6 +55,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.xy.XYLine3DRenderer;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link XYLine3DRenderer} class.
@@ -133,6 +135,14 @@ public class XYLine3DRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYLine3DRenderer r1 = new XYLine3DRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

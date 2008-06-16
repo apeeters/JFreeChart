@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 25-Oct-2006 : Version 1 (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -54,6 +55,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.xy.XYErrorRenderer;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link XYErrorRenderer} class.
@@ -142,6 +144,14 @@ public class XYErrorRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYErrorRenderer r1 = new XYErrorRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
