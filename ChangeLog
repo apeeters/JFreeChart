@@ -1,3 +1,17 @@
+2006-06-16  David Gilbert  <david.gilbert@object-refinery.com>
+
+    * source/org/jfree/chart/labels/AbstractXYItemLabelGenerator.java
+    (nullXString): Removed,
+    (getNullYString): New method,
+    (createItemArray): Removed redundant code,
+    (equals): Check nullYString field,
+    (hashCode): Implemented.
+
+2006-06-16  David Gilbert  <david.gilbert@object-refinery.com>
+
+    * source/org/jfree/chart/renderer/xy/XYSplineAndShapeRenderer.java:
+    Renamed XYSplineRenderer.java.
+
 2008-06-10  David Gilbert  <david.gilbert@object-refinery.com>
 
     * source/org/jfree/data/time/TimeSeriesCollection.java

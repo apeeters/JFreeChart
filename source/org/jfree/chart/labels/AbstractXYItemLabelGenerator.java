@@ -46,6 +46,9 @@
  * 26-Jan-2006 : Minor API doc update (DG);
  * 25-Jan-2007 : Added new constructor and fixed bug in clone() method (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 23-Nov-2007 : Implemented hashCode() (DG);
+ * 26-May-2008 : Added accessor methods for nullYString and updated equals()
+ *               method (DG);
  *
  */
 
@@ -57,6 +60,7 @@ import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 
+import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.xy.XYDataset;
 
@@ -82,9 +86,6 @@ public class AbstractXYItemLabelGenerator implements Cloneable, Serializable {
 
     /** A date formatter for the y value. */
     private DateFormat yDateFormat;
-
-    /** The string used to represent 'null' for the x-value. */
-    private String nullXString = "null";
 
     /** The string used to represent 'null' for the y-value. */
     private String nullYString = "null";
@@ -250,6 +251,17 @@ public class AbstractXYItemLabelGenerator implements Cloneable, Serializable {
     }
 
     /**
+     * Returns the string representing a null value.
+     *
+     * @return The string representing a null value.
+     *
+     * @since 1.0.10
+     */
+    public String getNullYString() {
+    	return this.nullYString;
+    }
+
+    /**
      * Creates the array of items that can be passed to the
      * {@link MessageFormat} class for creating labels.
      *
@@ -266,16 +278,11 @@ public class AbstractXYItemLabelGenerator implements Cloneable, Serializable {
         result[0] = dataset.getSeriesKey(series).toString();
 
         double x = dataset.getXValue(series, item);
-        if (Double.isNaN(x) && dataset.getX(series, item) == null) {
-            result[1] = this.nullXString;
+        if (this.xDateFormat != null) {
+            result[1] = this.xDateFormat.format(new Date((long) x));
         }
         else {
-            if (this.xDateFormat != null) {
-                result[1] = this.xDateFormat.format(new Date((long) x));
-            }
-            else {
-                result[1] = this.xFormat.format(x);
-            }
+            result[1] = this.xFormat.format(x);
         }
 
         double y = dataset.getYValue(series, item);
@@ -323,7 +330,25 @@ public class AbstractXYItemLabelGenerator implements Cloneable, Serializable {
         if (!ObjectUtilities.equal(this.yDateFormat, that.yDateFormat)) {
             return false;
         }
+        if (!this.nullYString.equals(that.nullYString)) {
+        	return false;
+        }
         return true;
+    }
+
+    /**
+     * Returns a hash code for this instance.
+     *
+     * @return A hash code.
+     */
+    public int hashCode() {
+        int result = 127;
+        result = HashUtilities.hashCode(result, this.formatString);
+        result = HashUtilities.hashCode(result, this.xFormat);
+        result = HashUtilities.hashCode(result, this.xDateFormat);
+        result = HashUtilities.hashCode(result, this.yFormat);
+        result = HashUtilities.hashCode(result, this.yDateFormat);
+        return result;
     }
 
     /**
