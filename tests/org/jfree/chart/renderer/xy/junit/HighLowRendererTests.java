@@ -38,6 +38,8 @@
  * 22-Oct-2003 : Added hashCode test (DG);
  * 01-Nov-2005 : Added tests for new fields (DG);
  * 17-Aug-2006 : Added testFindRangeBounds() method (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
+ * 29-Apr-2008 : Extended testEquals() for new field (DG);
  *
  */
 
@@ -57,6 +59,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.xy.HighLowRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.Range;
 import org.jfree.data.xy.DefaultOHLCDataset;
 import org.jfree.data.xy.OHLCDataItem;
@@ -116,6 +119,12 @@ public class HighLowRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setCloseTickPaint(Color.blue);
         assertTrue(r1.equals(r2));
+
+        // tickLength
+        r1.setTickLength(99.9);
+        assertFalse(r1.equals(r2));
+        r2.setTickLength(99.9);
+        assertTrue(r1.equals(r2));
     }
 
     /**
@@ -146,6 +155,14 @@ public class HighLowRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        HighLowRenderer r1 = new HighLowRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
@@ -204,6 +221,5 @@ public class HighLowRendererTests extends TestCase {
         range = renderer.findRangeBounds(null);
         assertNull(range);
     }
-
 
 }
