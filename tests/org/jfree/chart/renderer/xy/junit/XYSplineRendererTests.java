@@ -24,9 +24,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * ----------------------------------
- * XYSplineAndShapeRendererTests.java
- * ----------------------------------
+ * --------------------------
+ * XYSplineRendererTests.java
+ * --------------------------
  * (C) Copyright 2007, 2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 25-Jul-2007 : Version 1 (DG);
+ * 22-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -52,12 +53,13 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jfree.chart.renderer.xy.XYSplineAndShapeRenderer;
+import org.jfree.chart.renderer.xy.XYSplineRenderer;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
- * Tests for the {@link XYSplineAndShapeRenderer} class.
+ * Tests for the {@link XYSplineRenderer} class.
  */
-public class XYSplineAndShapeRendererTests extends TestCase {
+public class XYSplineRendererTests extends TestCase {
 
     /**
      * Returns the tests as a test suite.
@@ -65,7 +67,7 @@ public class XYSplineAndShapeRendererTests extends TestCase {
      * @return The test suite.
      */
     public static Test suite() {
-        return new TestSuite(XYSplineAndShapeRendererTests.class);
+        return new TestSuite(XYSplineRendererTests.class);
     }
 
     /**
@@ -73,7 +75,7 @@ public class XYSplineAndShapeRendererTests extends TestCase {
      *
      * @param name  the name of the tests.
      */
-    public XYSplineAndShapeRendererTests(String name) {
+    public XYSplineRendererTests(String name) {
         super(name);
     }
 
@@ -82,8 +84,8 @@ public class XYSplineAndShapeRendererTests extends TestCase {
      */
     public void testEquals() {
 
-        XYSplineAndShapeRenderer r1 = new XYSplineAndShapeRenderer();
-        XYSplineAndShapeRenderer r2 = new XYSplineAndShapeRenderer();
+        XYSplineRenderer r1 = new XYSplineRenderer();
+        XYSplineRenderer r2 = new XYSplineRenderer();
         assertEquals(r1, r2);
         assertEquals(r2, r1);
 
@@ -97,8 +99,8 @@ public class XYSplineAndShapeRendererTests extends TestCase {
      * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
-        XYSplineAndShapeRenderer r1 = new XYSplineAndShapeRenderer();
-        XYSplineAndShapeRenderer r2 = new XYSplineAndShapeRenderer();
+        XYSplineRenderer r1 = new XYSplineRenderer();
+        XYSplineRenderer r2 = new XYSplineRenderer();
         assertTrue(r1.equals(r2));
         int h1 = r1.hashCode();
         int h2 = r2.hashCode();
@@ -110,11 +112,11 @@ public class XYSplineAndShapeRendererTests extends TestCase {
      */
     public void testCloning() {
         Rectangle2D legendShape = new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0);
-        XYSplineAndShapeRenderer r1 = new XYSplineAndShapeRenderer();
+        XYSplineRenderer r1 = new XYSplineRenderer();
         r1.setLegendLine(legendShape);
-        XYSplineAndShapeRenderer r2 = null;
+        XYSplineRenderer r2 = null;
         try {
-            r2 = (XYSplineAndShapeRenderer) r1.clone();
+            r2 = (XYSplineRenderer) r1.clone();
         }
         catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -125,12 +127,20 @@ public class XYSplineAndShapeRendererTests extends TestCase {
     }
 
     /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYSplineRenderer r1 = new XYSplineRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
+    }
+
+    /**
      * Serialize an instance, restore it, and check for equality.
      */
     public void testSerialization() {
 
-        XYSplineAndShapeRenderer r1 = new XYSplineAndShapeRenderer();
-        XYSplineAndShapeRenderer r2 = null;
+        XYSplineRenderer r1 = new XYSplineRenderer();
+        XYSplineRenderer r2 = null;
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(buffer);
@@ -139,7 +149,7 @@ public class XYSplineAndShapeRendererTests extends TestCase {
 
             ObjectInput in = new ObjectInputStream(
                     new ByteArrayInputStream(buffer.toByteArray()));
-            r2 = (XYSplineAndShapeRenderer) in.readObject();
+            r2 = (XYSplineRenderer) in.readObject();
             in.close();
         }
         catch (Exception e) {
