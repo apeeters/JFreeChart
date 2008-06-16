@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 30-Jan-2007 : Version 1 (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -53,6 +54,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.xy.VectorRenderer;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link VectorRenderer} class.
@@ -121,6 +123,14 @@ public class VectorRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        VectorRenderer r1 = new VectorRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
