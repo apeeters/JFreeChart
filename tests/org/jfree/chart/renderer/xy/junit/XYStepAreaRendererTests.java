@@ -38,6 +38,7 @@
  * 26-Sep-2003 : copied XYStepRendererTests.java and used for
  *               testing XYStepAreaRenderer (MR);
  * 14-Feb-2007 : Extended testEquals() (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -58,6 +59,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYStepAreaRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.xy.DefaultTableXYDataset;
 import org.jfree.data.xy.XYSeries;
 
@@ -145,6 +147,14 @@ public class XYStepAreaRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYStepAreaRenderer r1 = new XYStepAreaRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
