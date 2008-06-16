@@ -38,6 +38,7 @@
  * 22-Oct-2003 : Added hashCode test (DG);
  * 14-Feb-2007 : Updated testCloning() (DG);
  * 17-May-2007 : Added testGetLegendItemSeriesIndex() (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -60,6 +61,7 @@ import org.jfree.chart.LegendItem;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYAreaRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.xy.DefaultTableXYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -166,6 +168,14 @@ public class XYAreaRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setLegendArea(new Rectangle2D.Double(4.0, 3.0, 2.0, 1.0));
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYAreaRenderer r1 = new XYAreaRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

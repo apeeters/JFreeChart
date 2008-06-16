@@ -37,6 +37,7 @@
  * 05-Jul-2006 : Version 1 (DG);
  * 09-Mar-2007 : Added independence check to testCloning (DG);
  * 20-Jun-2007 : Updated for deprecated code removal (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -57,6 +58,7 @@ import junit.framework.TestSuite;
 import org.jfree.chart.renderer.GrayPaintScale;
 import org.jfree.chart.renderer.LookupPaintScale;
 import org.jfree.chart.renderer.xy.XYBlockRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.Range;
 import org.jfree.data.xy.DefaultXYZDataset;
 
@@ -150,6 +152,14 @@ public class XYBlockRendererTests extends TestCase {
         LookupPaintScale scale2 = (LookupPaintScale) r2.getPaintScale();
         scale2.add(0.5, Color.red);
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYBlockRenderer r1 = new XYBlockRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

@@ -39,6 +39,7 @@
  * 09-Feb-2007 : Added to testCloning() (DG);
  * 17-May-2007 : Added testGetLegendItemSeriesIndex() (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -65,6 +66,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.util.GradientPaintTransformType;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.Range;
 import org.jfree.data.xy.XYBarDataset;
@@ -194,6 +196,14 @@ public class XYBarRendererTests extends TestCase {
     }
 
     /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYBarRenderer r1 = new XYBarRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
+    }
+
+    /**
      * Serialize an instance, restore it, and check for equality.
      */
     public void testSerialization() {
@@ -213,7 +223,7 @@ public class XYBarRendererTests extends TestCase {
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(r1, r2);
 
