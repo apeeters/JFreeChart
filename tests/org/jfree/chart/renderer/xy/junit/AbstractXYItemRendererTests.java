@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------------------------
  * AbstractXYItemRendererTests.java
  * --------------------------------
- * (C) Copyright 2004-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -81,7 +81,7 @@ public class AbstractXYItemRendererTests extends TestCase {
 
     /**
      * Creates a test dataset.
-     * 
+     *
      * @return A test dataset.
      */
     private XYDataset createDataset1() {
@@ -93,21 +93,21 @@ public class AbstractXYItemRendererTests extends TestCase {
         dataset.addSeries(series);
         return dataset;
     }
-    
+
     private static final double EPSILON = 0.0000000001;
-    
+
     /**
      * Some checks for the findDomainBounds() method.
      */
     public void testFindDomainBounds() {
         AbstractXYItemRenderer renderer = new StandardXYItemRenderer();
-        
+
         // check the bounds of a simple dataset
         XYDataset dataset = createDataset1();
         Range r = renderer.findDomainBounds(dataset);
         assertEquals(1.0, r.getLowerBound(), EPSILON);
         assertEquals(3.0, r.getUpperBound(), EPSILON);
-        
+
         // check that a null dataset returns null bounds
         assertTrue(renderer.findDomainBounds(null) == null);
     }
@@ -120,12 +120,12 @@ public class AbstractXYItemRendererTests extends TestCase {
         // check that a null dataset returns null bounds
         assertTrue(renderer.findRangeBounds(null) == null);
     }
-    
+
     /**
      * Check that the legendItemLabelGenerator is cloned.
      */
     public void testCloning_LegendItemLabelGenerator() {
-        StandardXYSeriesLabelGenerator generator 
+        StandardXYSeriesLabelGenerator generator
                 = new StandardXYSeriesLabelGenerator("Series {0}");
         XYBarRenderer r1 = new XYBarRenderer();
         r1.setLegendItemLabelGenerator(generator);
@@ -139,9 +139,9 @@ public class AbstractXYItemRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
-        
+
         // check that the generator has been cloned
-        assertTrue(r1.getLegendItemLabelGenerator() 
+        assertTrue(r1.getLegendItemLabelGenerator()
                 != r2.getLegendItemLabelGenerator());
     }
 
@@ -149,7 +149,7 @@ public class AbstractXYItemRendererTests extends TestCase {
      * Check that the legendItemToolTipGenerator is cloned.
      */
     public void testCloning_LegendItemToolTipGenerator() {
-        StandardXYSeriesLabelGenerator generator 
+        StandardXYSeriesLabelGenerator generator
                 = new StandardXYSeriesLabelGenerator("Series {0}");
         XYBarRenderer r1 = new XYBarRenderer();
         r1.setLegendItemToolTipGenerator(generator);
@@ -163,9 +163,9 @@ public class AbstractXYItemRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
-        
+
         // check that the generator has been cloned
-        assertTrue(r1.getLegendItemToolTipGenerator() 
+        assertTrue(r1.getLegendItemToolTipGenerator()
                 != r2.getLegendItemToolTipGenerator());
     }
 
@@ -173,7 +173,7 @@ public class AbstractXYItemRendererTests extends TestCase {
      * Check that the legendItemURLGenerator is cloned.
      */
     public void testCloning_LegendItemURLGenerator() {
-        StandardXYSeriesLabelGenerator generator 
+        StandardXYSeriesLabelGenerator generator
                 = new StandardXYSeriesLabelGenerator("Series {0}");
         XYBarRenderer r1 = new XYBarRenderer();
         r1.setLegendItemURLGenerator(generator);
@@ -187,9 +187,9 @@ public class AbstractXYItemRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
-        
+
         // check that the generator has been cloned
-        assertTrue(r1.getLegendItemURLGenerator() 
+        assertTrue(r1.getLegendItemURLGenerator()
                 != r2.getLegendItemURLGenerator());
     }
 
@@ -200,29 +200,29 @@ public class AbstractXYItemRendererTests extends TestCase {
         XYBarRenderer r1 = new XYBarRenderer();
         XYBarRenderer r2 = new XYBarRenderer();
         assertTrue(r1.equals(r2));
-        
+
         // background annotation
-        r1.addAnnotation(new XYTextAnnotation("ABC", 1.0, 2.0), 
+        r1.addAnnotation(new XYTextAnnotation("ABC", 1.0, 2.0),
                 Layer.BACKGROUND);
         assertFalse(r1.equals(r2));
-        r2.addAnnotation(new XYTextAnnotation("ABC", 1.0, 2.0), 
+        r2.addAnnotation(new XYTextAnnotation("ABC", 1.0, 2.0),
                 Layer.BACKGROUND);
         assertTrue(r1.equals(r2));
-        
+
         // foreground annotation
         r1.addAnnotation(new XYTextAnnotation("DEF", 3.0, 4.0),
                 Layer.FOREGROUND);
         assertFalse(r1.equals(r2));
-        r2.addAnnotation(new XYTextAnnotation("DEF", 3.0, 4.0), 
+        r2.addAnnotation(new XYTextAnnotation("DEF", 3.0, 4.0),
                 Layer.FOREGROUND);
         assertTrue(r1.equals(r2));
-        
+
         // default entity radius
         r1.setDefaultEntityRadius(99);
         assertFalse(r1.equals(r2));
         r2.setDefaultEntityRadius(99);
         assertTrue(r1.equals(r2));
-        
+
         // legend item label generator
         r1.setLegendItemLabelGenerator(new StandardXYSeriesLabelGenerator(
                 "X:{0}"));
@@ -238,7 +238,7 @@ public class AbstractXYItemRendererTests extends TestCase {
         r2.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator(
                 "X:{0}"));
         assertTrue(r1.equals(r2));
-    
+
         // legend item URL generator
         r1.setLegendItemURLGenerator(new StandardXYSeriesLabelGenerator(
                 "X:{0}"));

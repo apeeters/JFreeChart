@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * -------------------------
  * HighLowRendererTests.java
  * -------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -92,25 +92,25 @@ public class HighLowRendererTests extends TestCase {
         HighLowRenderer r1 = new HighLowRenderer();
         HighLowRenderer r2 = new HighLowRenderer();
         assertEquals(r1, r2);
-        
+
         // drawOpenTicks
         r1.setDrawOpenTicks(false);
         assertFalse(r1.equals(r2));
         r2.setDrawOpenTicks(false);
         assertTrue(r1.equals(r2));
-        
+
         // drawCloseTicks
         r1.setDrawCloseTicks(false);
         assertFalse(r1.equals(r2));
         r2.setDrawCloseTicks(false);
         assertTrue(r1.equals(r2));
-        
+
         // openTickPaint
         r1.setOpenTickPaint(Color.red);
         assertFalse(r1.equals(r2));
         r2.setOpenTickPaint(Color.red);
         assertTrue(r1.equals(r2));
-        
+
         // closeTickPaint
         r1.setCloseTickPaint(Color.blue);
         assertFalse(r1.equals(r2));
@@ -119,7 +119,7 @@ public class HighLowRendererTests extends TestCase {
     }
 
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         HighLowRenderer r1 = new HighLowRenderer();
@@ -129,7 +129,7 @@ public class HighLowRendererTests extends TestCase {
         int h2 = r2.hashCode();
         assertEquals(h1, h2);
     }
-    
+
     /**
      * Confirm that cloning works.
      */
@@ -164,8 +164,7 @@ public class HighLowRendererTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             r2 = (HighLowRenderer) in.readObject();
             in.close();
         }
@@ -181,30 +180,30 @@ public class HighLowRendererTests extends TestCase {
      */
     public void testFindRangeBounds() {
         HighLowRenderer renderer = new HighLowRenderer();
-        
-        OHLCDataItem item1 = new OHLCDataItem(new Date(1L), 2.0, 4.0, 1.0, 3.0, 
+
+        OHLCDataItem item1 = new OHLCDataItem(new Date(1L), 2.0, 4.0, 1.0, 3.0,
                 100);
-        OHLCDataset dataset = new DefaultOHLCDataset("S1", 
+        OHLCDataset dataset = new DefaultOHLCDataset("S1",
                 new OHLCDataItem[] {item1});
         Range range = renderer.findRangeBounds(dataset);
         assertEquals(new Range(1.0, 4.0), range);
 
-        OHLCDataItem item2 = new OHLCDataItem(new Date(1L), -1.0, 3.0, -1.0, 
+        OHLCDataItem item2 = new OHLCDataItem(new Date(1L), -1.0, 3.0, -1.0,
                 3.0, 100);
-        dataset = new DefaultOHLCDataset("S1", new OHLCDataItem[] {item1, 
+        dataset = new DefaultOHLCDataset("S1", new OHLCDataItem[] {item1,
                 item2});
         range = renderer.findRangeBounds(dataset);
         assertEquals(new Range(-1.0, 4.0), range);
-        
+
         // try an empty dataset - should return a null range
         dataset = new DefaultOHLCDataset("S1", new OHLCDataItem[] {});
         range = renderer.findRangeBounds(dataset);
         assertNull(range);
-        
+
         // try a null dataset - should return a null range
         range = renderer.findRangeBounds(null);
         assertNull(range);
     }
 
-    
+
 }
