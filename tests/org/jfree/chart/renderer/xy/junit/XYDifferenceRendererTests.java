@@ -39,6 +39,7 @@
  * 24-Jan-2007 : Added 'roundXCoordinates' to testEquals(), and improved
  *               testClone() (DG);
  * 17-May-2007 : Added testGetLegendItemSeriesIndex() (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -64,6 +65,7 @@ import org.jfree.chart.LegendItem;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYDifferenceRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -175,6 +177,14 @@ public class XYDifferenceRendererTests extends TestCase {
             l.setLine(1.0, 2.0, 3.0, 4.0);
             assertFalse(r1.equals(r2));
         }
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYDifferenceRenderer r1 = new XYDifferenceRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

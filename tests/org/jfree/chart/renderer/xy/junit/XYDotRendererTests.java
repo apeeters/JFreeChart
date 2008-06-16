@@ -37,6 +37,7 @@
  * 25-Mar-2003 : Version 1 (DG);
  * 17-May-2007 : Added testGetLegendItemSeriesIndex() (DG);
  * 09-Nov-2007 : Updated testEquals() (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -59,6 +60,7 @@ import org.jfree.chart.LegendItem;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYDotRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -143,6 +145,14 @@ public class XYDotRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XYDotRenderer r1 = new XYDotRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
