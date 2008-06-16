@@ -40,6 +40,7 @@
  *               method (DG);
  * 05-Mar-2007 : Added new field to testEquals() (DG);
  * 08-Oct-2007 : Added tests for new volumePaint field (DG);
+ * 22-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -60,6 +61,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.xy.CandlestickRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.Range;
 import org.jfree.data.xy.DefaultOHLCDataset;
 import org.jfree.data.xy.OHLCDataItem;
@@ -203,6 +205,14 @@ public class CandlestickRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        CandlestickRenderer r1 = new CandlestickRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

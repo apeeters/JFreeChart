@@ -54,6 +54,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.xy.AbstractXYItemRenderer;
 import org.jfree.chart.renderer.xy.ClusteredXYBarRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.Range;
 import org.jfree.data.xy.DefaultIntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
@@ -128,6 +129,14 @@ public class ClusteredXYBarRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        ClusteredXYBarRenderer r1 = new ClusteredXYBarRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

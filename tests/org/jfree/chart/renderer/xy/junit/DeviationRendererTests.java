@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 26-Feb-2007 : Version 1 (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -52,6 +53,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.xy.DeviationRenderer;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link DeviationRenderer} class.
@@ -124,6 +126,14 @@ public class DeviationRendererTests extends TestCase {
 
         // check independence
 
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        DeviationRenderer r1 = new DeviationRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
