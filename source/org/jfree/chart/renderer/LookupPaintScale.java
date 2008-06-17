@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------
  * LookupPaintScale.java
  * ---------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited.
+ * (C) Copyright 2006-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -39,7 +39,7 @@
  * 09-Mar-2007 : Fixed cloning (DG);
  * 14-Jun-2007 : Use double primitive in PaintItem (DG);
  * 20-Jun-2007 : Removed deprecated code and JCommon dependencies (DG);
- * 
+ *
  */
 
 package org.jfree.chart.renderer;
@@ -60,26 +60,26 @@ import org.jfree.chart.util.SerialUtilities;
 /**
  * A paint scale that uses a lookup table to associate paint instances
  * with data value ranges.
- * 
+ *
  * @since 1.0.4
  */
-public class LookupPaintScale 
+public class LookupPaintScale
         implements PaintScale, PublicCloneable, Serializable {
 
     /**
      * Stores the paint for a value.
      */
     class PaintItem implements Comparable, Serializable {
-        
+
         /** The value. */
         double value;
-        
+
         /** The paint. */
         transient Paint paint;
-        
+
         /**
          * Creates a new instance.
-         * 
+         *
          * @param value  the value.
          * @param paint  the paint.
          */
@@ -87,7 +87,7 @@ public class LookupPaintScale
             this.value = value;
             this.paint = paint;
         }
-        
+
         /* (non-Javadoc)
          * @see java.lang.Comparable#compareTo(java.lang.Object)
          */
@@ -106,9 +106,9 @@ public class LookupPaintScale
 
         /**
          * Tests this item for equality with an arbitrary object.
-         * 
+         *
          * @param obj  the object (<code>null</code> permitted).
-         * 
+         *
          * @return A boolean.
          */
         public boolean equals(Object obj) {
@@ -127,7 +127,7 @@ public class LookupPaintScale
             }
             return true;
         }
-        
+
         /**
          * Provides serialization support.
          *
@@ -148,42 +148,42 @@ public class LookupPaintScale
          * @throws IOException  if there is an I/O error.
          * @throws ClassNotFoundException  if there is a classpath problem.
          */
-        private void readObject(ObjectInputStream stream) 
+        private void readObject(ObjectInputStream stream)
                 throws IOException, ClassNotFoundException {
             stream.defaultReadObject();
             this.paint = SerialUtilities.readPaint(stream);
         }
-        
+
     }
-    
+
     /** The lower bound. */
     private double lowerBound;
-    
+
     /** The upper bound. */
     private double upperBound;
-    
+
     /** The default paint. */
-    private transient Paint defaultPaint; 
-    
+    private transient Paint defaultPaint;
+
     /** The lookup table. */
     private List lookupTable;
-    
+
     /**
      * Creates a new paint scale.
      */
     public LookupPaintScale() {
-        this(0.0, 1.0, Color.lightGray);    
+        this(0.0, 1.0, Color.lightGray);
     }
-    
+
     /**
      * Creates a new paint scale with the specified default paint.
-     * 
+     *
      * @param lowerBound  the lower bound.
      * @param upperBound  the upper bound.
-     * @param defaultPaint  the default paint (<code>null</code> not 
+     * @param defaultPaint  the default paint (<code>null</code> not
      *     permitted).
      */
-    public LookupPaintScale(double lowerBound, double upperBound, 
+    public LookupPaintScale(double lowerBound, double upperBound,
             Paint defaultPaint) {
         if (lowerBound >= upperBound) {
             throw new IllegalArgumentException(
@@ -197,21 +197,21 @@ public class LookupPaintScale
         this.defaultPaint = defaultPaint;
         this.lookupTable = new java.util.ArrayList();
     }
-    
+
     /**
      * Returns the default paint (never <code>null</code>).
-     * 
+     *
      * @return The default paint.
      */
     public Paint getDefaultPaint() {
         return this.defaultPaint;
     }
-    
+
     /**
      * Returns the lower bound.
-     * 
+     *
      * @return The lower bound.
-     * 
+     *
      * @see #getUpperBound()
      */
     public double getLowerBound() {
@@ -220,23 +220,23 @@ public class LookupPaintScale
 
     /**
      * Returns the upper bound.
-     * 
+     *
      * @return The upper bound.
-     * 
+     *
      * @see #getLowerBound()
      */
     public double getUpperBound() {
         return this.upperBound;
     }
-    
+
     /**
      * Adds an entry to the lookup table.  Any values from <code>n</code> up
      * to but not including the next value in the table take on the specified
      * <code>paint</code>.
-     * 
+     *
      * @param value  the data value.
      * @param paint  the paint.
-     * 
+     *
      * @since 1.0.6
      */
     public void add(double value, Paint paint) {
@@ -249,18 +249,18 @@ public class LookupPaintScale
             this.lookupTable.add(-(index + 1), item);
         }
     }
-    
+
     /**
      * Returns the paint associated with the specified value.
-     * 
+     *
      * @param value  the value.
-     * 
+     *
      * @return The paint.
-     * 
+     *
      * @see #getDefaultPaint()
      */
     public Paint getPaint(double value) {
-        
+
         // handle value outside bounds...
         if (value < this.lowerBound) {
             return this.defaultPaint;
@@ -268,7 +268,7 @@ public class LookupPaintScale
         if (value > this.upperBound) {
             return this.defaultPaint;
         }
-        
+
         int count = this.lookupTable.size();
         if (count == 0) {
             return this.defaultPaint;
@@ -301,13 +301,13 @@ public class LookupPaintScale
         }
         return (item != null ? item.paint : this.defaultPaint);
     }
-    
-    
+
+
     /**
      * Tests this instance for equality with an arbitrary object.
-     * 
+     *
      * @param obj  the object (<code>null</code> permitted).
-     * 
+     *
      * @return A boolean.
      */
     public boolean equals(Object obj) {
@@ -332,12 +332,12 @@ public class LookupPaintScale
         }
         return true;
     }
-    
+
     /**
      * Returns a clone of the instance.
-     * 
+     *
      * @return A clone.
-     * 
+     *
      * @throws CloneNotSupportedException if there is a problem cloning the
      *     instance.
      */
@@ -367,7 +367,7 @@ public class LookupPaintScale
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream) 
+    private void readObject(ObjectInputStream stream)
             throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.defaultPaint = SerialUtilities.readPaint(stream);
