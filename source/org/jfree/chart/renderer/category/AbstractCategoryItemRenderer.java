@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------------
  * AbstractCategoryItemRenderer.java
  * ---------------------------------
- * (C) Copyright 2002-2007, by Object Refinery Limited.
+ * (C) Copyright 2002-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard Atkinson;
@@ -87,7 +87,7 @@
  *               method (DG);
  * 07-Dec-2006 : Fix for equals() method (DG);
  * 22-Feb-2007 : Added createState() method (DG);
- * 01-Mar-2007 : Fixed interval marker drawing (patch 1670686 thanks to 
+ * 01-Mar-2007 : Fixed interval marker drawing (patch 1670686 thanks to
  *               Sergei Ivanov) (DG);
  * 20-Apr-2007 : Updated getLegendItem() for renderer change, and deprecated
  *               itemLabelGenerator, toolTipGenerator and itemURLGenerator
@@ -199,7 +199,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     /**
      * Annotations to be drawn in the background layer ('underneath' the data
      * items).
-     * 
+     *
      * @since 1.2.0
      */
     private List backgroundAnnotations;
@@ -207,7 +207,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     /**
      * Annotations to be drawn in the foreground layer ('on top' of the data
      * items).
-     * 
+     *
      * @since 1.2.0
      */
     private List foregroundAnnotations;
@@ -280,7 +280,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     /**
      * Returns the item label generator for a data item.  This implementation
      * returns the series item label generator if one is defined, otherwise
-     * it returns the default item label generator (which may be 
+     * it returns the default item label generator (which may be
      * <code>null</code>).
      *
      * @param row  the row index (zero based).
@@ -508,7 +508,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     // URL GENERATOR
 
     /**
-     * Returns the URL generator for a data item.  
+     * Returns the URL generator for a data item.
      *
      * @param row  the row index (zero based).
      * @param column  the column index (zero based).
@@ -516,7 +516,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @return The URL generator.
      */
     public CategoryURLGenerator getURLGenerator(int row, int column) {
-        CategoryURLGenerator generator 
+        CategoryURLGenerator generator
                 = (CategoryURLGenerator) this.urlGeneratorList.get(row);
         if (generator == null) {
             generator = this.baseURLGenerator;
@@ -538,7 +538,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     }
 
     /**
-     * Sets the URL generator for a series and sends a 
+     * Sets the URL generator for a series and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero based).
@@ -563,7 +563,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *
      * @see #getSeriesURLGenerator(int)
      */
-    public void setSeriesURLGenerator(int series, 
+    public void setSeriesURLGenerator(int series,
             CategoryURLGenerator generator, boolean notify) {
         this.urlGeneratorList.set(series, generator);
         if (notify) {
@@ -600,10 +600,10 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param notify  notify listeners?
      *
      * @see #getBaseURLGenerator()
-     * 
+     *
      * @since 1.2.0
      */
-    public void setBaseURLGenerator(CategoryURLGenerator generator, 
+    public void setBaseURLGenerator(CategoryURLGenerator generator,
             boolean notify) {
         this.baseURLGenerator = generator;
         if (notify) {
@@ -612,7 +612,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     }
 
     // ANNOTATIONS
-    
+
     /**
      * Adds an annotation and sends a {@link RendererChangeEvent} to all
      * registered listeners.  The annotation is added to the foreground
@@ -769,7 +769,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
 
     /**
      * Draws a background for the data area.  The default implementation just
-     * gets the plot to draw the background, but some renderers will override 
+     * gets the plot to draw the background, but some renderers will override
      * this behaviour.
      *
      * @param g2  the graphics device.
@@ -1227,7 +1227,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
 
     /**
      * Returns a legend item for a series.  This default implementation will
-     * return <code>null</code> if {@link #isSeriesVisible(int)} or 
+     * return <code>null</code> if {@link #isSeriesVisible(int)} or
      * {@link #isSeriesVisibleInLegend(int)} returns <code>false</code>.
      *
      * @param datasetIndex  the dataset index (zero-based).
@@ -1310,7 +1310,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                 that.baseToolTipGenerator)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.urlGeneratorList, 
+        if (!ObjectUtilities.equal(this.urlGeneratorList,
                 that.urlGeneratorList)) {
             return false;
         }
