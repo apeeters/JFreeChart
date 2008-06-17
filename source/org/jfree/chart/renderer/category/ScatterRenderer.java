@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------------
  * ScatterRenderer.java
  * --------------------
- * (C) Copyright 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2007, 2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   David Forslund;
@@ -67,10 +67,10 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.statistics.MultiValueCategoryDataset;
 
 /**
- * A renderer that handles the multiple values from a 
- * {@link MultiValueCategoryDataset} by plotting a shape for each value for 
+ * A renderer that handles the multiple values from a
+ * {@link MultiValueCategoryDataset} by plotting a shape for each value for
  * each given item in the dataset.
- * 
+ *
  * @since 1.0.7
  */
 public class ScatterRenderer extends AbstractCategoryItemRenderer
@@ -132,51 +132,51 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
     /**
      * Returns the flag that controls whether or not the x-position for each
      * data item is offset within the category according to the series.
-     * 
+     *
      * @return A boolean.
-     * 
+     *
      * @see #setUseSeriesOffset(boolean)
      */
     public boolean getUseSeriesOffset() {
         return this.useSeriesOffset;
     }
-    
+
     /**
-     * Sets the flag that controls whether or not the x-position for each 
+     * Sets the flag that controls whether or not the x-position for each
      * data item is offset within its category according to the series, and
      * sends a {@link RendererChangeEvent} to all registered listeners.
-     * 
+     *
      * @param offset  the offset.
-     * 
+     *
      * @see #getUseSeriesOffset()
      */
     public void setUseSeriesOffset(boolean offset) {
         this.useSeriesOffset = offset;
         notifyListeners(new RendererChangeEvent(this));
     }
-    
+
     /**
-     * Returns the item margin, which is the gap between items within a 
-     * category (expressed as a percentage of the overall category width).  
-     * This can be used to match the offset alignment with the bars drawn by 
+     * Returns the item margin, which is the gap between items within a
+     * category (expressed as a percentage of the overall category width).
+     * This can be used to match the offset alignment with the bars drawn by
      * a {@link BarRenderer}).
-     * 
+     *
      * @return The item margin.
-     * 
+     *
      * @see #setItemMargin(double)
      * @see #getUseSeriesOffset()
      */
     public double getItemMargin() {
         return this.itemMargin;
     }
-    
+
     /**
      * Sets the item margin, which is the gap between items within a category
      * (expressed as a percentage of the overall category width), and sends
      * a {@link RendererChangeEvent} to all registered listeners.
-     * 
+     *
      * @param margin  the margin (0.0 <= margin < 1.0).
-     * 
+     *
      * @see #getItemMargin()
      * @see #getUseSeriesOffset()
      */
@@ -193,7 +193,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      * <code>false</code> otherwise.
      *
      * @return A boolean.
-     * 
+     *
      * @see #setDrawOutlines(boolean)
      */
     public boolean getDrawOutlines() {
@@ -209,7 +209,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      * this flag allows you to set your own preference.
      *
      * @param flag the flag.
-     * 
+     *
      * @see #getDrawOutlines()
      */
     public void setDrawOutlines(boolean flag) {
@@ -222,7 +222,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      * shape outlines.  If not, the regular series paint is used.
      *
      * @return A boolean.
-     * 
+     *
      * @see #setUseOutlinePaint(boolean)
      */
     public boolean getUseOutlinePaint() {
@@ -234,7 +234,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      * outlines.
      *
      * @param use the flag.
-     * 
+     *
      * @see #getUseOutlinePaint()
      */
     public void setUseOutlinePaint(boolean use) {
@@ -269,7 +269,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
         Boolean flag = this.seriesShapesFilled.getBoolean(series);
         if (flag != null) {
             return flag.booleanValue();
-        } 
+        }
         else {
             return this.baseShapesFilled;
         }
@@ -339,7 +339,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
         this.useFillPaint = flag;
         notifyListeners(new RendererChangeEvent(this));
     }
-    
+
     /**
      * Draw a single data item.
      *
@@ -361,7 +361,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
 
         // do nothing if item is not visible
         if (!getItemVisible(row, column)) {
-            return;   
+            return;
         }
 
         PlotOrientation orientation = plot.getOrientation();
@@ -377,16 +377,16 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             double x1;
             if (this.useSeriesOffset) {
                 x1 = domainAxis.getCategorySeriesMiddle(dataset.getColumnKey(
-                        column), dataset.getRowKey(row), dataset, 
-                        this.itemMargin, dataArea, plot.getDomainAxisEdge());            
+                        column), dataset.getRowKey(row), dataset,
+                        this.itemMargin, dataArea, plot.getDomainAxisEdge());
             }
             else {
-                x1 = domainAxis.getCategoryMiddle(column, getColumnCount(), 
+                x1 = domainAxis.getCategoryMiddle(column, getColumnCount(),
                         dataArea, plot.getDomainAxisEdge());
             }
             Number n = (Number) values.get(i);
             double value = n.doubleValue();
-            double y1 = rangeAxis.valueToJava2D(value, dataArea, 
+            double y1 = rangeAxis.valueToJava2D(value, dataArea,
                     plot.getRangeAxisEdge());
 
             Shape shape = getItemShape(row, column);
@@ -401,13 +401,13 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
                     g2.setPaint(getItemFillPaint(row, column));
                 }
                 else {
-                    g2.setPaint(getItemPaint(row, column));   
+                    g2.setPaint(getItemPaint(row, column));
                 }
                 g2.fill(shape);
             }
             if (this.drawOutlines) {
                 if (this.useOutlinePaint) {
-                    g2.setPaint(getItemOutlinePaint(row, column));   
+                    g2.setPaint(getItemOutlinePaint(row, column));
                 }
                 else {
                     g2.setPaint(getItemPaint(row, column));
@@ -418,7 +418,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
         }
 
     }
-    
+
     /**
      * Returns a legend item for a series.
      *
@@ -439,25 +439,25 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             String label = getLegendItemLabelGenerator().generateLabel(
                     dataset, series);
             String description = label;
-            String toolTipText = null; 
+            String toolTipText = null;
             if (getLegendItemToolTipGenerator() != null) {
                 toolTipText = getLegendItemToolTipGenerator().generateLabel(
-                        dataset, series);   
+                        dataset, series);
             }
             String urlText = null;
             if (getLegendItemURLGenerator() != null) {
                 urlText = getLegendItemURLGenerator().generateLabel(
-                        dataset, series);   
+                        dataset, series);
             }
             Shape shape = lookupSeriesShape(series);
             Paint paint = lookupSeriesPaint(series);
-            Paint fillPaint = (this.useFillPaint 
+            Paint fillPaint = (this.useFillPaint
                     ? getItemFillPaint(series, 0) : paint);
             boolean shapeOutlineVisible = this.drawOutlines;
-            Paint outlinePaint = (this.useOutlinePaint 
+            Paint outlinePaint = (this.useOutlinePaint
                     ? getItemOutlinePaint(series, 0) : paint);
             Stroke outlineStroke = lookupSeriesOutlineStroke(series);
-            LegendItem result = new LegendItem(label, description, toolTipText, 
+            LegendItem result = new LegendItem(label, description, toolTipText,
                     urlText, true, shape, getItemShapeFilled(series, 0),
                     fillPaint, shapeOutlineVisible, outlinePaint, outlineStroke,
                     false, new Line2D.Double(-7.0, 0.0, 7.0, 0.0),
@@ -513,14 +513,14 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
 
     /**
      * Returns an independent copy of the renderer.
-     * 
+     *
      * @return A clone.
-     * 
+     *
      * @throws CloneNotSupportedException  should not happen.
      */
     public Object clone() throws CloneNotSupportedException {
         ScatterRenderer clone = (ScatterRenderer) super.clone();
-        clone.seriesShapesFilled 
+        clone.seriesShapesFilled
                 = (BooleanList) this.seriesShapesFilled.clone();
         return clone;
     }

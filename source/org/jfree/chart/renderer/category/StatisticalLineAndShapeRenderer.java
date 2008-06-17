@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------------------
  * StatisticalLineAndShapeRenderer.java
  * ------------------------------------
- * (C) Copyright 2005-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2005-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  Mofeed Shahin;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -47,7 +47,7 @@
  *               to the drawing behaviour of LineAndShapeRenderer (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 29-Jun-2007 : Simplified entity generation by calling addEntity() (DG);
- * 27-Sep-2007 : Added offset option to match new option in 
+ * 27-Sep-2007 : Added offset option to match new option in
  *               LineAndShapeRenderer (DG);
  *
  */
@@ -116,7 +116,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
      *
      * @return The paint used for the error indicators (possibly
      *         <code>null</code>).
-     *         
+     *
      * @see #setErrorIndicatorPaint(Paint)
      */
     public Paint getErrorIndicatorPaint() {
@@ -125,11 +125,11 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
 
     /**
      * Sets the paint used for the error indicators (if <code>null</code>,
-     * the item outline paint is used instead) and sends a 
+     * the item outline paint is used instead) and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param paint  the paint (<code>null</code> permitted).
-     * 
+     *
      * @see #getErrorIndicatorPaint()
      */
     public void setErrorIndicatorPaint(Paint paint) {
@@ -193,11 +193,11 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
         double x1;
         if (getUseSeriesOffset()) {
             x1 = domainAxis.getCategorySeriesMiddle(dataset.getColumnKey(
-                    column), dataset.getRowKey(row), dataset, getItemMargin(), 
-                    dataArea, plot.getDomainAxisEdge());            
+                    column), dataset.getRowKey(row), dataset, getItemMargin(),
+                    dataArea, plot.getDomainAxisEdge());
         }
         else {
-            x1 = domainAxis.getCategoryMiddle(column, getColumnCount(), 
+            x1 = domainAxis.getCategoryMiddle(column, getColumnCount(),
                     dataArea, plot.getDomainAxisEdge());
         }
 
@@ -240,14 +240,14 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
                     double x0;
                     if (getUseSeriesOffset()) {
                         x0 = domainAxis.getCategorySeriesMiddle(
-                                dataset.getColumnKey(column - 1), 
-                                dataset.getRowKey(row), dataset, 
-                                getItemMargin(), dataArea, 
+                                dataset.getColumnKey(column - 1),
+                                dataset.getRowKey(row), dataset,
+                                getItemMargin(), dataArea,
                                 plot.getDomainAxisEdge());
                     }
                     else {
-                        x0 = domainAxis.getCategoryMiddle(column - 1, 
-                                getColumnCount(), dataArea, 
+                        x0 = domainAxis.getCategoryMiddle(column - 1,
+                                getColumnCount(), dataArea,
                                 plot.getDomainAxisEdge());
                     }
                     double y0 = rangeAxis.valueToJava2D(previous, dataArea,
