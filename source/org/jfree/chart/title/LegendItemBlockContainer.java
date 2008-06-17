@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
- * 
+ *
  * -----------------------------
  * LegendItemBlockContainer.java
  * -----------------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited.
+ * (C) Copyright 2006-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,7 +38,7 @@
  * 06-Oct-2006 : Added tooltip and URL text fields (DG);
  * 18-May-2007 : Added seriesKey and dataset fields (DG);
  * 20-Jun-2007 : Removed deprecated code (DG);
- * 
+ *
  */
 
 package org.jfree.chart.title;
@@ -64,33 +64,33 @@ import org.jfree.data.general.Dataset;
  */
 public class LegendItemBlockContainer extends BlockContainer {
 
-    /** 
-     * The dataset. 
-     * 
+    /**
+     * The dataset.
+     *
      * @since 1.0.6
      */
     private Dataset dataset;
-    
+
     /**
      * The series key.
-     * 
+     *
      * @since 1.0.6
      */
     private Comparable seriesKey;
-    
+
     /** The tool tip text (can be <code>null</code>). */
     private String toolTipText;
-    
+
     /** The URL text (can be <code>null</code>). */
     private String urlText;
-    
+
     /**
      * Creates a new legend item block.
-     * 
+     *
      * @param arrangement  the arrangement.
      * @param dataset  the dataset.
      * @param seriesKey  the series key.
-     * 
+     *
      * @since 1.0.6
      */
     public LegendItemBlockContainer(Arrangement arrangement, Dataset dataset,
@@ -99,81 +99,81 @@ public class LegendItemBlockContainer extends BlockContainer {
         this.dataset = dataset;
         this.seriesKey = seriesKey;
     }
-    
+
     /**
      * Returns a reference to the dataset for the associated legend item.
-     * 
+     *
      * @return A dataset reference.
-     * 
+     *
      * @since 1.0.6
      */
     public Dataset getDataset() {
         return this.dataset;
     }
-    
+
     /**
      * Returns the series key.
-     * 
+     *
      * @return The series key.
-     * 
+     *
      * @since 1.0.6
      */
     public Comparable getSeriesKey() {
         return this.seriesKey;
     }
-    
+
     /**
      * Returns the tool tip text.
-     * 
+     *
      * @return The tool tip text (possibly <code>null</code>).
-     * 
+     *
      * @since 1.0.3
      */
     public String getToolTipText() {
         return this.toolTipText;
     }
-    
+
     /**
      * Sets the tool tip text.
-     * 
+     *
      * @param text  the text (<code>null</code> permitted).
-     * 
+     *
      * @since 1.0.3
      */
     public void setToolTipText(String text) {
-        this.toolTipText = text;   
+        this.toolTipText = text;
     }
-    
+
     /**
      * Returns the URL text.
-     * 
+     *
      * @return The URL text (possibly <code>null</code>).
-     * 
+     *
      * @since 1.0.3
      */
     public String getURLText() {
         return this.urlText;
     }
-    
+
     /**
      * Sets the URL text.
-     * 
+     *
      * @param text  the text (<code>null</code> permitted).
-     * 
+     *
      * @since 1.0.3
      */
     public void setURLText(String text) {
-        this.urlText = text;   
+        this.urlText = text;
     }
-    
+
     /**
      * Draws the block within the specified area.
-     * 
+     *
      * @param g2  the graphics device.
      * @param area  the area.
-     * @param params  passed on to blocks within the container 
+     * @param params  passed on to blocks within the container
      *                (<code>null</code> permitted).
-     * 
+     *
      * @return An instance of {@link EntityBlockResult}, or <code>null</code>.
      */
     public Object draw(Graphics2D g2, Rectangle2D area, Object params) {

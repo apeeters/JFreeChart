@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------
  * TextTitle.java
  * --------------
- * (C) Copyright 2000-2007, by David Berry and Contributors.
+ * (C) Copyright 2000-2008, by David Berry and Contributors.
  *
  * Original Author:  David Berry;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -36,7 +36,7 @@
  * Changes (from 18-Sep-2001)
  * --------------------------
  * 18-Sep-2001 : Added standard header (DG);
- * 07-Nov-2001 : Separated the JCommon Class Library classes, JFreeChart now 
+ * 07-Nov-2001 : Separated the JCommon Class Library classes, JFreeChart now
  *               requires jcommon.jar (DG);
  * 09-Jan-2002 : Updated Javadoc comments (DG);
  * 07-Feb-2002 : Changed Insets --> Spacer in AbstractTitle.java (DG);
@@ -48,19 +48,19 @@
  * 26-Mar-2003 : Implemented Serializable (DG);
  * 15-Jul-2003 : Fixed null pointer exception (DG);
  * 11-Sep-2003 : Implemented Cloneable (NB)
- * 22-Sep-2003 : Added checks for null values and throw nullpointer 
- *               exceptions (TM); 
+ * 22-Sep-2003 : Added checks for null values and throw nullpointer
+ *               exceptions (TM);
  *               Background paint was not serialized.
  * 07-Oct-2003 : Added fix for exception caused by empty string in title (DG);
  * 29-Oct-2003 : Added workaround for text alignment in PDF output (DG);
  * 03-Feb-2004 : Fixed bug in getPreferredWidth() method (DG);
  * 17-Feb-2004 : Added clone() method and fixed bug in equals() method (DG);
- * 01-Apr-2004 : Changed java.awt.geom.Dimension2D to org.jfree.ui.Size2D 
+ * 01-Apr-2004 : Changed java.awt.geom.Dimension2D to org.jfree.ui.Size2D
  *               because of JDK bug 4976448 which persists on JDK 1.3.1.  Also
  *               fixed bug in getPreferredHeight() method (DG);
- * 29-Apr-2004 : Fixed bug in getPreferredWidth() method - see bug id 
+ * 29-Apr-2004 : Fixed bug in getPreferredWidth() method - see bug id
  *               944173 (DG);
- * 11-Jan-2005 : Removed deprecated code in preparation for the 1.0.0 
+ * 11-Jan-2005 : Removed deprecated code in preparation for the 1.0.0
  *               release (DG);
  * 08-Feb-2005 : Updated for changes in RectangleConstraint class (DG);
  * 11-Feb-2005 : Implemented PublicCloneable (DG);
@@ -71,10 +71,10 @@
  *               fit the available space (DG);
  * 07-Oct-2005 : Added textAlignment attribute (DG);
  * ------------- JFREECHART 1.0.x RELEASED ------------------------------------
- * 13-Dec-2005 : Fixed bug 1379331 - incorrect drawing with LEFT or RIGHT 
+ * 13-Dec-2005 : Fixed bug 1379331 - incorrect drawing with LEFT or RIGHT
  *               title placement (DG);
  * 20-Jun-2007 : Removed JCommon dependency (DG);
- * 
+ *
  */
 
 package org.jfree.chart.title;
@@ -113,17 +113,17 @@ import org.jfree.chart.util.VerticalAlignment;
 import org.jfree.data.Range;
 
 /**
- * A chart title that displays a text string with automatic wrapping as 
+ * A chart title that displays a text string with automatic wrapping as
  * required.
  */
-public class TextTitle extends Title 
+public class TextTitle extends Title
                        implements Serializable, Cloneable, PublicCloneable {
 
     /** For serialization. */
     private static final long serialVersionUID = 8372008692127477443L;
-    
+
     /** The default font. */
-    public static final Font DEFAULT_FONT = new Font("SansSerif", Font.BOLD, 
+    public static final Font DEFAULT_FONT = new Font("SansSerif", Font.BOLD,
             12);
 
     /** The default text color. */
@@ -134,7 +134,7 @@ public class TextTitle extends Title
 
     /** The font used to display the title. */
     private Font font;
-    
+
     /** The text alignment. */
     private HorizontalAlignment textAlignment;
 
@@ -146,19 +146,19 @@ public class TextTitle extends Title
 
     /** The tool tip text (can be <code>null</code>). */
     private String toolTipText;
-    
+
     /** The URL text (can be <code>null</code>). */
     private String urlText;
-    
+
     /** The content. */
     private TextBlock content;
-    
-    /** 
+
+    /**
      * A flag that controls whether the title expands to fit the available
      * space..
      */
     private boolean expandToFitSpace = false;
-    
+
     /**
      * Creates a new title, using default attributes where necessary.
      */
@@ -185,7 +185,7 @@ public class TextTitle extends Title
      */
     public TextTitle(String text, Font font) {
         this(text, font, TextTitle.DEFAULT_TEXT_PAINT, Title.DEFAULT_POSITION,
-                Title.DEFAULT_HORIZONTAL_ALIGNMENT, 
+                Title.DEFAULT_HORIZONTAL_ALIGNMENT,
                 Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
     }
 
@@ -196,20 +196,20 @@ public class TextTitle extends Title
      * @param font  the title font (<code>null</code> not permitted).
      * @param paint  the title paint (<code>null</code> not permitted).
      * @param position  the title position (<code>null</code> not permitted).
-     * @param horizontalAlignment  the horizontal alignment (<code>null</code> 
+     * @param horizontalAlignment  the horizontal alignment (<code>null</code>
      *                             not permitted).
-     * @param verticalAlignment  the vertical alignment (<code>null</code> not 
+     * @param verticalAlignment  the vertical alignment (<code>null</code> not
      *                           permitted).
      * @param padding  the space to leave around the outside of the title.
      */
-    public TextTitle(String text, Font font, Paint paint, 
-                     RectangleEdge position, 
-                     HorizontalAlignment horizontalAlignment, 
+    public TextTitle(String text, Font font, Paint paint,
+                     RectangleEdge position,
+                     HorizontalAlignment horizontalAlignment,
                      VerticalAlignment verticalAlignment,
                      RectangleInsets padding) {
 
         super(position, horizontalAlignment, verticalAlignment, padding);
-        
+
         if (text == null) {
             throw new NullPointerException("Null 'text' argument.");
         }
@@ -230,14 +230,14 @@ public class TextTitle extends Title
         this.content = null;
         this.toolTipText = null;
         this.urlText = null;
-        
+
     }
 
     /**
      * Returns the title text.
      *
      * @return The text (never <code>null</code>).
-     * 
+     *
      * @see #setText(String)
      */
     public String getText() {
@@ -245,7 +245,7 @@ public class TextTitle extends Title
     }
 
     /**
-     * Sets the title to the specified text and sends a 
+     * Sets the title to the specified text and sends a
      * {@link TitleChangeEvent} to all registered listeners.
      *
      * @param text  the text (<code>null</code> not permitted).
@@ -261,20 +261,20 @@ public class TextTitle extends Title
     }
 
     /**
-     * Returns the text alignment.  This controls how the text is aligned 
+     * Returns the text alignment.  This controls how the text is aligned
      * within the title's bounds, whereas the title's horizontal alignment
-     * controls how the title's bounding rectangle is aligned within the 
+     * controls how the title's bounding rectangle is aligned within the
      * drawing space.
-     * 
+     *
      * @return The text alignment.
      */
     public HorizontalAlignment getTextAlignment() {
         return this.textAlignment;
     }
-    
+
     /**
      * Sets the text alignment.
-     * 
+     *
      * @param alignment  the alignment (<code>null</code> not permitted).
      */
     public void setTextAlignment(HorizontalAlignment alignment) {
@@ -284,12 +284,12 @@ public class TextTitle extends Title
         this.textAlignment = alignment;
         notifyListeners(new TitleChangeEvent(this));
     }
-    
+
     /**
      * Returns the font used to display the title string.
      *
      * @return The font (never <code>null</code>).
-     * 
+     *
      * @see #setFont(Font)
      */
     public Font getFont() {
@@ -297,11 +297,11 @@ public class TextTitle extends Title
     }
 
     /**
-     * Sets the font used to display the title string.  Registered listeners 
+     * Sets the font used to display the title string.  Registered listeners
      * are notified that the title has been modified.
      *
      * @param font  the new font (<code>null</code> not permitted).
-     * 
+     *
      * @see #getFont()
      */
     public void setFont(Font font) {
@@ -318,7 +318,7 @@ public class TextTitle extends Title
      * Returns the paint used to display the title string.
      *
      * @return The paint (never <code>null</code>).
-     * 
+     *
      * @see #setPaint(Paint)
      */
     public Paint getPaint() {
@@ -326,11 +326,11 @@ public class TextTitle extends Title
     }
 
     /**
-     * Sets the paint used to display the title string.  Registered listeners 
+     * Sets the paint used to display the title string.  Registered listeners
      * are notified that the title has been modified.
      *
      * @param paint  the new paint (<code>null</code> not permitted).
-     * 
+     *
      * @see #getPaint()
      */
     public void setPaint(Paint paint) {
@@ -353,8 +353,8 @@ public class TextTitle extends Title
     }
 
     /**
-     * Sets the background paint and sends a {@link TitleChangeEvent} to all 
-     * registered listeners.  If you set this attribute to <code>null</code>, 
+     * Sets the background paint and sends a {@link TitleChangeEvent} to all
+     * registered listeners.  If you set this attribute to <code>null</code>,
      * no background is painted (which makes the title background transparent).
      *
      * @param paint  the background paint (<code>null</code> permitted).
@@ -363,7 +363,7 @@ public class TextTitle extends Title
         this.backgroundPaint = paint;
         notifyListeners(new TitleChangeEvent(this));
     }
-    
+
     /**
      * Returns the tool tip text.
      *
@@ -374,7 +374,7 @@ public class TextTitle extends Title
     }
 
     /**
-     * Sets the tool tip text to the specified text and sends a 
+     * Sets the tool tip text to the specified text and sends a
      * {@link TitleChangeEvent} to all registered listeners.
      *
      * @param text  the text (<code>null</code> permitted).
@@ -394,7 +394,7 @@ public class TextTitle extends Title
     }
 
     /**
-     * Sets the URL text to the specified text and sends a 
+     * Sets the URL text to the specified text and sends a
      * {@link TitleChangeEvent} to all registered listeners.
      *
      * @param text  the text (<code>null</code> permitted).
@@ -403,36 +403,36 @@ public class TextTitle extends Title
         this.urlText = text;
         notifyListeners(new TitleChangeEvent(this));
     }
-    
+
     /**
      * Returns the flag that controls whether or not the title expands to fit
      * the available space.
-     * 
+     *
      * @return The flag.
      */
     public boolean getExpandToFitSpace() {
-        return this.expandToFitSpace;   
+        return this.expandToFitSpace;
     }
-    
+
     /**
-     * Sets the flag that controls whether the title expands to fit the 
+     * Sets the flag that controls whether the title expands to fit the
      * available space, and sends a {@link TitleChangeEvent} to all registered
      * listeners.
-     * 
+     *
      * @param expand  the flag.
      */
     public void setExpandToFitSpace(boolean expand) {
         this.expandToFitSpace = expand;
-        notifyListeners(new TitleChangeEvent(this));        
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
-     * Arranges the contents of the block, within the given constraints, and 
+     * Arranges the contents of the block, within the given constraints, and
      * returns the block size.
-     * 
+     *
      * @param g2  the graphics device.
      * @param constraint  the constraint (<code>null</code> not permitted).
-     * 
+     *
      * @return The block size (in Java2D units, never <code>null</code>).
      */
     public Size2D arrange(Graphics2D g2, RectangleConstraint constraint) {
@@ -442,60 +442,60 @@ public class TextTitle extends Title
         Size2D contentSize = null;
         if (w == LengthConstraintType.NONE) {
             if (h == LengthConstraintType.NONE) {
-                throw new RuntimeException("Not yet implemented."); 
+                throw new RuntimeException("Not yet implemented.");
             }
             else if (h == LengthConstraintType.RANGE) {
-                throw new RuntimeException("Not yet implemented."); 
+                throw new RuntimeException("Not yet implemented.");
             }
             else if (h == LengthConstraintType.FIXED) {
-                throw new RuntimeException("Not yet implemented.");                 
-            }            
+                throw new RuntimeException("Not yet implemented.");
+            }
         }
         else if (w == LengthConstraintType.RANGE) {
             if (h == LengthConstraintType.NONE) {
-                throw new RuntimeException("Not yet implemented."); 
+                throw new RuntimeException("Not yet implemented.");
             }
             else if (h == LengthConstraintType.RANGE) {
-                contentSize = arrangeRR(g2, cc.getWidthRange(), 
-                        cc.getHeightRange()); 
+                contentSize = arrangeRR(g2, cc.getWidthRange(),
+                        cc.getHeightRange());
             }
             else if (h == LengthConstraintType.FIXED) {
-                throw new RuntimeException("Not yet implemented.");                 
+                throw new RuntimeException("Not yet implemented.");
             }
         }
         else if (w == LengthConstraintType.FIXED) {
             if (h == LengthConstraintType.NONE) {
-                throw new RuntimeException("Not yet implemented."); 
+                throw new RuntimeException("Not yet implemented.");
             }
             else if (h == LengthConstraintType.RANGE) {
-                throw new RuntimeException("Not yet implemented."); 
+                throw new RuntimeException("Not yet implemented.");
             }
             else if (h == LengthConstraintType.FIXED) {
-                throw new RuntimeException("Not yet implemented.");                 
+                throw new RuntimeException("Not yet implemented.");
             }
         }
         return new Size2D(calculateTotalWidth(contentSize.getWidth()),
                 calculateTotalHeight(contentSize.getHeight()));
     }
-    
+
     /**
      * Returns the content size for the title.  This will reflect the fact that
      * a text title positioned on the left or right of a chart will be rotated
      * 90 degrees.
-     * 
+     *
      * @param g2  the graphics device.
      * @param widthRange  the width range.
      * @param heightRange  the height range.
-     * 
+     *
      * @return The content size.
      */
-    protected Size2D arrangeRR(Graphics2D g2, Range widthRange, 
+    protected Size2D arrangeRR(Graphics2D g2, Range widthRange,
             Range heightRange) {
         RectangleEdge position = getPosition();
         if (position == RectangleEdge.TOP || position == RectangleEdge.BOTTOM) {
             float maxWidth = (float) widthRange.getUpperBound();
             g2.setFont(this.font);
-            this.content = TextUtilities.createTextBlock(this.text, this.font, 
+            this.content = TextUtilities.createTextBlock(this.text, this.font,
                     this.paint, maxWidth, new G2TextMeasurer(g2));
             this.content.setLineAlignment(this.textAlignment);
             Size2D contentSize = this.content.calculateDimensions(g2);
@@ -506,15 +506,15 @@ public class TextTitle extends Title
                 return contentSize;
             }
         }
-        else if (position == RectangleEdge.LEFT || position 
+        else if (position == RectangleEdge.LEFT || position
                 == RectangleEdge.RIGHT) {
             float maxWidth = (float) heightRange.getUpperBound();
             g2.setFont(this.font);
-            this.content = TextUtilities.createTextBlock(this.text, this.font, 
+            this.content = TextUtilities.createTextBlock(this.text, this.font,
                     this.paint, maxWidth, new G2TextMeasurer(g2));
             this.content.setLineAlignment(this.textAlignment);
             Size2D contentSize = this.content.calculateDimensions(g2);
-            
+
             // transpose the dimensions, because the title is rotated
             if (this.expandToFitSpace) {
                 return new Size2D(contentSize.getHeight(), maxWidth);
@@ -527,9 +527,9 @@ public class TextTitle extends Title
             throw new RuntimeException("Unrecognised exception.");
         }
     }
-    
+
     /**
-     * Draws the title on a Java 2D graphics device (such as the screen or a 
+     * Draws the title on a Java 2D graphics device (such as the screen or a
      * printer).
      *
      * @param g2  the graphics device.
@@ -538,22 +538,22 @@ public class TextTitle extends Title
     public void draw(Graphics2D g2, Rectangle2D area) {
         draw(g2, area, null);
     }
-    
+
     /**
      * Draws the block within the specified area.
-     * 
+     *
      * @param g2  the graphics device.
      * @param area  the area.
      * @param params  if this is an instance of {@link EntityBlockParams} it
-     *                is used to determine whether or not an 
+     *                is used to determine whether or not an
      *                {@link EntityCollection} is returned by this method.
-     * 
+     *
      * @return An {@link EntityCollection} containing a chart entity for the
      *         title, or <code>null</code>.
      */
     public Object draw(Graphics2D g2, Rectangle2D area, Object params) {
         if (this.content == null) {
-            return null;   
+            return null;
         }
         area = trimMargin(area);
         drawBorder(g2, area);
@@ -564,7 +564,7 @@ public class TextTitle extends Title
         if (params instanceof EntityBlockParams) {
             EntityBlockParams p = (EntityBlockParams) params;
             if (p.getGenerateEntities()) {
-                entity = new ChartEntity(area, this.toolTipText, this.urlText);    
+                entity = new ChartEntity(area, this.toolTipText, this.urlText);
             }
         }
         area = trimBorder(area);
@@ -577,7 +577,7 @@ public class TextTitle extends Title
         if (position == RectangleEdge.TOP || position == RectangleEdge.BOTTOM) {
             drawHorizontal(g2, area);
         }
-        else if (position == RectangleEdge.LEFT 
+        else if (position == RectangleEdge.LEFT
                  || position == RectangleEdge.RIGHT) {
             drawVertical(g2, area);
         }
@@ -591,10 +591,10 @@ public class TextTitle extends Title
     }
 
     /**
-     * Draws a the title horizontally within the specified area.  This method 
-     * will be called from the {@link #draw(Graphics2D, Rectangle2D) draw} 
+     * Draws a the title horizontally within the specified area.  This method
+     * will be called from the {@link #draw(Graphics2D, Rectangle2D) draw}
      * method.
-     * 
+     *
      * @param g2  the graphics device.
      * @param area  the area for the title.
      */
@@ -636,12 +636,12 @@ public class TextTitle extends Title
         }
         this.content.draw(g2, x, y, anchor);
     }
-    
+
     /**
-     * Draws a the title vertically within the specified area.  This method 
-     * will be called from the {@link #draw(Graphics2D, Rectangle2D) draw} 
+     * Draws a the title vertically within the specified area.  This method
+     * will be called from the {@link #draw(Graphics2D, Rectangle2D) draw}
      * method.
-     * 
+     *
      * @param g2  the graphics device.
      * @param area  the area for the title.
      */
@@ -722,7 +722,7 @@ public class TextTitle extends Title
 
     /**
      * Returns a hash code.
-     * 
+     *
      * @return A hash code.
      */
     public int hashCode() {
@@ -730,22 +730,22 @@ public class TextTitle extends Title
         result = 29 * result + (this.text != null ? this.text.hashCode() : 0);
         result = 29 * result + (this.font != null ? this.font.hashCode() : 0);
         result = 29 * result + (this.paint != null ? this.paint.hashCode() : 0);
-        result = 29 * result + (this.backgroundPaint != null 
+        result = 29 * result + (this.backgroundPaint != null
                 ? this.backgroundPaint.hashCode() : 0);
         return result;
     }
 
     /**
      * Returns a clone of this object.
-     * 
+     *
      * @return A clone.
-     * 
+     *
      * @throws CloneNotSupportedException never.
      */
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-    
+
     /**
      * Provides serialization support.
      *
@@ -767,8 +767,8 @@ public class TextTitle extends Title
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream) 
-        throws IOException, ClassNotFoundException 
+    private void readObject(ObjectInputStream stream)
+        throws IOException, ClassNotFoundException
     {
         stream.defaultReadObject();
         this.paint = SerialUtilities.readPaint(stream);
