@@ -39,6 +39,7 @@
  *               StrokeListTests (DG);
  * 08-Apr-2008 : Added LogFormatTests (DG);
  * 02-Jun-2008 : Added ShapeUtilitiesTests and SerialUtilitiesTests (DG);
+ * 17-Jun-2008 : Added ShapeListTests (DG);
  *
  */
 
@@ -68,6 +69,7 @@ public class UtilPackageTests extends TestCase {
         suite.addTestSuite(PaintListTests.class);
         suite.addTestSuite(RelativeDateFormatTests.class);
         suite.addTestSuite(SerialUtilitiesTests.class);
+        suite.addTestSuite(ShapeListTests.class);
         suite.addTestSuite(ShapeUtilitiesTests.class);
         suite.addTestSuite(StrokeListTests.class);
         return suite;

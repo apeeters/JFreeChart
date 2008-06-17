@@ -36,6 +36,7 @@
  * -------
  * 13-Aug-2003 : Version 1 (DG);
  * 21-Jun-2007 : Copied from JCommon (DG);
+ * 17-Jun-2008 : Fixed bug in equals() (DG);
  *
  */
 
@@ -70,7 +71,8 @@ public class ShapeList extends AbstractObjectList {
     }
 
     /**
-     * Sets the {@link Shape} for an item in the list.  The list is expanded if necessary.
+     * Sets the {@link Shape} for an item in the list.  The list is expanded 
+	 * if necessary.
      *
      * @param index  the index (zero-based).
      * @param shape  the {@link Shape}.
@@ -84,7 +86,8 @@ public class ShapeList extends AbstractObjectList {
      *
      * @return A clone.
      *
-     * @throws CloneNotSupportedException if an item in the list does not support cloning.
+     * @throws CloneNotSupportedException if an item in the list does not
+     *         support cloning.
      */
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -93,25 +96,26 @@ public class ShapeList extends AbstractObjectList {
     /**
      * Tests the list for equality with another object (typically also a list).
      *
-     * @param obj  the other object.
+     * @param obj  the other object (<code>null</code> permitted).
      *
      * @return A boolean.
      */
     public boolean equals(Object obj) {
 
-        if (obj == null) {
-            return false;
-        }
-
         if (obj == this) {
             return true;
         }
-
-        if (obj instanceof ShapeList) {
-            return super.equals(obj);
+        if (!(obj instanceof ShapeList)) {
+            return false;
         }
-
-        return false;
+        ShapeList that = (ShapeList) obj;
+        int listSize = size();
+        for (int i = 0; i < listSize; i++) {
+           if (!ShapeUtilities.equal((Shape) get(i), (Shape) that.get(i))) {
+               return false;
+           }
+        }
+        return true;
 
     }
 
