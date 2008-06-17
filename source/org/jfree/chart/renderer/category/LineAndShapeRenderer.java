@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * -------------------------
  * LineAndShapeRenderer.java
  * -------------------------
- * (C) Copyright 2001-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2001-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Mark Watson (www.markwatson.com);
@@ -39,22 +39,22 @@
  * -------
  * 23-Oct-2001 : Version 1 (DG);
  * 15-Nov-2001 : Modified to allow for null data values (DG);
- * 16-Jan-2002 : Renamed HorizontalCategoryItemRenderer.java 
+ * 16-Jan-2002 : Renamed HorizontalCategoryItemRenderer.java
  *               --> CategoryItemRenderer.java (DG);
- * 05-Feb-2002 : Changed return type of the drawCategoryItem method from void 
+ * 05-Feb-2002 : Changed return type of the drawCategoryItem method from void
  *               to Shape, as part of the tooltips implementation (DG);
  * 11-May-2002 : Support for value label drawing (JB);
  * 29-May-2002 : Now extends AbstractCategoryItemRenderer (DG);
  * 25-Jun-2002 : Removed redundant import (DG);
- * 05-Aug-2002 : Small modification to drawCategoryItem method to support URLs 
+ * 05-Aug-2002 : Small modification to drawCategoryItem method to support URLs
  *               for HTML image maps (RA);
  * 26-Sep-2002 : Fixed errors reported by Checkstyle (DG);
- * 11-Oct-2002 : Added new constructor to incorporate tool tip and URL 
+ * 11-Oct-2002 : Added new constructor to incorporate tool tip and URL
  *               generators (DG);
- * 24-Oct-2002 : Amendments for changes in CategoryDataset interface and 
+ * 24-Oct-2002 : Amendments for changes in CategoryDataset interface and
  *               CategoryToolTipGenerator interface (DG);
  * 05-Nov-2002 : Base dataset is now TableDataset not CategoryDataset (DG);
- * 06-Nov-2002 : Renamed drawCategoryItem() --> drawItem() and now using axis 
+ * 06-Nov-2002 : Renamed drawCategoryItem() --> drawItem() and now using axis
  *               for category spacing (DG);
  * 17-Jan-2003 : Moved plot classes to a separate package (DG);
  * 10-Apr-2003 : Changed CategoryDataset to KeyedValues2DDataset in drawItem()
@@ -63,14 +63,14 @@
  * 29-Jul-2003 : Amended code that doesn't compile with JDK 1.2.2 (DG);
  * 30-Jul-2003 : Modified entity constructor (CZ);
  * 22-Sep-2003 : Fixed cloning (DG);
- * 10-Feb-2004 : Small change to drawItem() method to make cut-and-paste 
+ * 10-Feb-2004 : Small change to drawItem() method to make cut-and-paste
  *               override easier (DG);
- * 16-Jun-2004 : Fixed bug (id=972454) with label positioning on horizontal 
+ * 16-Jun-2004 : Fixed bug (id=972454) with label positioning on horizontal
  *               charts (DG);
  * 15-Oct-2004 : Updated equals() method (DG);
  * 05-Nov-2004 : Modified drawItem() signature (DG);
  * 11-Nov-2004 : Now uses ShapeUtilities class to translate shapes (DG);
- * 27-Jan-2005 : Changed attribute names, modified constructor and removed 
+ * 27-Jan-2005 : Changed attribute names, modified constructor and removed
  *               constants (DG);
  * 01-Feb-2005 : Removed unnecessary constants (DG);
  * 15-Mar-2005 : Fixed bug 1163897, concerning outlines for shapes (DG);
@@ -88,7 +88,7 @@
  * 24-Sep-2007 : Fixed bug in clone() method and added change event to
  *               setUseOutlinePaint() method (DG);
  * 27-Sep-2007 : Added option to offset series x-position within category (DG);
- * 
+ *
  */
 
 package org.jfree.chart.renderer.category;
@@ -115,65 +115,65 @@ import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.data.category.CategoryDataset;
 
 /**
- * A renderer that draws shapes for each data item, and lines between data 
+ * A renderer that draws shapes for each data item, and lines between data
  * items (for use with the {@link CategoryPlot} class).
  */
-public class LineAndShapeRenderer extends AbstractCategoryItemRenderer 
-                                  implements Cloneable, PublicCloneable, 
+public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
+                                  implements Cloneable, PublicCloneable,
                                              Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -197749519869226398L;
 
-    /** 
-     * A table of flags that control (per series) whether or not lines are 
-     * visible. 
+    /**
+     * A table of flags that control (per series) whether or not lines are
+     * visible.
      */
     private BooleanList seriesLinesVisible;
 
-    /** 
-     * A flag indicating whether or not lines are drawn between non-null 
-     * points. 
+    /**
+     * A flag indicating whether or not lines are drawn between non-null
+     * points.
      */
     private boolean baseLinesVisible;
 
-    /** 
-     * A table of flags that control (per series) whether or not shapes are 
-     * visible. 
+    /**
+     * A table of flags that control (per series) whether or not shapes are
+     * visible.
      */
     private BooleanList seriesShapesVisible;
 
     /** The default value returned by the getShapeVisible() method. */
     private boolean baseShapesVisible;
-    
-    /** 
-     * A table of flags that control (per series) whether or not shapes are 
-     * filled. 
+
+    /**
+     * A table of flags that control (per series) whether or not shapes are
+     * filled.
      */
     private BooleanList seriesShapesFilled;
-    
+
     /** The default value returned by the getShapeFilled() method. */
     private boolean baseShapesFilled;
-    
-    /** 
-     * A flag that controls whether the fill paint is used for filling 
-     * shapes. 
+
+    /**
+     * A flag that controls whether the fill paint is used for filling
+     * shapes.
      */
     private boolean useFillPaint;
 
     /** A flag that controls whether outlines are drawn for shapes. */
     private boolean drawOutlines;
-        
-    /** 
-     * A flag that controls whether the outline paint is used for drawing shape 
-     * outlines - if not, the regular series paint is used. 
+
+    /**
+     * A flag that controls whether the outline paint is used for drawing shape
+     * outlines - if not, the regular series paint is used.
      */
     private boolean useOutlinePaint;
-    
+
     /**
      * A flag that controls whether or not the x-position for each item is
      * offset within the category according to the series.
-     * 
+     *
      * @since 1.0.7
      */
     private boolean useSeriesOffset;
@@ -181,11 +181,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     /**
      * The item margin used for series offsetting - this allows the positioning
      * to match the bar positions of the {@link BarRenderer} class.
-     * 
+     *
      * @since 1.0.7
      */
     private double itemMargin;
-    
+
     /**
      * Creates a renderer with both lines and shapes visible by default.
      */
@@ -195,7 +195,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
 
     /**
      * Creates a new renderer with lines and/or shapes visible.
-     * 
+     *
      * @param lines  draw lines?
      * @param shapes  draw shapes?
      */
@@ -213,11 +213,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
         this.useSeriesOffset = false;  // preserves old behaviour
         this.itemMargin = 0.0;
     }
-    
+
     // LINES VISIBLE
 
     /**
-     * Returns the flag used to control whether or not the line for an item is 
+     * Returns the flag used to control whether or not the line for an item is
      * visible.
      *
      * @param series  the series index (zero-based).
@@ -231,18 +231,18 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             return flag.booleanValue();
         }
         else {
-            return this.baseLinesVisible;   
+            return this.baseLinesVisible;
         }
     }
 
     /**
-     * Returns the flag used to control whether or not the lines for a series 
+     * Returns the flag used to control whether or not the lines for a series
      * are visible.
      *
      * @param series  the series index (zero-based).
      *
      * @return The flag (possibly <code>null</code>).
-     * 
+     *
      * @see #setSeriesLinesVisible(int, Boolean)
      */
     public Boolean getSeriesLinesVisible(int series) {
@@ -250,12 +250,12 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Sets the 'lines visible' flag for a series and sends a 
+     * Sets the 'lines visible' flag for a series and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero-based).
      * @param flag  the flag (<code>null</code> permitted).
-     * 
+     *
      * @see #getSeriesLinesVisible(int)
      */
     public void setSeriesLinesVisible(int series, Boolean flag) {
@@ -264,23 +264,23 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Sets the 'lines visible' flag for a series and sends a 
+     * Sets the 'lines visible' flag for a series and sends a
      * {@link RendererChangeEvent} to all registered listeners.
-     * 
+     *
      * @param series  the series index (zero-based).
      * @param visible  the flag.
-     * 
+     *
      * @see #getSeriesLinesVisible(int)
      */
     public void setSeriesLinesVisible(int series, boolean visible) {
         setSeriesLinesVisible(series, Boolean.valueOf(visible));
     }
-    
+
     /**
      * Returns the base 'lines visible' attribute.
      *
      * @return The base flag.
-     * 
+     *
      * @see #getBaseLinesVisible()
      */
     public boolean getBaseLinesVisible() {
@@ -288,11 +288,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Sets the base 'lines visible' flag and sends a 
+     * Sets the base 'lines visible' flag and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param flag  the flag.
-     * 
+     *
      * @see #getBaseLinesVisible()
      */
     public void setBaseLinesVisible(boolean flag) {
@@ -303,7 +303,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     // SHAPES VISIBLE
 
     /**
-     * Returns the flag used to control whether or not the shape for an item is 
+     * Returns the flag used to control whether or not the shape for an item is
      * visible.
      *
      * @param series  the series index (zero-based).
@@ -317,7 +317,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             return flag.booleanValue();
         }
         else {
-            return this.baseShapesVisible;   
+            return this.baseShapesVisible;
         }
     }
 
@@ -328,7 +328,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param series  the series index (zero-based).
      *
      * @return A boolean.
-     * 
+     *
      * @see #setSeriesShapesVisible(int, Boolean)
      */
     public Boolean getSeriesShapesVisible(int series) {
@@ -336,25 +336,25 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Sets the 'shapes visible' flag for a series and sends a 
+     * Sets the 'shapes visible' flag for a series and sends a
      * {@link RendererChangeEvent} to all registered listeners.
-     * 
+     *
      * @param series  the series index (zero-based).
      * @param visible  the flag.
-     * 
+     *
      * @see #getSeriesShapesVisible(int)
      */
     public void setSeriesShapesVisible(int series, boolean visible) {
         setSeriesShapesVisible(series, Boolean.valueOf(visible));
     }
-    
+
     /**
-     * Sets the 'shapes visible' flag for a series and sends a 
+     * Sets the 'shapes visible' flag for a series and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero-based).
      * @param flag  the flag.
-     * 
+     *
      * @see #getSeriesShapesVisible(int)
      */
     public void setSeriesShapesVisible(int series, Boolean flag) {
@@ -366,7 +366,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * Returns the base 'shape visible' attribute.
      *
      * @return The base flag.
-     * 
+     *
      * @see #setBaseShapesVisible(boolean)
      */
     public boolean getBaseShapesVisible() {
@@ -374,11 +374,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Sets the base 'shapes visible' flag and sends a 
+     * Sets the base 'shapes visible' flag and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param flag  the flag.
-     * 
+     *
      * @see #getBaseShapesVisible()
      */
     public void setBaseShapesVisible(boolean flag) {
@@ -387,65 +387,65 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Returns <code>true</code> if outlines should be drawn for shapes, and 
+     * Returns <code>true</code> if outlines should be drawn for shapes, and
      * <code>false</code> otherwise.
-     * 
+     *
      * @return A boolean.
-     * 
+     *
      * @see #setDrawOutlines(boolean)
      */
     public boolean getDrawOutlines() {
         return this.drawOutlines;
     }
-    
+
     /**
-     * Sets the flag that controls whether outlines are drawn for 
-     * shapes, and sends a {@link RendererChangeEvent} to all registered 
-     * listeners. 
+     * Sets the flag that controls whether outlines are drawn for
+     * shapes, and sends a {@link RendererChangeEvent} to all registered
+     * listeners.
      * <P>
-     * In some cases, shapes look better if they do NOT have an outline, but 
+     * In some cases, shapes look better if they do NOT have an outline, but
      * this flag allows you to set your own preference.
-     * 
+     *
      * @param flag  the flag.
-     * 
+     *
      * @see #getDrawOutlines()
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
         notifyListeners(new RendererChangeEvent(this));
     }
-    
+
     /**
-     * Returns the flag that controls whether the outline paint is used for 
+     * Returns the flag that controls whether the outline paint is used for
      * shape outlines.  If not, the regular series paint is used.
-     * 
+     *
      * @return A boolean.
-     * 
+     *
      * @see #setUseOutlinePaint(boolean)
      */
     public boolean getUseOutlinePaint() {
-        return this.useOutlinePaint;   
+        return this.useOutlinePaint;
     }
-    
+
     /**
-     * Sets the flag that controls whether the outline paint is used for shape 
-     * outlines, and sends a {@link RendererChangeEvent} to all registered 
-     * listeners. 
-     * 
+     * Sets the flag that controls whether the outline paint is used for shape
+     * outlines, and sends a {@link RendererChangeEvent} to all registered
+     * listeners.
+     *
      * @param use  the flag.
-     * 
+     *
      * @see #getUseOutlinePaint()
      */
     public void setUseOutlinePaint(boolean use) {
-        this.useOutlinePaint = use;   
+        this.useOutlinePaint = use;
         notifyListeners(new RendererChangeEvent(this));
     }
 
     // SHAPES FILLED
-    
+
     /**
-     * Returns the flag used to control whether or not the shape for an item 
-     * is filled. The default implementation passes control to the 
+     * Returns the flag used to control whether or not the shape for an item
+     * is filled. The default implementation passes control to the
      * <code>getSeriesShapesFilled</code> method. You can override this method
      * if you require different behaviour.
      *
@@ -457,34 +457,34 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     public boolean getItemShapeFilled(int series, int item) {
         Boolean flag = getSeriesShapesFilled(series);
         if (flag != null) {
-            return flag.booleanValue();   
+            return flag.booleanValue();
         }
         else {
-            return this.baseShapesFilled;   
+            return this.baseShapesFilled;
         }
     }
 
     /**
-     * Returns the flag used to control whether or not the shapes for a series 
-     * are filled. 
+     * Returns the flag used to control whether or not the shapes for a series
+     * are filled.
      *
      * @param series  the series index (zero-based).
      *
      * @return A boolean.
-     * 
+     *
      * @see #setSeriesShapesFilled(int, Boolean)
      */
     public Boolean getSeriesShapesFilled(int series) {
         return this.seriesShapesFilled.getBoolean(series);
     }
-    
+
     /**
-     * Sets the 'shapes filled' flag for a series and sends a 
+     * Sets the 'shapes filled' flag for a series and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero-based).
      * @param filled  the flag.
-     * 
+     *
      * @see #getSeriesShapesFilled(int)
      */
     public void setSeriesShapesFilled(int series, Boolean filled) {
@@ -493,12 +493,12 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Sets the 'shapes filled' flag for a series and sends a 
+     * Sets the 'shapes filled' flag for a series and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero-based).
      * @param filled  the flag.
-     * 
+     *
      * @see #getSeriesShapesFilled(int)
      */
     public void setSeriesShapesFilled(int series, boolean filled) {
@@ -510,7 +510,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * Returns the base 'shape filled' attribute.
      *
      * @return The base flag.
-     * 
+     *
      * @see #setBaseShapesFilled(boolean)
      */
     public boolean getBaseShapesFilled() {
@@ -518,11 +518,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Sets the base 'shapes filled' flag and sends a 
+     * Sets the base 'shapes filled' flag and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param flag  the flag.
-     * 
+     *
      * @see #getBaseShapesFilled()
      */
     public void setBaseShapesFilled(boolean flag) {
@@ -531,89 +531,89 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Returns <code>true</code> if the renderer should use the fill paint 
+     * Returns <code>true</code> if the renderer should use the fill paint
      * setting to fill shapes, and <code>false</code> if it should just
      * use the regular paint.
-     * 
+     *
      * @return A boolean.
-     * 
+     *
      * @see #setUseFillPaint(boolean)
      */
     public boolean getUseFillPaint() {
         return this.useFillPaint;
     }
-    
+
     /**
-     * Sets the flag that controls whether the fill paint is used to fill 
-     * shapes, and sends a {@link RendererChangeEvent} to all 
+     * Sets the flag that controls whether the fill paint is used to fill
+     * shapes, and sends a {@link RendererChangeEvent} to all
      * registered listeners.
-     * 
+     *
      * @param flag  the flag.
-     * 
+     *
      * @see #getUseFillPaint()
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
         notifyListeners(new RendererChangeEvent(this));
     }
-    
+
     /**
      * Returns the flag that controls whether or not the x-position for each
      * data item is offset within the category according to the series.
-     * 
+     *
      * @return A boolean.
-     * 
+     *
      * @see #setUseSeriesOffset(boolean)
-     * 
+     *
      * @since 1.0.7
      */
     public boolean getUseSeriesOffset() {
         return this.useSeriesOffset;
     }
-    
+
     /**
-     * Sets the flag that controls whether or not the x-position for each 
+     * Sets the flag that controls whether or not the x-position for each
      * data item is offset within its category according to the series, and
      * sends a {@link RendererChangeEvent} to all registered listeners.
-     * 
+     *
      * @param offset  the offset.
-     * 
+     *
      * @see #getUseSeriesOffset()
-     * 
+     *
      * @since 1.0.7
      */
     public void setUseSeriesOffset(boolean offset) {
         this.useSeriesOffset = offset;
         notifyListeners(new RendererChangeEvent(this));
     }
-    
+
     /**
-     * Returns the item margin, which is the gap between items within a 
-     * category (expressed as a percentage of the overall category width).  
-     * This can be used to match the offset alignment with the bars drawn by 
+     * Returns the item margin, which is the gap between items within a
+     * category (expressed as a percentage of the overall category width).
+     * This can be used to match the offset alignment with the bars drawn by
      * a {@link BarRenderer}).
-     * 
+     *
      * @return The item margin.
-     * 
+     *
      * @see #setItemMargin(double)
      * @see #getUseSeriesOffset()
-     * 
+     *
      * @since 1.0.7
      */
     public double getItemMargin() {
         return this.itemMargin;
     }
-    
+
     /**
      * Sets the item margin, which is the gap between items within a category
      * (expressed as a percentage of the overall category width), and sends
      * a {@link RendererChangeEvent} to all registered listeners.
-     * 
+     *
      * @param margin  the margin (0.0 <= margin < 1.0).
-     * 
+     *
      * @see #getItemMargin()
      * @see #getUseSeriesOffset()
-     * 
+     *
      * @since 1.0.7
      */
     public void setItemMargin(double margin) {
@@ -623,7 +623,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
         this.itemMargin = margin;
         notifyListeners(new RendererChangeEvent(this));
     }
-    
+
     /**
      * Returns a legend item for a series.
      *
@@ -644,27 +644,27 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             String label = getLegendItemLabelGenerator().generateLabel(
                     dataset, series);
             String description = label;
-            String toolTipText = null; 
+            String toolTipText = null;
             if (getLegendItemToolTipGenerator() != null) {
                 toolTipText = getLegendItemToolTipGenerator().generateLabel(
-                        dataset, series);   
+                        dataset, series);
             }
             String urlText = null;
             if (getLegendItemURLGenerator() != null) {
                 urlText = getLegendItemURLGenerator().generateLabel(
-                        dataset, series);   
+                        dataset, series);
             }
             Shape shape = lookupSeriesShape(series);
             Paint paint = lookupSeriesPaint(series);
-            Paint fillPaint = (this.useFillPaint 
+            Paint fillPaint = (this.useFillPaint
                     ? getItemFillPaint(series, 0) : paint);
             boolean shapeOutlineVisible = this.drawOutlines;
-            Paint outlinePaint = (this.useOutlinePaint 
+            Paint outlinePaint = (this.useOutlinePaint
                     ? getItemOutlinePaint(series, 0) : paint);
             Stroke outlineStroke = lookupSeriesOutlineStroke(series);
             boolean lineVisible = getItemLineVisible(series, 0);
             boolean shapeVisible = getItemShapeVisible(series, 0);
-            LegendItem result = new LegendItem(label, description, toolTipText, 
+            LegendItem result = new LegendItem(label, description, toolTipText,
                     urlText, shapeVisible, shape, getItemShapeFilled(series, 0),
                     fillPaint, shapeOutlineVisible, outlinePaint, outlineStroke,
                     lineVisible, new Line2D.Double(-7.0, 0.0, 7.0, 0.0),
@@ -681,13 +681,13 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
 
     /**
      * This renderer uses two passes to draw the data.
-     * 
+     *
      * @return The pass count (<code>2</code> for this renderer).
      */
     public int getPassCount() {
-        return 2;   
+        return 2;
     }
-    
+
     /**
      * Draw a single data item.
      *
@@ -709,11 +709,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
 
         // do nothing if item is not visible
         if (!getItemVisible(row, column)) {
-            return;   
+            return;
         }
-        
+
         // do nothing if both the line and shape are not visible
-        if (!getItemLineVisible(row, column) 
+        if (!getItemLineVisible(row, column)
                 && !getItemShapeVisible(row, column)) {
             return;
         }
@@ -730,15 +730,15 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
         double x1;
         if (this.useSeriesOffset) {
             x1 = domainAxis.getCategorySeriesMiddle(dataset.getColumnKey(
-                    column), dataset.getRowKey(row), dataset, this.itemMargin, 
-                    dataArea, plot.getDomainAxisEdge());            
+                    column), dataset.getRowKey(row), dataset, this.itemMargin,
+                    dataArea, plot.getDomainAxisEdge());
         }
         else {
-            x1 = domainAxis.getCategoryMiddle(column, getColumnCount(), 
+            x1 = domainAxis.getCategoryMiddle(column, getColumnCount(),
                     dataArea, plot.getDomainAxisEdge());
         }
         double value = v.doubleValue();
-        double y1 = rangeAxis.valueToJava2D(value, dataArea, 
+        double y1 = rangeAxis.valueToJava2D(value, dataArea,
                 plot.getRangeAxisEdge());
 
         if (pass == 0 && getItemLineVisible(row, column)) {
@@ -750,17 +750,17 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                     double x0;
                     if (this.useSeriesOffset) {
                         x0 = domainAxis.getCategorySeriesMiddle(
-                                dataset.getColumnKey(column - 1), 
-                                dataset.getRowKey(row), dataset, 
-                                this.itemMargin, dataArea, 
+                                dataset.getColumnKey(column - 1),
+                                dataset.getRowKey(row), dataset,
+                                this.itemMargin, dataArea,
                                 plot.getDomainAxisEdge());
                     }
                     else {
-                        x0 = domainAxis.getCategoryMiddle(column - 1, 
-                                getColumnCount(), dataArea, 
+                        x0 = domainAxis.getCategoryMiddle(column - 1,
+                                getColumnCount(), dataArea,
                                 plot.getDomainAxisEdge());
                     }
-                    double y0 = rangeAxis.valueToJava2D(previous, dataArea, 
+                    double y0 = rangeAxis.valueToJava2D(previous, dataArea,
                             plot.getRangeAxisEdge());
 
                     Line2D line = null;
@@ -792,13 +792,13 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                         g2.setPaint(getItemFillPaint(row, column));
                     }
                     else {
-                        g2.setPaint(getItemPaint(row, column));   
+                        g2.setPaint(getItemPaint(row, column));
                     }
                     g2.fill(shape);
                 }
                 if (this.drawOutlines) {
                     if (this.useOutlinePaint) {
-                        g2.setPaint(getItemOutlinePaint(row, column));   
+                        g2.setPaint(getItemOutlinePaint(row, column));
                     }
                     else {
                         g2.setPaint(getItemPaint(row, column));
@@ -811,11 +811,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             // draw the item label if there is one...
             if (isItemLabelVisible(row, column)) {
                 if (orientation == PlotOrientation.HORIZONTAL) {
-                    drawItemLabel(g2, orientation, dataset, row, column, y1, 
+                    drawItemLabel(g2, orientation, dataset, row, column, y1,
                             x1, (value < 0.0));
                 }
                 else if (orientation == PlotOrientation.VERTICAL) {
-                    drawItemLabel(g2, orientation, dataset, row, column, x1, 
+                    drawItemLabel(g2, orientation, dataset, row, column, x1,
                             y1, (value < 0.0));
                 }
             }
@@ -828,7 +828,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
         }
 
     }
-    
+
     /**
      * Tests this renderer for equality with an arbitrary object.
      *
@@ -844,23 +844,23 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
         if (!(obj instanceof LineAndShapeRenderer)) {
             return false;
         }
-        
+
         LineAndShapeRenderer that = (LineAndShapeRenderer) obj;
         if (this.baseLinesVisible != that.baseLinesVisible) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.seriesLinesVisible, 
+        if (!ObjectUtilities.equal(this.seriesLinesVisible,
                 that.seriesLinesVisible)) {
             return false;
         }
         if (this.baseShapesVisible != that.baseShapesVisible) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.seriesShapesVisible, 
+        if (!ObjectUtilities.equal(this.seriesShapesVisible,
                 that.seriesShapesVisible)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.seriesShapesFilled, 
+        if (!ObjectUtilities.equal(this.seriesShapesFilled,
                 that.seriesShapesFilled)) {
             return false;
         }
@@ -881,20 +881,20 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
 
     /**
      * Returns an independent copy of the renderer.
-     * 
+     *
      * @return A clone.
-     * 
+     *
      * @throws CloneNotSupportedException  should not happen.
      */
     public Object clone() throws CloneNotSupportedException {
         LineAndShapeRenderer clone = (LineAndShapeRenderer) super.clone();
-        clone.seriesLinesVisible 
+        clone.seriesLinesVisible
                 = (BooleanList) this.seriesLinesVisible.clone();
-        clone.seriesShapesVisible 
+        clone.seriesShapesVisible
                 = (BooleanList) this.seriesShapesVisible.clone();
-        clone.seriesShapesFilled 
+        clone.seriesShapesFilled
                 = (BooleanList) this.seriesShapesFilled.clone();
         return clone;
     }
-    
+
 }
