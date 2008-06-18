@@ -27,7 +27,7 @@
  * --------------------------------
  * CategoryLabelWidthTypeTests.java
  * --------------------------------
- * (C) Copyright 2004-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
