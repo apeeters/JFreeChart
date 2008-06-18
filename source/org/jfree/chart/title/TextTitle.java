@@ -74,6 +74,9 @@
  * 13-Dec-2005 : Fixed bug 1379331 - incorrect drawing with LEFT or RIGHT
  *               title placement (DG);
  * 20-Jun-2007 : Removed JCommon dependency (DG);
+ * 19-Dec-2007 : Implemented some of the missing arrangement options (DG);
+ * 28-Apr-2008 : Added option for maximum lines, and fixed minor bugs in
+ *               equals() method (DG);
  *
  */
 
@@ -158,6 +161,13 @@ public class TextTitle extends Title
      * space..
      */
     private boolean expandToFitSpace = false;
+
+    /**
+     * The maximum number of lines to display.
+     *
+     * @since 1.0.10
+     */
+    private int maximumLinesToDisplay = Integer.MAX_VALUE;
 
     /**
      * Creates a new title, using default attributes where necessary.
@@ -273,7 +283,8 @@ public class TextTitle extends Title
     }
 
     /**
-     * Sets the text alignment.
+     * Sets the text alignment and sends a {@link TitleChangeEvent} to
+     * all registered listeners.
      *
      * @param alignment  the alignment (<code>null</code> not permitted).
      */
@@ -427,6 +438,34 @@ public class TextTitle extends Title
     }
 
     /**
+     * Returns the maximum number of lines to display.
+     *
+     * @return The maximum.
+     *
+     * @since 1.0.10
+     *
+     * @see #setMaximumLinesToDisplay(int)
+     */
+    public int getMaximumLinesToDisplay() {
+        return this.maximumLinesToDisplay;
+    }
+
+    /**
+     * Sets the maximum number of lines to display and sends a
+     * {@link TitleChangeEvent} to all registered listeners.
+     *
+     * @param max  the maximum.
+     *
+     * @since 1.0.10.
+     *
+     * @see #getMaximumLinesToDisplay()
+     */
+    public void setMaximumLinesToDisplay(int max) {
+        this.maximumLinesToDisplay = max;
+        notifyListeners(new TitleChangeEvent(this));
+    }
+
+    /**
      * Arranges the contents of the block, within the given constraints, and
      * returns the block size.
      *
@@ -442,7 +481,7 @@ public class TextTitle extends Title
         Size2D contentSize = null;
         if (w == LengthConstraintType.NONE) {
             if (h == LengthConstraintType.NONE) {
-                throw new RuntimeException("Not yet implemented.");
+                contentSize = arrangeNN(g2);
             }
             else if (h == LengthConstraintType.RANGE) {
                 throw new RuntimeException("Not yet implemented.");
@@ -453,7 +492,7 @@ public class TextTitle extends Title
         }
         else if (w == LengthConstraintType.RANGE) {
             if (h == LengthConstraintType.NONE) {
-                throw new RuntimeException("Not yet implemented.");
+                contentSize = arrangeRN(g2, cc.getWidthRange());
             }
             else if (h == LengthConstraintType.RANGE) {
                 contentSize = arrangeRR(g2, cc.getWidthRange(),
@@ -465,7 +504,7 @@ public class TextTitle extends Title
         }
         else if (w == LengthConstraintType.FIXED) {
             if (h == LengthConstraintType.NONE) {
-                throw new RuntimeException("Not yet implemented.");
+                contentSize = arrangeFN(g2, cc.getWidth());
             }
             else if (h == LengthConstraintType.RANGE) {
                 throw new RuntimeException("Not yet implemented.");
@@ -476,6 +515,98 @@ public class TextTitle extends Title
         }
         return new Size2D(calculateTotalWidth(contentSize.getWidth()),
                 calculateTotalHeight(contentSize.getHeight()));
+    }
+
+    /**
+     * Arranges the content for this title assuming no bounds on the width
+     * or the height, and returns the required size.  This will reflect the
+     * fact that a text title positioned on the left or right of a chart will
+     * be rotated by 90 degrees.
+     *
+     * @param g2  the graphics target.
+     *
+     * @return The content size.
+     *
+     * @since 1.0.9
+     */
+    protected Size2D arrangeNN(Graphics2D g2) {
+        Range max = new Range(0.0, Float.MAX_VALUE);
+        return arrangeRR(g2, max, max);
+    }
+
+    /**
+     * Arranges the content for this title assuming a fixed width and no bounds
+     * on the height, and returns the required size.  This will reflect the
+     * fact that a text title positioned on the left or right of a chart will
+     * be rotated by 90 degrees.
+     *
+     * @param g2  the graphics target.
+     * @param w  the width.
+     *
+     * @return The content size.
+     *
+     * @since 1.0.9
+     */
+    protected Size2D arrangeFN(Graphics2D g2, double w) {
+        RectangleEdge position = getPosition();
+        if (position == RectangleEdge.TOP || position == RectangleEdge.BOTTOM) {
+            float maxWidth = (float) w;
+            g2.setFont(this.font);
+            this.content = TextUtilities.createTextBlock(this.text, this.font,
+                    this.paint, maxWidth, this.maximumLinesToDisplay,
+                    new G2TextMeasurer(g2));
+            this.content.setLineAlignment(this.textAlignment);
+            Size2D contentSize = this.content.calculateDimensions(g2);
+            if (this.expandToFitSpace) {
+                return new Size2D(maxWidth, contentSize.getHeight());
+            }
+            else {
+                return contentSize;
+            }
+        }
+        else if (position == RectangleEdge.LEFT || position
+                == RectangleEdge.RIGHT) {
+            float maxWidth = Float.MAX_VALUE;
+            g2.setFont(this.font);
+            this.content = TextUtilities.createTextBlock(this.text, this.font,
+                    this.paint, maxWidth, this.maximumLinesToDisplay,
+                    new G2TextMeasurer(g2));
+            this.content.setLineAlignment(this.textAlignment);
+            Size2D contentSize = this.content.calculateDimensions(g2);
+
+            // transpose the dimensions, because the title is rotated
+            if (this.expandToFitSpace) {
+                return new Size2D(contentSize.getHeight(), maxWidth);
+            }
+            else {
+                return new Size2D(contentSize.height, contentSize.width);
+            }
+        }
+        else {
+            throw new RuntimeException("Unrecognised exception.");
+        }
+    }
+
+    /**
+     * Arranges the content for this title assuming a range constraint for the
+     * width and no bounds on the height, and returns the required size.  This
+     * will reflect the fact that a text title positioned on the left or right
+     * of a chart will be rotated by 90 degrees.
+     *
+     * @param g2  the graphics target.
+     * @param widthRange  the range for the width.
+     *
+     * @return The content size.
+     *
+     * @since 1.0.9
+     */
+    protected Size2D arrangeRN(Graphics2D g2, Range widthRange) {
+        Size2D s = arrangeNN(g2);
+        if (widthRange.contains(s.getWidth())) {
+            return s;
+        }
+        double ww = widthRange.constrain(s.getWidth());
+        return arrangeFN(g2, ww);
     }
 
     /**
@@ -496,7 +627,8 @@ public class TextTitle extends Title
             float maxWidth = (float) widthRange.getUpperBound();
             g2.setFont(this.font);
             this.content = TextUtilities.createTextBlock(this.text, this.font,
-                    this.paint, maxWidth, new G2TextMeasurer(g2));
+                    this.paint, maxWidth, this.maximumLinesToDisplay,
+                    new G2TextMeasurer(g2));
             this.content.setLineAlignment(this.textAlignment);
             Size2D contentSize = this.content.calculateDimensions(g2);
             if (this.expandToFitSpace) {
@@ -511,7 +643,8 @@ public class TextTitle extends Title
             float maxWidth = (float) heightRange.getUpperBound();
             g2.setFont(this.font);
             this.content = TextUtilities.createTextBlock(this.text, this.font,
-                    this.paint, maxWidth, new G2TextMeasurer(g2));
+                    this.paint, maxWidth, this.maximumLinesToDisplay,
+                    new G2TextMeasurer(g2));
             this.content.setLineAlignment(this.textAlignment);
             Size2D contentSize = this.content.calculateDimensions(g2);
 
@@ -698,9 +831,6 @@ public class TextTitle extends Title
         if (!(obj instanceof TextTitle)) {
             return false;
         }
-        if (!super.equals(obj)) {
-            return false;
-        }
         TextTitle that = (TextTitle) obj;
         if (!ObjectUtilities.equal(this.text, that.text)) {
             return false;
@@ -717,7 +847,19 @@ public class TextTitle extends Title
         if (!PaintUtilities.equal(this.backgroundPaint, that.backgroundPaint)) {
             return false;
         }
-        return true;
+        if (this.maximumLinesToDisplay != that.maximumLinesToDisplay) {
+            return false;
+        }
+        if (this.expandToFitSpace != that.expandToFitSpace) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.toolTipText, that.toolTipText)) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.urlText, that.urlText)) {
+            return false;
+        }
+        return super.equals(obj);
     }
 
     /**
@@ -768,8 +910,7 @@ public class TextTitle extends Title
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
     private void readObject(ObjectInputStream stream)
-        throws IOException, ClassNotFoundException
-    {
+            throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.paint = SerialUtilities.readPaint(stream);
         this.backgroundPaint = SerialUtilities.readPaint(stream);
