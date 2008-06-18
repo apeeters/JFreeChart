@@ -51,6 +51,9 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  * 20-Jun-2007 : Removed JCommon dependency (DG);
+ * 11-Apr-2008 : Added arrange() method override to account for margin, border
+ *               and padding (DG);
+ * 21-Apr-2008 : Added equals() method override (DG);
  *
  */
 
@@ -60,8 +63,10 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 
+import org.jfree.chart.block.RectangleConstraint;
 import org.jfree.chart.event.TitleChangeEvent;
 import org.jfree.chart.util.HorizontalAlignment;
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.Size2D;
@@ -74,10 +79,13 @@ import org.jfree.chart.util.VerticalAlignment;
  * <P>
  * ImageTitle needs an image passed to it in the constructor.  For ImageTitle
  * to work, you must have already loaded this image from its source (disk or
- * URL).  It is recomended you use something like
+ * URL).  It is recommended you use something like
  * Toolkit.getDefaultToolkit().getImage() to get the image.  Then, use
  * MediaTracker or some other message to make sure the image is fully loaded
  * from disk.
+ * <P>
+ * SPECIAL NOTE:  this class fails to serialize, so if you are
+ * relying on your charts to be serializable, please avoid using this class.
  */
 public class ImageTitle extends Title {
 
@@ -165,22 +173,36 @@ public class ImageTitle extends Title {
     }
 
     /**
+     * Arranges the contents of the block, within the given constraints, and
+     * returns the block size.
+     *
+     * @param g2  the graphics device.
+     * @param constraint  the constraint (<code>null</code> not permitted).
+     *
+     * @return The block size (in Java2D units, never <code>null</code>).
+     */
+    public Size2D arrange(Graphics2D g2, RectangleConstraint constraint) {
+        Size2D s = new Size2D(this.image.getWidth(null),
+                this.image.getHeight(null));
+        return new Size2D(calculateTotalWidth(s.getWidth()),
+                calculateTotalHeight(s.getHeight()));
+    }
+
+    /**
      * Draws the title on a Java 2D graphics device (such as the screen or a
      * printer).
      *
      * @param g2  the graphics device.
-     * @param titleArea  the area within which the title (and plot) should be
-     *                   drawn.
+     * @param area  the area allocated for the title.
      */
-    public void draw(Graphics2D g2, Rectangle2D titleArea) {
-
+    public void draw(Graphics2D g2, Rectangle2D area) {
         RectangleEdge position = getPosition();
         if (position == RectangleEdge.TOP || position == RectangleEdge.BOTTOM) {
-            drawHorizontal(g2, titleArea);
+            drawHorizontal(g2, area);
         }
         else if (position == RectangleEdge.LEFT
                      || position == RectangleEdge.RIGHT) {
-            drawVertical(g2, titleArea);
+            drawVertical(g2, area);
         }
         else {
             throw new RuntimeException("Invalid title position.");
@@ -311,6 +333,34 @@ public class ImageTitle extends Title {
     public Object draw(Graphics2D g2, Rectangle2D area, Object params) {
         draw(g2, area);
         return null;
+    }
+
+    /**
+     * Tests this <code>ImageTitle</code> for equality with an arbitrary
+     * object.  Returns <code>true</code> if:
+     * <ul>
+     * <li><code>obj</code> is an instance of <code>ImageTitle</code>;
+     * <li><code>obj</code> references the same image as this
+     *     <code>ImageTitle</code>;
+     * <li><code>super.equals(obj)<code> returns <code>true</code>;
+     * </ul>
+     *
+     * @param obj  the object (<code>null</code> permitted).
+     *
+     * @return A boolean.
+     */
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof ImageTitle)) {
+            return false;
+        }
+        ImageTitle that = (ImageTitle) obj;
+        if (!ObjectUtilities.equal(this.image, that.image)) {
+            return false;
+        }
+        return super.equals(obj);
     }
 
 }
