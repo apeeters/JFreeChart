@@ -38,6 +38,7 @@
  * 06-Jun-2005 : Use GradientPaint in equals() test (DG);
  * 07-Oct-2005 : Updated testEquals() (DG);
  * 20-Jun-2007 : Removed JCommon dependency (DG);
+ * 28-Apr-2008 : Extended testEquals() (DG);
  *
  */
 
@@ -123,6 +124,30 @@ public class TextTitleTests extends TestCase {
                 2.0f, 1.0f, Color.blue));
         assertTrue(t1.equals(t2));
 
+        // maximumLinesToDisplay
+        t1.setMaximumLinesToDisplay(3);
+        assertFalse(t1.equals(t2));
+        t2.setMaximumLinesToDisplay(3);
+        assertTrue(t1.equals(t2));
+
+        // toolTipText
+        t1.setToolTipText("TTT");
+        assertFalse(t1.equals(t2));
+        t2.setToolTipText("TTT");
+        assertTrue(t1.equals(t2));
+
+        // urlText
+        t1.setURLText(("URL"));
+        assertFalse(t1.equals(t2));
+        t2.setURLText(("URL"));
+        assertTrue(t1.equals(t2));
+
+        // expandToFitSpace
+        t1.setExpandToFitSpace(!t1.getExpandToFitSpace());
+        assertFalse(t1.equals(t2));
+        t2.setExpandToFitSpace(!t2.getExpandToFitSpace());
+        assertTrue(t1.equals(t2));
+
     }
 
     /**
@@ -147,7 +172,7 @@ public class TextTitleTests extends TestCase {
             t2 = (TextTitle) t1.clone();
         }
         catch (CloneNotSupportedException e) {
-            System.err.println("TextTitleTests.testCloning: failed to clone.");
+            e.printStackTrace();
         }
         assertTrue(t1 != t2);
         assertTrue(t1.getClass() == t2.getClass());
@@ -169,13 +194,12 @@ public class TextTitleTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             t2 = (TextTitle) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(t1, t2);
 
