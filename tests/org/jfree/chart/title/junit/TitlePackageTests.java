@@ -38,6 +38,7 @@
  * 19-Jan-2005 : Added main() method to run JUnit in text mode (DG);
  * 01-Sep-2005 : Added tests for LegendGraphic (DG);
  * 31-Jan-2007 : Added PaintScaleLegendTests (DG);
+ * 05-May-2008 : Added ShortTextTitleTests (DG);
  *
  */
 
@@ -67,6 +68,7 @@ public class TitlePackageTests extends TestCase {
         suite.addTestSuite(LegendGraphicTests.class);
         suite.addTestSuite(LegendTitleTests.class);
         suite.addTestSuite(PaintScaleLegendTests.class);
+        suite.addTestSuite(ShortTextTitleTests.class);
         suite.addTestSuite(TextTitleTests.class);
         suite.addTestSuite(TitleTests.class);
         return suite;
