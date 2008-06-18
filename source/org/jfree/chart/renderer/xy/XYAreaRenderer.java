@@ -75,6 +75,7 @@
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
+ * 17-Jun-2008 : Apply legend font and paint attributes (DG);
  *
  */
 
@@ -296,7 +297,7 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
      */
     public void setOutline(boolean show) {
         this.showOutline = show;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -319,7 +320,7 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'area' argument.");
         }
         this.legendArea = area;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -376,6 +377,11 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
                 Paint paint = lookupSeriesPaint(series);
                 result = new LegendItem(label, description, toolTipText,
                         urlText, this.legendArea, paint);
+                result.setLabelFont(lookupLegendTextFont(series));
+                Paint labelPaint = lookupLegendTextPaint(series);
+                if (labelPaint != null) {
+                	result.setLabelPaint(labelPaint);
+                }
                 result.setDataset(dataset);
                 result.setDatasetIndex(datasetIndex);
                 result.setSeriesKey(dataset.getSeriesKey(series));
@@ -558,8 +564,9 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
         updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,
                 rangeAxisIndex, transX1, transY1, orientation);
 
+        // collect entity and tool tip information...
         EntityCollection entities = state.getEntityCollection();
-        if (entities != null) {
+        if (entities != null && hotspot != null) {
             addEntity(entities, hotspot, dataset, series, item, 0.0, 0.0);
         }
 

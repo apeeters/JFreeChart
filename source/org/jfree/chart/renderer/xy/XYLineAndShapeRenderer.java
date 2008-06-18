@@ -63,6 +63,7 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Removed some series override attributes (DG);
  * 02-Jun-2008 : Fixed tooltips at lower edges of data area (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -102,7 +103,7 @@ import org.jfree.data.xy.XYDataset;
  * class.
  */
 public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
-    implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -7435246895986425885L;
@@ -204,7 +205,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
 
     /**
      * Sets the flag that controls whether or not each series is drawn as a
-     * single path.
+     * single path and sends a {@link RendererChangeEvent} to all registered
+     * listeners.
      *
      * @param flag  the flag.
      *
@@ -213,7 +215,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
     public void setDrawSeriesLineAsPath(boolean flag) {
         if (this.drawSeriesLineAsPath != flag) {
             this.drawSeriesLineAsPath = flag;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -274,7 +276,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setSeriesLinesVisible(int series, Boolean flag) {
         this.seriesLinesVisible.setBoolean(series, flag);
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -311,7 +313,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setBaseLinesVisible(boolean flag) {
         this.baseLinesVisible = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -338,7 +340,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'line' argument.");
         }
         this.legendLine = line;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     // SHAPES VISIBLE
@@ -404,7 +406,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setSeriesShapesVisible(int series, Boolean flag) {
         this.seriesShapesVisible.setBoolean(series, flag);
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -428,7 +430,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setBaseShapesVisible(boolean flag) {
         this.baseShapesVisible = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     // SHAPES FILLED
@@ -494,7 +496,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setSeriesShapesFilled(int series, Boolean flag) {
         this.seriesShapesFilled.setBoolean(series, flag);
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -518,7 +520,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setBaseShapesFilled(boolean flag) {
         this.baseShapesFilled = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -547,13 +549,16 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
      * Returns <code>true</code> if the renderer should use the fill paint
      * setting to fill shapes, and <code>false</code> if it should just
      * use the regular paint.
+     * <p>
+     * Refer to <code>XYLineAndShapeRendererDemo2.java</code> to see the
+     * effect of this flag.
      *
      * @return A boolean.
      *
@@ -575,7 +580,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -596,6 +601,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      * Sets the flag that controls whether the outline paint is used to draw
      * shape outlines, and sends a {@link RendererChangeEvent} to all
      * registered listeners.
+     * <p>
+     * Refer to <code>XYLineAndShapeRendererDemo2.java</code> to see the
+     * effect of this flag.
      *
      * @param flag  the flag.
      *
@@ -603,7 +611,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setUseOutlinePaint(boolean flag) {
         this.useOutlinePaint = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1065,7 +1073,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
                             dataset, series);
                 }
                 boolean shapeIsVisible = getItemShapeVisible(series, 0);
-                Shape shape = lookupSeriesShape(series);
+                Shape shape = lookupLegendShape(series);
                 boolean shapeIsFilled = getItemShapeFilled(series, 0);
                 Paint fillPaint = (this.useFillPaint
                     ? lookupSeriesFillPaint(series)
@@ -1083,6 +1091,11 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
                         fillPaint, shapeOutlineVisible, outlinePaint,
                         outlineStroke, lineVisible, this.legendLine,
                         lineStroke, linePaint);
+                result.setLabelFont(lookupLegendTextFont(series));
+                Paint labelPaint = lookupLegendTextPaint(series);
+                if (labelPaint != null) {
+                	result.setLabelPaint(labelPaint);
+                }
                 result.setSeriesKey(dataset.getSeriesKey(series));
                 result.setSeriesIndex(series);
                 result.setDataset(dataset);

@@ -97,6 +97,7 @@
  * 27-Jun-2007 : Added some new methods with 'notify' argument, renamed
  *               methods containing 'ItemURL' to just 'URL' (DG);
  * 06-Jul-2007 : Added annotation support (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -161,7 +162,8 @@ import org.jfree.data.general.DatasetUtilities;
  * but it makes the job easier.
  */
 public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
-    implements CategoryItemRenderer, Cloneable, PublicCloneable, Serializable {
+        implements CategoryItemRenderer, Cloneable, PublicCloneable,
+        Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 1247553218442497391L;
@@ -1263,13 +1265,18 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             urlText = this.legendItemURLGenerator.generateLabel(dataset,
                     series);
         }
-        Shape shape = lookupSeriesShape(series);
+        Shape shape = lookupLegendShape(series);
         Paint paint = lookupSeriesPaint(series);
         Paint outlinePaint = lookupSeriesOutlinePaint(series);
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
 
         LegendItem item = new LegendItem(label, description, toolTipText,
                 urlText, shape, paint, outlineStroke, outlinePaint);
+        item.setLabelFont(lookupLegendTextFont(series));
+        Paint labelPaint = lookupLegendTextPaint(series);
+        if (labelPaint != null) {
+        	item.setLabelPaint(labelPaint);
+        }
         item.setSeriesKey(dataset.getRowKey(series));
         item.setSeriesIndex(series);
         item.setDataset(dataset);
@@ -1614,7 +1621,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             throw new IllegalArgumentException("Null 'generator' argument.");
         }
         this.legendItemLabelGenerator = generator;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1639,7 +1646,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public void setLegendItemToolTipGenerator(
             CategorySeriesLabelGenerator generator) {
         this.legendItemToolTipGenerator = generator;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1664,7 +1671,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public void setLegendItemURLGenerator(
             CategorySeriesLabelGenerator generator) {
         this.legendItemURLGenerator = generator;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**

@@ -36,6 +36,7 @@
  * -------
  * 08-Oct-2007 : Version 1, based on patch 1780779 by David Forslund (DG);
  * 11-Oct-2007 : Renamed ScatterRenderer (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -152,7 +153,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseSeriesOffset(boolean offset) {
         this.useSeriesOffset = offset;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -185,7 +186,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             throw new IllegalArgumentException("Requires 0.0 <= margin < 1.0.");
         }
         this.itemMargin = margin;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -214,7 +215,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -231,7 +232,8 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
 
     /**
      * Sets the flag that controls whether the outline paint is used for shape
-     * outlines.
+     * outlines, and sends a {@link RendererChangeEvent} to all registered
+     * listeners.
      *
      * @param use the flag.
      *
@@ -239,7 +241,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseOutlinePaint(boolean use) {
         this.useOutlinePaint = use;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     // SHAPES FILLED
@@ -277,25 +279,27 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Sets the 'shapes filled' flag for a series.
+     * Sets the 'shapes filled' flag for a series and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series the series index (zero-based).
      * @param filled the flag.
      */
     public void setSeriesShapesFilled(int series, Boolean filled) {
         this.seriesShapesFilled.setBoolean(series, filled);
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
-     * Sets the 'shapes filled' flag for a series.
+     * Sets the 'shapes filled' flag for a series and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series the series index (zero-based).
      * @param filled the flag.
      */
     public void setSeriesShapesFilled(int series, boolean filled) {
         this.seriesShapesFilled.setBoolean(series, Boolean.valueOf(filled));
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -308,13 +312,14 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Sets the base 'shapes filled' flag.
+     * Sets the base 'shapes filled' flag and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param flag the flag.
      */
     public void setBaseShapesFilled(boolean flag) {
         this.baseShapesFilled = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -337,7 +342,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -449,7 +454,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
                 urlText = getLegendItemURLGenerator().generateLabel(
                         dataset, series);
             }
-            Shape shape = lookupSeriesShape(series);
+            Shape shape = lookupLegendShape(series);
             Paint paint = lookupSeriesPaint(series);
             Paint fillPaint = (this.useFillPaint
                     ? getItemFillPaint(series, 0) : paint);
@@ -462,6 +467,11 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
                     fillPaint, shapeOutlineVisible, outlinePaint, outlineStroke,
                     false, new Line2D.Double(-7.0, 0.0, 7.0, 0.0),
                     getItemStroke(series, 0), getItemPaint(series, 0));
+            result.setLabelFont(lookupLegendTextFont(series));
+            Paint labelPaint = lookupLegendTextPaint(series);
+            if (labelPaint != null) {
+            	result.setLabelPaint(labelPaint);
+            }
             result.setDataset(dataset);
             result.setDatasetIndex(datasetIndex);
             result.setSeriesKey(dataset.getRowKey(series));

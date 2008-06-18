@@ -105,6 +105,7 @@
  * 27-Jun-2007 : Updated constructor for method changes in XYItemRenderer (DG);
  * 02-Jul-2007 : Removed override field (DG);
  * 02-Jun-2008 : Fixed tooltips at lower edges of data area (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -597,7 +598,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                     urlText = getLegendItemURLGenerator().generateLabel(
                             dataset, series);
                 }
-                Shape shape = lookupSeriesShape(series);
+                Shape shape = lookupLegendShape(series);
                 boolean shapeFilled = getItemShapeFilled(series, 0);
                 Paint paint = lookupSeriesPaint(series);
                 Paint linePaint = paint;
@@ -606,6 +607,11 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                         urlText, this.baseShapesVisible, shape, shapeFilled,
                         paint, !shapeFilled, paint, lineStroke,
                         this.plotLines, this.legendLine, lineStroke, linePaint);
+                result.setLabelFont(lookupLegendTextFont(series));
+                Paint labelPaint = lookupLegendTextPaint(series);
+                if (labelPaint != null) {
+                	result.setLabelPaint(labelPaint);
+                }
                 result.setDataset(dataset);
                 result.setDatasetIndex(datasetIndex);
                 result.setSeriesKey(dataset.getSeriesKey(series));

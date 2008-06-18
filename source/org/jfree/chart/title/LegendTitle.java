@@ -99,14 +99,14 @@ import org.jfree.chart.util.Size2D;
  * created to match the dataset(s).
  */
 public class LegendTitle extends Title
-                         implements Cloneable, PublicCloneable, Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 2644010518533854633L;
 
     /** The default item font. */
     public static final Font DEFAULT_ITEM_FONT
-        = new Font("SansSerif", Font.PLAIN, 12);
+            = new Font("SansSerif", Font.PLAIN, 12);
 
     /** The default item paint. */
     public static final Paint DEFAULT_ITEM_PAINT = Color.black;
@@ -143,8 +143,16 @@ public class LegendTitle extends Title
      */
     private BlockContainer items;
 
+    /**
+     * The layout for the legend when it is positioned at the top or bottom
+     * of the chart.
+     */
     private Arrangement hLayout;
 
+    /**
+     * The layout for the legend when it is positioned at the left or right
+     * of the chart.
+     */
     private Arrangement vLayout;
 
     /**
@@ -434,8 +442,16 @@ public class LegendTitle extends Title
         lg.setShapeAnchor(getLegendItemGraphicAnchor());
         lg.setShapeLocation(getLegendItemGraphicLocation());
         legendItem.add(lg, this.legendItemGraphicEdge);
-        LabelBlock labelBlock = new LabelBlock(item.getLabel(), this.itemFont,
-                this.itemPaint);
+        Font textFont = item.getLabelFont();
+        if (textFont == null) {
+            textFont = this.itemFont;
+        }
+        Paint textPaint = item.getLabelPaint();
+        if (textPaint == null) {
+        	textPaint = this.itemPaint;
+        }
+        LabelBlock labelBlock = new LabelBlock(item.getLabel(), textFont,
+                textPaint);
         labelBlock.setPadding(this.itemLabelPadding);
         legendItem.add(labelBlock);
         legendItem.setToolTipText(item.getToolTipText());

@@ -82,6 +82,9 @@
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 06-Jul-2007 : Changed default for drawBarOutline attribute (DG);
+ * 07-May-2008 : If minimumBarLength is > 0.0, extend the non-base end of the
+ *               bar (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -201,6 +204,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         this.negativeItemLabelPositionFallback = null;
         this.gradientPaintTransformer = new StandardGradientPaintTransformer();
         this.minimumBarLength = 0.0;
+        setBaseLegendShape(new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0));
     }
 
     /**
@@ -225,7 +229,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setBase(double base) {
         this.base = base;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -252,7 +256,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setItemMargin(double percent) {
         this.itemMargin = percent;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -276,7 +280,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setDrawBarOutline(boolean draw) {
         this.drawBarOutline = draw;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -302,11 +306,12 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setMaximumBarWidth(double percent) {
         this.maximumBarWidth = percent;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
-     * Returns the minimum bar length (in Java2D units).
+     * Returns the minimum bar length (in Java2D units).  The default value is
+     * 0.0.
      *
      * @return The minimum bar length.
      *
@@ -320,15 +325,22 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * Sets the minimum bar length and sends a {@link RendererChangeEvent} to
      * all registered listeners.  The minimum bar length is specified in Java2D
      * units, and can be used to prevent bars that represent very small data
-     * values from disappearing when drawn on the screen.
+     * values from disappearing when drawn on the screen.  Typically you would
+     * set this to (say) 0.5 or 1.0 Java 2D units.  Use this attribute with
+     * caution, however, because setting it to a non-zero value will
+     * artificially increase the length of bars representing small values,
+     * which may misrepresent your data.
      *
-     * @param min  the minimum bar length (in Java2D units).
+     * @param min  the minimum bar length (in Java2D units, must be >= 0.0).
      *
      * @see #getMinimumBarLength()
      */
     public void setMinimumBarLength(double min) {
+        if (min < 0.0) {
+            throw new IllegalArgumentException("Requires 'min' >= 0.0");
+        }
         this.minimumBarLength = min;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -354,7 +366,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setGradientPaintTransformer(
             GradientPaintTransformer transformer) {
         this.gradientPaintTransformer = transformer;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -381,7 +393,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setPositiveItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.positiveItemLabelPositionFallback = position;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -408,7 +420,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setNegativeItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.negativeItemLabelPositionFallback = position;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -442,7 +454,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setIncludeBaseInRange(boolean include) {
         if (this.includeBaseInRange != include) {
             this.includeBaseInRange = include;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -678,7 +690,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
             urlText = getLegendItemURLGenerator().generateLabel(dataset,
                     series);
         }
-        Shape shape = new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0);
+        Shape shape = lookupLegendShape(series);
         Paint paint = lookupSeriesPaint(series);
         Paint outlinePaint = lookupSeriesOutlinePaint(series);
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
@@ -687,6 +699,11 @@ public class BarRenderer extends AbstractCategoryItemRenderer
                 urlText, true, shape, true, paint, isDrawBarOutline(),
                 outlinePaint, outlineStroke, false, new Line2D.Float(),
                 new BasicStroke(1.0f), Color.black);
+        result.setLabelFont(lookupLegendTextFont(series));
+        Paint labelPaint = lookupLegendTextPaint(series);
+        if (labelPaint != null) {
+        	result.setLabelPaint(labelPaint);
+        }
         result.setDataset(dataset);
         result.setDatasetIndex(datasetIndex);
         result.setSeriesKey(dataset.getRowKey(series));
@@ -729,7 +746,6 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         }
 
         double value = dataValue.doubleValue();
-
         PlotOrientation orientation = plot.getOrientation();
         double barW0 = calculateBarW0(plot, orientation, dataArea, domainAxis,
                 state, row, column);
@@ -741,19 +757,43 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         RectangleEdge edge = plot.getRangeAxisEdge();
         double transL0 = rangeAxis.valueToJava2D(barL0L1[0], dataArea, edge);
         double transL1 = rangeAxis.valueToJava2D(barL0L1[1], dataArea, edge);
+
+        // in the following code, barL0 is (in Java2D coordinates) the LEFT
+        // end of the bar for a horizontal bar chart, and the TOP end of the
+        // bar for a vertical bar chart.  Whether this is the BASE of the bar
+        // or not depends also on (a) whether the data value is 'negative'
+        // relative to the base value and (b) whether or not the range axis is
+        // inverted.  This only matters if/when we apply the minimumBarLength
+        // attribute, because we should extend the non-base end of the bar
+        boolean positive = (value >= this.base);
+        boolean inverted = rangeAxis.isInverted();
         double barL0 = Math.min(transL0, transL1);
-        double barLength = Math.max(Math.abs(transL1 - transL0),
-                getMinimumBarLength());
+        double barLength = Math.abs(transL1 - transL0);
+        double barLengthAdj = 0.0;
+        if (barLength > 0.0 && barLength < getMinimumBarLength()) {
+            barLengthAdj = getMinimumBarLength() - barLength;
+        }
+        double barL0Adj = 0.0;
+        if (orientation == PlotOrientation.HORIZONTAL) {
+            if (positive && inverted || !positive && !inverted) {
+                barL0Adj = barLengthAdj;
+            }
+        }
+        else {
+            if (positive && !inverted || !positive && inverted) {
+                barL0Adj = barLengthAdj;
+            }
+        }
 
         // draw the bar...
         Rectangle2D bar = null;
         if (orientation == PlotOrientation.HORIZONTAL) {
-            bar = new Rectangle2D.Double(barL0, barW0, barLength,
-                    state.getBarWidth());
+            bar = new Rectangle2D.Double(barL0 - barL0Adj, barW0,
+                    barLength + barLengthAdj, state.getBarWidth());
         }
         else {
-            bar = new Rectangle2D.Double(barW0, barL0, state.getBarWidth(),
-                    barLength);
+            bar = new Rectangle2D.Double(barW0, barL0 - barL0Adj,
+                    state.getBarWidth(), barLength + barLengthAdj);
         }
         Paint itemPaint = getItemPaint(row, column);
         GradientPaintTransformer t = getGradientPaintTransformer();

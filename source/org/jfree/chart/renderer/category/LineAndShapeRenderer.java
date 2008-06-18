@@ -88,6 +88,7 @@
  * 24-Sep-2007 : Fixed bug in clone() method and added change event to
  *               setUseOutlinePaint() method (DG);
  * 27-Sep-2007 : Added option to offset series x-position within category (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -119,8 +120,7 @@ import org.jfree.data.category.CategoryDataset;
  * items (for use with the {@link CategoryPlot} class).
  */
 public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
-                                  implements Cloneable, PublicCloneable,
-                                             Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -197749519869226398L;
@@ -260,7 +260,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesLinesVisible(int series, Boolean flag) {
         this.seriesLinesVisible.setBoolean(series, flag);
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -297,7 +297,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setBaseLinesVisible(boolean flag) {
         this.baseLinesVisible = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     // SHAPES VISIBLE
@@ -359,7 +359,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesShapesVisible(int series, Boolean flag) {
         this.seriesShapesVisible.setBoolean(series, flag);
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -383,7 +383,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setBaseShapesVisible(boolean flag) {
         this.baseShapesVisible = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -412,7 +412,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -438,7 +438,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseOutlinePaint(boolean use) {
         this.useOutlinePaint = use;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     // SHAPES FILLED
@@ -489,7 +489,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesShapesFilled(int series, Boolean filled) {
         this.seriesShapesFilled.setBoolean(series, filled);
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -502,8 +502,8 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @see #getSeriesShapesFilled(int)
      */
     public void setSeriesShapesFilled(int series, boolean filled) {
-        this.seriesShapesFilled.setBoolean(series, Boolean.valueOf(filled));
-        notifyListeners(new RendererChangeEvent(this));
+        // delegate
+        setSeriesShapesFilled(series, Boolean.valueOf(filled));
     }
 
     /**
@@ -527,7 +527,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setBaseShapesFilled(boolean flag) {
         this.baseShapesFilled = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -554,7 +554,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -584,7 +584,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseSeriesOffset(boolean offset) {
         this.useSeriesOffset = offset;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -621,7 +621,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             throw new IllegalArgumentException("Requires 0.0 <= margin < 1.0.");
         }
         this.itemMargin = margin;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -654,7 +654,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                 urlText = getLegendItemURLGenerator().generateLabel(
                         dataset, series);
             }
-            Shape shape = lookupSeriesShape(series);
+            Shape shape = lookupLegendShape(series);
             Paint paint = lookupSeriesPaint(series);
             Paint fillPaint = (this.useFillPaint
                     ? getItemFillPaint(series, 0) : paint);
@@ -669,6 +669,11 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                     fillPaint, shapeOutlineVisible, outlinePaint, outlineStroke,
                     lineVisible, new Line2D.Double(-7.0, 0.0, 7.0, 0.0),
                     getItemStroke(series, 0), getItemPaint(series, 0));
+            result.setLabelFont(lookupLegendTextFont(series));
+            Paint labelPaint = lookupLegendTextPaint(series);
+            if (labelPaint != null) {
+            	result.setLabelPaint(labelPaint);
+            }
             result.setDataset(dataset);
             result.setDatasetIndex(datasetIndex);
             result.setSeriesKey(dataset.getRowKey(series));

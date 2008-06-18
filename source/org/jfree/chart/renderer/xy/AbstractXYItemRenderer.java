@@ -106,6 +106,7 @@
  * 07-Apr-2008 : Updated various methods to use fireChangeEvent(), plus
  *               minor API doc update (DG);
  * 02-Jun-2008 : Added isPointInRect() method (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -143,6 +144,7 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.chart.plot.IntervalMarker;
 import org.jfree.chart.plot.Marker;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueMarker;
@@ -883,12 +885,17 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                     urlText = getLegendItemURLGenerator().generateLabel(
                             dataset, series);
                 }
-                Shape shape = lookupSeriesShape(series);
+                Shape shape = lookupLegendShape(series);
                 Paint paint = lookupSeriesPaint(series);
                 Paint outlinePaint = lookupSeriesOutlinePaint(series);
                 Stroke outlineStroke = lookupSeriesOutlineStroke(series);
                 result = new LegendItem(label, description, toolTipText,
                         urlText, shape, paint, outlineStroke, outlinePaint);
+                Paint labelPaint = lookupLegendTextPaint(series);
+                result.setLabelFont(lookupLegendTextFont(series));
+                if (labelPaint != null) {
+                	result.setLabelPaint(labelPaint);
+                }
                 result.setSeriesKey(dataset.getSeriesKey(series));
                 result.setSeriesIndex(series);
                 result.setDataset(dataset);
@@ -966,6 +973,48 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             g2.setPaint(paint);
             g2.fill(band);
         }
+
+    }
+
+    /**
+     * Draws a grid line against the range axis.
+     *
+     * @param g2  the graphics device.
+     * @param plot  the plot.
+     * @param axis  the value axis.
+     * @param dataArea  the area for plotting data (not yet adjusted for any
+     *                  3D effect).
+     * @param value  the value at which the grid line should be drawn.
+     */
+    public void drawDomainGridLine(Graphics2D g2,
+                                   XYPlot plot,
+                                   ValueAxis axis,
+                                   Rectangle2D dataArea,
+                                   double value) {
+
+        Range range = axis.getRange();
+        if (!range.contains(value)) {
+            return;
+        }
+
+        PlotOrientation orientation = plot.getOrientation();
+        double v = axis.valueToJava2D(value, dataArea,
+                plot.getDomainAxisEdge());
+        Line2D line = null;
+        if (orientation == PlotOrientation.HORIZONTAL) {
+            line = new Line2D.Double(dataArea.getMinX(), v,
+                    dataArea.getMaxX(), v);
+        }
+        else if (orientation == PlotOrientation.VERTICAL) {
+            line = new Line2D.Double(v, dataArea.getMinY(), v,
+                    dataArea.getMaxY());
+        }
+
+        Paint paint = plot.getDomainGridlinePaint();
+        Stroke stroke = plot.getDomainGridlineStroke();
+        g2.setPaint(paint != null ? paint : Plot.DEFAULT_OUTLINE_PAINT);
+        g2.setStroke(stroke != null ? stroke : Plot.DEFAULT_OUTLINE_STROKE);
+        g2.draw(line);
 
     }
 
@@ -1759,7 +1808,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         if (urlster != null) {
             url = urlster.generateURL(dataset, series, item);
         }
-        XYItemEntity entity = new XYItemEntity(area, dataset, series, item,
+        XYItemEntity entity = new XYItemEntity(hotspot, dataset, series, item,
                 tip, url);
         entities.add(entity);
     }

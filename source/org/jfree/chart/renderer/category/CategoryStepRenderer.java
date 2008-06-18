@@ -46,6 +46,7 @@
  * 20-Apr-2007 : Updated getLegendItem() for renderer change (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -75,8 +76,7 @@ import org.jfree.data.category.CategoryDataset;
  * that can be used with the {@link CategoryPlot} class.
  */
 public class CategoryStepRenderer extends AbstractCategoryItemRenderer
-                                  implements Cloneable, PublicCloneable,
-                                             Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
 
     /**
      * State information for the renderer.
@@ -129,6 +129,7 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
      */
     public CategoryStepRenderer(boolean stagger) {
         this.stagger = stagger;
+        setBaseLegendShape(new Rectangle2D.Double(-4.0, -3.0, 8.0, 6.0));
     }
 
     /**
@@ -149,7 +150,7 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
      */
     public void setStagger(boolean shouldStagger) {
         this.stagger = shouldStagger;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -186,11 +187,16 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
             urlText = getLegendItemURLGenerator().generateLabel(dataset,
                     series);
         }
-        Shape shape = new Rectangle2D.Double(-4.0, -3.0, 8.0, 6.0);
+        Shape shape = lookupLegendShape(series);
         Paint paint = lookupSeriesPaint(series);
 
         LegendItem item = new LegendItem(label, description, toolTipText,
                 urlText, shape, paint);
+        item.setLabelFont(lookupLegendTextFont(series));
+        Paint labelPaint = lookupLegendTextPaint(series);
+        if (labelPaint != null) {
+        	item.setLabelPaint(labelPaint);
+        }
         item.setSeriesKey(dataset.getRowKey(series));
         item.setSeriesIndex(series);
         item.setDataset(dataset);

@@ -65,6 +65,7 @@
  * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
  * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -95,7 +96,7 @@ import org.jfree.data.category.CategoryDataset;
  * with the {@link org.jfree.chart.plot.CategoryPlot} class.
  */
 public class AreaRenderer extends AbstractCategoryItemRenderer
-                          implements Cloneable, PublicCloneable, Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -4231878281385812757L;
@@ -109,6 +110,7 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
     public AreaRenderer() {
         super();
         this.endType = AreaRendererEndType.TAPER;
+        setBaseLegendShape(new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0));
     }
 
     /**
@@ -136,7 +138,7 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
             throw new IllegalArgumentException("Null 'type' argument.");
         }
         this.endType = type;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -174,13 +176,18 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
             urlText = getLegendItemURLGenerator().generateLabel(dataset,
                     series);
         }
-        Shape shape = new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0);
+        Shape shape = lookupLegendShape(series);
         Paint paint = lookupSeriesPaint(series);
         Paint outlinePaint = lookupSeriesOutlinePaint(series);
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
 
         LegendItem result = new LegendItem(label, description, toolTipText,
                 urlText, shape, paint, outlineStroke, outlinePaint);
+        result.setLabelFont(lookupLegendTextFont(series));
+        Paint labelPaint = lookupLegendTextPaint(series);
+        if (labelPaint != null) {
+        	result.setLabelPaint(labelPaint);
+        }
         result.setDataset(dataset);
         result.setDatasetIndex(datasetIndex);
         result.setSeriesKey(dataset.getRowKey(series));

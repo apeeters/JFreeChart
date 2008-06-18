@@ -92,6 +92,7 @@
  *               axes, thanks to Marc van Glabbeek (DG);
  * 12-Nov-2007 : Fixed NPE in drawItemLabel() method, thanks to Richard West
  *               (see patch 1827829) (DG);
+ * 17-Jun-2008 : Apply legend font and paint attributes (DG);
  *
  */
 
@@ -265,7 +266,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setBase(double base) {
         this.base = base;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -292,7 +293,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setUseYInterval(boolean use) {
         if (this.useYInterval != use) {
             this.useYInterval = use;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -318,7 +319,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setMargin(double margin) {
         this.margin = margin;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -342,7 +343,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setDrawBarOutline(boolean draw) {
         this.drawBarOutline = draw;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -368,7 +369,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setGradientPaintTransformer(
             GradientPaintTransformer transformer) {
         this.gradientPaintTransformer = transformer;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -396,7 +397,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'bar' argument.");
         }
         this.legendBar = bar;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -425,7 +426,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setPositiveItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.positiveItemLabelPositionFallback = position;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -454,7 +455,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setNegativeItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.negativeItemLabelPositionFallback = position;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -512,6 +513,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                     urlText = getLegendItemURLGenerator().generateLabel(
                             dataset, series);
                 }
+				// FIXME: Use the general mechanism
                 Shape shape = this.legendBar;
                 Paint paint = lookupSeriesPaint(series);
                 Paint outlinePaint = lookupSeriesOutlinePaint(series);
@@ -523,6 +525,11 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                 else {
                     result = new LegendItem(label, description, toolTipText,
                             urlText, shape, paint);
+                }
+                result.setLabelFont(lookupLegendTextFont(series));
+                Paint labelPaint = lookupLegendTextPaint(series);
+                if (labelPaint != null) {
+                	result.setLabelPaint(labelPaint);
                 }
                 result.setDataset(dataset);
                 result.setDatasetIndex(datasetIndex);

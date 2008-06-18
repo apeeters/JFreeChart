@@ -48,6 +48,7 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 09-Nov-2007 : Added legend shape attribute, plus override for
  *               getLegendItem() (DG);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -138,7 +139,7 @@ public class XYDotRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Requires w > 0.");
         }
         this.dotWidth = w;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -169,7 +170,7 @@ public class XYDotRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Requires h > 0.");
         }
         this.dotHeight = h;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -200,7 +201,7 @@ public class XYDotRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'shape' argument.");
         }
         this.legendShape = shape;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -304,8 +305,14 @@ public class XYDotRenderer extends AbstractXYItemRenderer
                         dataset, series);
             }
             Paint fillPaint = lookupSeriesPaint(series);
+			// FIXME: getLegendShape() should be deprecated
             result = new LegendItem(label, description, toolTipText, urlText,
                     getLegendShape(), fillPaint);
+            result.setLabelFont(lookupLegendTextFont(series));
+            Paint labelPaint = lookupLegendTextPaint(series);
+            if (labelPaint != null) {
+            	result.setLabelPaint(labelPaint);
+            }
             result.setSeriesKey(dataset.getSeriesKey(series));
             result.setSeriesIndex(series);
             result.setDataset(dataset);

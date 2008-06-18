@@ -72,6 +72,8 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 27-Jun-2007 : Updated drawItem() for method name changes in
  *               XYItemRenderer (DG);
+ * 05-Nov-2007 : Draw item labels if visible (RW);
+ * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  *
  */
 
@@ -191,7 +193,8 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
     }
 
     /**
-     * Sets the paint used to highlight positive differences.
+     * Sets the paint used to highlight positive differences and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param paint  the paint (<code>null</code> not permitted).
      *
@@ -202,7 +205,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.positivePaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -245,7 +248,8 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
 
     /**
      * Sets a flag that controls whether or not shapes are drawn for each
-     * data value.
+     * data value, and sends a {@link RendererChangeEvent} to all registered
+     * listeners.
      *
      * @param flag  the flag.
      *
@@ -253,7 +257,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      */
     public void setShapesVisible(boolean flag) {
         this.shapesVisible = flag;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -280,7 +284,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'line' argument.");
         }
         this.legendLine = line;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -310,7 +314,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      */
     public void setRoundXCoordinates(boolean round) {
         this.roundXCoordinates = round;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -802,7 +806,8 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
                     + (l_y1 - (l_slope * l_x1)));
         }
 
-        // consider last point of minuend and subtrahend for determining positivity
+        // consider last point of minuend and subtrahend for determining
+        // positivity
         l_minuendMaxY    = Math.max(l_minuendMaxY,
                 l_minuendNextY.doubleValue());
         l_subtrahendMaxY = Math.max(l_subtrahendMaxY,
@@ -928,6 +933,12 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
             l_entities.add(l_entity);
         }
 
+        // draw the item label if there is one...
+        if (isItemLabelVisible(x_series, x_item)) {
+            drawItemLabel(x_graphics, l_orientation, x_dataset, x_series,
+                          x_item, l_x1, l_y1, (l_y1 < 0.0));
+        }
+
         int l_domainAxisIndex = x_plot.getDomainAxisIndex(x_domainAxis);
         int l_rangeAxisIndex  = x_plot.getRangeAxisIndex(x_rangeAxis);
         updateCrosshairValues(x_crosshairState, l_x0, l_y0, l_domainAxisIndex,
@@ -1046,35 +1057,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
                     (Double) l_yValues[0]).doubleValue(), x_dataArea,
                     l_rangeAxisLocation);
 
-            l_path.moveTo((float)l_x, (float)l_y);
-            for (int i = 1; i < l_xValues.length; i++) {
-                l_x = x_domainAxis.valueToJava2D((
-                        (Double) l_xValues[i]).doubleValue(), x_dataArea,
-                        l_domainAxisLocation);
-                if (this.roundXCoordinates) {
-                    l_x = Math.rint(l_x);
-                }
-
-                l_y = x_rangeAxis.valueToJava2D((
-                        (Double)l_yValues[i]).doubleValue(), x_dataArea,
-                        l_rangeAxisLocation);
-                l_path.lineTo((float)l_x, (float)l_y);
-            }
-            l_path.closePath();
-        }
-        else {
-            double l_x = x_domainAxis.valueToJava2D((
-                    (Double)l_xValues[0]).doubleValue(), x_dataArea,
-                    l_domainAxisLocation);
-            if (this.roundXCoordinates) {
-                l_x = Math.rint(l_x);
-            }
-
-            double l_y = x_rangeAxis.valueToJava2D((
-                    (Double)l_yValues[0]).doubleValue(), x_dataArea,
-                    l_rangeAxisLocation);
-
-            l_path.moveTo((float)l_y, (float)l_x);
+            l_path.moveTo((float) l_x, (float) l_y);
             for (int i = 1; i < l_xValues.length; i++) {
                 l_x = x_domainAxis.valueToJava2D((
                         (Double) l_xValues[i]).doubleValue(), x_dataArea,
@@ -1086,7 +1069,35 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
                 l_y = x_rangeAxis.valueToJava2D((
                         (Double) l_yValues[i]).doubleValue(), x_dataArea,
                         l_rangeAxisLocation);
-                l_path.lineTo((float)l_y, (float)l_x);
+                l_path.lineTo((float) l_x, (float) l_y);
+            }
+            l_path.closePath();
+        }
+        else {
+            double l_x = x_domainAxis.valueToJava2D((
+                    (Double) l_xValues[0]).doubleValue(), x_dataArea,
+                    l_domainAxisLocation);
+            if (this.roundXCoordinates) {
+                l_x = Math.rint(l_x);
+            }
+
+            double l_y = x_rangeAxis.valueToJava2D((
+                    (Double) l_yValues[0]).doubleValue(), x_dataArea,
+                    l_rangeAxisLocation);
+
+            l_path.moveTo((float) l_y, (float) l_x);
+            for (int i = 1; i < l_xValues.length; i++) {
+                l_x = x_domainAxis.valueToJava2D((
+                        (Double) l_xValues[i]).doubleValue(), x_dataArea,
+                        l_domainAxisLocation);
+                if (this.roundXCoordinates) {
+                    l_x = Math.rint(l_x);
+                }
+
+                l_y = x_rangeAxis.valueToJava2D((
+                        (Double) l_yValues[i]).doubleValue(), x_dataArea,
+                        l_rangeAxisLocation);
+                l_path.lineTo((float) l_y, (float) l_x);
             }
             l_path.closePath();
         }
@@ -1130,10 +1141,14 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
                     }
                     Paint paint = lookupSeriesPaint(series);
                     Stroke stroke = lookupSeriesStroke(series);
-                    // TODO:  the following hard-coded line needs generalising
-                    Line2D line = new Line2D.Double(-7.0, 0.0, 7.0, 0.0);
+                    Shape line = getLegendLine();
                     result = new LegendItem(label, description,
                             toolTipText, urlText, line, stroke, paint);
+                    result.setLabelFont(lookupLegendTextFont(series));
+                    Paint labelPaint = lookupLegendTextPaint(series);
+                    if (labelPaint != null) {
+                    	result.setLabelPaint(labelPaint);
+                    }
                     result.setDataset(dataset);
                     result.setDatasetIndex(datasetIndex);
                     result.setSeriesKey(dataset.getSeriesKey(series));
