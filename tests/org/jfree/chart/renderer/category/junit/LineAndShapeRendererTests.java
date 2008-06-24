@@ -37,6 +37,7 @@
  * 22-Sep-2003 : Version 1 (DG);
  * 17-May-2007 : Added check for getLegendItem() method (DG);
  * 27-Sep-2007 : Extended equals() test (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -59,6 +60,7 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -170,6 +172,14 @@ public class LineAndShapeRendererTests extends TestCase {
 
         assertTrue(checkIndependence(r1, r2));
 
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        LineAndShapeRenderer r1 = new LineAndShapeRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

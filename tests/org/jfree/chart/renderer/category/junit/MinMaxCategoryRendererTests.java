@@ -36,6 +36,7 @@
  * -------
  * 22-Oct-2003 : Version 1 (DG);
  * 28-Sep-2007 : Added testEquals() method (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -60,6 +61,7 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.MinMaxCategoryRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -138,6 +140,14 @@ public class MinMaxCategoryRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        MinMaxCategoryRenderer r1 = new MinMaxCategoryRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

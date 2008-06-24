@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 15-Oct-2004 : Version 1 (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -54,6 +55,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.category.LineRenderer3D;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link LineRenderer3D} class.
@@ -134,6 +136,14 @@ public class LineRenderer3DTests extends TestCase {
 
         assertTrue(checkIndependence(r1, r2));
 
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        LineRenderer3D r1 = new LineRenderer3D();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

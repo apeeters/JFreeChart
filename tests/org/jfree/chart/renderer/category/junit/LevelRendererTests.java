@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 29-Mar-2005 : Version 1 (DG);
+ * 23-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -57,6 +58,7 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.LevelRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -135,6 +137,14 @@ public class LevelRendererTests extends TestCase {
 
         assertTrue(checkIndependence(r1, r2));
 
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        LevelRenderer r1 = new LevelRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
