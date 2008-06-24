@@ -116,8 +116,7 @@ import org.jfree.data.general.DatasetUtilities;
  * {@link org.jfree.chart.plot.CategoryPlot} class.
  */
 public class StackedBarRenderer3D extends BarRenderer3D
-                                  implements Cloneable, PublicCloneable,
-                                             Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -5832945916493247123L;
@@ -208,7 +207,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
      */
     public void setRenderAsPercentages(boolean asPercentages) {
         this.renderAsPercentages = asPercentages;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
