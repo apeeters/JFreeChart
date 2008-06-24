@@ -36,11 +36,14 @@
  * -------
  * 25-Mar-2003 : Version 1 (DG);
  * 28-Aug-2007 : Added tests for bug 1779941 (DG);
+ * 14-Nov-2007 : Updated testEquals() (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
 package org.jfree.chart.renderer.category.junit;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -59,6 +62,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.StatisticalBarRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.statistics.DefaultStatisticalCategoryDataset;
 
 /**
@@ -96,6 +100,11 @@ public class StatisticalBarRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setErrorIndicatorPaint(Color.red);
         assertTrue(r2.equals(r1));
+
+        r1.setErrorIndicatorStroke(new BasicStroke(1.5f));
+        assertFalse(r1.equals(r2));
+        r2.setErrorIndicatorStroke(new BasicStroke(1.5f));
+        assertTrue(r2.equals(r1));
     }
 
     /**
@@ -125,6 +134,14 @@ public class StatisticalBarRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        StatisticalBarRenderer r1 = new StatisticalBarRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
