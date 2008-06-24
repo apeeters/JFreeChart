@@ -44,14 +44,13 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 29-Jun-2007 : Simplified entity generation by calling addEntity() (DG);
  * 20-Dec-2007 : Fix for bug 1848961 (DG);
+ * 24-Jun-2008 : Added new barPainter mechanism (DG);
  *
  */
 
 package org.jfree.chart.renderer.category;
 
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
@@ -203,24 +202,24 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
             space = dataArea.getWidth();
         }
         double barW0 = domainAxis.getCategoryStart(column, getColumnCount(),
-        		dataArea, plot.getDomainAxisEdge());
+                dataArea, plot.getDomainAxisEdge());
         int groupCount = this.seriesToGroupMap.getGroupCount();
         int groupIndex = this.seriesToGroupMap.getGroupIndex(
-        		this.seriesToGroupMap.getGroup(plot.getDataset(
-        				plot.getIndexOf(this)).getRowKey(row)));
+                this.seriesToGroupMap.getGroup(plot.getDataset(
+                        plot.getIndexOf(this)).getRowKey(row)));
         int categoryCount = getColumnCount();
         if (groupCount > 1) {
             double groupGap = space * getItemMargin()
                               / (categoryCount * (groupCount - 1));
             double groupW = calculateSeriesWidth(space, domainAxis,
-            		categoryCount, groupCount);
+                    categoryCount, groupCount);
             barW0 = barW0 + groupIndex * (groupW + groupGap)
                           + (groupW / 2.0) - (state.getBarWidth() / 2.0);
         }
         else {
             barW0 = domainAxis.getCategoryMiddle(column, getColumnCount(),
-            		dataArea, plot.getDomainAxisEdge())
-            		- state.getBarWidth() / 2.0;
+                    dataArea, plot.getDomainAxisEdge())
+                    - state.getBarWidth() / 2.0;
         }
         return barW0;
     }
@@ -258,7 +257,7 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
 
         double value = dataValue.doubleValue();
         Comparable group = this.seriesToGroupMap.getGroup(
-        		dataset.getRowKey(row));
+                dataset.getRowKey(row));
         PlotOrientation orientation = plot.getOrientation();
         double barW0 = calculateBarW0(plot, orientation, dataArea, domainAxis,
                 state, row, column);
@@ -284,6 +283,25 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
 
         double translatedBase;
         double translatedValue;
+        boolean positive = (value > 0.0);
+        boolean inverted = rangeAxis.isInverted();
+        RectangleEdge barBase;
+        if (orientation == PlotOrientation.HORIZONTAL) {
+            if (positive && inverted || !positive && !inverted) {
+                barBase = RectangleEdge.RIGHT;
+            }
+            else {
+            	barBase = RectangleEdge.LEFT;
+            }
+        }
+        else {
+            if (positive && !inverted || !positive && inverted) {
+                barBase = RectangleEdge.BOTTOM;
+            }
+            else {
+            	barBase = RectangleEdge.TOP;
+            }
+        }
         RectangleEdge location = plot.getRangeAxisEdge();
         if (value > 0.0) {
             translatedBase = rangeAxis.valueToJava2D(positiveBase, dataArea,
@@ -310,20 +328,7 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
             bar = new Rectangle2D.Double(barW0, barL0, state.getBarWidth(),
                     barLength);
         }
-        Paint itemPaint = getItemPaint(row, column);
-        if (getGradientPaintTransformer() != null
-                && itemPaint instanceof GradientPaint) {
-            GradientPaint gp = (GradientPaint) itemPaint;
-            itemPaint = getGradientPaintTransformer().transform(gp, bar);
-        }
-        g2.setPaint(itemPaint);
-        g2.fill(bar);
-        if (isDrawBarOutline()
-                && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-            g2.setStroke(getItemStroke(row, column));
-            g2.setPaint(getItemOutlinePaint(row, column));
-            g2.draw(bar);
-        }
+        getBarPainter().paintBar(g2, this, row, column, bar, barBase);
 
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
                 column);
@@ -352,7 +357,7 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
             return true;
         }
         if (!(obj instanceof GroupedStackedBarRenderer)) {
-        	return false;
+            return false;
         }
         GroupedStackedBarRenderer that = (GroupedStackedBarRenderer) obj;
         if (!this.seriesToGroupMap.equals(that.seriesToGroupMap)) {

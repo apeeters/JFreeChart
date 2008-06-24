@@ -70,6 +70,7 @@ public class RendererCategoryPackageTests extends TestCase {
         suite.addTestSuite(CategoryStepRendererTests.class);
         suite.addTestSuite(DefaultCategoryItemRendererTests.class);
         suite.addTestSuite(GanttRendererTests.class);
+        suite.addTestSuite(GradientBarPainterTests.class);
         suite.addTestSuite(GroupedStackedBarRendererTests.class);
         suite.addTestSuite(IntervalBarRendererTests.class);
         suite.addTestSuite(LayeredBarRendererTests.class);
@@ -81,6 +82,7 @@ public class RendererCategoryPackageTests extends TestCase {
         suite.addTestSuite(StackedAreaRendererTests.class);
         suite.addTestSuite(StackedBarRendererTests.class);
         suite.addTestSuite(StackedBarRenderer3DTests.class);
+        suite.addTestSuite(StandardBarPainterTests.class);
         suite.addTestSuite(StatisticalBarRendererTests.class);
         suite.addTestSuite(StatisticalLineAndShapeRendererTests.class);
         suite.addTestSuite(WaterfallBarRendererTests.class);

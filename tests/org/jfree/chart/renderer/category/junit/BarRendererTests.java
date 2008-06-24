@@ -41,6 +41,7 @@
  * 22-Sep-2005 : Renamed getMaxBarWidth() --> getMaximumBarWidth() (DG);
  * 11-May-2007 : Added testGetLegendItem() (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -67,9 +68,11 @@ import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.GradientBarPainter;
 import org.jfree.chart.renderer.junit.RendererChangeDetector;
 import org.jfree.chart.text.TextAnchor;
 import org.jfree.chart.util.GradientPaintTransformType;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -159,6 +162,30 @@ public class BarRendererTests extends TestCase {
                 ItemLabelAnchor.INSIDE1, TextAnchor.CENTER));
         assertTrue(r1.equals(r2));
 
+        // barPainter
+        r1.setBarPainter(new GradientBarPainter(0.1, 0.2, 0.3));
+        assertFalse(r1.equals(r2));
+        r2.setBarPainter(new GradientBarPainter(0.1, 0.2, 0.3));
+        assertTrue(r1.equals(r2));
+
+        // shadowsVisible
+        r1.setShadowVisible(false);
+        assertFalse(r1.equals(r2));
+        r2.setShadowVisible(false);
+        assertTrue(r1.equals(r2));
+
+        // shadowXOffset
+        r1.setShadowXOffset(3.3);
+        assertFalse(r1.equals(r2));
+        r2.setShadowXOffset(3.3);
+        assertTrue(r1.equals(r2));
+
+        // shadowYOffset
+        r1.setShadowYOffset(3.3);
+        assertFalse(r1.equals(r2));
+        r2.setShadowYOffset(3.3);
+        assertTrue(r1.equals(r2));
+
     }
 
     /**
@@ -179,6 +206,7 @@ public class BarRendererTests extends TestCase {
     public void testCloning() {
         BarRenderer r1 = new BarRenderer();
         r1.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+        r1.setBarPainter(new GradientBarPainter(0.11, 0.22, 0.33));
         BarRenderer r2 = null;
         try {
             r2 = (BarRenderer) r1.clone();
@@ -189,6 +217,14 @@ public class BarRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        BarRenderer r1 = new BarRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

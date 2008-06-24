@@ -48,14 +48,13 @@
  * 06-Dec-2006 : Added support for GradientPaint (DG);
  * 15-Mar-2007 : Added renderAsPercentages option (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 24-Jun-2008 : Added new barPainter mechanism (DG);
  *
  */
 
 package org.jfree.chart.renderer.xy;
 
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
 
 import org.jfree.chart.axis.ValueAxis;
@@ -146,18 +145,19 @@ public class StackedXYBarRenderer extends XYBarRenderer {
      */
     public void setRenderAsPercentages(boolean asPercentages) {
         this.renderAsPercentages = asPercentages;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
-     * Returns <code>2</code> to indicate that this renderer requires two
-     * passes for drawing (item labels are drawn in the second pass so that
+     * Returns <code>3</code> to indicate that this renderer requires three
+     * passes for drawing (shadows are drawn in the first pass, the bars in the
+     * second, and item labels are drawn in the third pass so that
      * they always appear in front of all the bars).
      *
      * @return <code>2</code>.
      */
     public int getPassCount() {
-        return 2;
+        return 3;
     }
 
     /**
@@ -345,33 +345,44 @@ public class StackedXYBarRenderer extends XYBarRenderer {
                     Math.min(translatedBase, translatedValue),
                     translatedWidth, translatedHeight);
         }
+        boolean positive = (value > 0.0);
+        boolean inverted = rangeAxis.isInverted();
+        RectangleEdge barBase;
+        if (orientation == PlotOrientation.HORIZONTAL) {
+            if (positive && inverted || !positive && !inverted) {
+                barBase = RectangleEdge.RIGHT;
+            }
+            else {
+            	barBase = RectangleEdge.LEFT;
+            }
+        }
+        else {
+            if (positive && !inverted || !positive && inverted) {
+                barBase = RectangleEdge.BOTTOM;
+            }
+            else {
+            	barBase = RectangleEdge.TOP;
+            }
+        }
 
         if (pass == 0) {
-            Paint itemPaint = getItemPaint(series, item);
-            if (getGradientPaintTransformer()
-                    != null && itemPaint instanceof GradientPaint) {
-                GradientPaint gp = (GradientPaint) itemPaint;
-                itemPaint = getGradientPaintTransformer().transform(gp, bar);
-            }
-            g2.setPaint(itemPaint);
-            g2.fill(bar);
-            if (isDrawBarOutline()
-                    && Math.abs(translatedEndX - translatedStartX) > 3) {
-                g2.setStroke(getItemStroke(series, item));
-                g2.setPaint(getItemOutlinePaint(series, item));
-                g2.draw(bar);
-            }
+        	getBarPainter().paintBarShadow(g2, this, series, item, bar, barBase,
+        			false);
+        }
+        else if (pass == 1) {
+        	getBarPainter().paintBar(g2, this, series, item, bar, barBase);
 
             // add an entity for the item...
             if (info != null) {
-                EntityCollection entities = info.getOwner().getEntityCollection();
+                EntityCollection entities = info.getOwner()
+                        .getEntityCollection();
                 if (entities != null) {
                     addEntity(entities, bar, dataset, series, item,
                             bar.getCenterX(), bar.getCenterY());
                 }
             }
         }
-        else if (pass == 1) {
+        else if (pass == 2) {
             // handle item label drawing, now that we know all the bars have
             // been drawn...
             if (isItemLabelVisible(series, item)) {

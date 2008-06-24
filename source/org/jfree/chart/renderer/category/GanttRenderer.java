@@ -48,6 +48,7 @@
  * 20-Mar-2007 : Implemented equals() and fixed serialization (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 29-Jun-2007 : Simplified entity generation by calling addEntity() (DG);
+ * 24-Jun-2008 : Added new barPainter mechanism (DG);
  *
  */
 
@@ -80,7 +81,7 @@ import org.jfree.data.gantt.GanttCategoryDataset;
  * A renderer for simple Gantt charts.
  */
 public class GanttRenderer extends IntervalBarRenderer
-                           implements Serializable {
+        implements Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -4010349116350119512L;
@@ -139,7 +140,7 @@ public class GanttRenderer extends IntervalBarRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.completePaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -166,7 +167,7 @@ public class GanttRenderer extends IntervalBarRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.incompletePaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -183,7 +184,8 @@ public class GanttRenderer extends IntervalBarRenderer
 
     /**
      * Sets the position of the start of the progress indicator, as a
-     * percentage of the bar width.
+     * percentage of the bar width, and sends a {@link RendererChangeEvent} to
+     * all registered listeners.
      *
      * @param percent  the percent.
      *
@@ -191,7 +193,7 @@ public class GanttRenderer extends IntervalBarRenderer
      */
     public void setStartPercent(double percent) {
         this.startPercent = percent;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -208,7 +210,8 @@ public class GanttRenderer extends IntervalBarRenderer
 
     /**
      * Sets the position of the end of the progress indicator, as a percentage
-     * of the bar width.
+     * of the bar width, and sends a {@link RendererChangeEvent} to all
+     * registered listeners.
      *
      * @param percent  the percent.
      *
@@ -216,7 +219,7 @@ public class GanttRenderer extends IntervalBarRenderer
      */
     public void setEndPercent(double percent) {
         this.endPercent = percent;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -318,14 +321,16 @@ public class GanttRenderer extends IntervalBarRenderer
 
             // DRAW THE BARS...
             Rectangle2D bar = null;
-
+            RectangleEdge barBase = null;
             if (plot.getOrientation() == PlotOrientation.HORIZONTAL) {
                 bar = new Rectangle2D.Double(translatedValue0, rectStart,
                         rectLength, rectBreadth);
+                barBase = RectangleEdge.LEFT;
             }
             else if (plot.getOrientation() == PlotOrientation.VERTICAL) {
                 bar = new Rectangle2D.Double(rectStart, translatedValue0,
                         rectBreadth, rectLength);
+                barBase = RectangleEdge.BOTTOM;
             }
 
             Rectangle2D completeBar = null;
@@ -356,9 +361,12 @@ public class GanttRenderer extends IntervalBarRenderer
 
             }
 
-            Paint seriesPaint = getItemPaint(row, column);
-            g2.setPaint(seriesPaint);
-            g2.fill(bar);
+            if (getShadowsVisible()) {
+                getBarPainter().paintBarShadow(g2, this, row, column, bar,
+                		barBase, true);
+            }
+            getBarPainter().paintBar(g2, this, row, column, bar, barBase);
+
             if (completeBar != null) {
                 g2.setPaint(getCompletePaint());
                 g2.fill(completeBar);
@@ -442,13 +450,16 @@ public class GanttRenderer extends IntervalBarRenderer
         double rectLength = Math.abs(java2dValue1 - java2dValue0);
 
         Rectangle2D bar = null;
+        RectangleEdge barBase = null;
         if (orientation == PlotOrientation.HORIZONTAL) {
             bar = new Rectangle2D.Double(java2dValue0, rectStart, rectLength,
                     rectBreadth);
+            barBase = RectangleEdge.LEFT;
         }
         else if (orientation == PlotOrientation.VERTICAL) {
             bar = new Rectangle2D.Double(rectStart, java2dValue1, rectBreadth,
                     rectLength);
+            barBase = RectangleEdge.BOTTOM;
         }
 
         Rectangle2D completeBar = null;
@@ -477,9 +488,11 @@ public class GanttRenderer extends IntervalBarRenderer
 
         }
 
-        Paint seriesPaint = getItemPaint(row, column);
-        g2.setPaint(seriesPaint);
-        g2.fill(bar);
+        if (getShadowsVisible()) {
+            getBarPainter().paintBarShadow(g2, this, row, column, bar,
+            		barBase, true);
+        }
+        getBarPainter().paintBar(g2, this, row, column, bar, barBase);
 
         if (completeBar != null) {
             g2.setPaint(getCompletePaint());
