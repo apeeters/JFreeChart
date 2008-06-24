@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 08-Jul-2004 : Version 1 (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -56,6 +57,7 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.GroupedStackedBarRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.KeyToGroupMap;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -112,11 +114,19 @@ public class GroupedStackedBarRendererTests extends TestCase {
             r2 = (GroupedStackedBarRenderer) r1.clone();
         }
         catch (CloneNotSupportedException e) {
-            System.err.println("Failed to clone.");
+            e.printStackTrace();
         }
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        GroupedStackedBarRenderer r1 = new GroupedStackedBarRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
@@ -132,14 +142,13 @@ public class GroupedStackedBarRendererTests extends TestCase {
             out.writeObject(r1);
             out.close();
 
-            ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+            ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(
+                    buffer.toByteArray()));
             r2 = (GroupedStackedBarRenderer) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(r1, r2);
 
@@ -158,7 +167,7 @@ public class GroupedStackedBarRendererTests extends TestCase {
             dataset.addValue(3.0, "S2", "C1");
             dataset.addValue(4.0, "S2", "C2");
             GroupedStackedBarRenderer renderer
-                = new GroupedStackedBarRenderer();
+                    = new GroupedStackedBarRenderer();
             CategoryPlot plot = new CategoryPlot(dataset,
                     new CategoryAxis("Category"), new NumberAxis("Value"),
                     renderer);
