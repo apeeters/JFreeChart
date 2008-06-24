@@ -40,6 +40,8 @@
  * 11-May-2007 : Added testGetLegendItem() (DG);
  * 17-May-2007 : Added testGetLegendItemSeriesIndex() (DG);
  * 08-Oct-2007 : Added tests for null items in dataset (DG);
+ * 15-Jan-2008 : Updated testEquals() (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -71,6 +73,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BoxAndWhiskerRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.statistics.BoxAndWhiskerItem;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
@@ -123,6 +126,10 @@ public class BoxAndWhiskerRendererTests extends TestCase {
         r2.setItemMargin(0.11);
         assertEquals(r1, r2);
 
+        r1.setMaximumBarWidth(0.99);
+        assertFalse(r1.equals(r2));
+        r2.setMaximumBarWidth(0.99);
+        assertTrue(r1.equals(r2));
     }
 
     /**
@@ -152,6 +159,14 @@ public class BoxAndWhiskerRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        BoxAndWhiskerRenderer r1 = new BoxAndWhiskerRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

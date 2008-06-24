@@ -36,6 +36,7 @@
  * -------
  * 29-Apr-2003 : Version 1 (DG);
  * 22-Oct-2003 : Added hashCode test (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -53,6 +54,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.category.DefaultCategoryItemRenderer;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link DefaultCategoryItemRenderer} class.
@@ -113,6 +115,14 @@ public class DefaultCategoryItemRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        DefaultCategoryItemRenderer r1 = new DefaultCategoryItemRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
