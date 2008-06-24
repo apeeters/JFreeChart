@@ -199,6 +199,19 @@ public class AbstractCategoryItemRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+
+        r1 = new BarRenderer();
+        r1.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+        r2 = null;
+        try {
+            r2 = (BarRenderer) r1.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        assertTrue(r1 != r2);
+        assertTrue(r1.getClass() == r2.getClass());
+        assertTrue(r1.equals(r2));
     }
 
     /**
@@ -221,6 +234,19 @@ public class AbstractCategoryItemRendererTests extends TestCase {
         r1 = new BarRenderer();
         r1.setSeriesItemLabelGenerator(0,
                 new IntervalCategoryItemLabelGenerator());
+        r2 = null;
+        try {
+            r2 = (BarRenderer) r1.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        assertTrue(r1 != r2);
+        assertTrue(r1.getClass() == r2.getClass());
+        assertTrue(r1.equals(r2));
+
+        r1 = new BarRenderer();
+        r1.setBaseItemLabelGenerator(new IntervalCategoryItemLabelGenerator());
         r2 = null;
         try {
             r2 = (BarRenderer) r1.clone();

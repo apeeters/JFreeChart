@@ -38,6 +38,7 @@
  * 22-Oct-2003 : Added hashCode() test (DG);
  * 11-Oct-2006 : Strengthened the testEquals() method (DG);
  * 17-May-2007 : Added testGetLegendItemSeriesIndex() (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -61,6 +62,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.AreaRendererEndType;
 import org.jfree.chart.renderer.category.AreaRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -127,6 +129,14 @@ public class AreaRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        AreaRenderer r1 = new AreaRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

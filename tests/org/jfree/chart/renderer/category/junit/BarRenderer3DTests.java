@@ -37,6 +37,7 @@
  * 25-Mar-2003 : Version 1 (DG);
  * 22-Oct-2003 : Added hashCode test (DG);
  * 07-Dec-2006 : Improved testEquals() (DG);
+ * 23-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -56,6 +57,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.category.BarRenderer3D;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link BarRenderer3D} class.
@@ -133,6 +135,14 @@ public class BarRenderer3DTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        BarRenderer3D r1 = new BarRenderer3D();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
