@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ------------------------------
  * LineAndShapeRendererTests.java
  * ------------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -88,60 +88,60 @@ public class LineAndShapeRendererTests extends TestCase {
      * Test that the equals() method distinguishes all fields.
      */
     public void testEquals() {
-        
+
         LineAndShapeRenderer r1 = new LineAndShapeRenderer();
         LineAndShapeRenderer r2 = new LineAndShapeRenderer();
         assertEquals(r1, r2);
-        
+
         r1.setBaseLinesVisible(!r1.getBaseLinesVisible());
         assertFalse(r1.equals(r2));
         r2.setBaseLinesVisible(r1.getBaseLinesVisible());
         assertTrue(r1.equals(r2));
-        
+
         r1.setSeriesLinesVisible(1, true);
         assertFalse(r1.equals(r2));
         r2.setSeriesLinesVisible(1, true);
         assertTrue(r1.equals(r2));
-        
+
         r1.setBaseShapesVisible(!r1.getBaseShapesVisible());
         assertFalse(r1.equals(r2));
         r2.setBaseShapesVisible(r1.getBaseShapesVisible());
         assertTrue(r1.equals(r2));
-        
+
         r1.setSeriesShapesVisible(1, true);
         assertFalse(r1.equals(r2));
         r2.setSeriesShapesVisible(1, true);
         assertTrue(r1.equals(r2));
-        
+
         r1.setSeriesShapesFilled(1, true);
         assertFalse(r1.equals(r2));
         r2.setSeriesShapesFilled(1, true);
         assertTrue(r1.equals(r2));
-        
+
         r1.setBaseShapesFilled(false);
         assertFalse(r1.equals(r2));
         r2.setBaseShapesFilled(false);
         assertTrue(r1.equals(r2));
-        
+
         r1.setUseOutlinePaint(true);
         assertFalse(r1.equals(r2));
         r2.setUseOutlinePaint(true);
         assertTrue(r1.equals(r2));
-        
+
         r1.setUseSeriesOffset(true);
         assertFalse(r1.equals(r2));
         r2.setUseSeriesOffset(true);
         assertTrue(r1.equals(r2));
-        
+
         r1.setItemMargin(0.14);
         assertFalse(r1.equals(r2));
         r2.setItemMargin(0.14);
         assertTrue(r1.equals(r2));
-        
+
     }
 
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashcode() {
         LineAndShapeRenderer r1 = new LineAndShapeRenderer();
@@ -151,7 +151,7 @@ public class LineAndShapeRendererTests extends TestCase {
         int h2 = r2.hashCode();
         assertEquals(h1, h2);
     }
-    
+
     /**
      * Confirm that cloning works.
      */
@@ -167,28 +167,28 @@ public class LineAndShapeRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
-        
+
         assertTrue(checkIndependence(r1, r2));
-        
+
     }
 
     /**
      * Checks that the two renderers are equal but independent of one another.
-     * 
+     *
      * @param r1  renderer 1.
      * @param r2  renderer 2.
-     * 
+     *
      * @return A boolean.
      */
-    private boolean checkIndependence(LineAndShapeRenderer r1, 
+    private boolean checkIndependence(LineAndShapeRenderer r1,
                                       LineAndShapeRenderer r2) {
 
         // should be equal...
         if (!r1.equals(r2)) {
             return false;
         }
-        
-        // and independent...        
+
+        // and independent...
         r1.setBaseLinesVisible(!r1.getBaseLinesVisible());
         if (r1.equals(r2)) {
             return false;
@@ -206,7 +206,7 @@ public class LineAndShapeRendererTests extends TestCase {
         if (!r1.equals(r2)) {
             return false;
         }
-        
+
         r1.setBaseShapesVisible(!r1.getBaseShapesVisible());
         if (r1.equals(r2)) {
             return false;
@@ -234,7 +234,7 @@ public class LineAndShapeRendererTests extends TestCase {
         if (!r1.equals(r2)) {
             return false;
         }
-        
+
         r1.setBaseShapesFilled(false);
         r2.setBaseShapesFilled(true);
         if (r1.equals(r2)) {
@@ -245,7 +245,7 @@ public class LineAndShapeRendererTests extends TestCase {
             return false;
         }
         return true;
-    
+
     }
 
     /**
@@ -273,7 +273,7 @@ public class LineAndShapeRendererTests extends TestCase {
         assertEquals(r1, r2);
 
     }
-    
+
     /**
      * A check for the datasetIndex and seriesIndex fields in the LegendItem
      * returned by the getLegendItem() method.
@@ -281,11 +281,11 @@ public class LineAndShapeRendererTests extends TestCase {
     public void testGetLegendItemSeriesIndex() {
         DefaultCategoryDataset dataset0 = new DefaultCategoryDataset();
         dataset0.addValue(21.0, "R1", "C1");
-        dataset0.addValue(22.0, "R2", "C1");        
+        dataset0.addValue(22.0, "R2", "C1");
         DefaultCategoryDataset dataset1 = new DefaultCategoryDataset();
         dataset1.addValue(23.0, "R3", "C1");
-        dataset1.addValue(24.0, "R4", "C1");        
-        dataset1.addValue(25.0, "R5", "C1");        
+        dataset1.addValue(24.0, "R4", "C1");
+        dataset1.addValue(25.0, "R5", "C1");
         LineAndShapeRenderer r = new LineAndShapeRenderer();
         CategoryPlot plot = new CategoryPlot(dataset0, new CategoryAxis("x"),
                 new NumberAxis("y"), r);
