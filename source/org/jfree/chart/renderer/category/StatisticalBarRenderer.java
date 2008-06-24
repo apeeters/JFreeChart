@@ -53,6 +53,8 @@
  * 06-Jul-2007 : Added errorIndicatorStroke attribute (DG);
  * 11-Jul-2007 : Fixed serialization for new errorIndicatorStroke field (DG);
  * 28-Aug-2007 : Fixed NullPointerException - see bug 1779941 (DG);
+ * 14-Nov-2007 : Added errorIndicatorStroke, and fixed bugs with drawBarOutline
+ *               and gradientPaintTransformer attributes being ignored (DG);
  *
  */
 
@@ -60,6 +62,7 @@ package org.jfree.chart.renderer.category;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
@@ -77,6 +80,8 @@ import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.GradientPaintTransformer;
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
@@ -89,9 +94,8 @@ import org.jfree.data.statistics.StatisticalCategoryDataset;
  * each bar has a mean value and a standard deviation line.
  */
 public class StatisticalBarRenderer extends BarRenderer
-                                    implements CategoryItemRenderer,
-                                               Cloneable, PublicCloneable,
-                                               Serializable {
+        implements CategoryItemRenderer, Cloneable, PublicCloneable,
+                   Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -4986038395414039117L;
@@ -100,9 +104,9 @@ public class StatisticalBarRenderer extends BarRenderer
     private transient Paint errorIndicatorPaint;
 
     /**
-     * The stroke used to draw the error indicator.
+     * The stroke used to draw the error indicators.
      *
-     * @since 1.2.0
+     * @since 1.0.8
      */
     private transient Stroke errorIndicatorStroke;
 
@@ -129,7 +133,8 @@ public class StatisticalBarRenderer extends BarRenderer
 
     /**
      * Sets the paint used for the error indicators (if <code>null</code>,
-     * the item outline paint is used instead)
+     * the item outline paint is used instead) and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param paint  the paint (<code>null</code> permitted).
      *
@@ -137,35 +142,38 @@ public class StatisticalBarRenderer extends BarRenderer
      */
     public void setErrorIndicatorPaint(Paint paint) {
         this.errorIndicatorPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
-     * Returns the stroke used for the error indicators.
+     * Returns the stroke used to draw the error indicators.  If this is
+     * <code>null</code>, the renderer will use the item outline stroke).
      *
      * @return The stroke (possibly <code>null</code>).
      *
      * @see #setErrorIndicatorStroke(Stroke)
      *
-     * @since 1.2.0
+     * @since 1.0.8
      */
     public Stroke getErrorIndicatorStroke() {
         return this.errorIndicatorStroke;
     }
 
     /**
-     * Sets the stroke used for the error indicators (if <code>null</code>,
-     * the item outline stroke is used instead)
+     * Sets the stroke used to draw the error indicators, and sends a
+     * {@link RendererChangeEvent} to all registered listeners.  If you set
+     * this to <code>null</code>, the renderer will use the item outline
+     * stroke.
      *
      * @param stroke  the stroke (<code>null</code> permitted).
      *
      * @see #getErrorIndicatorStroke()
      *
-     * @since 1.2.0
+     * @since 1.0.8
      */
     public void setErrorIndicatorStroke(Stroke stroke) {
         this.errorIndicatorStroke = stroke;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -257,7 +265,6 @@ public class StatisticalBarRenderer extends BarRenderer
         if (meanValue == null) {
             return;
         }
-
         double value = meanValue.doubleValue();
         double base = 0.0;
         double lclip = getLowerClip();
@@ -303,13 +310,24 @@ public class StatisticalBarRenderer extends BarRenderer
 
         Rectangle2D bar = new Rectangle2D.Double(rectX, rectY, rectWidth,
                 rectHeight);
-        Paint seriesPaint = getItemPaint(row, column);
-        g2.setPaint(seriesPaint);
+        Paint itemPaint = getItemPaint(row, column);
+        GradientPaintTransformer t = getGradientPaintTransformer();
+        if (t != null && itemPaint instanceof GradientPaint) {
+            itemPaint = t.transform((GradientPaint) itemPaint, bar);
+        }
+        g2.setPaint(itemPaint);
         g2.fill(bar);
-        if (isDrawBarOutline() && state.getBarWidth() > 3) {
-            g2.setStroke(getItemStroke(row, column));
-            g2.setPaint(getItemOutlinePaint(row, column));
-            g2.draw(bar);
+
+        // draw the outline...
+        if (isDrawBarOutline()
+                && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
+            Stroke stroke = getItemOutlineStroke(row, column);
+            Paint paint = getItemOutlinePaint(row, column);
+            if (stroke != null && paint != null) {
+                g2.setStroke(stroke);
+                g2.setPaint(paint);
+                g2.draw(bar);
+            }
         }
 
         // standard deviation lines
@@ -333,7 +351,6 @@ public class StatisticalBarRenderer extends BarRenderer
             else {
                 g2.setPaint(getItemOutlinePaint(row, column));
             }
-
             Line2D line = null;
             line = new Line2D.Double(lowVal, rectY + rectHeight / 2.0d,
                                      highVal, rectY + rectHeight / 2.0d);
@@ -387,9 +404,8 @@ public class StatisticalBarRenderer extends BarRenderer
         RectangleEdge xAxisLocation = plot.getDomainAxisEdge();
 
         // BAR X
-        double rectX = domainAxis.getCategoryStart(
-            column, getColumnCount(), dataArea, xAxisLocation
-        );
+        double rectX = domainAxis.getCategoryStart(column, getColumnCount(),
+                dataArea, xAxisLocation);
 
         int seriesCount = getRowCount();
         int categoryCount = getColumnCount();
@@ -453,13 +469,23 @@ public class StatisticalBarRenderer extends BarRenderer
 
         Rectangle2D bar = new Rectangle2D.Double(rectX, rectY, rectWidth,
                 rectHeight);
-        Paint seriesPaint = getItemPaint(row, column);
-        g2.setPaint(seriesPaint);
+        Paint itemPaint = getItemPaint(row, column);
+        GradientPaintTransformer t = getGradientPaintTransformer();
+        if (t != null && itemPaint instanceof GradientPaint) {
+            itemPaint = t.transform((GradientPaint) itemPaint, bar);
+        }
+        g2.setPaint(itemPaint);
         g2.fill(bar);
-        if (isDrawBarOutline() && state.getBarWidth() > 3) {
-            g2.setStroke(getItemStroke(row, column));
-            g2.setPaint(getItemOutlinePaint(row, column));
-            g2.draw(bar);
+        // draw the outline...
+        if (isDrawBarOutline()
+                && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
+            Stroke stroke = getItemOutlineStroke(row, column);
+            Paint paint = getItemOutlinePaint(row, column);
+            if (stroke != null && paint != null) {
+                g2.setStroke(stroke);
+                g2.setPaint(paint);
+                g2.draw(bar);
+            }
         }
 
         // standard deviation lines
@@ -523,15 +549,16 @@ public class StatisticalBarRenderer extends BarRenderer
         if (!(obj instanceof StatisticalBarRenderer)) {
             return false;
         }
-        if (!super.equals(obj)) {
-            return false;
-        }
         StatisticalBarRenderer that = (StatisticalBarRenderer) obj;
         if (!PaintUtilities.equal(this.errorIndicatorPaint,
                 that.errorIndicatorPaint)) {
             return false;
         }
-        return true;
+        if (!ObjectUtilities.equal(this.errorIndicatorStroke,
+                that.errorIndicatorStroke)) {
+            return false;
+        }
+        return super.equals(obj);
     }
 
     /**
