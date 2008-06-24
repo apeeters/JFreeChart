@@ -36,6 +36,7 @@
  * -------
  * 15-Jun-2005 : Version 1 (DG);
  * 25-Sep-2006 : Added test1562759() (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -58,6 +59,7 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.StatisticalLineAndShapeRenderer;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.statistics.DefaultStatisticalCategoryDataset;
 
 /**
@@ -119,7 +121,7 @@ public class StatisticalLineAndShapeRendererTests extends TestCase {
      */
     public void testCloning() {
         StatisticalLineAndShapeRenderer r1
-            = new StatisticalLineAndShapeRenderer();
+                = new StatisticalLineAndShapeRenderer();
         StatisticalLineAndShapeRenderer r2 = null;
         try {
             r2 = (StatisticalLineAndShapeRenderer) r1.clone();
@@ -130,6 +132,15 @@ public class StatisticalLineAndShapeRendererTests extends TestCase {
         assertTrue(r1 != r2);
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        StatisticalLineAndShapeRenderer r1
+                = new StatisticalLineAndShapeRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

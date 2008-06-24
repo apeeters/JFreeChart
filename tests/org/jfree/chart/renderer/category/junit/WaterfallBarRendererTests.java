@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 21-Oct-2003 : Version 1 (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -53,6 +54,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.category.WaterfallBarRenderer;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link WaterfallBarRenderer} class.
@@ -145,6 +147,14 @@ public class WaterfallBarRendererTests extends TestCase {
         r2.setFirstBarPaint(Color.yellow);
         assertTrue(r1.equals(r2));
 
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        WaterfallBarRenderer r1 = new WaterfallBarRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
