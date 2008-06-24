@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 25-Mar-2003 : Version 1 (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -52,6 +53,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.category.StackedAreaRenderer;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link StackedAreaRendererTests} class.
@@ -118,6 +120,14 @@ public class StackedAreaRendererTests extends TestCase {
         assertTrue(r1.getClass() == r2.getClass());
         assertTrue(r1.equals(r2));
 
+    }
+
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        StackedAreaRenderer r1 = new StackedAreaRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**

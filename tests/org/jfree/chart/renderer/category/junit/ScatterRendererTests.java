@@ -36,6 +36,7 @@
  * -------
  * 08-Oct-2007 : Version 1 (DG);
  * 11-Oct-2007 : Renamed ScatterRenderer (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -53,6 +54,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.renderer.category.ScatterRenderer;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link ScatterRenderer} class.
@@ -147,7 +149,14 @@ public class ScatterRendererTests extends TestCase {
         assertTrue(r1.equals(r2));
 
         assertTrue(checkIndependence(r1, r2));
+    }
 
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        ScatterRenderer r1 = new ScatterRenderer();
+        assertTrue(r1 instanceof PublicCloneable);
     }
 
     /**
