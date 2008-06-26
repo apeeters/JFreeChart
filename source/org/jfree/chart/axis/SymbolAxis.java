@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------
  * SymbolAxis.java
  * ---------------
- * (C) Copyright 2002-2007, by Anthony Boulestreau and Contributors.
+ * (C) Copyright 2002-2008, by Anthony Boulestreau and Contributors.
  *
  * Original Author:  Anthony Boulestreau;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -37,7 +37,7 @@
  * -------
  * 29-Mar-2002 : First version (AB);
  * 19-Apr-2002 : Updated formatting and import statements (DG);
- * 21-Jun-2002 : Make change to use the class TickUnit - remove valueToString() 
+ * 21-Jun-2002 : Make change to use the class TickUnit - remove valueToString()
  *               method and add SymbolicTickUnit (AB);
  * 25-Jun-2002 : Removed redundant code (DG);
  * 25-Jul-2002 : Changed order of parameters in ValueAxis constructor (DG);
@@ -47,12 +47,12 @@
  * 26-Mar-2003 : Implemented Serializable (DG);
  * 14-May-2003 : Renamed HorizontalSymbolicAxis --> SymbolicAxis and merged in
  *               VerticalSymbolicAxis (DG);
- * 12-Aug-2003 : Fixed bug where refreshTicks() method has different signature 
+ * 12-Aug-2003 : Fixed bug where refreshTicks() method has different signature
  *               to super class (DG);
  * 29-Oct-2003 : Added workaround for font alignment in PDF output (DG);
  * 02-Nov-2003 : Added code to avoid overlapping labels (MR);
  * 07-Nov-2003 : Modified to use new tick classes (DG);
- * 18-Nov-2003 : Fixed bug where symbols are not being displayed on the 
+ * 18-Nov-2003 : Fixed bug where symbols are not being displayed on the
  *               axis (DG);
  * 24-Nov-2003 : Added fix for gridlines on zooming (bug id 834643) (DG);
  * 21-Jan-2004 : Update for renamed method in ValueAxis (DG);
@@ -65,17 +65,17 @@
  *               and autoRangeStickyZero() --> getAutoRangeStickyZero() (DG);
  * 05-Jul-2005 : Fixed signature on refreshTicks() method - see bug report
  *               1232264 (DG);
- * 06-Jul-2005 : Renamed SymbolicAxis --> SymbolAxis, added equals() method, 
- *               renamed getSymbolicValue() --> getSymbols(), renamed 
- *               symbolicGridPaint --> gridBandPaint, fixed serialization of 
- *               gridBandPaint, renamed symbolicGridLinesVisible --> 
+ * 06-Jul-2005 : Renamed SymbolicAxis --> SymbolAxis, added equals() method,
+ *               renamed getSymbolicValue() --> getSymbols(), renamed
+ *               symbolicGridPaint --> gridBandPaint, fixed serialization of
+ *               gridBandPaint, renamed symbolicGridLinesVisible -->
  *               gridBandsVisible, eliminated symbolicGridLineList (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  * 28-Feb-2007 : Fixed bug 1669302 (tick label overlap) (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 25-Jul-2007 : Added new field for alternate grid band paint (DG);
- * 
+ *
  */
 
 package org.jfree.chart.axis;
@@ -115,19 +115,19 @@ public class SymbolAxis extends NumberAxis implements Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 7216330468770619716L;
-    
+
     /** The default grid band paint. */
-    public static final Paint DEFAULT_GRID_BAND_PAINT 
+    public static final Paint DEFAULT_GRID_BAND_PAINT
             = new Color(232, 234, 232, 128);
 
     /**
      * The default paint for alternate grid bands.
-     * 
+     *
      * @since 1.0.7
      */
     public static final Paint DEFAULT_GRID_BAND_ALTERNATE_PAINT
             = new Color(0, 0, 0, 0);  // transparent
-    
+
     /** The list of symbols to display instead of the numeric values. */
     private List symbols;
 
@@ -136,16 +136,16 @@ public class SymbolAxis extends NumberAxis implements Serializable {
 
     /** The paint used to color the grid bands (if the bands are visible). */
     private transient Paint gridBandPaint;
-    
-    /** 
+
+    /**
      * The paint used to fill the alternate grid bands.
-     * 
+     *
      * @since 1.0.7
      */
     private transient Paint gridBandAlternatePaint;
 
     /**
-     * Constructs a symbol axis, using default attribute values where 
+     * Constructs a symbol axis, using default attribute values where
      * necessary.
      *
      * @param label  the axis label (<code>null</code> permitted).
@@ -178,9 +178,9 @@ public class SymbolAxis extends NumberAxis implements Serializable {
      * Returns <code>true</code> if the grid bands are showing, and
      * <code>false</code> otherwise.
      *
-     * @return <code>true</code> if the grid bands are showing, and 
+     * @return <code>true</code> if the grid bands are showing, and
      *         <code>false</code> otherwise.
-     *         
+     *
      * @see #setGridBandsVisible(boolean)
      */
     public boolean isGridBandsVisible() {
@@ -192,7 +192,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
      * listeners that the axis has been modified.
      *
      * @param flag  the new setting.
-     * 
+     *
      * @see #isGridBandsVisible()
      */
     public void setGridBandsVisible(boolean flag) {
@@ -206,7 +206,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
      * Returns the paint used to color the grid bands.
      *
      * @return The grid band paint (never <code>null</code>).
-     * 
+     *
      * @see #setGridBandPaint(Paint)
      * @see #isGridBandsVisible()
      */
@@ -215,11 +215,11 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     }
 
     /**
-     * Sets the grid band paint and sends an {@link AxisChangeEvent} to 
+     * Sets the grid band paint and sends an {@link AxisChangeEvent} to
      * all registered listeners.
-     * 
+     *
      * @param paint  the paint (<code>null</code> not permitted).
-     * 
+     *
      * @see #getGridBandPaint()
      */
     public void setGridBandPaint(Paint paint) {
@@ -232,27 +232,27 @@ public class SymbolAxis extends NumberAxis implements Serializable {
 
     /**
      * Returns the paint used for alternate grid bands.
-     * 
+     *
      * @return The paint (never <code>null</code>).
-     * 
+     *
      * @see #setGridBandAlternatePaint(Paint)
      * @see #getGridBandPaint()
-     * 
+     *
      * @since 1.0.7
      */
     public Paint getGridBandAlternatePaint() {
         return this.gridBandAlternatePaint;
     }
-    
+
     /**
-     * Sets the paint used for alternate grid bands and sends a 
+     * Sets the paint used for alternate grid bands and sends a
      * {@link AxisChangeEvent} to all registered listeners.
-     * 
+     *
      * @param paint  the paint (<code>null</code> not permitted).
-     * 
+     *
      * @see #getGridBandAlternatePaint()
      * @see #setGridBandPaint(Paint)
-     * 
+     *
      * @since 1.0.7
      */
     public void setGridBandAlternatePaint(Paint paint) {
@@ -262,7 +262,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
         this.gridBandAlternatePaint = paint;
         notifyListeners(new AxisChangeEvent(this));
     }
-    
+
     /**
      * This operation is not supported by this axis.
      *
@@ -270,31 +270,31 @@ public class SymbolAxis extends NumberAxis implements Serializable {
      * @param dataArea  the area in which the plot and axes should be drawn.
      * @param edge  the edge along which the axis is drawn.
      */
-    protected void selectAutoTickUnit(Graphics2D g2, Rectangle2D dataArea, 
+    protected void selectAutoTickUnit(Graphics2D g2, Rectangle2D dataArea,
                                       RectangleEdge edge) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Draws the axis on a Java 2D graphics device (such as the screen or a 
+     * Draws the axis on a Java 2D graphics device (such as the screen or a
      * printer).
      *
      * @param g2  the graphics device (<code>null</code> not permitted).
      * @param cursor  the cursor location.
      * @param plotArea  the area within which the plot and axes should be drawn
      *                  (<code>null</code> not permitted).
-     * @param dataArea  the area within which the data should be drawn 
+     * @param dataArea  the area within which the data should be drawn
      *                  (<code>null</code> not permitted).
      * @param edge  the axis location (<code>null</code> not permitted).
-     * @param plotState  collects information about the plot 
+     * @param plotState  collects information about the plot
      *                   (<code>null</code> permitted).
-     * 
+     *
      * @return The axis state (never <code>null</code>).
      */
-    public AxisState draw(Graphics2D g2, 
+    public AxisState draw(Graphics2D g2,
                           double cursor,
-                          Rectangle2D plotArea, 
-                          Rectangle2D dataArea, 
+                          Rectangle2D plotArea,
+                          Rectangle2D dataArea,
                           RectangleEdge edge,
                           PlotRenderingInfo plotState) {
 
@@ -310,21 +310,21 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     }
 
     /**
-     * Draws the grid bands.  Alternate bands are colored using 
-     * <CODE>gridBandPaint<CODE> (<CODE>DEFAULT_GRID_BAND_PAINT</CODE> by 
+     * Draws the grid bands.  Alternate bands are colored using
+     * <CODE>gridBandPaint<CODE> (<CODE>DEFAULT_GRID_BAND_PAINT</CODE> by
      * default).
      *
      * @param g2  the graphics device.
      * @param plotArea  the area within which the chart should be drawn.
-     * @param dataArea  the area within which the plot should be drawn (a 
+     * @param dataArea  the area within which the plot should be drawn (a
      *                  subset of the drawArea).
      * @param edge  the axis location.
      * @param ticks  the ticks.
      */
     protected void drawGridBands(Graphics2D g2,
-                                 Rectangle2D plotArea, 
+                                 Rectangle2D plotArea,
                                  Rectangle2D dataArea,
-                                 RectangleEdge edge, 
+                                 RectangleEdge edge,
                                  List ticks) {
 
         Shape savedClip = g2.getClip();
@@ -340,7 +340,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     }
 
     /**
-     * Draws the grid bands for the axis when it is at the top or bottom of 
+     * Draws the grid bands for the axis when it is at the top or bottom of
      * the plot.
      *
      * @param g2  the graphics device.
@@ -349,14 +349,14 @@ public class SymbolAxis extends NumberAxis implements Serializable {
      *                  (a subset of the drawArea).
      * @param firstGridBandIsDark  True: the first grid band takes the
      *                             color of <CODE>gridBandPaint<CODE>.
-     *                             False: the second grid band takes the 
+     *                             False: the second grid band takes the
      *                             color of <CODE>gridBandPaint<CODE>.
      * @param ticks  the ticks.
      */
     protected void drawGridBandsHorizontal(Graphics2D g2,
-                                           Rectangle2D plotArea, 
+                                           Rectangle2D plotArea,
                                            Rectangle2D dataArea,
-                                           boolean firstGridBandIsDark, 
+                                           boolean firstGridBandIsDark,
                                            List ticks) {
 
         boolean currentGridBandIsDark = firstGridBandIsDark;
@@ -366,7 +366,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
         //gets the outline stroke width of the plot
         double outlineStrokeWidth;
         if (getPlot().getOutlineStroke() !=  null) {
-            outlineStrokeWidth 
+            outlineStrokeWidth
                 = ((BasicStroke) getPlot().getOutlineStroke()).getLineWidth();
         }
         else {
@@ -378,9 +378,9 @@ public class SymbolAxis extends NumberAxis implements Serializable {
         Rectangle2D band;
         while (iterator.hasNext()) {
             tick = (ValueTick) iterator.next();
-            xx1 = valueToJava2D(tick.getValue() - 0.5d, dataArea, 
+            xx1 = valueToJava2D(tick.getValue() - 0.5d, dataArea,
                     RectangleEdge.BOTTOM);
-            xx2 = valueToJava2D(tick.getValue() + 0.5d, dataArea, 
+            xx2 = valueToJava2D(tick.getValue() + 0.5d, dataArea,
                     RectangleEdge.BOTTOM);
             if (currentGridBandIsDark) {
                 g2.setPaint(this.gridBandPaint);
@@ -388,7 +388,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
             else {
                 g2.setPaint(Color.white);
             }
-            band = new Rectangle2D.Double(xx1, yy + outlineStrokeWidth, 
+            band = new Rectangle2D.Double(xx1, yy + outlineStrokeWidth,
                 xx2 - xx1, dataArea.getMaxY() - yy - outlineStrokeWidth);
             g2.fill(band);
             currentGridBandIsDark = !currentGridBandIsDark;
@@ -397,7 +397,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     }
 
     /**
-     * Draws the grid bands for the axis when it is at the top or bottom of 
+     * Draws the grid bands for the axis when it is at the top or bottom of
      * the plot.
      *
      * @param g2  the graphics device.
@@ -406,13 +406,13 @@ public class SymbolAxis extends NumberAxis implements Serializable {
      *                  subset of the drawArea).
      * @param firstGridBandIsDark  True: the first grid band takes the
      *                             color of <CODE>gridBandPaint<CODE>.
-     *                             False: the second grid band takes the 
+     *                             False: the second grid band takes the
      *                             color of <CODE>gridBandPaint<CODE>.
      * @param ticks  a list of ticks.
      */
-    protected void drawGridBandsVertical(Graphics2D g2, 
+    protected void drawGridBandsVertical(Graphics2D g2,
                                          Rectangle2D drawArea,
-                                         Rectangle2D plotArea, 
+                                         Rectangle2D plotArea,
                                          boolean firstGridBandIsDark,
                                          List ticks) {
 
@@ -435,9 +435,9 @@ public class SymbolAxis extends NumberAxis implements Serializable {
         Rectangle2D band;
         while (iterator.hasNext()) {
             tick = (ValueTick) iterator.next();
-            yy1 = valueToJava2D(tick.getValue() + 0.5d, plotArea, 
+            yy1 = valueToJava2D(tick.getValue() + 0.5d, plotArea,
                     RectangleEdge.LEFT);
-            yy2 = valueToJava2D(tick.getValue() - 0.5d, plotArea, 
+            yy2 = valueToJava2D(tick.getValue() - 0.5d, plotArea,
                     RectangleEdge.LEFT);
             if (currentGridBandIsDark) {
                 g2.setPaint(this.gridBandPaint);
@@ -445,7 +445,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
             else {
                 g2.setPaint(Color.white);
             }
-            band = new Rectangle2D.Double(xx + outlineStrokeWidth, yy1, 
+            band = new Rectangle2D.Double(xx + outlineStrokeWidth, yy1,
                     plotArea.getMaxX() - xx - outlineStrokeWidth, yy2 - yy1);
             g2.fill(band);
             currentGridBandIsDark = !currentGridBandIsDark;
@@ -529,17 +529,17 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     }
 
     /**
-     * Calculates the positions of the tick labels for the axis, storing the 
+     * Calculates the positions of the tick labels for the axis, storing the
      * results in the tick label list (ready for drawing).
      *
      * @param g2  the graphics device.
      * @param state  the axis state.
      * @param dataArea  the area in which the data should be drawn.
      * @param edge  the location of the axis.
-     * 
+     *
      * @return A list of ticks.
      */
-    public List refreshTicks(Graphics2D g2, 
+    public List refreshTicks(Graphics2D g2,
                              AxisState state,
                              Rectangle2D dataArea,
                              RectangleEdge edge) {
@@ -554,13 +554,13 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     }
 
     /**
-     * Calculates the positions of the tick labels for the axis, storing the 
+     * Calculates the positions of the tick labels for the axis, storing the
      * results in the tick label list (ready for drawing).
      *
      * @param g2  the graphics device.
      * @param dataArea  the area in which the data should be drawn.
      * @param edge  the location of the axis.
-     * 
+     *
      * @return The ticks.
      */
     protected List refreshTicksHorizontal(Graphics2D g2,
@@ -576,8 +576,8 @@ public class SymbolAxis extends NumberAxis implements Serializable {
         int count = calculateVisibleTickCount();
         double lowestTickValue = calculateLowestVisibleTickValue();
 
-        double previousDrawnTickLabelPos = 0.0;         
-        double previousDrawnTickLabelLength = 0.0;              
+        double previousDrawnTickLabelPos = 0.0;
+        double previousDrawnTickLabelLength = 0.0;
 
         if (count <= ValueAxis.MAXIMUM_TICK_COUNT) {
             for (int i = 0; i < count; i++) {
@@ -591,17 +591,17 @@ public class SymbolAxis extends NumberAxis implements Serializable {
                 else {
                     tickLabel = valueToString(currentTickValue);
                 }
-                
+
                 // avoid to draw overlapping tick labels
-                Rectangle2D bounds = TextUtilities.getTextBounds(tickLabel, g2, 
+                Rectangle2D bounds = TextUtilities.getTextBounds(tickLabel, g2,
                         g2.getFontMetrics());
-                double tickLabelLength = isVerticalTickLabels() 
+                double tickLabelLength = isVerticalTickLabels()
                         ? bounds.getHeight() : bounds.getWidth();
                 boolean tickLabelsOverlapping = false;
                 if (i > 0) {
-                    double avgTickLabelLength = (previousDrawnTickLabelLength 
+                    double avgTickLabelLength = (previousDrawnTickLabelLength
                             + tickLabelLength) / 2.0;
-                    if (Math.abs(xx - previousDrawnTickLabelPos) 
+                    if (Math.abs(xx - previousDrawnTickLabelPos)
                             < avgTickLabelLength) {
                         tickLabelsOverlapping = true;
                     }
@@ -612,9 +612,9 @@ public class SymbolAxis extends NumberAxis implements Serializable {
                 else {
                     // remember these values for next comparison
                     previousDrawnTickLabelPos = xx;
-                    previousDrawnTickLabelLength = tickLabelLength;         
-                } 
-                
+                    previousDrawnTickLabelLength = tickLabelLength;
+                }
+
                 TextAnchor anchor = null;
                 TextAnchor rotationAnchor = null;
                 double angle = 0.0;
@@ -638,7 +638,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
                         rotationAnchor = TextAnchor.TOP_CENTER;
                     }
                 }
-                Tick tick = new NumberTick(new Double(currentTickValue), 
+                Tick tick = new NumberTick(new Double(currentTickValue),
                         tickLabel, anchor, rotationAnchor, angle);
                 ticks.add(tick);
             }
@@ -648,13 +648,13 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     }
 
     /**
-     * Calculates the positions of the tick labels for the axis, storing the 
+     * Calculates the positions of the tick labels for the axis, storing the
      * results in the tick label list (ready for drawing).
      *
      * @param g2  the graphics device.
      * @param dataArea  the area in which the plot should be drawn.
      * @param edge  the location of the axis.
-     * 
+     *
      * @return The ticks.
      */
     protected List refreshTicksVertical(Graphics2D g2,
@@ -670,8 +670,8 @@ public class SymbolAxis extends NumberAxis implements Serializable {
         int count = calculateVisibleTickCount();
         double lowestTickValue = calculateLowestVisibleTickValue();
 
-        double previousDrawnTickLabelPos = 0.0;         
-        double previousDrawnTickLabelLength = 0.0;              
+        double previousDrawnTickLabelPos = 0.0;
+        double previousDrawnTickLabelLength = 0.0;
 
         if (count <= ValueAxis.MAXIMUM_TICK_COUNT) {
             for (int i = 0; i < count; i++) {
@@ -689,15 +689,15 @@ public class SymbolAxis extends NumberAxis implements Serializable {
                 // avoid to draw overlapping tick labels
                 Rectangle2D bounds = TextUtilities.getTextBounds(tickLabel, g2,
                         g2.getFontMetrics());
-                double tickLabelLength = isVerticalTickLabels() 
+                double tickLabelLength = isVerticalTickLabels()
                     ? bounds.getWidth() : bounds.getHeight();
                 boolean tickLabelsOverlapping = false;
                 if (i > 0) {
-                    double avgTickLabelLength = (previousDrawnTickLabelLength 
+                    double avgTickLabelLength = (previousDrawnTickLabelLength
                             + tickLabelLength) / 2.0;
-                    if (Math.abs(yy - previousDrawnTickLabelPos) 
+                    if (Math.abs(yy - previousDrawnTickLabelPos)
                             < avgTickLabelLength) {
-                        tickLabelsOverlapping = true;    
+                        tickLabelsOverlapping = true;
                     }
                 }
                 if (tickLabelsOverlapping) {
@@ -706,9 +706,9 @@ public class SymbolAxis extends NumberAxis implements Serializable {
                 else {
                     // remember these values for next comparison
                     previousDrawnTickLabelPos = yy;
-                    previousDrawnTickLabelLength = tickLabelLength;         
+                    previousDrawnTickLabelLength = tickLabelLength;
                 }
-                
+
                 TextAnchor anchor = null;
                 TextAnchor rotationAnchor = null;
                 double angle = 0.0;
@@ -720,7 +720,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
                     }
                     else {
                         angle = Math.PI / 2.0;
-                    }                    
+                    }
                 }
                 else {
                     if (edge == RectangleEdge.LEFT) {
@@ -732,13 +732,13 @@ public class SymbolAxis extends NumberAxis implements Serializable {
                         rotationAnchor = TextAnchor.CENTER_LEFT;
                     }
                 }
-                Tick tick = new NumberTick(new Double(currentTickValue), 
+                Tick tick = new NumberTick(new Double(currentTickValue),
                         tickLabel, anchor, rotationAnchor, angle);
                 ticks.add(tick);
             }
         }
         return ticks;
-        
+
     }
 
     /**
@@ -761,9 +761,9 @@ public class SymbolAxis extends NumberAxis implements Serializable {
 
     /**
      * Tests this axis for equality with an arbitrary object.
-     * 
+     *
      * @param obj  the object (<code>null</code> permitted).
-     * 
+     *
      * @return A boolean.
      */
     public boolean equals(Object obj) {
@@ -783,13 +783,13 @@ public class SymbolAxis extends NumberAxis implements Serializable {
         if (!PaintUtilities.equal(this.gridBandPaint, that.gridBandPaint)) {
             return false;
         }
-        if (!PaintUtilities.equal(this.gridBandAlternatePaint, 
+        if (!PaintUtilities.equal(this.gridBandAlternatePaint,
                 that.gridBandAlternatePaint)) {
             return false;
         }
         return super.equals(obj);
     }
-    
+
     /**
      * Provides serialization support.
      *
@@ -811,7 +811,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream) 
+    private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.gridBandPaint = SerialUtilities.readPaint(stream);
