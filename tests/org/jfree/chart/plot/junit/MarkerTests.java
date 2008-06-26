@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ----------------
  * MarkerTests.java
  * ----------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -36,7 +36,7 @@
  * -------
  * 05-Sep-2006 : Version 1 (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
- * 
+ *
  */
 
 package org.jfree.chart.plot.junit;
@@ -69,7 +69,7 @@ import org.jfree.chart.util.RectangleInsets;
 public class MarkerTests extends TestCase implements MarkerChangeListener {
 
     MarkerChangeEvent lastEvent;
-    
+
     /**
      * Returns the tests as a test suite.
      *
@@ -92,7 +92,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
      * Some checks for the getPaint() and setPaint() methods.
      */
     public void testGetSetPaint() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -101,7 +101,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setPaint(Color.blue);
         assertEquals(Color.blue, m.getPaint());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         try {
             m.setPaint(null);
@@ -111,12 +111,12 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
             assertTrue(true);
         }
     }
-    
+
     /**
      * Some checks for the getStroke() and setStroke() methods.
      */
     public void testGetSetStroke() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -125,7 +125,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setStroke(new BasicStroke(1.1f));
         assertEquals(new BasicStroke(1.1f), m.getStroke());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         try {
             m.setStroke(null);
@@ -135,12 +135,12 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
             assertTrue(true);
         }
     }
-    
+
     /**
      * Some checks for the getOutlinePaint() and setOutlinePaint() methods.
      */
     public void testGetSetOutlinePaint() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -149,7 +149,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setOutlinePaint(Color.yellow);
         assertEquals(Color.yellow, m.getOutlinePaint());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         m.setOutlinePaint(null);
         assertEquals(null, m.getOutlinePaint());
@@ -159,7 +159,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
      * Some checks for the getOutlineStroke() and setOutlineStroke() methods.
      */
     public void testGetSetOutlineStroke() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -168,19 +168,19 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setOutlineStroke(new BasicStroke(1.1f));
         assertEquals(new BasicStroke(1.1f), m.getOutlineStroke());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         m.setOutlineStroke(null);
         assertEquals(null, m.getOutlineStroke());
     }
 
     private static final float EPSILON = 0.000000001f;
-    
+
     /**
      * Some checks for the getAlpha() and setAlpha() methods.
      */
     public void testGetSetAlpha() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -195,7 +195,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
      * Some checks for the getLabel() and setLabel() methods.
      */
     public void testGetSetLabel() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -204,7 +204,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setLabel("XYZ");
         assertEquals("XYZ", m.getLabel());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         m.setLabel(null);
         assertEquals(null, m.getLabel());
@@ -214,7 +214,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
      * Some checks for the getLabelFont() and setLabelFont() methods.
      */
     public void testGetSetLabelFont() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -223,7 +223,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setLabelFont(new Font("SansSerif", Font.BOLD, 10));
         assertEquals(new Font("SansSerif", Font.BOLD, 10), m.getLabelFont());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         try {
             m.setLabelFont(null);
@@ -238,7 +238,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
      * Some checks for the getLabelPaint() and setLabelPaint() methods.
      */
     public void testGetSetLabelPaint() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -247,7 +247,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setLabelPaint(Color.red);
         assertEquals(Color.red, m.getLabelPaint());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         try {
             m.setLabelPaint(null);
@@ -262,7 +262,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
      * Some checks for the getLabelAnchor() and setLabelAnchor() methods.
      */
     public void testGetSetLabelAnchor() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -271,7 +271,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setLabelAnchor(RectangleAnchor.TOP);
         assertEquals(RectangleAnchor.TOP, m.getLabelAnchor());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         try {
             m.setLabelAnchor(null);
@@ -286,7 +286,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
      * Some checks for the getLabelOffset() and setLabelOffset() methods.
      */
     public void testGetSetLabelOffset() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -295,7 +295,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setLabelOffset(new RectangleInsets(1, 2, 3, 4));
         assertEquals(new RectangleInsets(1, 2, 3, 4), m.getLabelOffset());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         try {
             m.setLabelOffset(null);
@@ -307,11 +307,11 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
     }
 
     /**
-     * Some checks for the getLabelOffsetType() and setLabelOffsetType() 
+     * Some checks for the getLabelOffsetType() and setLabelOffsetType()
      * methods.
      */
     public void testGetSetLabelOffsetType() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -320,7 +320,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setLabelOffsetType(LengthAdjustmentType.EXPAND);
         assertEquals(LengthAdjustmentType.EXPAND, m.getLabelOffsetType());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         try {
             m.setLabelOffsetType(null);
@@ -332,11 +332,11 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
     }
 
     /**
-     * Some checks for the getLabelTextAnchor() and setLabelTextAnchor() 
+     * Some checks for the getLabelTextAnchor() and setLabelTextAnchor()
      * methods.
      */
     public void testGetSetLabelTextAnchor() {
-        // we use ValueMarker for the tests, because we need a concrete 
+        // we use ValueMarker for the tests, because we need a concrete
         // subclass...
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
@@ -345,7 +345,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         m.setLabelTextAnchor(TextAnchor.BASELINE_LEFT);
         assertEquals(TextAnchor.BASELINE_LEFT, m.getLabelTextAnchor());
         assertEquals(m, this.lastEvent.getMarker());
-        
+
         // check null argument...
         try {
             m.setLabelTextAnchor(null);
@@ -355,7 +355,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
             assertTrue(true);
         }
     }
-    
+
     /**
      * Checks that a CategoryPlot deregisters listeners when clearing markers.
      */
