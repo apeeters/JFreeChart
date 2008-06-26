@@ -32,8 +32,8 @@
  * Original Author:  David Gilbert;
  * Contributor(s):   Pady Srinivasan (patch 1217634);
  *
- * Changes (from 21-Aug-2001)
- * --------------------------
+ * Changes
+ * -------
  * 21-Aug-2001 : Added standard header. Fixed DOS encoding problem (DG);
  * 18-Sep-2001 : Updated header (DG);
  * 04-Dec-2001 : Changed constructors to protected, and tidied up default
@@ -87,6 +87,9 @@
  * 27-Sep-2007 : Added getCategorySeriesMiddle() method (DG);
  * 21-Nov-2007 : Fixed performance bug noted by FindBugs in the
  *               equalPaintMaps() method (DG);
+ * 23-Apr-2008 : Fixed bug 1942059, bad use of insets in
+ *               calculateTextBlockWidth() (DG);
+ * 26-Jun-2008 : Added new getCategoryMiddle() method (DG);
  *
  */
 
@@ -625,6 +628,10 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
     public double getCategoryMiddle(int category, int categoryCount,
                                     Rectangle2D area, RectangleEdge edge) {
 
+    	if (category < 0 || category >= categoryCount) {
+    		throw new IllegalArgumentException("Invalid category index: "
+    				+ category);
+    	}
         return getCategoryStart(category, categoryCount, area, edge)
                + calculateCategorySize(categoryCount, area, edge) / 2;
 
@@ -649,6 +656,33 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
         return getCategoryStart(category, categoryCount, area, edge)
                + calculateCategorySize(categoryCount, area, edge);
 
+    }
+
+    /**
+     * A convenience method that returns the axis coordinate for the centre of
+     * a category.
+     *
+     * @param category  the category key (<code>null</code> not permitted).
+     * @param categories  the categories (<code>null</code> not permitted).
+     * @param area  the data area (<code>null</code> not permitted).
+     * @param edge  the edge along which the axis lies (<code>null</code> not
+     *     permitted).
+     *
+     * @return The centre coordinate.
+     *
+     * @since 1.0.11
+     *
+     * @see #getCategorySeriesMiddle(Comparable, Comparable, CategoryDataset,
+     *     double, Rectangle2D, RectangleEdge)
+     */
+    public double getCategoryMiddle(Comparable category,
+    		List categories, Rectangle2D area, RectangleEdge edge) {
+    	if (categories == null) {
+    		throw new IllegalArgumentException("Null 'categories' argument.");
+    	}
+        int categoryIndex = categories.indexOf(category);
+        int categoryCount = categories.size();
+        return getCategoryMiddle(categoryIndex, categoryCount, area, edge);
     }
 
     /**
@@ -1056,8 +1090,8 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
                             position, g2));
                 }
                 Tick tick = new CategoryTick(category, label,
-                        position.getLabelAnchor(), position.getRotationAnchor(),
-                        position.getAngle());
+                        position.getLabelAnchor(),
+                        position.getRotationAnchor(), position.getAngle());
                 ticks.add(tick);
                 categoryIndex = categoryIndex + 1;
             }
@@ -1095,8 +1129,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      * @return The width.
      */
     protected double calculateTextBlockWidth(TextBlock block,
-                                             CategoryLabelPosition position,
-                                             Graphics2D g2) {
+            CategoryLabelPosition position, Graphics2D g2) {
 
         RectangleInsets insets = getTickLabelInsets();
         Size2D size = block.calculateDimensions(g2);
@@ -1104,8 +1137,8 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
                 size.getHeight());
         Shape rotatedBox = ShapeUtilities.rotateShape(box, position.getAngle(),
                 0.0f, 0.0f);
-        double w = rotatedBox.getBounds2D().getWidth() + insets.getTop()
-                + insets.getBottom();
+        double w = rotatedBox.getBounds2D().getWidth() + insets.getLeft()
+                + insets.getRight();
         return w;
 
     }

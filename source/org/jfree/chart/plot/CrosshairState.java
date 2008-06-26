@@ -41,11 +41,12 @@
  * 04-Dec-2003 : Crosshair anchor point now stored outside chart since it is
  *               dependent on the display target (DG);
  * 25-Feb-2004 : Replaced CrosshairInfo --> CrosshairState (DG);
- * ------------- JFREECHART 1.0.x ------------------------------------------
+ * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 13-Oct-2006 : Fixed initialisation of CrosshairState - see bug report
  *               1565168 (DG);
  * 06-Feb-2007 : Added new fields and methods to fix bug 1086307 (DG);
  * 19-Jun-2007 : Removed deprecated code (DG);
+ * 26-Jun-2008 : Now tracks dataset index (DG);
  *
  */
 
@@ -82,6 +83,14 @@ public class CrosshairState {
     private double crosshairY;
 
     /**
+     * The dataset index that the crosshair point relates to (this determines
+     * the axes that the crosshairs will be plotted against).
+     *
+     * @since 1.0.11
+     */
+    private int datasetIndex;
+
+    /**
      * The index of the domain axis that the crosshair x-value is measured
      * against.
      *
@@ -98,7 +107,8 @@ public class CrosshairState {
     private int rangeAxisIndex;
 
     /**
-     * The smallest distance (so far) between the anchor point and a data point.
+     * The smallest distance (so far) between the anchor point and a data
+     * point.
      */
     private double distance;
 
@@ -146,6 +156,31 @@ public class CrosshairState {
      */
     public void setCrosshairDistance(double distance) {
         this.distance = distance;
+    }
+
+    /**
+     * Evaluates a data point and if it is the closest to the anchor point it
+     * becomes the new crosshair point.
+     * <P>
+     * To understand this method, you need to know the context in which it will
+     * be called.  An instance of this class is passed to an
+     * {@link org.jfree.chart.renderer.xy.XYItemRenderer} as
+     * each data point is plotted.  As the point is plotted, it is passed to
+     * this method to see if it should be the new crosshair point.
+     *
+     * @param x  x coordinate (measured against the domain axis).
+     * @param y  y coordinate (measured against the range axis).
+     * @param transX  x translated into Java2D space.
+     * @param transY  y translated into Java2D space.
+     * @param orientation  the plot orientation.
+     *
+     * @deprecated Use {@link #updateCrosshairPoint(double, double, int, int,
+     *     double, double, PlotOrientation)}.  See bug report 1086307.
+     */
+    public void updateCrosshairPoint(double x, double y,
+                                     double transX, double transY,
+                                     PlotOrientation orientation) {
+        updateCrosshairPoint(x, y, 0, 0, transX, transY, orientation);
     }
 
     /**
@@ -209,6 +244,22 @@ public class CrosshairState {
      *
      * @param candidateX  x position of the candidate for the new crosshair
      *                    point.
+     *
+     * @deprecated Use {@link #updateCrosshairX(double, int)}.  See bug report
+     *     1086307.
+     */
+    public void updateCrosshairX(double candidateX) {
+        updateCrosshairX(candidateX, 0);
+    }
+
+    /**
+     * Evaluates an x-value and if it is the closest to the anchor x-value it
+     * becomes the new crosshair value.
+     * <P>
+     * Used in cases where only the x-axis is numerical.
+     *
+     * @param candidateX  x position of the candidate for the new crosshair
+     *                    point.
      * @param domainAxisIndex  the index of the domain axis for this x-value.
      *
      * @since 1.0.4
@@ -222,6 +273,22 @@ public class CrosshairState {
             this.distance = d;
         }
 
+    }
+
+    /**
+     * Evaluates a y-value and if it is the closest to the anchor y-value it
+     * becomes the new crosshair value.
+     * <P>
+     * Used in cases where only the y-axis is numerical.
+     *
+     * @param candidateY  y position of the candidate for the new crosshair
+     *                    point.
+     *
+     * @deprecated Use {@link #updateCrosshairY(double, int)}.  See bug report
+     *     1086307.
+     */
+    public void updateCrosshairY(double candidateY) {
+        updateCrosshairY(candidateY, 0);
     }
 
     /**
@@ -252,6 +319,7 @@ public class CrosshairState {
      * @return The anchor point.
      *
      * @see #setAnchor(Point2D)
+     *
      * @since 1.0.3
      */
     public Point2D getAnchor() {
@@ -342,7 +410,7 @@ public class CrosshairState {
      *
      * @see #getCrosshairX()
      * @see #setCrosshairY(double)
-     * @see #updateCrosshairPoint(double, double, int, int, double, double,
+     * @see #updateCrosshairPoint(double, double, double, double,
      * PlotOrientation)
      */
     public void setCrosshairX(double x) {
@@ -368,11 +436,39 @@ public class CrosshairState {
      *
      * @see #getCrosshairY()
      * @see #setCrosshairX(double)
-     * @see #updateCrosshairPoint(double, double, int, int, double, double,
+     * @see #updateCrosshairPoint(double, double, double, double,
      * PlotOrientation)
      */
     public void setCrosshairY(double y) {
         this.crosshairY = y;
+    }
+
+    /**
+     * Returns the dataset index that the crosshair values relate to.  The
+     * dataset is mapped to specific axes, and this is how the crosshairs are
+     * mapped also.
+     *
+     * @return The dataset index.
+     *
+     * @see #setDatasetIndex(int)
+     *
+     * @since 1.0.11
+     */
+    public int getDatasetIndex() {
+    	return this.datasetIndex;
+    }
+
+    /**
+     * Sets the dataset index that the current crosshair values relate to.
+     *
+     * @param index  the dataset index.
+     *
+     * @see #getDatasetIndex()
+     *
+     * @since 1.0.11
+     */
+    public void setDatasetIndex(int index) {
+    	this.datasetIndex = index;
     }
 
     /**
@@ -381,6 +477,9 @@ public class CrosshairState {
      * @return The domain axis index.
      *
      * @since 1.0.4
+     *
+     * @deprecated As of version 1.0.11, the domain axis should be determined
+     *     using the dataset index.
      */
     public int getDomainAxisIndex() {
         return this.domainAxisIndex;
@@ -392,8 +491,12 @@ public class CrosshairState {
      * @return The range axis index.
      *
      * @since 1.0.4
+     *
+     * @deprecated As of version 1.0.11, the domain axis should be determined
+     *     using the dataset index.
      */
     public int getRangeAxisIndex() {
         return this.rangeAxisIndex;
     }
+
 }

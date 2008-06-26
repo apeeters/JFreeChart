@@ -43,6 +43,8 @@
  * 19-Jun-2007 : Removed deprecated code (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 29-Jun-2007 : Simplified entity generation by calling addEntity() (DG);
+ * 13-May-2008 : Code clean-up (DG);
+ * 26-Jun-2008 : Added crosshair support (DG);
  *
  */
 
@@ -72,7 +74,7 @@ import org.jfree.data.category.CategoryDataset;
  * horizontal lines, spaced in the same way as bars in a bar chart.
  */
 public class LevelRenderer extends AbstractCategoryItemRenderer
-                           implements Cloneable, PublicCloneable, Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -8204856624355025117L;
@@ -100,21 +102,26 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      * Returns the item margin.
      *
      * @return The margin.
+     *
+     * @see #setItemMargin(double)
      */
     public double getItemMargin() {
         return this.itemMargin;
     }
 
     /**
-     * Sets the item margin.  The value is expressed as a percentage of the
+     * Sets the item margin and sends a {@link RendererChangeEvent} to all
+     * registered listeners.  The value is expressed as a percentage of the
      * available width for plotting all the bars, with the resulting amount to
      * be distributed between all the bars evenly.
      *
      * @param percent  the new margin.
+     *
+     * @see #getItemMargin()
      */
     public void setItemMargin(double percent) {
         this.itemMargin = percent;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -122,6 +129,8 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      * space.
      *
      * @return The maximum width.
+     *
+     * @see #setMaximumItemWidth(double)
      */
     public double getMaximumItemWidth() {
         return this.maxItemWidth;
@@ -133,10 +142,12 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      * to all registered listeners.
      *
      * @param percent  the percent.
+     *
+     * @see #getMaximumItemWidth()
      */
     public void setMaximumItemWidth(double percent) {
         this.maxItemWidth = percent;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -156,10 +167,8 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      *
      */
     public CategoryItemRendererState initialise(Graphics2D g2,
-                                                Rectangle2D dataArea,
-                                                CategoryPlot plot,
-                                                int rendererIndex,
-                                                PlotRenderingInfo info) {
+            Rectangle2D dataArea, CategoryPlot plot, int rendererIndex,
+            PlotRenderingInfo info) {
 
         CategoryItemRendererState state = super.initialise(g2, dataArea, plot,
                 rendererIndex, info);
@@ -177,9 +186,8 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      * @param state  the renderer state.
      */
     protected void calculateItemWidth(CategoryPlot plot,
-                                      Rectangle2D dataArea,
-                                      int rendererIndex,
-                                      CategoryItemRendererState state) {
+            Rectangle2D dataArea, int rendererIndex,
+            CategoryItemRendererState state) {
 
         CategoryAxis domainAxis = getDomainAxis(plot, rendererIndex);
         CategoryDataset dataset = plot.getDataset(rendererIndex);
@@ -327,12 +335,17 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
                     (value < 0.0));
         }
 
+        // submit the current data point as a crosshair candidate
+        int datasetIndex = plot.indexOf(dataset);
+        updateCrosshairValues(state.getCrosshairState(),
+        		dataset.getRowKey(row), dataset.getColumnKey(column), value,
+        		datasetIndex, barW0, barL, orientation);
+
         // collect entity and tool tip information...
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
             addItemEntity(entities, dataset, row, column, line.getBounds());
         }
-
 
     }
 
@@ -357,6 +370,27 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
+     * Returns the Java2D coordinate for the middle of the specified data item.
+     *
+     * @param rowKey  the row key.
+     * @param columnKey  the column key.
+     * @param dataset  the dataset.
+     * @param axis  the axis.
+     * @param area  the drawing area.
+     * @param edge  the edge along which the axis lies.
+     *
+     * @return The Java2D coordinate.
+     *
+     * @since 1.0.11
+     */
+    public double getItemMiddle(Comparable rowKey, Comparable columnKey,
+    		CategoryDataset dataset, CategoryAxis axis, Rectangle2D area,
+    		RectangleEdge edge) {
+        return axis.getCategorySeriesMiddle(columnKey, rowKey, dataset,
+        		this.itemMargin, area, edge);
+    }
+
+    /**
      * Tests an object for equality with this instance.
      *
      * @param obj  the object (<code>null</code> permitted).
@@ -370,9 +404,6 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
         if (!(obj instanceof LevelRenderer)) {
             return false;
         }
-        if (!super.equals(obj)) {
-            return false;
-        }
         LevelRenderer that = (LevelRenderer) obj;
         if (this.itemMargin != that.itemMargin) {
             return false;
@@ -380,7 +411,7 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
         if (this.maxItemWidth != that.maxItemWidth) {
             return false;
         }
-        return true;
+        return super.equals(obj);
     }
 
 }

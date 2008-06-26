@@ -42,6 +42,9 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 07-Apr-2008 : Added testRemoveDomainMarker() and
  *               testRemoveRangeMarker() (DG);
+ * 23-Apr-2008 : Extended testEquals() and testCloning(), and added
+ *               testCloning2() and testCloning3() (DG);
+ * 26-Jun-2008 : Updated testEquals() (DG);
  *
  */
 
@@ -52,6 +55,7 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -69,6 +73,9 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.LegendItem;
+import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.annotations.CategoryLineAnnotation;
 import org.jfree.chart.annotations.CategoryTextAnnotation;
 import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.AxisSpace;
@@ -344,6 +351,18 @@ public class CategoryPlotTests extends TestCase {
         plot2.setRangeCrosshairLockedOnData(false);
         assertTrue(plot1.equals(plot2));
 
+        // foreground domain markers
+        plot1.addDomainMarker(new CategoryMarker("C1"), Layer.FOREGROUND);
+        assertFalse(plot1.equals(plot2));
+        plot2.addDomainMarker(new CategoryMarker("C1"), Layer.FOREGROUND);
+        assertTrue(plot1.equals(plot2));
+
+        // background domain markers
+        plot1.addDomainMarker(new CategoryMarker("C2"), Layer.BACKGROUND);
+        assertFalse(plot1.equals(plot2));
+        plot2.addDomainMarker(new CategoryMarker("C2"), Layer.BACKGROUND);
+        assertTrue(plot1.equals(plot2));
+
         // range markers - no longer separate fields but test anyway...
         plot1.addRangeMarker(new ValueMarker(4.0), Layer.FOREGROUND);
         assertFalse(plot1.equals(plot2));
@@ -368,9 +387,8 @@ public class CategoryPlotTests extends TestCase {
         assertTrue(plot1.equals(plot2));
 
         // annotations
-        plot1.addAnnotation(
-            new CategoryTextAnnotation("Text", "Category", 43.0)
-        );
+        plot1.addAnnotation(new CategoryTextAnnotation("Text", "Category",
+                43.0));
         assertFalse(plot1.equals(plot2));
         plot2.addAnnotation(new CategoryTextAnnotation("Text", "Category",
                 43.0));
@@ -394,6 +412,49 @@ public class CategoryPlotTests extends TestCase {
         plot2.setFixedRangeAxisSpace(new AxisSpace());
         assertTrue(plot1.equals(plot2));
 
+        // fixed legend items
+        plot1.setFixedLegendItems(new LegendItemCollection());
+        assertFalse(plot1.equals(plot2));
+        plot2.setFixedLegendItems(new LegendItemCollection());
+        assertTrue(plot1.equals(plot2));
+
+        // crosshairDatasetIndex
+        plot1.setCrosshairDatasetIndex(99);
+        assertFalse(plot1.equals(plot2));
+        plot2.setCrosshairDatasetIndex(99);
+        assertTrue(plot1.equals(plot2));
+
+        // domainCrosshairColumnKey
+        plot1.setDomainCrosshairColumnKey("A");
+        assertFalse(plot1.equals(plot2));
+        plot2.setDomainCrosshairColumnKey("A");
+        assertTrue(plot1.equals(plot2));
+
+        // domainCrosshairRowKey
+        plot1.setDomainCrosshairRowKey("B");
+        assertFalse(plot1.equals(plot2));
+        plot2.setDomainCrosshairRowKey("B");
+        assertTrue(plot1.equals(plot2));
+
+        // domainCrosshairVisible
+        plot1.setDomainCrosshairVisible(true);
+        assertFalse(plot1.equals(plot2));
+        plot2.setDomainCrosshairVisible(true);
+        assertTrue(plot1.equals(plot2));
+
+        // domainCrosshairPaint
+        plot1.setDomainCrosshairPaint(new GradientPaint(1.0f, 2.0f, Color.red,
+        		3.0f, 4.0f, Color.blue));
+        assertFalse(plot1.equals(plot2));
+        plot2.setDomainCrosshairPaint(new GradientPaint(1.0f, 2.0f, Color.red,
+        		3.0f, 4.0f, Color.blue));
+        assertTrue(plot1.equals(plot2));
+
+        // domainCrosshairStroke
+        plot1.setDomainCrosshairStroke(new BasicStroke(1.23f));
+        assertFalse(plot1.equals(plot2));
+        plot2.setDomainCrosshairStroke(new BasicStroke(1.23f));
+        assertTrue(plot1.equals(plot2));
     }
 
     /**
@@ -413,6 +474,97 @@ public class CategoryPlotTests extends TestCase {
         }
         assertTrue(p1 != p2);
         assertTrue(p1.getClass() == p2.getClass());
+        assertTrue(p1.equals(p2));
+
+        // check independence
+        p1.addAnnotation(new CategoryLineAnnotation("C1", 1.0, "C2", 2.0,
+                Color.red, new BasicStroke(1.0f)));
+        assertFalse(p1.equals(p2));
+        p2.addAnnotation(new CategoryLineAnnotation("C1", 1.0, "C2", 2.0,
+                Color.red, new BasicStroke(1.0f)));
+        assertTrue(p1.equals(p2));
+
+        p1.addDomainMarker(new CategoryMarker("C1"), Layer.FOREGROUND);
+        assertFalse(p1.equals(p2));
+        p2.addDomainMarker(new CategoryMarker("C1"), Layer.FOREGROUND);
+        assertTrue(p1.equals(p2));
+
+        p1.addDomainMarker(new CategoryMarker("C2"), Layer.BACKGROUND);
+        assertFalse(p1.equals(p2));
+        p2.addDomainMarker(new CategoryMarker("C2"), Layer.BACKGROUND);
+        assertTrue(p1.equals(p2));
+
+        p1.addRangeMarker(new ValueMarker(1.0), Layer.FOREGROUND);
+        assertFalse(p1.equals(p2));
+        p2.addRangeMarker(new ValueMarker(1.0), Layer.FOREGROUND);
+        assertTrue(p1.equals(p2));
+
+        p1.addRangeMarker(new ValueMarker(2.0), Layer.BACKGROUND);
+        assertFalse(p1.equals(p2));
+        p2.addRangeMarker(new ValueMarker(2.0), Layer.BACKGROUND);
+        assertTrue(p1.equals(p2));
+    }
+
+    /**
+     * Some more cloning checks.
+     */
+    public void testCloning2() {
+        AxisSpace da1 = new AxisSpace();
+        AxisSpace ra1 = new AxisSpace();
+        CategoryPlot p1 = new CategoryPlot();
+        p1.setFixedDomainAxisSpace(da1);
+        p1.setFixedRangeAxisSpace(ra1);
+        CategoryPlot p2 = null;
+        try {
+            p2 = (CategoryPlot) p1.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        assertTrue(p1 != p2);
+        assertTrue(p1.getClass() == p2.getClass());
+        assertTrue(p1.equals(p2));
+
+        da1.setBottom(99.0);
+        assertFalse(p1.equals(p2));
+        p2.getFixedDomainAxisSpace().setBottom(99.0);
+        assertTrue(p1.equals(p2));
+
+        ra1.setBottom(11.0);
+        assertFalse(p1.equals(p2));
+        p2.getFixedRangeAxisSpace().setBottom(11.0);
+        assertTrue(p1.equals(p2));
+    }
+
+    /**
+     * Some more cloning checks.
+     */
+    public void testCloning3() {
+        LegendItemCollection c1 = new LegendItemCollection();
+        CategoryPlot p1 = new CategoryPlot();
+        p1.setFixedLegendItems(c1);
+        CategoryPlot p2 = null;
+        try {
+            p2 = (CategoryPlot) p1.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        assertTrue(p1 != p2);
+        assertTrue(p1.getClass() == p2.getClass());
+        assertTrue(p1.equals(p2));
+
+        c1.add(new LegendItem("X", "XX", "tt", "url", true,
+                new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0), true, Color.red,
+                true, Color.yellow, new BasicStroke(1.0f), true,
+                new Line2D.Double(1.0, 2.0, 3.0, 4.0), new BasicStroke(1.0f),
+                Color.green));
+        assertFalse(p1.equals(p2));
+        p2.getFixedLegendItems().add(new LegendItem("X", "XX", "tt", "url",
+                true, new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0), true,
+                Color.red, true, Color.yellow, new BasicStroke(1.0f), true,
+                new Line2D.Double(1.0, 2.0, 3.0, 4.0), new BasicStroke(1.0f),
+                Color.green));
         assertTrue(p1.equals(p2));
     }
 
@@ -767,8 +919,8 @@ public class CategoryPlotTests extends TestCase {
      * false.
      */
     public void testRemoveDomainMarker() {
-    	CategoryPlot plot = new CategoryPlot();
-    	assertFalse(plot.removeDomainMarker(new CategoryMarker("Category 1")));
+        CategoryPlot plot = new CategoryPlot();
+        assertFalse(plot.removeDomainMarker(new CategoryMarker("Category 1")));
     }
 
     /**
@@ -776,8 +928,8 @@ public class CategoryPlotTests extends TestCase {
      * false.
      */
     public void testRemoveRangeMarker() {
-    	CategoryPlot plot = new CategoryPlot();
-    	assertFalse(plot.removeRangeMarker(new ValueMarker(0.5)));
+        CategoryPlot plot = new CategoryPlot();
+        assertFalse(plot.removeRangeMarker(new ValueMarker(0.5)));
     }
 
 }
