@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ------------------------------
  * CombinedDomainXYPlotTests.java
  * ------------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -95,7 +95,7 @@ public class CombinedDomainXYPlotTests extends TestCase {
         CombinedDomainXYPlot plot = new CombinedDomainXYPlot(null);
         assertEquals(null, plot.getDomainAxis());
     }
-    
+
     /**
      * This is a test to replicate the bug report 987080.
      */
@@ -110,14 +110,14 @@ public class CombinedDomainXYPlotTests extends TestCase {
         List plots = plot.getSubplots();
         assertTrue(plots.get(0) == plot1);
     }
-    
+
     /**
      * Tests the equals() method.
      */
     public void testEquals() {
         CombinedDomainXYPlot plot1 = createPlot();
         CombinedDomainXYPlot plot2 = createPlot();
-        assertTrue(plot1.equals(plot2));    
+        assertTrue(plot1.equals(plot2));
         assertTrue(plot2.equals(plot1));
     }
 
@@ -125,7 +125,7 @@ public class CombinedDomainXYPlotTests extends TestCase {
      * Confirm that cloning works.
      */
     public void testCloning() {
-        CombinedDomainXYPlot plot1 = createPlot();        
+        CombinedDomainXYPlot plot1 = createPlot();
         CombinedDomainXYPlot plot2 = null;
         try {
             plot2 = (CombinedDomainXYPlot) plot1.clone();
@@ -164,7 +164,7 @@ public class CombinedDomainXYPlotTests extends TestCase {
         assertEquals(plot1, plot2);
 
     }
-    
+
     /**
      * Creates a sample dataset.
      *
@@ -245,7 +245,7 @@ public class CombinedDomainXYPlotTests extends TestCase {
 
     /**
      * Creates a sample plot.
-     * 
+     *
      * @return A sample plot.
      */
     private CombinedDomainXYPlot createPlot() {
@@ -255,13 +255,13 @@ public class CombinedDomainXYPlotTests extends TestCase {
         NumberAxis rangeAxis1 = new NumberAxis("Range 1");
         XYPlot subplot1 = new XYPlot(data1, null, rangeAxis1, renderer1);
         subplot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
-        
-        XYTextAnnotation annotation 
+
+        XYTextAnnotation annotation
             = new XYTextAnnotation("Hello!", 50.0, 10000.0);
         annotation.setFont(new Font("SansSerif", Font.PLAIN, 9));
         annotation.setRotationAngle(Math.PI / 4.0);
         subplot1.addAnnotation(annotation);
-        
+
         // create subplot 2...
         XYDataset data2 = createDataset2();
         XYItemRenderer renderer2 = new StandardXYItemRenderer();
@@ -271,10 +271,10 @@ public class CombinedDomainXYPlotTests extends TestCase {
         subplot2.setRangeAxisLocation(AxisLocation.TOP_OR_LEFT);
 
         // parent plot...
-        CombinedDomainXYPlot plot 
+        CombinedDomainXYPlot plot
             = new CombinedDomainXYPlot(new NumberAxis("Domain"));
         plot.setGap(10.0);
-        
+
         // add the subplots...
         plot.add(subplot1, 1);
         plot.add(subplot2, 1);

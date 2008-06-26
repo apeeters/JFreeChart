@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ------------------------------------
  * CombinedDomainCategoryPlotTests.java
  * ------------------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -100,21 +100,21 @@ public class CombinedDomainCategoryPlotTests extends TestCase {
         assertTrue(plots.get(0) == plot1);
         assertEquals(1, plots.size());
     }
-    
+
     /**
      * Some checks for the equals() method.
      */
     public void testEquals() {
         CombinedDomainCategoryPlot plot1 = createPlot();
         CombinedDomainCategoryPlot plot2 = createPlot();
-        assertTrue(plot1.equals(plot2));    
+        assertTrue(plot1.equals(plot2));
     }
 
     /**
      * Some checks for cloning.
      */
     public void testCloning() {
-        CombinedDomainCategoryPlot plot1 = createPlot();        
+        CombinedDomainCategoryPlot plot1 = createPlot();
         CombinedDomainCategoryPlot plot2 = null;
         try {
             plot2 = (CombinedDomainCategoryPlot) plot1.clone();
@@ -149,7 +149,7 @@ public class CombinedDomainCategoryPlotTests extends TestCase {
         }
         assertEquals(plot1, plot2);
     }
-    
+
     /**
      * Creates a dataset.
      *
@@ -242,11 +242,11 @@ public class CombinedDomainCategoryPlotTests extends TestCase {
 
     /**
      * Creates a sample plot.
-     * 
+     *
      * @return A sample plot.
      */
     private CombinedDomainCategoryPlot createPlot() {
-        
+
         CategoryDataset dataset1 = createDataset1();
         NumberAxis rangeAxis1 = new NumberAxis("Value");
         rangeAxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -258,7 +258,7 @@ public class CombinedDomainCategoryPlotTests extends TestCase {
             dataset1, null, rangeAxis1, renderer1
         );
         subplot1.setDomainGridlinesVisible(true);
-        
+
         CategoryDataset dataset2 = createDataset2();
         NumberAxis rangeAxis2 = new NumberAxis("Value");
         rangeAxis2.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -272,12 +272,12 @@ public class CombinedDomainCategoryPlotTests extends TestCase {
         subplot2.setDomainGridlinesVisible(true);
 
         CategoryAxis domainAxis = new CategoryAxis("Category");
-        CombinedDomainCategoryPlot plot 
+        CombinedDomainCategoryPlot plot
             = new CombinedDomainCategoryPlot(domainAxis);
         plot.add(subplot1, 2);
         plot.add(subplot2, 1);
         return plot;
-        
+
     }
-    
+
 }

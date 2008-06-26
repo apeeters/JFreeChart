@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * -----------------------------
  * CombinedRangeXYPlotTests.java
  * -----------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -94,7 +94,7 @@ public class CombinedRangeXYPlotTests extends TestCase {
     public void testEquals() {
         CombinedRangeXYPlot plot1 = createPlot();
         CombinedRangeXYPlot plot2 = createPlot();
-        assertTrue(plot1.equals(plot2));    
+        assertTrue(plot1.equals(plot2));
         assertTrue(plot2.equals(plot1));
     }
 
@@ -112,12 +112,12 @@ public class CombinedRangeXYPlotTests extends TestCase {
         List plots = plot.getSubplots();
         assertTrue(plots.get(0) == plot1);
     }
-    
+
     /**
      * Confirm that cloning works.
      */
     public void testCloning() {
-        CombinedRangeXYPlot plot1 = createPlot();        
+        CombinedRangeXYPlot plot1 = createPlot();
         CombinedRangeXYPlot plot2 = null;
         try {
             plot2 = (CombinedRangeXYPlot) plot1.clone();
@@ -156,7 +156,7 @@ public class CombinedRangeXYPlotTests extends TestCase {
         assertEquals(plot1, plot2);
 
     }
-    
+
     /**
      * Creates a sample dataset.
      *
@@ -237,7 +237,7 @@ public class CombinedRangeXYPlotTests extends TestCase {
 
     /**
      * Creates a sample plot.
-     * 
+     *
      * @return A sample plot.
      */
     private CombinedRangeXYPlot createPlot() {
@@ -247,31 +247,31 @@ public class CombinedRangeXYPlotTests extends TestCase {
         NumberAxis rangeAxis1 = new NumberAxis("Range 1");
         XYPlot subplot1 = new XYPlot(data1, null, rangeAxis1, renderer1);
         subplot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
-         
-        XYTextAnnotation annotation 
+
+        XYTextAnnotation annotation
             = new XYTextAnnotation("Hello!", 50.0, 10000.0);
         annotation.setFont(new Font("SansSerif", Font.PLAIN, 9));
         annotation.setRotationAngle(Math.PI / 4.0);
         subplot1.addAnnotation(annotation);
-         
+
         // create subplot 2...
         XYDataset data2 = createDataset2();
         XYItemRenderer renderer2 = new StandardXYItemRenderer();
         NumberAxis rangeAxis2 = new NumberAxis("Range 2");
         rangeAxis2.setAutoRangeIncludesZero(false);
         XYPlot subplot2 = new XYPlot(data2, null, rangeAxis2, renderer2);
-        subplot2.setRangeAxisLocation(AxisLocation.TOP_OR_LEFT); 
+        subplot2.setRangeAxisLocation(AxisLocation.TOP_OR_LEFT);
 
         // parent plot...
-        CombinedRangeXYPlot plot 
+        CombinedRangeXYPlot plot
             = new CombinedRangeXYPlot(new NumberAxis("Range"));
         plot.setGap(10.0);
-        
+
         // add the subplots...
         plot.add(subplot1, 1);
         plot.add(subplot2, 1);
         plot.setOrientation(PlotOrientation.VERTICAL);
         return plot;
     }
-    
+
 }
