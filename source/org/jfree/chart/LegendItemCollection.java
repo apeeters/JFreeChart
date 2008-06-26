@@ -39,6 +39,7 @@
  * 02-Oct-2002 : Fixed errors reported by Checkstyle (DG);
  * 18-Apr-2005 : Added equals() method and implemented Cloneable and
  *               Serializable (DG);
+ * 23-Apr-2008 : Fixed clone() method (DG);
  *
  */
 
@@ -47,6 +48,8 @@ package org.jfree.chart;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
+
+import org.jfree.chart.util.ObjectUtilities;
 
 /**
  * A collection of legend items.
@@ -143,7 +146,9 @@ public class LegendItemCollection implements Cloneable, Serializable {
      *         cloneable.
      */
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        LegendItemCollection clone = (LegendItemCollection) super.clone();
+        clone.items = (List) ObjectUtilities.deepClone(this.items);
+        return clone;
     }
 
 }
