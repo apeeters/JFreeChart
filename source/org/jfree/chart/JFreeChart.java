@@ -140,6 +140,10 @@
  *               1749124 (not registering as listener with TextTitle) (DG);
  * 04-Dec-2007 : In createBufferedImage() methods, make the default image type
  *               BufferedImage.TYPE_INT_ARGB (thanks to Klaus Rheinwald) (DG);
+ * 05-Dec-2007 : Fixed bug 1749124 (not registering as listener with
+ *               TextTitle) (DG);
+ * 23-Apr-2008 : Added new contributor (Diego Pierangeli) (DG);
+ * 16-May-2008 : Added new contributor (Michael Siemer) (DG);
  *
  */
 
@@ -329,10 +333,10 @@ public class JFreeChart implements Drawable,
 
     /**
      * Creates a new chart with the given title and plot.  A default font
-     * (@link DEFAULT_TITLE_FONT) is used for the title, and the chart will
+     * ({@link #DEFAULT_TITLE_FONT}) is used for the title, and the chart will
      * have a legend added automatically.
      * <br><br>
-     * Note that the  {@link ChartFactory} class contains a range
+     * Note that the {@link ChartFactory} class contains a range
      * of static methods that will return ready-made charts, and often this
      * is a more convenient way to create charts than using this constructor.
      *
@@ -932,7 +936,7 @@ public class JFreeChart implements Drawable,
      */
     public void setTextAntiAlias(Object val) {
         this.renderingHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, val);
-        this.notifyListeners(new ChartChangeEvent(this));
+        notifyListeners(new ChartChangeEvent(this));
     }
 
     /**
@@ -1430,16 +1434,16 @@ public class JFreeChart implements Drawable,
     }
 
     /**
-     * Handles a 'click' on the chart.
-     * <P>
-     * JFreeChart is not a UI component, so some other object (e.g. ChartPanel)
-     * needs to capture the click event and pass it onto the JFreeChart object.
+     * Handles a 'click' on the chart.  JFreeChart is not a UI component, so
+     * some other object (for example, {@link ChartPanel}) needs to capture
+     * the click event and pass it onto the JFreeChart object.
      * If you are not using JFreeChart in a client application, then this
-     * method is not required (and hopefully it doesn't get in the way).
+     * method is not required.
      *
      * @param x  x-coordinate of the click (in Java2D space).
      * @param y  y-coordinate of the click (in Java2D space).
-     * @param info  contains chart dimension and entity information.
+     * @param info  contains chart dimension and entity information
+     *              (<code>null</code> not permitted).
      */
     public void handleClick(int x, int y, ChartRenderingInfo info) {
 
@@ -1777,6 +1781,7 @@ class JFreeChartInfo extends ProjectInfo {
                 new Contributor("Joao Guilherme Del Valle", "-"),
                 new Contributor("Aiman Han", "-"),
                 new Contributor("Cameron Hayne", "-"),
+                new Contributor("Martin Hoeller", "-"),
                 new Contributor("Jon Iles", "-"),
                 new Contributor("Wolfgang Irler", "-"),
                 new Contributor("Sergei Ivanov", "-"),
@@ -1801,6 +1806,7 @@ class JFreeChartInfo extends ProjectInfo {
                 new Contributor("David M. O'Donnell", "-"),
                 new Contributor("Krzysztof Paz", "-"),
                 new Contributor("Tomer Peretz", "-"),
+                new Contributor("Diego Pierangeli", "-"),
                 new Contributor("Xavier Poinsard", "-"),
                 new Contributor("Andrzej Porebski", "-"),
                 new Contributor("Viktor Rajewski", "-"),
@@ -1817,8 +1823,10 @@ class JFreeChartInfo extends ProjectInfo {
                 new Contributor("Bryan Scott", "-"),
                 new Contributor("Tobias Selb", "-"),
                 new Contributor("Mofeed Shahin", "-"),
+                new Contributor("Michael Siemer", "-"),
                 new Contributor("Pady Srinivasan", "-"),
                 new Contributor("Greg Steckman", "-"),
+                new Contributor("Gerald Struck", "-"),
                 new Contributor("Roger Studner", "-"),
                 new Contributor("Irv Thomae", "-"),
                 new Contributor("Eric Thomas", "-"),
@@ -1826,6 +1834,7 @@ class JFreeChartInfo extends ProjectInfo {
                 new Contributor("Daniel van Enckevort", "-"),
                 new Contributor("Laurence Vanhelsuwe", "-"),
                 new Contributor("Sylvain Vieujot", "-"),
+                new Contributor("Ulrich Voigt", "-"),
                 new Contributor("Jelai Wang", "-"),
                 new Contributor("Mark Watson", "www.markwatson.com"),
                 new Contributor("Alex Weber", "-"),
