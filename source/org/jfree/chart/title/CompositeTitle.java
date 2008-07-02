@@ -30,7 +30,7 @@
  * (C) Copyright 2005-2008, by David Gilbert and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
+ * Contributor(s):   Eric Penfold (patch 2006826);
  *
  * Changes
  * -------
@@ -40,6 +40,8 @@
  * 20-Apr-2005 : Added new draw() method (DG);
  * 03-May-2005 : Implemented equals() method (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Jul-2008 : Applied patch 2006826 by Eric Penfold, to enable chart
+ *               entities to be generated (DG);
  *
  */
 
@@ -129,11 +131,7 @@ public class CompositeTitle extends Title implements Cloneable, Serializable {
      * @param area  the area allocated for the title.
      */
     public void draw(Graphics2D g2, Rectangle2D area) {
-        area = trimMargin(area);
-        drawBorder(g2, area);
-        area = trimBorder(area);
-        area = trimPadding(area);
-        this.container.draw(g2, area);
+    	draw(g2, area, null);
     }
 
     /**
@@ -146,8 +144,11 @@ public class CompositeTitle extends Title implements Cloneable, Serializable {
      * @return Always <code>null</code>.
      */
     public Object draw(Graphics2D g2, Rectangle2D area, Object params) {
-        draw(g2, area);
-        return null;
+        area = trimMargin(area);
+        drawBorder(g2, area);
+        area = trimBorder(area);
+        area = trimPadding(area);
+        return this.container.draw(g2, area, params);
     }
 
     /**
