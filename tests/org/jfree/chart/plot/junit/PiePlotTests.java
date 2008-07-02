@@ -40,6 +40,7 @@
  * 23-Nov-2006 : Additional equals() and clone() tests (DG);
  * 17-Apr-2007 : Added check for label generator that returns a null label (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 31-Mar-2008 : Updated testEquals();
  *
  */
 
@@ -72,6 +73,7 @@ import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieToolTipGenerator;
+import org.jfree.chart.plot.PieLabelLinkStyle;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.urls.CustomPieURLGenerator;
 import org.jfree.chart.urls.StandardPieURLGenerator;
@@ -318,6 +320,11 @@ public class PiePlotTests extends TestCase {
         plot2.setLabelLinksVisible(false);
         assertTrue(plot1.equals(plot2));
 
+        plot1.setLabelLinkStyle(PieLabelLinkStyle.QUAD_CURVE);
+        assertFalse(plot1.equals(plot2));
+        plot2.setLabelLinkStyle(PieLabelLinkStyle.QUAD_CURVE);
+        assertTrue(plot1.equals(plot2));
+
         // linkMargin
         plot1.setLabelLinkMargin(0.11);
         assertFalse(plot1.equals(plot2));
@@ -390,6 +397,23 @@ public class PiePlotTests extends TestCase {
                 "index.html"));
         assertTrue(plot1.equals(plot2));
 
+        // autoPopulateSectionPaint
+        plot1.setAutoPopulateSectionPaint(false);
+        assertFalse(plot1.equals(plot2));
+        plot2.setAutoPopulateSectionPaint(false);
+        assertTrue(plot1.equals(plot2));
+
+        // autoPopulateSectionOutlinePaint
+        plot1.setAutoPopulateSectionOutlinePaint(true);
+        assertFalse(plot1.equals(plot2));
+        plot2.setAutoPopulateSectionOutlinePaint(true);
+        assertTrue(plot1.equals(plot2));
+
+        // autoPopulateSectionOutlineStroke
+        plot1.setAutoPopulateSectionOutlineStroke(true);
+        assertFalse(plot1.equals(plot2));
+        plot2.setAutoPopulateSectionOutlineStroke(true);
+        assertTrue(plot1.equals(plot2));
     }
 
     /**

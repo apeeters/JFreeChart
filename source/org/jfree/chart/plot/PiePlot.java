@@ -35,6 +35,7 @@
  *                   Richard Atkinson (URL support for image maps);
  *                   Christian W. Zuckschwerdt;
  *                   Arnaud Lelievre;
+ *                   Martin Hilpert (patch 1891849);
  *                   Andreas Schroeder (very minor);
  *
  * Changes (from 21-Jun-2001)
@@ -154,6 +155,7 @@
  * 31-Mar-2008 : Adjust the label area for the interiorGap (DG);
  * 31-Mar-2008 : Added quad and cubic curve label link lines - see patch
  *               1891849 by Martin Hilpert (DG);
+ * 02-Jul-2008 : Added autoPopulate flags (DG);
  *
  */
 
@@ -300,6 +302,14 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     private transient Paint baseSectionPaint;
 
     /**
+     * A flag that controls whether or not the section paint is auto-populated
+     * from the drawing supplier.
+     *
+     * @since 1.0.11
+     */
+    private boolean autoPopulateSectionPaint;
+
+    /**
      * A flag that controls whether or not an outline is drawn for each
      * section in the plot.
      */
@@ -311,11 +321,27 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /** The base section outline paint (fallback). */
     private transient Paint baseSectionOutlinePaint;
 
+    /**
+     * A flag that controls whether or not the section outline paint is
+     * auto-populated from the drawing supplier.
+     *
+     * @since 1.0.11
+     */
+    private boolean autoPopulateSectionOutlinePaint;
+
     /** The section outline stroke map. */
     private StrokeMap sectionOutlineStrokeMap;
 
     /** The base section outline stroke (fallback). */
     private transient Stroke baseSectionOutlineStroke;
+
+    /**
+     * A flag that controls whether or not the section outline stroke is
+     * auto-populated from the drawing supplier.
+     *
+     * @since 1.0.11
+     */
+    private boolean autoPopulateSectionOutlineStroke;
 
     /** The shadow paint. */
     private transient Paint shadowPaint = Color.gray;
@@ -516,13 +542,16 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
 
         this.sectionPaintMap = new PaintMap();
         this.baseSectionPaint = Color.gray;
+        this.autoPopulateSectionPaint = true;
 
         this.sectionOutlinesVisible = true;
         this.sectionOutlinePaintMap = new PaintMap();
         this.baseSectionOutlinePaint = DEFAULT_OUTLINE_PAINT;
+        this.autoPopulateSectionOutlinePaint = false;
 
         this.sectionOutlineStrokeMap = new StrokeMap();
         this.baseSectionOutlineStroke = DEFAULT_OUTLINE_STROKE;
+        this.autoPopulateSectionOutlineStroke = false;
 
         this.explodePercentages = new TreeMap();
 
@@ -806,7 +835,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
 
     /**
      * Returns the paint for the specified section.  This is equivalent to
-     * <code>lookupSectionPaint(section, false)</code>.
+     * <code>lookupSectionPaint(section, getAutoPopulateSectionPaint())</code>.
      *
      * @param key  the section key.
      *
@@ -817,7 +846,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @see #lookupSectionPaint(Comparable, boolean)
      */
     protected Paint lookupSectionPaint(Comparable key) {
-        return lookupSectionPaint(key, false);
+        return lookupSectionPaint(key, getAutoPopulateSectionPaint());
     }
 
     /**
@@ -963,6 +992,32 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         fireChangeEvent();
     }
 
+    /**
+     * Returns the flag that controls whether or not the section paint is
+     * auto-populated by the {@link #lookupSectionPaint(Comparable)} method.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.11
+     */
+    public boolean getAutoPopulateSectionPaint() {
+    	return this.autoPopulateSectionPaint;
+    }
+
+    /**
+     * Sets the flag that controls whether or not the section paint is
+     * auto-populated by the {@link #lookupSectionPaint(Comparable)} method,
+     * and sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param auto  auto-populate?
+     *
+     * @since 1.0.11
+     */
+    public void setAutoPopulateSectionPaint(boolean auto) {
+        this.autoPopulateSectionPaint = auto;
+        fireChangeEvent();
+    }
+
     //// SECTION OUTLINE PAINT ////////////////////////////////////////////////
 
     /**
@@ -994,7 +1049,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
 
     /**
      * Returns the outline paint for the specified section.  This is equivalent
-     * to <code>lookupSectionPaint(section, false)</code>.
+     * to <code>lookupSectionPaint(section,
+     * getAutoPopulateSectionOutlinePaint())</code>.
      *
      * @param key  the section key.
      *
@@ -1005,7 +1061,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @see #lookupSectionOutlinePaint(Comparable, boolean)
      */
     protected Paint lookupSectionOutlinePaint(Comparable key) {
-        return lookupSectionOutlinePaint(key, false);
+        return lookupSectionOutlinePaint(key,
+        		getAutoPopulateSectionOutlinePaint());
     }
 
     /**
@@ -1125,11 +1182,39 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         fireChangeEvent();
     }
 
+    /**
+     * Returns the flag that controls whether or not the section outline paint
+     * is auto-populated by the {@link #lookupSectionOutlinePaint(Comparable)}
+     * method.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.11
+     */
+    public boolean getAutoPopulateSectionOutlinePaint() {
+    	return this.autoPopulateSectionOutlinePaint;
+    }
+
+    /**
+     * Sets the flag that controls whether or not the section outline paint is
+     * auto-populated by the {@link #lookupSectionOutlinePaint(Comparable)}
+     * method, and sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param auto  auto-populate?
+     *
+     * @since 1.0.11
+     */
+    public void setAutoPopulateSectionOutlinePaint(boolean auto) {
+        this.autoPopulateSectionOutlinePaint = auto;
+        fireChangeEvent();
+    }
+
     //// SECTION OUTLINE STROKE ///////////////////////////////////////////////
 
     /**
-     * Returns the outline stroke for the specified section.  This is equivalent
-     * to <code>lookupSectionOutlineStroke(section, false)</code>.
+     * Returns the outline stroke for the specified section.  This is
+     * equivalent to <code>lookupSectionOutlineStroke(section,
+     * getAutoPopulateSectionOutlineStroke())</code>.
      *
      * @param key  the section key.
      *
@@ -1140,7 +1225,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @see #lookupSectionOutlineStroke(Comparable, boolean)
      */
     protected Stroke lookupSectionOutlineStroke(Comparable key) {
-        return lookupSectionOutlineStroke(key, false);
+        return lookupSectionOutlineStroke(key,
+        		getAutoPopulateSectionOutlineStroke());
     }
 
     /**
@@ -1257,6 +1343,33 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.baseSectionOutlineStroke = stroke;
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns the flag that controls whether or not the section outline stroke
+     * is auto-populated by the {@link #lookupSectionOutlinePaint(Comparable)}
+     * method.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.11
+     */
+    public boolean getAutoPopulateSectionOutlineStroke() {
+    	return this.autoPopulateSectionOutlineStroke;
+    }
+
+    /**
+     * Sets the flag that controls whether or not the section outline stroke is
+     * auto-populated by the {@link #lookupSectionOutlineStroke(Comparable)}
+     * method, and sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param auto  auto-populate?
+     *
+     * @since 1.0.11
+     */
+    public void setAutoPopulateSectionOutlineStroke(boolean auto) {
+        this.autoPopulateSectionOutlineStroke = auto;
         fireChangeEvent();
     }
 
@@ -1514,7 +1627,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @since 1.0.10
      */
     public PieLabelLinkStyle getLabelLinkStyle() {
-    	return this.labelLinkStyle;
+        return this.labelLinkStyle;
     }
 
     /**
@@ -1528,11 +1641,11 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @since 1.0.10
      */
     public void setLabelLinkStyle(PieLabelLinkStyle style) {
-    	if (style == null) {
-    		throw new IllegalArgumentException("Null 'style' argument.");
-    	}
-    	this.labelLinkStyle = style;
-    	fireChangeEvent();
+        if (style == null) {
+            throw new IllegalArgumentException("Null 'style' argument.");
+        }
+        this.labelLinkStyle = style;
+        fireChangeEvent();
     }
 
     /**
@@ -2339,7 +2452,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
             }
             else if (currentPass == 1) {
                 Comparable key = getSectionKey(section);
-                Paint paint = lookupSectionPaint(key, true);
+                Paint paint = lookupSectionPaint(key);
                 g2.setPaint(paint);
                 g2.fill(arc);
 
@@ -2700,7 +2813,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                         urlText = this.legendLabelURLGenerator.generateURL(
                                 this.dataset, key, this.pieIndex);
                     }
-                    Paint paint = lookupSectionPaint(key, true);
+                    Paint paint = lookupSectionPaint(key);
                     Paint outlinePaint = lookupSectionOutlinePaint(key);
                     Stroke outlineStroke = lookupSectionOutlineStroke(key);
                     LegendItem item = new LegendItem(label, description,
@@ -2800,15 +2913,15 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                 g2.draw(new Line2D.Double(anchorX, anchorY, targetX, targetY));
             }
             else if (style.equals(PieLabelLinkStyle.QUAD_CURVE)) {
-            	QuadCurve2D q = new QuadCurve2D.Float();
+                QuadCurve2D q = new QuadCurve2D.Float();
                 q.setCurve(targetX, targetY, anchorX, anchorY, elbowX, elbowY);
                 g2.draw(q);
                 g2.draw(new Line2D.Double(elbowX, elbowY, linkX, linkY));
             }
             else if (style.equals(PieLabelLinkStyle.CUBIC_CURVE)) {
-            	CubicCurve2D c = new CubicCurve2D .Float();
+                CubicCurve2D c = new CubicCurve2D .Float();
                 c.setCurve(targetX, targetY, anchorX, anchorY, elbowX, elbowY,
-                		linkX, linkY);
+                        linkX, linkY);
                 g2.draw(c);
             }
         }
@@ -2851,15 +2964,15 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                 g2.draw(new Line2D.Double(anchorX, anchorY, targetX, targetY));
             }
             else if (style.equals(PieLabelLinkStyle.QUAD_CURVE)) {
-            	QuadCurve2D q = new QuadCurve2D.Float();
+                QuadCurve2D q = new QuadCurve2D.Float();
                 q.setCurve(targetX, targetY, anchorX, anchorY, elbowX, elbowY);
                 g2.draw(q);
                 g2.draw(new Line2D.Double(elbowX, elbowY, linkX, linkY));
             }
             else if (style.equals(PieLabelLinkStyle.CUBIC_CURVE)) {
-            	CubicCurve2D c = new CubicCurve2D .Float();
+                CubicCurve2D c = new CubicCurve2D .Float();
                 c.setCurve(targetX, targetY, anchorX, anchorY, elbowX, elbowY,
-                		linkX, linkY);
+                        linkX, linkY);
                 g2.draw(c);
             }
         }
@@ -2999,7 +3112,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
             return false;
         }
         if (!this.labelLinkStyle.equals(that.labelLinkStyle)) {
-        	return false;
+            return false;
         }
         if (!PaintUtilities.equal(this.labelLinkPaint, that.labelLinkPaint)) {
             return false;
@@ -3032,6 +3145,17 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         if (!ObjectUtilities.equal(this.legendLabelURLGenerator,
                 that.legendLabelURLGenerator)) {
             return false;
+        }
+        if (this.autoPopulateSectionPaint != that.autoPopulateSectionPaint) {
+        	return false;
+        }
+        if (this.autoPopulateSectionOutlinePaint
+        		!= that.autoPopulateSectionOutlinePaint) {
+        	return false;
+        }
+        if (this.autoPopulateSectionOutlineStroke
+        		!= that.autoPopulateSectionOutlineStroke) {
+        	return false;
         }
         // can't find any difference...
         return true;

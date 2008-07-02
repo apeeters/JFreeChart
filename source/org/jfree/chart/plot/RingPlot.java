@@ -408,7 +408,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
                 }
             }
             else if (currentPass == 1) {
-                Paint paint = lookupSectionPaint(key, true);
+                Paint paint = lookupSectionPaint(key);
                 g2.setPaint(paint);
                 g2.fill(path);
                 Paint outlinePaint = lookupSectionOutlinePaint(key);
