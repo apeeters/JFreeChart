@@ -37,12 +37,14 @@
  * 04-Feb-2005 : Version 1 (DG);
  * 19-Jun-2007 : Fixed deprecation warnings (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 09-Jul-2008 : Added new field into testEquals() (DG);
  *
  */
 
 package org.jfree.chart.title.junit;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInput;
@@ -84,6 +86,14 @@ public class CompositeTitleTests extends TestCase {
     }
 
     /**
+     * Some checks for the constructor.
+     */
+    public void testConstructor() {
+    	CompositeTitle t = new CompositeTitle();
+    	assertNull(t.getBackgroundPaint());
+    }
+
+    /**
      * Check that the equals() method distinguishes all fields.
      */
     public void testEquals() {
@@ -116,6 +126,13 @@ public class CompositeTitleTests extends TestCase {
         t2.getContainer().add(new TextTitle("T1"));
         assertTrue(t1.equals(t2));
 
+        t1.setBackgroundPaint(new GradientPaint(1.0f, 2.0f, Color.red,
+        		3.0f, 4.0f, Color.yellow));
+        assertFalse(t1.equals(t2));
+        t2.setBackgroundPaint(new GradientPaint(1.0f, 2.0f, Color.red,
+        		3.0f, 4.0f, Color.yellow));
+        assertTrue(t1.equals(t2));
+
     }
 
     /**
@@ -138,6 +155,8 @@ public class CompositeTitleTests extends TestCase {
     public void testCloning() {
         CompositeTitle t1 = new CompositeTitle(new BlockContainer());
         t1.getContainer().add(new TextTitle("T1"));
+        t1.setBackgroundPaint(new GradientPaint(1.0f, 2.0f, Color.red,
+        		3.0f, 4.0f, Color.yellow));
         CompositeTitle t2 = null;
         try {
             t2 = (CompositeTitle) t1.clone();
@@ -156,6 +175,8 @@ public class CompositeTitleTests extends TestCase {
     public void testSerialization() {
         CompositeTitle t1 = new CompositeTitle(new BlockContainer());
         t1.getContainer().add(new TextTitle("T1"));
+        t1.setBackgroundPaint(new GradientPaint(1.0f, 2.0f, Color.red,
+        		3.0f, 4.0f, Color.blue));
         CompositeTitle t2 = null;
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
