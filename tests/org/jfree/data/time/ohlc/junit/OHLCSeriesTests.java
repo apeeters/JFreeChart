@@ -27,7 +27,7 @@
  * --------------------
  * OHLCSeriesTests.java
  * --------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -64,11 +64,16 @@ import org.jfree.data.time.ohlc.OHLCSeries;
 public class OHLCSeriesTests extends TestCase
         implements SeriesChangeListener {
 
-	SeriesChangeEvent lastEvent;
+    SeriesChangeEvent lastEvent;
 
+    /**
+     * Records a change event.
+     *
+     * @param event  the event.
+     */
     public void seriesChanged(SeriesChangeEvent event) {
         this.lastEvent = event;
-	}
+    }
 
     /**
      * Returns the tests as a test suite.
@@ -244,7 +249,7 @@ public class OHLCSeriesTests extends TestCase
      * Some checks for the clear() method.
      */
     public void testClear() {
-    	OHLCSeries s1 = new OHLCSeries("S1");
+        OHLCSeries s1 = new OHLCSeries("S1");
         s1.addChangeListener(this);
         s1.clear();
         assertNull(this.lastEvent);

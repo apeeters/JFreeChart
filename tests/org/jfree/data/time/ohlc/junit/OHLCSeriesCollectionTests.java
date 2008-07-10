@@ -27,7 +27,7 @@
  * ------------------------------
  * OHLCSeriesCollectionTests.java
  * ------------------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 04-Dec-2006 : Version 1 (DG);
+ * 10-Jul-2008 : Updated testEquals() method (DG);
  *
  */
 
@@ -51,6 +52,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.jfree.data.time.TimePeriodAnchor;
 import org.jfree.data.time.Year;
 import org.jfree.data.time.ohlc.OHLCSeries;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
@@ -101,6 +103,12 @@ public class OHLCSeriesCollectionTests extends TestCase {
         assertFalse(c1.equals(c2));
         c2.addSeries(new OHLCSeries("Empty Series"));
         assertTrue(c1.equals(c2));
+
+        c1.setXPosition(TimePeriodAnchor.END);
+        assertFalse(c1.equals(c2));
+        c2.setXPosition(TimePeriodAnchor.END);
+        assertTrue(c1.equals(c2));
+
     }
 
     /**
