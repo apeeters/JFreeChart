@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * -------------------
@@ -42,20 +42,20 @@
  * 30-Nov-2006 : Improved zoom box handling (HP);
  * 06-Dec-2006 : Added (simplified) tool tip support (HP);
  * 11-Dec-2006 : Fixed popup menu location by fgiust, bug 1612770 (HP);
- * 31-Jan-2007 : Fixed some issues with the trace lines, fixed cross hair not 
- *               being drawn, added getter and setter methods for the trace 
- *               lines (HP); 
- * 07-Apr-2007 : Changed this.redraw() into canvas.redraw() to fix redraw 
+ * 31-Jan-2007 : Fixed some issues with the trace lines, fixed cross hair not
+ *               being drawn, added getter and setter methods for the trace
+ *               lines (HP);
+ * 07-Apr-2007 : Changed this.redraw() into canvas.redraw() to fix redraw
  *               problems (HP);
- * 19-May-2007 : Small fix in paintControl to check for null charts, bug 
+ * 19-May-2007 : Small fix in paintControl to check for null charts, bug
  *               1719260 (HP);
- * 19-May-2007 : Corrected bug with scaling when the drawing region is larger 
+ * 19-May-2007 : Corrected bug with scaling when the drawing region is larger
  *               than maximum draw width/height (HP);
- * 23-May-2007 : Added some dispose call to free SWT resources, patch sent by 
+ * 23-May-2007 : Added some dispose call to free SWT resources, patch sent by
  *               Cédric Chabanois (CC);
- * 06-Jun-2007 : Fixed minor issues with tooltips. bug reported and fix 
+ * 06-Jun-2007 : Fixed minor issues with tooltips. bug reported and fix
  *               proposed by Christoph Beck, bug 1726404 (HP);
- * 04-Jul-2007 : Added addChartMouseListener and removeChartMouseListener 
+ * 04-Jul-2007 : Added addChartMouseListener and removeChartMouseListener
  *               methods as suggested by Christoph Beck, bug 1742002 (HP);
  * 06-Jul-2007 : Fixed bug in zooming with multiple plots (HP);
  * 06-Jul-2007 : Check for null zoom point when restoring auto range and domain
@@ -63,16 +63,16 @@
  * 25-Jul-2007 : Pass mouse moved events to listening ChartMouseListeners (HP);
  * 27-Aug-2007 : Refactored class, now implements PaintListener, MouseListener,
  *               MouseMoveListener. Made the chart field be private again and
- *               added new method addSWTListener to allow custom behavior. 
+ *               added new method addSWTListener to allow custom behavior.
  * 24-May-2008 : Corrected the axis traces which were inverted (HP);
- * 24-May-2008 : Fixed double listener registration, bug 1945818 and added 
- *               unregistration as suggested by paulb on the forum (HP); 
- * 24-May-2008 : Also release the buffer image resources when widget is 
-                 disposed (HP); 
+ * 24-May-2008 : Fixed double listener registration, bug 1945818 and added
+ *               unregistration as suggested by paulb on the forum (HP);
+ * 24-May-2008 : Also release the buffer image resources when widget is
+                 disposed (HP);
  * 30-May-2008 : Removed duplicate code in constructor (previously moved to the
  *               setChart method as suggested by Christoph Beck) (HP);
- * 02-Jun-2008 : Added SWT.DOUBLE_BUFFERED in constructor, plus 
- *               getChartRenderingInfo(), is/setDomainZoomable() and 
+ * 02-Jun-2008 : Added SWT.DOUBLE_BUFFERED in constructor, plus
+ *               getChartRenderingInfo(), is/setDomainZoomable() and
  *               is/setRangeZoomable() (DG);
  */
 
@@ -146,7 +146,7 @@ import org.jfree.experimental.swt.SWTUtils;
  * A SWT GUI composite for displaying a {@link JFreeChart} object.
  * <p>
  * The composite listens to the chart to receive notification of changes to any
- * component of the chart.  The chart is redrawn automatically whenever this 
+ * component of the chart.  The chart is redrawn automatically whenever this
  * notification is received.
  */
 public class ChartComposite extends Composite implements ChartChangeListener,
@@ -221,7 +221,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
     /** The canvas to display the chart. */
     private Canvas canvas;
-    
+
     /** Storage for registered (chart) mouse listeners. */
     private EventListenerList chartMouseListeners;
 
@@ -243,26 +243,26 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     /** The width of the chart buffer. */
     private int chartBufferWidth;
 
-    /** 
-     * The minimum width for drawing a chart (uses scaling for smaller widths). 
+    /**
+     * The minimum width for drawing a chart (uses scaling for smaller widths).
      */
     private int minimumDrawWidth;
 
-    /** 
-     * The minimum height for drawing a chart (uses scaling for smaller 
-     * heights). 
+    /**
+     * The minimum height for drawing a chart (uses scaling for smaller
+     * heights).
      */
     private int minimumDrawHeight;
 
-    /** 
-     * The maximum width for drawing a chart (uses scaling for bigger 
-     * widths). 
+    /**
+     * The maximum width for drawing a chart (uses scaling for bigger
+     * widths).
      */
     private int maximumDrawWidth;
 
-    /** 
-     * The maximum height for drawing a chart (uses scaling for bigger 
-     * heights). 
+    /**
+     * The maximum height for drawing a chart (uses scaling for bigger
+     * heights).
      */
     private int maximumDrawHeight;
 
@@ -271,7 +271,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
     /** The drawing info collected the last time the chart was drawn. */
     private ChartRenderingInfo info;
-    
+
     /** The chart anchor point. */
     private Point2D anchor;
 
@@ -283,17 +283,17 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
     /** The plot orientation. */
     private PlotOrientation orientation = PlotOrientation.VERTICAL;
-    
+
     /** A flag that controls whether or not domain zooming is enabled. */
     private boolean domainZoomable = false;
 
     /** A flag that controls whether or not range zooming is enabled. */
     private boolean rangeZoomable = false;
 
-    /** 
-     * The zoom rectangle starting point (selected by the user with a mouse 
+    /**
+     * The zoom rectangle starting point (selected by the user with a mouse
      * click).  This is a point on the screen, not the chart (which may have
-     * been scaled up or down to fit the panel).  
+     * been scaled up or down to fit the panel).
      */
     private org.eclipse.swt.graphics.Point zoomPoint = null;
 
@@ -305,7 +305,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
     /** The minimum distance required to drag the mouse to trigger a zoom. */
     private int zoomTriggerDistance;
-    
+
     /** A flag that controls whether or not horizontal tracing is enabled. */
     private boolean horizontalAxisTrace = false;
 
@@ -350,22 +350,22 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
     /** The factor used to zoom in on an axis range. */
     private double zoomInFactor = 0.5;
-    
+
     /** The factor used to zoom out on an axis range. */
     private double zoomOutFactor = 2.0;
-    
+
     /** The resourceBundle for the localization. */
-    protected static ResourceBundle localizationResources 
+    protected static ResourceBundle localizationResources
         = ResourceBundle.getBundle("org.jfree.chart.LocalizationBundle");
 
     /**
-     * Create a new chart composite with a default FillLayout. 
+     * Create a new chart composite with a default FillLayout.
      * This way, when drawn, the chart will fill all the space.
      * @param comp The parent.
      * @param style The style of the composite.
      */
     public ChartComposite(Composite comp, int style) {
-        this(comp, 
+        this(comp,
                 style,
                 null,
                 DEFAULT_WIDTH,
@@ -391,7 +391,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * @param chart  the chart.
      */
     public ChartComposite(Composite comp, int style, JFreeChart chart) {
-        this(comp, 
+        this(comp,
              style,
              chart,
              DEFAULT_WIDTH,
@@ -418,9 +418,9 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * @param useBuffer  a flag controlling whether or not an off-screen buffer
      *                   is used.
      */
-    public ChartComposite(Composite comp, int style, JFreeChart chart, 
+    public ChartComposite(Composite comp, int style, JFreeChart chart,
             boolean useBuffer) {
-        
+
         this(comp, style, chart,
                 DEFAULT_WIDTH,
                 DEFAULT_HEIGHT,
@@ -436,7 +436,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 true   // tooltips
                 );
     }
-    
+
     /**
      * Constructs a JFreeChart panel.
      *
@@ -455,7 +455,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      *                  enabled for the chart.
      */
     public ChartComposite(
-            Composite comp, 
+            Composite comp,
             int style,
             JFreeChart chart,
             boolean properties,
@@ -495,7 +495,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * @param maximumDrawW  the maximum drawing width.
      * @param maximumDrawH  the maximum drawing height.
      * @param usingBuffer  a flag that indicates whether to use the off-screen
-     *                   buffer to improve performance (at the expense of 
+     *                   buffer to improve performance (at the expense of
      *                   memory).
      * @param properties  a flag indicating whether or not the chart property
      *                    editor should be available via the popup menu.
@@ -503,12 +503,12 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      *              available via the popup menu.
      * @param print  a flag indicating whether or not the print option
      *               should be available via the popup menu.
-     * @param zoom  a flag indicating whether or not zoom options should be 
+     * @param zoom  a flag indicating whether or not zoom options should be
      *              added to the popup menu.
-     * @param tooltips  a flag indicating whether or not tooltips should be 
+     * @param tooltips  a flag indicating whether or not tooltips should be
      *                  enabled for the chart.
      */
-    public ChartComposite(Composite comp, 
+    public ChartComposite(Composite comp,
             int style,
             JFreeChart jfreechart,
             int width,
@@ -549,44 +549,44 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
         this.enforceFileExtensions = true;
     }
-        
+
     /**
-     * Returns the X scale factor for the chart.  This will be 1.0 if no 
+     * Returns the X scale factor for the chart.  This will be 1.0 if no
      * scaling has been used.
-     * 
+     *
      * @return The scale factor.
      */
     public double getScaleX() {
         return this.scaleX;
     }
-    
+
     /**
-     * Returns the Y scale factory for the chart.  This will be 1.0 if no 
+     * Returns the Y scale factory for the chart.  This will be 1.0 if no
      * scaling has been used.
-     * 
+     *
      * @return The scale factor.
      */
     public double getScaleY() {
         return this.scaleY;
     }
-    
+
     /**
      * Returns the anchor point.
-     * 
+     *
      * @return The anchor point (possibly <code>null</code>).
      */
     public Point2D getAnchor() {
-        return this.anchor;   
+        return this.anchor;
     }
-    
+
     /**
-     * Sets the anchor point.  This method is provided for the use of 
+     * Sets the anchor point.  This method is provided for the use of
      * subclasses, not end users.
-     * 
+     *
      * @param anchor  the anchor point (<code>null</code> permitted).
      */
     protected void setAnchor(Point2D anchor) {
-        this.anchor = anchor;   
+        this.anchor = anchor;
     }
 
     /**
@@ -642,19 +642,19 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     public ChartRenderingInfo getChartRenderingInfo() {
         return this.info;
     }
-    
+
     /**
-     * Returns the flag that determines whether or not zooming is enabled for 
+     * Returns the flag that determines whether or not zooming is enabled for
      * the domain axis.
-     * 
+     *
      * @return A boolean.
      */
     public boolean isDomainZoomable() {
         return this.domainZoomable;
     }
-    
+
     /**
-     * Sets the flag that controls whether or not zooming is enable for the 
+     * Sets the flag that controls whether or not zooming is enable for the
      * domain axis.  A check is made to ensure that the current plot supports
      * zooming for the domain values.
      *
@@ -665,7 +665,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             Plot plot = this.chart.getPlot();
             if (plot instanceof Zoomable) {
                 Zoomable z = (Zoomable) plot;
-                this.domainZoomable = flag && (z.isDomainZoomable());  
+                this.domainZoomable = flag && (z.isDomainZoomable());
             }
         }
         else {
@@ -674,15 +674,15 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     }
 
     /**
-     * Returns the flag that determines whether or not zooming is enabled for 
+     * Returns the flag that determines whether or not zooming is enabled for
      * the range axis.
-     * 
+     *
      * @return A boolean.
      */
     public boolean isRangeZoomable() {
         return this.rangeZoomable;
     }
-    
+
     /**
      * A flag that controls mouse-based zooming on the vertical axis.
      *
@@ -693,7 +693,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             Plot plot = this.chart.getPlot();
             if (plot instanceof Zoomable) {
                 Zoomable z = (Zoomable) plot;
-                this.rangeZoomable = flag && (z.isRangeZoomable());  
+                this.rangeZoomable = flag && (z.isRangeZoomable());
             }
         }
         else {
@@ -703,61 +703,61 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
     /**
      * Returns the zoom in factor.
-     * 
+     *
      * @return The zoom in factor.
-     * 
+     *
      * @see #setZoomInFactor(double)
      */
     public double getZoomInFactor() {
-        return this.zoomInFactor;   
+        return this.zoomInFactor;
     }
-    
+
     /**
      * Sets the zoom in factor.
-     * 
+     *
      * @param factor  the factor.
-     * 
+     *
      * @see #getZoomInFactor()
      */
     public void setZoomInFactor(double factor) {
         this.zoomInFactor = factor;
     }
-    
+
     /**
      * Returns the zoom out factor.
-     * 
+     *
      * @return The zoom out factor.
-     * 
+     *
      * @see #setZoomOutFactor(double)
      */
     public double getZoomOutFactor() {
-        return this.zoomOutFactor;   
+        return this.zoomOutFactor;
     }
-    
+
     /**
      * Sets the zoom out factor.
-     * 
+     *
      * @param factor  the factor.
-     * 
+     *
      * @see #getZoomOutFactor()
      */
     public void setZoomOutFactor(double factor) {
         this.zoomOutFactor = factor;
     }
-    
+
     /**
      * Displays a dialog that allows the user to edit the properties for the
      * current chart.
      */
     private void attemptEditChartProperties() {
-        SWTChartEditor editor = new SWTChartEditor(this.canvas.getDisplay(), 
+        SWTChartEditor editor = new SWTChartEditor(this.canvas.getDisplay(),
                 this.chart);
         //ChartEditorManager.getChartEditor(canvas.getDisplay(), this.chart);
         editor.open();
     }
 
     /**
-     * Returns <code>true</code> if file extensions should be enforced, and 
+     * Returns <code>true</code> if file extensions should be enforced, and
      * <code>false</code> otherwise.
      *
      * @return The flag.
@@ -782,7 +782,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * @throws IOException if there is an I/O error.
      */
     public void doSaveAs() throws IOException {
-        FileDialog fileDialog = new FileDialog(this.canvas.getShell(), 
+        FileDialog fileDialog = new FileDialog(this.canvas.getShell(),
                 SWT.SAVE);
         String[] extensions = {"*.png"};
         fileDialog.setFilterExtensions(extensions);
@@ -794,7 +794,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 }
             }
             //TODO replace getSize by getBounds ?
-            ChartUtilities.saveChartAsPNG(new File(filename), this.chart, 
+            ChartUtilities.saveChartAsPNG(new File(filename), this.chart,
                     this.canvas.getSize().x, this.canvas.getSize().y);
         }
     }
@@ -802,16 +802,16 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     /**
      * Returns a point based on (x, y) but constrained to be within the bounds
      * of the given rectangle.  This method could be moved to JCommon.
-     * 
+     *
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
      * @param area  the rectangle (<code>null</code> not permitted).
-     * 
+     *
      * @return A point within the rectangle.
      */
-    private org.eclipse.swt.graphics.Point getPointInRectangle(int x, int y, 
+    private org.eclipse.swt.graphics.Point getPointInRectangle(int x, int y,
             Rectangle area) {
-        x = Math.max(area.x, Math.min(x, area.x + area.width));   
+        x = Math.max(area.x, Math.min(x, area.x + area.width));
         y = Math.max(area.y, Math.min(y, area.y + area.height));
         return new org.eclipse.swt.graphics.Point(x, y);
     }
@@ -837,10 +837,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      */
     public void zoomInDomain(double x, double y) {
         Plot p = this.chart.getPlot();
-        if (p instanceof Zoomable) 
+        if (p instanceof Zoomable)
         {
             Zoomable plot = (Zoomable) p;
-            plot.zoomDomainAxes(this.zoomInFactor, this.info.getPlotInfo(), 
+            plot.zoomDomainAxes(this.zoomInFactor, this.info.getPlotInfo(),
                     translateScreenToJava2D(new Point((int) x, (int) y)));
         }
     }
@@ -857,7 +857,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         Plot p = this.chart.getPlot();
         if (p instanceof Zoomable) {
             Zoomable z = (Zoomable) p;
-            z.zoomRangeAxes(this.zoomInFactor, this.info.getPlotInfo(), 
+            z.zoomRangeAxes(this.zoomInFactor, this.info.getPlotInfo(),
                     translateScreenToJava2D(new Point((int) x, (int) y)));
         }
     }
@@ -885,7 +885,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         Plot p = this.chart.getPlot();
         if (p instanceof Zoomable) {
             Zoomable z = (Zoomable) p;
-            z.zoomDomainAxes(this.zoomOutFactor, this.info.getPlotInfo(), 
+            z.zoomDomainAxes(this.zoomOutFactor, this.info.getPlotInfo(),
                     translateScreenToJava2D(new Point((int) x, (int) y)));
         }
     }
@@ -902,7 +902,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         Plot p = this.chart.getPlot();
         if (p instanceof Zoomable) {
             Zoomable z = (Zoomable) p;
-            z.zoomRangeAxes(this.zoomOutFactor, this.info.getPlotInfo(), 
+            z.zoomRangeAxes(this.zoomOutFactor, this.info.getPlotInfo(),
                     translateScreenToJava2D(new Point((int) x, (int) y)));
         }
     }
@@ -920,18 +920,18 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 new Point(selection.x, selection.y));
         PlotRenderingInfo plotInfo = this.info.getPlotInfo();
         Rectangle scaledDataArea = getScreenDataArea(
-                (selection.x + selection.width / 2), 
+                (selection.x + selection.width / 2),
                 (selection.y + selection.height / 2));
         if ((selection.height > 0) && (selection.width > 0)) {
 
-            double hLower = (selection.x - scaledDataArea.x) 
+            double hLower = (selection.x - scaledDataArea.x)
                 / (double) scaledDataArea.width;
-            double hUpper = (selection.x + selection.width - scaledDataArea.x) 
+            double hUpper = (selection.x + selection.width - scaledDataArea.x)
                 / (double) scaledDataArea.width;
-            double vLower = (scaledDataArea.y + scaledDataArea.height 
-                    - selection.y - selection.height) 
+            double vLower = (scaledDataArea.y + scaledDataArea.height
+                    - selection.y - selection.height)
                     / (double) scaledDataArea.height;
-            double vUpper = (scaledDataArea.y + scaledDataArea.height 
+            double vUpper = (scaledDataArea.y + scaledDataArea.height
                     - selection.y) / (double) scaledDataArea.height;
             Plot p = this.chart.getPlot();
             if (p instanceof Zoomable) {
@@ -979,7 +979,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         this.canvas.notifyListeners(SWT.Paint, ev);
         ev.gc.dispose();
     }
-    
+
     /**
      * Adds a listener to the list of objects listening for chart mouse events.
      *
@@ -988,9 +988,9 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     public void addChartMouseListener(ChartMouseListener listener) {
         this.chartMouseListeners.add(ChartMouseListener.class, listener);
     }
-    
+
     /**
-     * Removes a listener from the list of objects listening for chart mouse 
+     * Removes a listener from the list of objects listening for chart mouse
      * events.
      *
      * @param listener  the listener.
@@ -998,7 +998,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     public void removeChartMouseListener(ChartMouseListener listener) {
         this.chartMouseListeners.remove(ChartMouseListener.class, listener);
     }
-    
+
     /**
      * Receives notification of a chart progress event.
      *
@@ -1024,10 +1024,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         if (p instanceof Zoomable) {
             Zoomable z = (Zoomable) p;
             // we need to guard against this.zoomPoint being null
-            org.eclipse.swt.graphics.Point zp = 
-                    (this.zoomPoint != null ? this.zoomPoint 
+            org.eclipse.swt.graphics.Point zp =
+                    (this.zoomPoint != null ? this.zoomPoint
                     : new org.eclipse.swt.graphics.Point(0, 0));
-            z.zoomDomainAxes(0.0, this.info.getPlotInfo(), 
+            z.zoomDomainAxes(0.0, this.info.getPlotInfo(),
                     SWTUtils.toAwtPoint(zp));
         }
     }
@@ -1040,20 +1040,20 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         if (p instanceof ValueAxisPlot) {
             Zoomable z = (Zoomable) p;
             // we need to guard against this.zoomPoint being null
-            org.eclipse.swt.graphics.Point zp = 
-                    (this.zoomPoint != null ? this.zoomPoint 
+            org.eclipse.swt.graphics.Point zp =
+                    (this.zoomPoint != null ? this.zoomPoint
                     : new org.eclipse.swt.graphics.Point(0, 0));
-            z.zoomRangeAxes(0.0, this.info.getPlotInfo(), 
-                    SWTUtils.toAwtPoint(zp)); 
+            z.zoomRangeAxes(0.0, this.info.getPlotInfo(),
+                    SWTUtils.toAwtPoint(zp));
         }
     }
 
     /**
      * Applies any scaling that is in effect for the chart drawing to the
      * given rectangle.
-     *  
+     *
      * @param rect  the rectangle.
-     * 
+     *
      * @return A new scaled rectangle.
      */
     public Rectangle scale(Rectangle2D rect) {
@@ -1080,14 +1080,14 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         int h = (int) (dataArea.getHeight() * this.scaleY);
         return new Rectangle(x, y, w, h);
     }
-    
+
     /**
      * Returns the data area (the area inside the axes) for the plot or subplot,
      * with the current scaling applied.
      *
      * @param x  the x-coordinate (for subplot selection).
      * @param y  the y-coordinate (for subplot selection).
-     * 
+     *
      * @return The scaled data area.
      */
     public Rectangle getScreenDataArea(int x, int y) {
@@ -1153,13 +1153,13 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     /**
      * Returns the flag that controls whether or not a horizontal axis trace
      * line is drawn over the plot area at the current mouse location.
-     * 
+     *
      * @return A boolean.
      */
     public boolean getHorizontalAxisTrace() {
-        return this.horizontalAxisTrace;    
+        return this.horizontalAxisTrace;
     }
-    
+
     /**
      * A flag that controls trace lines on the horizontal axis.
      *
@@ -1169,17 +1169,17 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     public void setHorizontalAxisTrace(boolean flag) {
         this.horizontalAxisTrace = flag;
     }
-    
+
     /**
      * Returns the flag that controls whether or not a vertical axis trace
      * line is drawn over the plot area at the current mouse location.
-     * 
+     *
      * @return A boolean.
      */
     public boolean getVerticalAxisTrace() {
-        return this.verticalAxisTrace;    
+        return this.verticalAxisTrace;
     }
-    
+
     /**
      * A flag that controls trace lines on the vertical axis.
      *
@@ -1223,7 +1223,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     }
 
     /**
-     * The idea is to modify the zooming options depending on the type of chart 
+     * The idea is to modify the zooming options depending on the type of chart
      * being displayed by the panel.
      *
      * @param x  horizontal position of the popup.
@@ -1231,7 +1231,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      */
     protected void displayPopupMenu(int x, int y) {
         if (this.popup != null) {
-            // go through each zoom menu item and decide whether or not to 
+            // go through each zoom menu item and decide whether or not to
             // enable it...
             Plot plot = this.chart.getPlot();
             boolean isDomainZoomable = false;
@@ -1246,7 +1246,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             }
             if (this.zoomOutDomainMenuItem != null) {
                 this.zoomOutDomainMenuItem.setEnabled(isDomainZoomable);
-            } 
+            }
             if (this.zoomResetDomainMenuItem != null) {
                 this.zoomResetDomainMenuItem.setEnabled(isDomainZoomable);
             }
@@ -1263,15 +1263,15 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             }
 
             if (this.zoomInBothMenuItem != null) {
-                this.zoomInBothMenuItem.setEnabled(isDomainZoomable 
+                this.zoomInBothMenuItem.setEnabled(isDomainZoomable
                         & isRangeZoomable);
             }
             if (this.zoomOutBothMenuItem != null) {
-                this.zoomOutBothMenuItem.setEnabled(isDomainZoomable 
+                this.zoomOutBothMenuItem.setEnabled(isDomainZoomable
                         & isRangeZoomable);
             }
             if (this.zoomResetBothMenuItem != null) {
-                this.zoomResetBothMenuItem.setEnabled(isDomainZoomable 
+                this.zoomResetBothMenuItem.setEnabled(isDomainZoomable
                         & isRangeZoomable);
             }
 
@@ -1315,9 +1315,9 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      *
      * @return The popup menu.
      */
-    protected Menu createPopupMenu(boolean properties, boolean save, 
+    protected Menu createPopupMenu(boolean properties, boolean save,
             boolean print, boolean zoom) {
-        
+
         Menu result = new Menu(this);
         boolean separator = false;
 
@@ -1393,7 +1393,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                     "All_Axes"));
             this.zoomOutBothMenuItem.setData(ZOOM_OUT_BOTH_COMMAND);
             this.zoomOutBothMenuItem.addSelectionListener(this);
-            
+
             new MenuItem(zoomOutMenu, SWT.SEPARATOR);
 
             this.zoomOutDomainMenuItem = new MenuItem(zoomOutMenu, SWT.PUSH);
@@ -1419,23 +1419,23 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                     "All_Axes"));
             this.zoomResetBothMenuItem.setData(ZOOM_RESET_BOTH_COMMAND);
             this.zoomResetBothMenuItem.addSelectionListener(this);
-            
+
             new MenuItem(autoRangeMenu, SWT.SEPARATOR);
 
-            this.zoomResetDomainMenuItem = new MenuItem(autoRangeMenu, 
+            this.zoomResetDomainMenuItem = new MenuItem(autoRangeMenu,
                     SWT.PUSH);
             this.zoomResetDomainMenuItem.setText(
                     localizationResources.getString("Domain_Axis"));
             this.zoomResetDomainMenuItem.setData(ZOOM_RESET_DOMAIN_COMMAND);
             this.zoomResetDomainMenuItem.addSelectionListener(this);
-               
+
             this.zoomResetRangeMenuItem = new MenuItem(autoRangeMenu, SWT.PUSH);
             this.zoomResetRangeMenuItem.setText(
                     localizationResources.getString("Range_Axis"));
             this.zoomResetRangeMenuItem.setData(ZOOM_RESET_RANGE_COMMAND);
             this.zoomResetRangeMenuItem.addSelectionListener(this);
         }
-        
+
         return result;
     }
 
@@ -1471,8 +1471,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         else if (command.equals(PRINT_COMMAND)) {
             createChartPrintJob();
         }
-        /* in the next zoomPoint.x and y replace by e.x and y for now. 
-         * this helps to handle the mouse events and besides, 
+        /* in the next zoomPoint.x and y replace by e.x and y for now.
+         * this helps to handle the mouse events and besides,
          * those values are unused AFAIK. */
         else if (command.equals(ZOOM_IN_BOTH_COMMAND)) {
             zoomInBoth(e.x, e.y);
@@ -1504,13 +1504,13 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         this.forceRedraw();
     }
 
-    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) 
+    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
         throws PrinterException {
         if (pageIndex != 0) {
             return NO_SUCH_PAGE;
         }
         /*
-        CairoImage image = new CairoImage( 
+        CairoImage image = new CairoImage(
                 this.getBounds().width, this.getBounds().height);
         Graphics2D g2 = image.createGraphics2D();
         double x = pageFormat.getImageableX();
@@ -1532,45 +1532,45 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     public void addSWTListener(SWTEventListener listener) {
         if (listener instanceof ControlListener) {
             this.canvas.addControlListener((ControlListener) listener);
-        } 
+        }
         else if (listener instanceof DisposeListener) {
             this.canvas.addDisposeListener((DisposeListener) listener);
-        } 
+        }
         else if (listener instanceof DragDetectListener) {
             this.canvas.addDragDetectListener((DragDetectListener) listener);
-        } 
+        }
         else if (listener instanceof FocusListener) {
             this.canvas.addFocusListener((FocusListener) listener);
-        } 
+        }
         else if (listener instanceof HelpListener) {
             this.canvas.addHelpListener((HelpListener) listener);
-        } 
+        }
         else if (listener instanceof KeyListener) {
             this.canvas.addKeyListener((KeyListener) listener);
-        } 
+        }
         else if (listener instanceof MenuDetectListener) {
             this.canvas.addMenuDetectListener((MenuDetectListener) listener);
-        } 
+        }
         else if (listener instanceof MouseListener) {
             this.canvas.addMouseListener((MouseListener) listener);
-        } 
+        }
         else if (listener instanceof MouseMoveListener) {
             this.canvas.addMouseMoveListener((MouseMoveListener) listener);
-        } 
+        }
         else if (listener instanceof MouseTrackListener) {
             this.canvas.addMouseTrackListener((MouseTrackListener) listener);
-        } 
+        }
         else if (listener instanceof MouseWheelListener) {
             this.canvas.addMouseWheelListener((MouseWheelListener) listener);
-        } 
+        }
         else if (listener instanceof PaintListener) {
             this.canvas.addPaintListener((PaintListener) listener);
-        } 
+        }
         else if (listener instanceof TraverseListener) {
             this.canvas.addTraverseListener((TraverseListener) listener);
-        } 
+        }
     }
-    
+
     /* (non-Javadoc)
      * @see org.eclipse.swt.events.MouseListener#mouseDoubleClick(
      * org.eclipse.swt.events.MouseEvent)
@@ -1584,7 +1584,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
      * org.eclipse.swt.events.MouseEvent)
      */
     public void mouseDown(MouseEvent event) {
-        
+
         Rectangle scaledDataArea = getScreenDataArea(event.x, event.y);
         if (scaledDataArea == null) return;
         this.zoomPoint = getPointInRectangle(event.x, event.y, scaledDataArea);
@@ -1592,9 +1592,9 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         int y = (int) ((event.y - getClientArea().y) / this.scaleY);
 
         this.anchor = new Point2D.Double(x, y);
-        this.chart.setNotify(true);  // force a redraw 
+        this.chart.setNotify(true);  // force a redraw
         this.canvas.redraw();
-        
+
         // new entity code
         ChartEntity entity = null;
         if (this.info != null) {
@@ -1603,7 +1603,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 entity = entities.getEntity(x, y);
             }
         }
-        
+
         Object[] listeners = this.chartMouseListeners.getListeners(
                 ChartMouseListener.class);
         if (listeners.length == 0) {
@@ -1611,8 +1611,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         }
 
         // pass mouse down event if some ChartMouseListener are listening
-        java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event); 
-        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), 
+        java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event);
+        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(),
                 mouseEvent, entity);
         for (int i = listeners.length - 1; i >= 0; i -= 1) {
             ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
@@ -1629,7 +1629,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         if (this.zoomRectangle == null) {
             Rectangle screenDataArea = getScreenDataArea(event.x, event.y);
             if (screenDataArea != null) {
-                this.zoomPoint = getPointInRectangle(event.x, event.y, 
+                this.zoomPoint = getPointInRectangle(event.x, event.y,
                         screenDataArea);
             }
             if (this.popup != null && event.button == 3) {
@@ -1646,19 +1646,19 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 vZoom = this.domainZoomable;
             }
             else {
-                hZoom = this.domainZoomable;              
+                hZoom = this.domainZoomable;
                 vZoom = this.rangeZoomable;
             }
-            boolean zoomTrigger1 = hZoom && Math.abs(this.zoomRectangle.width) 
+            boolean zoomTrigger1 = hZoom && Math.abs(this.zoomRectangle.width)
                     >= this.zoomTriggerDistance;
-            boolean zoomTrigger2 = vZoom 
-                    && Math.abs(this.zoomRectangle.height) 
+            boolean zoomTrigger2 = vZoom
+                    && Math.abs(this.zoomRectangle.height)
                     >= this.zoomTriggerDistance;
             if (zoomTrigger1 || zoomTrigger2) {
                 // if the box has been drawn backwards, restore the auto bounds
-                if ((hZoom && (this.zoomRectangle.x + this.zoomRectangle.width 
+                if ((hZoom && (this.zoomRectangle.x + this.zoomRectangle.width
                         < this.zoomPoint.x)) || (vZoom && (this.zoomRectangle.y
-                        + this.zoomRectangle.height < this.zoomPoint.y))) 
+                        + this.zoomRectangle.height < this.zoomPoint.y)))
                     restoreAutoBounds();
                 else {
                     zoom(this.zoomRectangle);
@@ -1684,7 +1684,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         }
 
         // handle tool tips in a simple way
-        if (this.displayToolTips) {                            
+        if (this.displayToolTips) {
             String s = getToolTipText(event);
             if (s == null && this.canvas.getToolTipText() != null
                     || s != null && !s.equals(this.canvas.getToolTipText()))
@@ -1694,27 +1694,27 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         // handle zoom box
         boolean hZoom, vZoom;
         if (this.zoomPoint != null) {
-            Rectangle scaledDataArea = getScreenDataArea(this.zoomPoint.x, 
+            Rectangle scaledDataArea = getScreenDataArea(this.zoomPoint.x,
                     this.zoomPoint.y);
-            org.eclipse.swt.graphics.Point movingPoint 
+            org.eclipse.swt.graphics.Point movingPoint
                     = getPointInRectangle(event.x, event.y, scaledDataArea);
             if (this.orientation == PlotOrientation.HORIZONTAL) {
                 hZoom = this.rangeZoomable;
                 vZoom = this.domainZoomable;
             }
             else {
-                hZoom = this.domainZoomable;              
+                hZoom = this.domainZoomable;
                 vZoom = this.rangeZoomable;
             }
             if (hZoom && vZoom) {
                 // selected rectangle shouldn't extend outside the data area...
-                this.zoomRectangle = new Rectangle(this.zoomPoint.x, 
-                        this.zoomPoint.y, movingPoint.x - this.zoomPoint.x, 
-                        movingPoint.y - this.zoomPoint.y);                            
+                this.zoomRectangle = new Rectangle(this.zoomPoint.x,
+                        this.zoomPoint.y, movingPoint.x - this.zoomPoint.x,
+                        movingPoint.y - this.zoomPoint.y);
             }
             else if (hZoom) {
-                this.zoomRectangle = new Rectangle(this.zoomPoint.x, 
-                        scaledDataArea.y, movingPoint.x - this.zoomPoint.x, 
+                this.zoomRectangle = new Rectangle(this.zoomPoint.x,
+                        scaledDataArea.y, movingPoint.x - this.zoomPoint.x,
                         scaledDataArea.height);
             }
             else if (vZoom) {
@@ -1745,8 +1745,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         }
 
         // pass mouse move event if some ChartMouseListener are listening
-        java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event); 
-        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), 
+        java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event);
+        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(),
                 mouseEvent, entity);
         for (int i = listeners.length - 1; i >= 0; i -= 1) {
             ((ChartMouseListener) listeners[i]).chartMouseMoved(chartEvent);
@@ -1763,7 +1763,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         Rectangle available = getBounds();
         // skip if chart is null
         if (this.chart == null) {
-            this.canvas.drawBackground(e.gc, available.x, available.y, 
+            this.canvas.drawBackground(e.gc, available.x, available.y,
                     available.width, available.height);
             return;
         }
@@ -1799,7 +1799,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         // are we using the chart buffer?
         if (this.useBuffer) {
             //SwtGraphics2D sg2 = new SwtGraphics2D(e.gc);
-            this.chartBuffer = (org.eclipse.swt.graphics.Image) 
+            this.chartBuffer = (org.eclipse.swt.graphics.Image)
                     this.canvas.getData("double-buffer-image");
             // do we need to fill the buffer?
             if (this.chartBuffer == null
@@ -1811,7 +1811,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                     this.chartBuffer.dispose();
                 }
                 this.chartBuffer = new org.eclipse.swt.graphics.Image(
-                        getDisplay(), this.chartBufferWidth, 
+                        getDisplay(), this.chartBufferWidth,
                         this.chartBufferHeight);
                 this.refreshBuffer = true;
             }
@@ -1824,19 +1824,19 @@ public class ChartComposite extends Composite implements ChartChangeListener,
                 if (this.chart.getAntiAlias()) {
                     gci.setAntialias(SWT.ON);
                 }
-                if (this.chart.getTextAntiAlias() 
+                if (this.chart.getTextAntiAlias()
                         == RenderingHints.KEY_TEXT_ANTIALIASING) {
                     gci.setTextAntialias(SWT.ON);
                 }
                 SWTGraphics2D sg2d = new SWTGraphics2D(gci);
                 if (scale) {
                     sg2d.scale(this.scaleX, this.scaleY);
-                    this.chart.draw(sg2d, new Rectangle2D.Double(0, 0, 
-                            drawWidth, drawHeight), getAnchor(), this.info);                            
-                } 
+                    this.chart.draw(sg2d, new Rectangle2D.Double(0, 0,
+                            drawWidth, drawHeight), getAnchor(), this.info);
+                }
                 else {
-                    this.chart.draw(sg2d, new Rectangle2D.Double(0, 0, 
-                            drawWidth, drawHeight), getAnchor(), this.info);                            
+                    this.chart.draw(sg2d, new Rectangle2D.Double(0, 0,
+                            drawWidth, drawHeight), getAnchor(), this.info);
                 }
                 this.canvas.setData("double-buffer-image", this.chartBuffer);
                 sg2d.dispose();
@@ -1852,25 +1852,25 @@ public class ChartComposite extends Composite implements ChartChangeListener,
             if (this.chart.getAntiAlias()) {
                 e.gc.setAntialias(SWT.ON);
             }
-            if (this.chart.getTextAntiAlias() 
+            if (this.chart.getTextAntiAlias()
                     == RenderingHints.KEY_TEXT_ANTIALIASING) {
                 e.gc.setTextAntialias(SWT.ON);
             }
-            this.chart.draw(sg2, new Rectangle2D.Double(0, 0, 
-                    getBounds().width, getBounds().height), getAnchor(), 
+            this.chart.draw(sg2, new Rectangle2D.Double(0, 0,
+                    getBounds().width, getBounds().height), getAnchor(),
                     this.info);
         }
         Rectangle area = getScreenDataArea();
-        // TODO see if we need to apply some line color and style to the 
+        // TODO see if we need to apply some line color and style to the
         // axis traces
-        if (this.horizontalAxisTrace && area.x < this.verticalTraceLineX 
+        if (this.horizontalAxisTrace && area.x < this.verticalTraceLineX
                 && area.x + area.width > this.verticalTraceLineX) {
-            e.gc.drawLine(this.verticalTraceLineX, area.y, 
+            e.gc.drawLine(this.verticalTraceLineX, area.y,
                     this.verticalTraceLineX, area.y + area.height);
         }
-        if (this.verticalAxisTrace && area.y < this.horizontalTraceLineY 
+        if (this.verticalAxisTrace && area.y < this.horizontalTraceLineY
                 && area.y + area.height > this.horizontalTraceLineY) {
-            e.gc.drawLine(area.x, this.horizontalTraceLineY, 
+            e.gc.drawLine(area.x, this.horizontalTraceLineY,
                     area.x + area.width, this.horizontalTraceLineY);
         }
         this.verticalTraceLineX = 0;
