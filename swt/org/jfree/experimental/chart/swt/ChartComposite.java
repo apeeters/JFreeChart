@@ -89,6 +89,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
+import java.util.EventListener;
 import java.util.ResourceBundle;
 
 import javax.swing.event.EventListenerList;
@@ -113,7 +114,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.internal.SWTEventListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -1527,9 +1527,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     /**
      * Hook an SWT listener on the canvas where the chart is drawn.
      * The purpose of this method is to allow some degree of customization.
+	 *
      * @param listener The SWT listener to attach to the canvas.
      */
-    public void addSWTListener(SWTEventListener listener) {
+    public void addSWTListener(EventListener listener) {
         if (listener instanceof ControlListener) {
             this.canvas.addControlListener((ControlListener) listener);
         }
