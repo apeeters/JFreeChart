@@ -45,7 +45,7 @@
  * 27-Aug-2007 : Modified toAwtMouseEvent signature (HP);
  * 27-Nov-2007 : Moved convertToSWT() method from SWTGraphics2D and added
  *               convertAWTImageToSWT() (DG);
- * 01-Jul-2008 ; Simplify AWT/SWT font style conversions (HP);
+ * 01-Jul-2008 : Simplify AWT/SWT font style conversions (HP);
  * 
  */
 
@@ -203,7 +203,8 @@ public class SWTUtils {
             tmpFont.dispose();
             tmpGC.dispose();
         }
-        return new java.awt.Font(fontData.getName(), fontData.getStyle(), height);
+        return new java.awt.Font(fontData.getName(), fontData.getStyle(), 
+                height);
     }
 
     /**
@@ -249,7 +250,7 @@ public class SWTUtils {
         else {
             try {
                 throw new Exception("only color is supported at present... " 
-                        + "setting paint to uniform black color" );
+                        + "setting paint to uniform black color");
             } 
             catch (Exception e) {
                 e.printStackTrace();
@@ -286,8 +287,7 @@ public class SWTUtils {
                 (int) Math.round(rect2d.getMinX()),
                 (int) Math.round(rect2d.getMinY()),
                 (int) Math.round(rect2d.getWidth()),
-                (int) Math.round(rect2d.getHeight())
-                );
+                (int) Math.round(rect2d.getHeight()));
     }
 
     /**
