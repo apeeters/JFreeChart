@@ -38,6 +38,7 @@
  * 27-Nov-2006 : Added clone() override (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 18-Jan-2008 : Added removeSeries() and removeAllSeries() methods (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -47,6 +48,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.DatasetChangeEvent;
 
 /**
@@ -57,7 +59,7 @@ import org.jfree.data.general.DatasetChangeEvent;
  * @see XIntervalSeries
  */
 public class XIntervalSeriesCollection extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, Serializable {
+        implements IntervalXYDataset, PublicCloneable, Serializable {
 
     /** Storage for the data series. */
     private List data;

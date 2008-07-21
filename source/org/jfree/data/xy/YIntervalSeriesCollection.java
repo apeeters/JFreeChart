@@ -39,6 +39,8 @@
  * 20-Feb-2007 : Added getYValue(), getStartYValue() and getEndYValue()
  *               methods (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 18-Jan-2008 : Added removeSeries() and removeAllSeries() methods (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -48,6 +50,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.DatasetChangeEvent;
 
 /**
@@ -58,7 +61,7 @@ import org.jfree.data.general.DatasetChangeEvent;
  * @see YIntervalSeries
  */
 public class YIntervalSeriesCollection extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, Serializable {
+        implements IntervalXYDataset, PublicCloneable, Serializable {
 
     /** Storage for the data series. */
     private List data;
@@ -260,6 +263,60 @@ public class YIntervalSeriesCollection extends AbstractIntervalXYDataset
     public Number getEndY(int series, int item) {
         YIntervalSeries s = (YIntervalSeries) this.data.get(series);
         return new Double(s.getYHighValue(item));
+    }
+
+    /**
+     * Removes a series from the collection and sends a
+     * {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index (zero-based).
+     *
+     * @since 1.0.10
+     */
+    public void removeSeries(int series) {
+        if ((series < 0) || (series >= getSeriesCount())) {
+            throw new IllegalArgumentException("Series index out of bounds.");
+        }
+        YIntervalSeries ts = (YIntervalSeries) this.data.get(series);
+        ts.removeChangeListener(this);
+        this.data.remove(series);
+        fireDatasetChanged();
+    }
+
+    /**
+     * Removes a series from the collection and sends a
+     * {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @param series  the series (<code>null</code> not permitted).
+     *
+     * @since 1.0.10
+     */
+    public void removeSeries(YIntervalSeries series) {
+        if (series == null) {
+            throw new IllegalArgumentException("Null 'series' argument.");
+        }
+        if (this.data.contains(series)) {
+            series.removeChangeListener(this);
+            this.data.remove(series);
+            fireDatasetChanged();
+        }
+    }
+
+    /**
+     * Removes all the series from the collection and sends a
+     * {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @since 1.0.10
+     */
+    public void removeAllSeries() {
+        // Unregister the collection as a change listener to each series in
+        // the collection.
+        for (int i = 0; i < this.data.size(); i++) {
+          YIntervalSeries series = (YIntervalSeries) this.data.get(i);
+          series.removeChangeListener(this);
+        }
+        this.data.clear();
+        fireDatasetChanged();
     }
 
     /**

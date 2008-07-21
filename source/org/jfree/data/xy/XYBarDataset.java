@@ -44,6 +44,7 @@
  * 30-Jan-2007 : Added method overrides to prevent unnecessary object
  *               creation (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -58,7 +59,7 @@ import org.jfree.data.general.DatasetChangeListener;
  * {@link IntervalXYDataset} suitable for use in creating XY bar charts.
  */
 public class XYBarDataset extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, DatasetChangeListener {
+        implements IntervalXYDataset, DatasetChangeListener, PublicCloneable {
 
     /** The underlying dataset. */
     private XYDataset underlying;
@@ -328,7 +329,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      * @param event  information about the event.
      */
     public void datasetChanged(DatasetChangeEvent event) {
-        this.notifyListeners(event);
+        notifyListeners(event);
     }
 
     /**
@@ -372,8 +373,8 @@ public class XYBarDataset extends AbstractIntervalXYDataset
     public Object clone() throws CloneNotSupportedException {
         XYBarDataset clone = (XYBarDataset) super.clone();
         if (this.underlying instanceof PublicCloneable) {
-            clone.underlying
-                    = (XYDataset) ((PublicCloneable) this.underlying).clone();
+        	PublicCloneable pc = (PublicCloneable) this.underlying;
+            clone.underlying = (XYDataset) pc.clone();
         }
         return clone;
     }

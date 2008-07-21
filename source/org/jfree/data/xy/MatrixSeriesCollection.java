@@ -29,7 +29,7 @@
  * ---------------------------
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * Original Author:  Barak Naveh;;
+ * Original Author:  Barak Naveh;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *
  * Changes
@@ -41,6 +41,7 @@
  * 27-Nov-2006 : Added clone() override (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -50,6 +51,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Represents a collection of {@link MatrixSeries} that can be used as a
@@ -58,7 +60,7 @@ import org.jfree.chart.util.ObjectUtilities;
  * @see org.jfree.data.xy.MatrixSeries
  */
 public class MatrixSeriesCollection extends AbstractXYZDataset
-        implements XYZDataset, Serializable {
+        implements XYZDataset, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -3197705779242543945L;

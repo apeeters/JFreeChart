@@ -52,6 +52,7 @@
  * 08-May-2007 : Added indexOf(XYSeries) method (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 03-Dec-2007 : Added getSeries(Comparable) method (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -63,6 +64,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
 import org.jfree.data.UnknownKeyException;
@@ -74,7 +76,8 @@ import org.jfree.data.general.DatasetUtilities;
  * dataset.
  */
 public class XYSeriesCollection extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, DomainInfo, Serializable {
+        implements IntervalXYDataset, DomainInfo, PublicCloneable,
+                   Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -7590013825931496766L;

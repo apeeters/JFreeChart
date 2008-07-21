@@ -29,7 +29,7 @@
  * ---------------------------
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * Original Author:  Barak Naveh;;
+ * Original Author:  Barak Naveh;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *
  * Changes
@@ -40,7 +40,6 @@
  */
 
 package org.jfree.data.xy;
-
 
 /**
  * Represents a dense normalized matrix M[i,j] where each Mij item of the
@@ -126,7 +125,13 @@ public class NormalizedMatrixSeries extends MatrixSeries {
 
 
     /**
-     * @see org.jfree.data.xy.MatrixSeries#update(int, int, double)
+     * Updates the value of the specified item in this matrix series.
+     *
+     * @param i the row of the item.
+     * @param j the column of the item.
+     * @param mij the new value for the item.
+     *
+     * @see #get(int, int)
      */
     public void update(int i, int j, double mij) {
         this.m_totalSum -= get(i, j);

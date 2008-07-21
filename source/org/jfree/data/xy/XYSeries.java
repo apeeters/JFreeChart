@@ -34,6 +34,7 @@
  *                   Jonathan Gabbai;
  *                   Richard Atkinson;
  *                   Michel Santos;
+ *                   Ted Schwartz (fix for bug 1955483);
  *
  * Changes
  * -------
@@ -68,6 +69,8 @@
  * 20-Jun-2007 : Removed deprecated code and JCommon dependencies (DG);
  * 31-Oct-2007 : Implemented faster hashCode() (DG);
  * 22-Nov-2007 : Reimplemented clone() (DG);
+ * 01-May-2008 : Fixed bug 1955483 in addOrUpdate() method, thanks to
+ *               Ted Schwartz (DG);
  *
  */
 
@@ -506,6 +509,21 @@ public class XYSeries extends Series implements Cloneable, Serializable {
 
     /**
      * Adds or updates an item in the series and sends a
+     * {@link SeriesChangeEvent} to all registered listeners.
+     *
+     * @param x  the x-value.
+     * @param y  the y-value.
+     *
+     * @return The item that was overwritten, if any.
+     *
+     * @since 1.0.10
+     */
+    public XYDataItem addOrUpdate(double x, double y) {
+        return addOrUpdate(new Double(x), new Double(y));
+    }
+
+    /**
+     * Adds or updates an item in the series and sends a
      * {@link org.jfree.data.general.SeriesChangeEvent} to all registered
      * listeners.
      *
@@ -521,7 +539,7 @@ public class XYSeries extends Series implements Cloneable, Serializable {
         }
         XYDataItem overwritten = null;
         int index = indexOf(x);
-        if (index >= 0) {
+        if (index >= 0 && !this.allowDuplicateXValues) {
             XYDataItem existing = (XYDataItem) this.data.get(index);
             try {
                 overwritten = (XYDataItem) existing.clone();
