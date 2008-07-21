@@ -38,6 +38,7 @@
  * 06-Oct-2006 : Fixed API doc warnings (DG);
  * 02-Nov-2006 : Fixed a problem with adding a new series with the same key
  *               as an existing series (see bug 1589392) (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainOrder;
 import org.jfree.data.general.DatasetChangeEvent;
 
@@ -57,7 +59,7 @@ import org.jfree.data.general.DatasetChangeEvent;
  * @since 1.0.2
  */
 public class DefaultXYZDataset extends AbstractXYZDataset
-        implements XYZDataset {
+        implements XYZDataset, PublicCloneable {
 
     /**
      * Storage for the series keys.  This list must be kept in sync with the

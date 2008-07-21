@@ -38,6 +38,7 @@
  * 02-Nov-2006 : Fixed a problem with adding a new series with the same key
  *               as an existing series (see bug 1589392) (DG);
  * 28-Nov-2006 : New override for clone() (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.DatasetChangeEvent;
 
 /**
@@ -59,7 +61,8 @@ import org.jfree.data.general.DatasetChangeEvent;
  *
  * @since 1.0.3
  */
-public class DefaultIntervalXYDataset extends AbstractIntervalXYDataset {
+public class DefaultIntervalXYDataset extends AbstractIntervalXYDataset
+        implements PublicCloneable {
 
     /**
      * Storage for the series keys.  This list must be kept in sync with the

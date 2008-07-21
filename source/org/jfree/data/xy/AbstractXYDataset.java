@@ -51,7 +51,7 @@ import org.jfree.data.general.AbstractSeriesDataset;
  * {@link XYDataset} interface.
  */
 public abstract class AbstractXYDataset extends AbstractSeriesDataset
-                                        implements XYDataset {
+        implements XYDataset {
 
     /**
      * Returns the order of the domain (X) values.

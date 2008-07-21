@@ -49,7 +49,7 @@ package org.jfree.data.xy;
  * {@link IntervalXYDataset} interface.
  */
 public abstract class AbstractIntervalXYDataset extends AbstractXYDataset
-                                                implements IntervalXYDataset {
+        implements IntervalXYDataset {
 
     /**
      * Returns the start x-value (as a double primitive) for an item within a

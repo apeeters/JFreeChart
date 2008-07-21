@@ -56,6 +56,7 @@
  * 05-Oct-2005 : Made the interval delegate a dataset listener (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -67,6 +68,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jfree.chart.util.ObjectUtilities;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeEvent;
@@ -78,7 +80,8 @@ import org.jfree.data.general.SeriesChangeEvent;
  * for generating stacked area charts).
  */
 public class DefaultTableXYDataset extends AbstractIntervalXYDataset
-        implements TableXYDataset, IntervalXYDataset, DomainInfo {
+        implements TableXYDataset, IntervalXYDataset, DomainInfo,
+                   PublicCloneable {
 
     /**
      * Storage for the data - this list will contain zero, one or many
@@ -522,6 +525,33 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
         result = 29 * result + (this.propagateEvents ? 1 : 0);
         result = 29 * result + (this.autoPrune ? 1 : 0);
         return result;
+    }
+
+    /**
+     * Returns an independent copy of this dataset.
+     *
+     * @return A clone.
+     *
+     * @throws CloneNotSupportedException if there is some reason that cloning
+     *     cannot be performed.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        DefaultTableXYDataset clone = (DefaultTableXYDataset) super.clone();
+        int seriesCount = this.data.size();
+        clone.data = new java.util.ArrayList(seriesCount);
+        for (int i = 0; i < seriesCount; i++) {
+            XYSeries series = (XYSeries) this.data.get(i);
+            clone.data.add(series.clone());
+        }
+
+        clone.intervalDelegate = new IntervalXYDelegate(clone);
+        // need to configure the intervalDelegate to match the original
+        clone.intervalDelegate.setFixedIntervalWidth(getIntervalWidth());
+        clone.intervalDelegate.setAutoWidth(isAutoWidth());
+        clone.intervalDelegate.setIntervalPositionFactor(
+                getIntervalPositionFactor());
+        clone.updateXPoints();
+        return clone;
     }
 
     /**

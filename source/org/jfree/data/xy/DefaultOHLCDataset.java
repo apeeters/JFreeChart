@@ -39,6 +39,7 @@
  * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
  *               getYValue() (DG);
  * 29-Apr-2005 : Added equals() method (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable, and fixed cloning bug (DG);
  *
  */
 
@@ -47,12 +48,14 @@ package org.jfree.data.xy;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.jfree.chart.util.PublicCloneable;
+
 /**
  * A simple implementation of the {@link OHLCDataset} interface.  This
  * implementation supports only one series.
  */
 public class DefaultOHLCDataset extends AbstractXYDataset
-                                implements OHLCDataset {
+        implements OHLCDataset, PublicCloneable {
 
     /** The series key. */
     private Comparable key;
@@ -317,6 +320,20 @@ public class DefaultOHLCDataset extends AbstractXYDataset
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns an independent copy of this dataset.
+     *
+     * @return A clone.
+     *
+     * @throws CloneNotSupportedException
+     */
+    public Object clone() throws CloneNotSupportedException {
+        DefaultOHLCDataset clone = (DefaultOHLCDataset) super.clone();
+        clone.data = new OHLCDataItem[this.data.length];
+        System.arraycopy(this.data, 0, clone.data, 0, this.data.length);
+        return clone;
     }
 
 }

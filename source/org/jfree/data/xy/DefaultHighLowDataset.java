@@ -42,6 +42,7 @@
  *               getYValue() (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 28-Nov-2006 : Added equals() method override (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -50,13 +51,15 @@ package org.jfree.data.xy;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.jfree.chart.util.PublicCloneable;
+
 /**
  * A simple implementation of the {@link OHLCDataset} interface.  See also
  * the {@link DefaultOHLCDataset} class, which provides another implementation
  * that is very similar.
  */
 public class DefaultHighLowDataset extends AbstractXYDataset
-                                   implements OHLCDataset {
+        implements OHLCDataset, PublicCloneable {
 
     /** The series key. */
     private Comparable seriesKey;

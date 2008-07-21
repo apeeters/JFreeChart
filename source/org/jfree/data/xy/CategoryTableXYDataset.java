@@ -42,11 +42,13 @@
  * 11-Jan-2005 : Removed deprecated code in preparation for 1.0.0 release (DG);
  * 05-Oct-2005 : Made the interval delegate a dataset change listener (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable, and fixed clone() method (DG);
  *
  */
 
 package org.jfree.data.xy;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DefaultKeyedValues2D;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
@@ -67,7 +69,8 @@ import org.jfree.data.general.DatasetUtilities;
  * implementation is provisional.
  */
 public class CategoryTableXYDataset extends AbstractIntervalXYDataset
-        implements TableXYDataset, IntervalXYDataset, DomainInfo {
+        implements TableXYDataset, IntervalXYDataset, DomainInfo,
+                   PublicCloneable {
 
     /**
      * The backing data structure.
@@ -375,6 +378,26 @@ public class CategoryTableXYDataset extends AbstractIntervalXYDataset
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns an independent copy of this dataset.
+     *
+     * @return A clone.
+     *
+     * @throws CloneNotSupportedException if there is some reason that cloning
+     *     cannot be performed.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        CategoryTableXYDataset clone = (CategoryTableXYDataset) super.clone();
+        clone.values = (DefaultKeyedValues2D) this.values.clone();
+        clone.intervalDelegate = new IntervalXYDelegate(clone);
+        // need to configure the intervalDelegate to match the original
+        clone.intervalDelegate.setFixedIntervalWidth(getIntervalWidth());
+        clone.intervalDelegate.setAutoWidth(isAutoWidth());
+        clone.intervalDelegate.setIntervalPositionFactor(
+                getIntervalPositionFactor());
+        return clone;
     }
 
 }

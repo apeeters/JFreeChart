@@ -42,7 +42,6 @@
 
 package org.jfree.data.xy;
 
-
 /**
  * An extension of the {@link XYDataset} interface that allows a range of data
  * to be defined for the X values, the Y values, or both the X and Y values.

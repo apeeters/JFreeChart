@@ -40,6 +40,7 @@
  * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
  *               getYValue() (DG);
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+ * 22-Apr-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -51,11 +52,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.jfree.chart.util.PublicCloneable;
+
 /**
  * A default implementation of the {@link WindDataset} interface.
  */
 public class DefaultWindDataset extends AbstractXYDataset
-                                implements WindDataset {
+        implements WindDataset, PublicCloneable {
 
     /** The keys for the series. */
     private List seriesKeys;
