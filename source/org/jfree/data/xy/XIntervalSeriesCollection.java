@@ -57,7 +57,7 @@ import org.jfree.data.general.DatasetChangeEvent;
  * @see XIntervalSeries
  */
 public class XIntervalSeriesCollection extends AbstractIntervalXYDataset
-                                implements IntervalXYDataset, Serializable {
+        implements IntervalXYDataset, Serializable {
 
     /** Storage for the data series. */
     private List data;
