@@ -762,7 +762,8 @@ public final class DatasetUtilities {
 
     /**
      * Returns the range of values in the range for the dataset.  This method
-     * is the partner for the {@link #findDomainBounds(XYDataset)} method.
+     * is the partner for the {@link #findDomainBounds(XYDataset, boolean)}
+     * method.
      *
      * @param dataset  the dataset (<code>null</code> not permitted).
      * @param includeInterval  a flag that determines whether or not the
@@ -842,7 +843,7 @@ public final class DatasetUtilities {
                 for (int column = 0; column < columnCount; column++) {
                     Number value = dataset.getValue(row, column);
                     if (value != null) {
-                    	double v = value.doubleValue();
+                        double v = value.doubleValue();
                         minimum = Math.min(minimum, v);
                         maximum = Math.max(maximum, v);
                     }
@@ -885,7 +886,7 @@ public final class DatasetUtilities {
      * @since 1.0.10
      */
     public static Range iterateRangeBounds(XYDataset dataset,
-    		boolean includeInterval) {
+            boolean includeInterval) {
         double minimum = Double.POSITIVE_INFINITY;
         double maximum = Double.NEGATIVE_INFINITY;
         int seriesCount = dataset.getSeriesCount();
