@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------------
  * ComparableObjectSeries.java
  * ---------------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited.
+ * (C) Copyright 2006-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -57,9 +57,9 @@ import org.jfree.data.general.SeriesException;
  *
  * @since 1.0.3
  */
-public class ComparableObjectSeries extends Series 
+public class ComparableObjectSeries extends Series
         implements Cloneable, Serializable {
-    
+
     /** Storage for the data items in the series. */
     protected List data;
 
@@ -68,13 +68,13 @@ public class ComparableObjectSeries extends Series
 
     /** A flag that controls whether the items are automatically sorted. */
     private boolean autoSort;
-    
+
     /** A flag that controls whether or not duplicate x-values are allowed. */
     private boolean allowDuplicateXValues;
 
     /**
-     * Creates a new empty series.  By default, items added to the series will 
-     * be sorted into ascending order by x-value, and duplicate x-values will 
+     * Creates a new empty series.  By default, items added to the series will
+     * be sorted into ascending order by x-value, and duplicate x-values will
      * be allowed (these defaults can be modified with another constructor.
      *
      * @param key  the series key (<code>null</code> not permitted).
@@ -82,18 +82,18 @@ public class ComparableObjectSeries extends Series
     public ComparableObjectSeries(Comparable key) {
         this(key, true, true);
     }
-    
+
     /**
-     * Constructs a new series that contains no data.  You can specify 
+     * Constructs a new series that contains no data.  You can specify
      * whether or not duplicate x-values are allowed for the series.
      *
      * @param key  the series key (<code>null</code> not permitted).
-     * @param autoSort  a flag that controls whether or not the items in the 
+     * @param autoSort  a flag that controls whether or not the items in the
      *                  series are sorted.
-     * @param allowDuplicateXValues  a flag that controls whether duplicate 
+     * @param allowDuplicateXValues  a flag that controls whether duplicate
      *                               x-values are allowed.
      */
-    public ComparableObjectSeries(Comparable key, boolean autoSort, 
+    public ComparableObjectSeries(Comparable key, boolean autoSort,
             boolean allowDuplicateXValues) {
         super(key);
         this.data = new java.util.ArrayList();
@@ -102,18 +102,18 @@ public class ComparableObjectSeries extends Series
     }
 
     /**
-     * Returns the flag that controls whether the items in the series are 
-     * automatically sorted.  There is no setter for this flag, it must be 
+     * Returns the flag that controls whether the items in the series are
+     * automatically sorted.  There is no setter for this flag, it must be
      * defined in the series constructor.
-     * 
+     *
      * @return A boolean.
      */
     public boolean getAutoSort() {
         return this.autoSort;
     }
-    
+
     /**
-     * Returns a flag that controls whether duplicate x-values are allowed.  
+     * Returns a flag that controls whether duplicate x-values are allowed.
      * This flag can only be set in the constructor.
      *
      * @return A boolean.
@@ -143,10 +143,10 @@ public class ComparableObjectSeries extends Series
     }
 
     /**
-     * Sets the maximum number of items that will be retained in the series.  
-     * If you add a new item to the series such that the number of items will 
-     * exceed the maximum item count, then the first element in the series is 
-     * automatically removed, ensuring that the maximum item count is not 
+     * Sets the maximum number of items that will be retained in the series.
+     * If you add a new item to the series such that the number of items will
+     * exceed the maximum item count, then the first element in the series is
+     * automatically removed, ensuring that the maximum item count is not
      * exceeded.
      * <p>
      * Typically this value is set before the series is populated with data,
@@ -160,19 +160,19 @@ public class ComparableObjectSeries extends Series
         this.maximumItemCount = maximum;
         boolean dataRemoved = false;
         while (this.data.size() > maximum) {
-            this.data.remove(0);   
+            this.data.remove(0);
             dataRemoved = true;
         }
         if (dataRemoved) {
             fireSeriesChanged();
         }
     }
-    
+
     /**
-     * Adds new data to the series and sends a {@link SeriesChangeEvent} to 
+     * Adds new data to the series and sends a {@link SeriesChangeEvent} to
      * all registered listeners.
      * <P>
-     * Throws an exception if the x-value is a duplicate AND the 
+     * Throws an exception if the x-value is a duplicate AND the
      * allowDuplicateXValues flag is false.
      *
      * @param x  the x-value (<code>null</code> not permitted).
@@ -182,18 +182,18 @@ public class ComparableObjectSeries extends Series
         // argument checking delegated...
         add(x, y, true);
     }
-    
+
     /**
-     * Adds new data to the series and, if requested, sends a 
+     * Adds new data to the series and, if requested, sends a
      * {@link SeriesChangeEvent} to all registered listeners.
      * <P>
-     * Throws an exception if the x-value is a duplicate AND the 
+     * Throws an exception if the x-value is a duplicate AND the
      * allowDuplicateXValues flag is false.
      *
      * @param x  the x-value (<code>null</code> not permitted).
      * @param y  the y-value (<code>null</code> permitted).
-     * @param notify  a flag the controls whether or not a 
-     *                {@link SeriesChangeEvent} is sent to all registered 
+     * @param notify  a flag the controls whether or not a
+     *                {@link SeriesChangeEvent} is sent to all registered
      *                listeners.
      */
     protected void add(Comparable x, Object y, boolean notify) {
@@ -203,12 +203,12 @@ public class ComparableObjectSeries extends Series
     }
 
     /**
-     * Adds a data item to the series and, if requested, sends a 
+     * Adds a data item to the series and, if requested, sends a
      * {@link SeriesChangeEvent} to all registered listeners.
      *
      * @param item  the (x, y) item (<code>null</code> not permitted).
-     * @param notify  a flag that controls whether or not a 
-     *                {@link SeriesChangeEvent} is sent to all registered 
+     * @param notify  a flag that controls whether or not a
+     *                {@link SeriesChangeEvent} is sent to all registered
      *                listeners.
      */
     protected void add(ComparableObjectItem item, boolean notify) {
@@ -226,7 +226,7 @@ public class ComparableObjectSeries extends Series
                 if (this.allowDuplicateXValues) {
                     // need to make sure we are adding *after* any duplicates
                     int size = this.data.size();
-                    while (index < size 
+                    while (index < size
                            && item.compareTo(this.data.get(index)) == 0) {
                         index++;
                     }
@@ -248,52 +248,52 @@ public class ComparableObjectSeries extends Series
                 // there is an item with the given x-value already
                 int index = indexOf(item.getComparable());
                 if (index >= 0) {
-                    throw new SeriesException("X-value already exists.");      
+                    throw new SeriesException("X-value already exists.");
                 }
             }
             this.data.add(item);
         }
         if (getItemCount() > this.maximumItemCount) {
             this.data.remove(0);
-        }                    
+        }
         if (notify) {
             fireSeriesChanged();
         }
     }
-    
+
     /**
-     * Returns the index of the item with the specified x-value, or a negative 
-     * index if the series does not contain an item with that x-value.  Be 
-     * aware that for an unsorted series, the index is found by iterating 
+     * Returns the index of the item with the specified x-value, or a negative
+     * index if the series does not contain an item with that x-value.  Be
+     * aware that for an unsorted series, the index is found by iterating
      * through all items in the series.
-     * 
+     *
      * @param x  the x-value (<code>null</code> not permitted).
-     * 
+     *
      * @return The index.
      */
     public int indexOf(Comparable x) {
         if (this.autoSort) {
             return Collections.binarySearch(this.data, new ComparableObjectItem(
-                    x, null));   
+                    x, null));
         }
         else {
             for (int i = 0; i < this.data.size(); i++) {
-                ComparableObjectItem item = (ComparableObjectItem) 
+                ComparableObjectItem item = (ComparableObjectItem)
                         this.data.get(i);
                 if (item.getComparable().equals(x)) {
-                    return i;   
+                    return i;
                 }
             }
             return -1;
         }
-    } 
+    }
 
     /**
      * Updates an item in the series.
-     * 
+     *
      * @param x  the x-value (<code>null</code> not permitted).
      * @param y  the y-value (<code>null</code> permitted).
-     * 
+     *
      * @throws SeriesException if there is no existing item with the specified
      *         x-value.
      */
@@ -310,9 +310,9 @@ public class ComparableObjectSeries extends Series
     }
 
     /**
-     * Updates the value of an item in the series and sends a 
+     * Updates the value of an item in the series and sends a
      * {@link SeriesChangeEvent} to all registered listeners.
-     * 
+     *
      * @param index  the item (zero based index).
      * @param y  the new value (<code>null</code> permitted).
      */
@@ -321,7 +321,7 @@ public class ComparableObjectSeries extends Series
         item.setObject(y);
         fireSeriesChanged();
     }
-    
+
     /**
      * Return the data item with the specified index.
      *
@@ -334,7 +334,7 @@ public class ComparableObjectSeries extends Series
     }
 
     /**
-     * Deletes a range of items from the series and sends a 
+     * Deletes a range of items from the series and sends a
      * {@link SeriesChangeEvent} to all registered listeners.
      *
      * @param start  the start index (zero-based).
@@ -346,10 +346,10 @@ public class ComparableObjectSeries extends Series
         }
         fireSeriesChanged();
     }
-    
+
     /**
-     * Removes all data items from the series and, unless the series is 
-     * already empty, sends a {@link SeriesChangeEvent} to all registered 
+     * Removes all data items from the series and, unless the series is
+     * already empty, sends a {@link SeriesChangeEvent} to all registered
      * listeners.
      */
     public void clear() {
@@ -360,11 +360,11 @@ public class ComparableObjectSeries extends Series
     }
 
     /**
-     * Removes the item at the specified index and sends a 
+     * Removes the item at the specified index and sends a
      * {@link SeriesChangeEvent} to all registered listeners.
-     * 
+     *
      * @param index  the index.
-     * 
+     *
      * @return The item removed.
      */
     protected ComparableObjectItem remove(int index) {
@@ -373,11 +373,11 @@ public class ComparableObjectSeries extends Series
         fireSeriesChanged();
         return result;
     }
-    
+
     /**
-     * Removes the item with the specified x-value and sends a 
+     * Removes the item with the specified x-value and sends a
      * {@link SeriesChangeEvent} to all registered listeners.
-     * 
+     *
      * @param x  the x-value.
 
      * @return The item removed.
@@ -385,11 +385,11 @@ public class ComparableObjectSeries extends Series
     public ComparableObjectItem remove(Comparable x) {
         return remove(indexOf(x));
     }
-    
+
     /**
      * Tests this series for equality with an arbitrary object.
      *
-     * @param obj  the object to test against for equality 
+     * @param obj  the object to test against for equality
      *             (<code>null</code> permitted).
      *
      * @return A boolean.
@@ -419,10 +419,10 @@ public class ComparableObjectSeries extends Series
         }
         return true;
     }
-    
+
     /**
      * Returns a hash code.
-     * 
+     *
      * @return A hash code.
      */
     public int hashCode() {
@@ -447,5 +447,5 @@ public class ComparableObjectSeries extends Series
         result = 29 * result + (this.allowDuplicateXValues ? 1 : 0);
         return result;
     }
-    
+
 }
