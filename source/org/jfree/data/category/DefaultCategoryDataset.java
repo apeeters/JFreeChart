@@ -42,6 +42,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 26-Feb-2007 : Updated API docs (DG);
  * 08-Mar-2007 : Implemented clone() (DG);
+ * 09-May-2008 : Implemented PublicCloneable (DG);
  *
  */
 
@@ -50,6 +51,7 @@ package org.jfree.data.category;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DefaultKeyedValues2D;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.general.AbstractDataset;
@@ -59,7 +61,7 @@ import org.jfree.data.general.DatasetChangeEvent;
  * A default implementation of the {@link CategoryDataset} interface.
  */
 public class DefaultCategoryDataset extends AbstractDataset
-        implements CategoryDataset, Serializable {
+        implements CategoryDataset, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -8168173757291644622L;

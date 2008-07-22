@@ -40,6 +40,7 @@
  * 06-Jun-2002 : Updated Javadoc comments (DG);
  * 24-Oct-2002 : Categories and series are now indexed by int or Comparable,
  *               following changes made to the CategoryDataset interface (DG);
+ * 12-May-2008 : Updated API docs (DG);
  *
  */
 
@@ -58,6 +59,8 @@ public interface IntervalCategoryDataset extends CategoryDataset {
      * @param category  the category (zero-based index).
      *
      * @return The start value (possibly <code>null</code>).
+     *
+     * @see #getEndValue(int, int)
      */
     public Number getStartValue(int series, int category);
 
@@ -68,6 +71,8 @@ public interface IntervalCategoryDataset extends CategoryDataset {
      * @param category  the category key.
      *
      * @return The start value (possibly <code>null</code>).
+     *
+     * @see #getEndValue(Comparable, Comparable)
      */
     public Number getStartValue(Comparable series, Comparable category);
 
@@ -78,6 +83,8 @@ public interface IntervalCategoryDataset extends CategoryDataset {
      * @param category  the category (zero-based index).
      *
      * @return The end value (possibly <code>null</code>).
+     *
+     * @see #getStartValue(int, int)
      */
     public Number getEndValue(int series, int category);
 
@@ -88,6 +95,8 @@ public interface IntervalCategoryDataset extends CategoryDataset {
      * @param category  the category key.
      *
      * @return The end value (possibly <code>null</code>).
+     *
+     * @see #getStartValue(Comparable, Comparable)
      */
     public Number getEndValue(Comparable series, Comparable category);
 
