@@ -48,7 +48,6 @@ import java.io.Serializable;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 
-
 /**
  * A (key, object) pair.
  */
