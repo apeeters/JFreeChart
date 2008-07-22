@@ -36,6 +36,7 @@
  * -------
  * 16-Sep-2003 : Version 1, based on MultiIntervalCategoryDataset (DG);
  * 23-Sep-2003 : Fixed Checkstyle issues (DG);
+ * 12-May-2008 : Updated API docs (DG);
  *
  */
 
@@ -56,6 +57,8 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param column  the column index (zero-based).
      *
      * @return The percent complete.
+     *
+     * @see #getPercentComplete(Comparable, Comparable)
      */
     public Number getPercentComplete(int row, int column);
 
@@ -66,6 +69,8 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param columnKey  the column key.
      *
      * @return The percent complete.
+     *
+     * @see #getPercentComplete(int, int)
      */
     public Number getPercentComplete(Comparable rowKey, Comparable columnKey);
 
@@ -76,6 +81,8 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param column  the column index (zero-based).
      *
      * @return The sub-interval count.
+     *
+     * @see #getSubIntervalCount(Comparable, Comparable)
      */
     public int getSubIntervalCount(int row, int column);
 
@@ -86,6 +93,8 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param columnKey  the column key.
      *
      * @return The sub-interval count.
+     *
+     * @see #getSubIntervalCount(int, int)
      */
     public int getSubIntervalCount(Comparable rowKey, Comparable columnKey);
 
@@ -97,6 +106,8 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param subinterval  the sub-interval index (zero-based).
      *
      * @return The start value (possibly <code>null</code>).
+     *
+     * @see #getEndValue(int, int, int)
      */
     public Number getStartValue(int row, int column, int subinterval);
 
@@ -108,6 +119,8 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param subinterval  the sub-interval.
      *
      * @return The start value (possibly <code>null</code>).
+     *
+     * @see #getEndValue(Comparable, Comparable, int)
      */
     public Number getStartValue(Comparable rowKey, Comparable columnKey,
                                 int subinterval);
@@ -120,6 +133,8 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param subinterval  the sub-interval.
      *
      * @return The end value (possibly <code>null</code>).
+     *
+     * @see #getStartValue(int, int, int)
      */
     public Number getEndValue(int row, int column, int subinterval);
 
@@ -131,6 +146,8 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param subinterval  the sub-interval.
      *
      * @return The end value (possibly <code>null</code>).
+     *
+     * @see #getStartValue(Comparable, Comparable, int)
      */
     public Number getEndValue(Comparable rowKey, Comparable columnKey,
                               int subinterval);
@@ -143,6 +160,8 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param subinterval  the sub-interval.
      *
      * @return The percent complete value (possibly <code>null</code>).
+     *
+     * @see #getPercentComplete(Comparable, Comparable, int)
      */
     public Number getPercentComplete(int row, int column, int subinterval);
 
@@ -153,7 +172,9 @@ public interface GanttCategoryDataset extends IntervalCategoryDataset {
      * @param columnKey  the column key.
      * @param subinterval  the sub-interval.
      *
-     * @return The precent complete value (possibly <code>null</code>).
+     * @return The percent complete value (possibly <code>null</code>).
+     *
+     * @see #getPercentComplete(int, int, int)
      */
     public Number getPercentComplete(Comparable rowKey, Comparable columnKey,
                                      int subinterval);

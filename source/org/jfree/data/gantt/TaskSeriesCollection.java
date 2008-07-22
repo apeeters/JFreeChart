@@ -45,6 +45,7 @@
  * 18-Jan-2006 : Added new methods getSeries(int) and
  *               getSeries(Comparable) (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 09-May-2008 : Fixed cloning bug (DG);
  *
  */
 
@@ -66,7 +67,7 @@ import org.jfree.data.time.TimePeriod;
  */
 public class TaskSeriesCollection extends AbstractSeriesDataset
         implements GanttCategoryDataset, Cloneable, PublicCloneable,
-        Serializable {
+                   Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -2065799050738449903L;
@@ -196,11 +197,14 @@ public class TaskSeriesCollection extends AbstractSeriesDataset
     /**
      * Returns the column index for a column key.
      *
-     * @param columnKey  the columnKey.
+     * @param columnKey  the column key (<code>null</code> not permitted).
      *
      * @return The column index.
      */
     public int getColumnIndex(Comparable columnKey) {
+        if (columnKey == null) {
+            throw new IllegalArgumentException("Null 'columnKey' argument.");
+        }
         return this.keys.indexOf(columnKey);
     }
 
@@ -589,7 +593,7 @@ public class TaskSeriesCollection extends AbstractSeriesDataset
      * @param columnKey  the column key.
      * @param subinterval  the sub-interval.
      *
-     * @return The precent complete value (possibly <code>null</code>).
+     * @return The percent complete value (possibly <code>null</code>).
      */
     public Number getPercentComplete(Comparable rowKey, Comparable columnKey,
                                      int subinterval) {
@@ -657,6 +661,21 @@ public class TaskSeriesCollection extends AbstractSeriesDataset
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns an independent copy of this dataset.
+     *
+     * @return A clone of the dataset.
+     *
+     * @throws CloneNotSupportedException if there is some problem cloning
+     *     the dataset.
+     */
+    public Object clone() throws CloneNotSupportedException {
+    	TaskSeriesCollection clone = (TaskSeriesCollection) super.clone();
+    	clone.data = (List) ObjectUtilities.deepClone(this.data);
+    	clone.keys = new java.util.ArrayList(this.keys);
+    	return clone;
     }
 
 }

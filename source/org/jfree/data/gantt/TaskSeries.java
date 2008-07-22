@@ -39,6 +39,7 @@
  * 24-Oct-2002 : Added methods to get TimeAllocation by task index (DG);
  * 10-Jan-2003 : Renamed GanttSeries --> TaskSeries (DG);
  * 30-Jul-2004 : Added equals() method (DG);
+ * 09-May-2008 : Fixed cloning bug (DG);
  *
  */
 
@@ -47,6 +48,7 @@ package org.jfree.data.gantt;
 import java.util.Collections;
 import java.util.List;
 
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.general.Series;
 
 /**
@@ -178,6 +180,20 @@ public class TaskSeries extends Series {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns an independent copy of this series.
+     *
+     * @return A clone of the series.
+     *
+     * @throws CloneNotSupportedException if there is some problem cloning
+     *     the dataset.
+     */
+    public Object clone() throws CloneNotSupportedException {
+    	TaskSeries clone = (TaskSeries) super.clone();
+    	clone.tasks = (List) ObjectUtilities.deepClone(this.tasks);
+    	return clone;
     }
 
 }
