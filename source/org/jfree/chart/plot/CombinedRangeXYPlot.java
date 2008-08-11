@@ -91,6 +91,9 @@
  * 27-Mar-2008 : Add documentation for getDataRange() method (DG);
  * 31-Mar-2008 : Updated getSubplots() to return EMPTY_LIST for null
  *               subplots, as suggested by Richard West (DG);
+ * 28-Apr-2008 : Fixed zooming problem (see bug 1950037) (DG);
+ * 11-Aug-2008 : Don't store totalWeight of subplots, calculate it as
+ *               required (DG);
  *
  */
 
@@ -128,9 +131,6 @@ public class CombinedRangeXYPlot extends XYPlot
 
     /** Storage for the subplot references. */
     private List subplots;
-
-    /** Total weight of all charts. */
-    private int totalWeight = 0;
 
     /** The gap between subplots. */
     private double gap = 5.0;
@@ -226,9 +226,6 @@ public class CombinedRangeXYPlot extends XYPlot
         subplot.setRangeAxis(null);
         subplot.addChangeListener(this);
         this.subplots.add(subplot);
-
-        // keep track of total weights
-        this.totalWeight += weight;
         configureRangeAxes();
         fireChangeEvent();
 
@@ -256,7 +253,6 @@ public class CombinedRangeXYPlot extends XYPlot
             this.subplots.remove(position);
             subplot.setParent(null);
             subplot.removeChangeListener(this);
-            this.totalWeight -= subplot.getWeight();
             configureRangeAxes();
             fireChangeEvent();
         }
@@ -269,12 +265,12 @@ public class CombinedRangeXYPlot extends XYPlot
      * @return An unmodifiable list of subplots.
      */
     public List getSubplots() {
-    	if (this.subplots != null) {
+        if (this.subplots != null) {
             return Collections.unmodifiableList(this.subplots);
-    	}
-    	else {
-    		return Collections.EMPTY_LIST;
-    	}
+        }
+        else {
+            return Collections.EMPTY_LIST;
+        }
     }
 
     /**
@@ -317,6 +313,11 @@ public class CombinedRangeXYPlot extends XYPlot
         Rectangle2D adjustedPlotArea = space.shrink(plotArea, null);
         // work out the maximum height or width of the non-shared axes...
         int n = this.subplots.size();
+        int totalWeight = 0;
+        for (int i = 0; i < n; i++) {
+        	XYPlot sub = (XYPlot) this.subplots.get(i);
+        	totalWeight += sub.getWeight();
+        }
 
         // calculate plotAreas of all sub-plots, maximum vertical/horizontal
         // axis width/height
@@ -336,13 +337,13 @@ public class CombinedRangeXYPlot extends XYPlot
 
             // calculate sub-plot area
             if (orientation == PlotOrientation.VERTICAL) {
-                double w = usableSize * plot.getWeight() / this.totalWeight;
+                double w = usableSize * plot.getWeight() / totalWeight;
                 this.subplotAreas[i] = new Rectangle2D.Double(x, y, w,
                         adjustedPlotArea.getHeight());
                 x = x + w + this.gap;
             }
             else if (orientation == PlotOrientation.HORIZONTAL) {
-                double h = usableSize * plot.getWeight() / this.totalWeight;
+                double h = usableSize * plot.getWeight() / totalWeight;
                 this.subplotAreas[i] = new Rectangle2D.Double(x, y,
                         adjustedPlotArea.getWidth(), h);
                 y = y + h + this.gap;
@@ -451,10 +452,23 @@ public class CombinedRangeXYPlot extends XYPlot
      */
     public void zoomDomainAxes(double factor, PlotRenderingInfo info,
                                Point2D source) {
+        zoomDomainAxes(factor, info, source, false);
+    }
+
+    /**
+     * Multiplies the range on the domain axis/axes by the specified factor.
+     *
+     * @param factor  the zoom factor.
+     * @param info  the plot rendering info (<code>null</code> not permitted).
+     * @param source  the source point (<code>null</code> not permitted).
+     * @param useAnchor  zoom about the anchor point?
+     */
+    public void zoomDomainAxes(double factor, PlotRenderingInfo info,
+                               Point2D source, boolean useAnchor) {
         // delegate 'info' and 'source' argument checks...
         XYPlot subplot = findSubplot(info, source);
         if (subplot != null) {
-            subplot.zoomDomainAxes(factor, info, source);
+            subplot.zoomDomainAxes(factor, info, source, useAnchor);
         }
         else {
             // if the source point doesn't fall within a subplot, we do the
@@ -462,7 +476,7 @@ public class CombinedRangeXYPlot extends XYPlot
             Iterator iterator = getSubplots().iterator();
             while (iterator.hasNext()) {
                 subplot = (XYPlot) iterator.next();
-                subplot.zoomDomainAxes(factor, info, source);
+                subplot.zoomDomainAxes(factor, info, source, useAnchor);
             }
         }
     }
@@ -635,28 +649,20 @@ public class CombinedRangeXYPlot extends XYPlot
      * @return <code>true</code> or <code>false</code>.
      */
     public boolean equals(Object obj) {
-
         if (obj == this) {
             return true;
         }
-
         if (!(obj instanceof CombinedRangeXYPlot)) {
             return false;
         }
-        if (!super.equals(obj)) {
-            return false;
-        }
         CombinedRangeXYPlot that = (CombinedRangeXYPlot) obj;
-        if (!ObjectUtilities.equal(this.subplots, that.subplots)) {
-            return false;
-        }
-        if (this.totalWeight != that.totalWeight) {
-            return false;
-        }
         if (this.gap != that.gap) {
             return false;
         }
-        return true;
+        if (!ObjectUtilities.equal(this.subplots, that.subplots)) {
+            return false;
+        }
+        return super.equals(obj);
     }
 
     /**
