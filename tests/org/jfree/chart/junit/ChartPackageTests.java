@@ -39,6 +39,7 @@
  * 21-May-2004 : Added PieChart3DTests (DG);
  * 02-Mar-2007 : Added missing tests (DG);
  * 06-Mar-2007 : Added HashUtilitiesTests (DG);
+ * 14-Aug-2008 : Added StandardChartThemeTests (DG);
  *
  */
 
@@ -81,6 +82,7 @@ public class ChartPackageTests extends TestCase {
         suite.addTestSuite(StackedAreaChartTests.class);
         suite.addTestSuite(StackedBarChartTests.class);
         suite.addTestSuite(StackedBarChart3DTests.class);
+        suite.addTestSuite(StandardChartThemeTests.class);
         suite.addTestSuite(StrokeMapTests.class);
         suite.addTestSuite(TimeSeriesChartTests.class);
         suite.addTestSuite(WaterfallChartTests.class);
