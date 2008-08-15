@@ -54,6 +54,7 @@
  * 16-Mar-2007 : Updated border drawing for changes in AbstractBlock (DG);
  * 18-May-2007 : Pass seriesKey and dataset to legend item block (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 15-Aug-2008 : Added getWrapper() method (DG);
  *
  */
 
@@ -535,6 +536,17 @@ public class LegendTitle extends Title
         }
         target = trimPadding(target);
         return container.draw(g2, target, params);
+    }
+
+    /**
+     * Returns the wrapper container, if any.
+     *
+     * @return The wrapper container (possibly <code>null</code>).
+     *
+     * @since 1.0.11
+     */
+    public BlockContainer getWrapper() {
+    	return this.wrapper;
     }
 
     /**
