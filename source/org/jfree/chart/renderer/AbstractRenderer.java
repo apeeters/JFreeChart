@@ -382,7 +382,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
         this.strokeList = new StrokeList();
         this.baseStroke = DEFAULT_STROKE;
-        this.autoPopulateSeriesStroke = false;
+        this.autoPopulateSeriesStroke = true;
 
         this.outlineStrokeList = new StrokeList();
         this.baseOutlineStroke = DEFAULT_OUTLINE_STROKE;
@@ -741,6 +741,21 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         if (notify) {
             fireChangeEvent();
         }
+    }
+
+    /**
+     * Clears the series paint settings for this renderer and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param notify  notify listeners?
+     *
+     * @since 1.0.11
+     */
+    public void clearSeriesPaints(boolean notify) {
+    	this.paintList.clear();
+    	if (notify) {
+    		fireChangeEvent();
+    	}
     }
 
     /**
@@ -1215,6 +1230,21 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         if (notify) {
             fireChangeEvent();
         }
+    }
+
+    /**
+     * Clears the series stroke settings for this renderer and, if requested,
+     * sends a {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param notify  notify listeners?
+     *
+     * @since 1.0.11
+     */
+    public void clearSeriesStrokes(boolean notify) {
+    	this.strokeList.clear();
+    	if (notify) {
+    		fireChangeEvent();
+    	}
     }
 
     /**
