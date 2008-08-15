@@ -135,6 +135,11 @@
  * 24-Sep-2007 : Added zoomAroundAnchor flag, and handle clearing of chart
  *               buffer (DG);
  * 25-Oct-2007 : Added default directory attribute (DG);
+ * 07-Nov-2007 : Fixed (rare) bug in refreshing off-screen image (DG);
+ * 07-May-2008 : Fixed bug in zooming that triggered zoom for a rectangle
+ *               outside of the data area (DG);
+ * 08-May-2008 : Fixed serialization bug (DG);
+ * 15-Aug-2008 : Increased default maxDrawWidth/Height (DG);
  *
  */
 
@@ -163,6 +168,8 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.EventListener;
 import java.util.ResourceBundle;
@@ -221,10 +228,10 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     public static final int DEFAULT_MINIMUM_DRAW_HEIGHT = 200;
 
     /** The default limit below which chart scaling kicks in. */
-    public static final int DEFAULT_MAXIMUM_DRAW_WIDTH = 800;
+    public static final int DEFAULT_MAXIMUM_DRAW_WIDTH = 1024;
 
     /** The default limit below which chart scaling kicks in. */
-    public static final int DEFAULT_MAXIMUM_DRAW_HEIGHT = 600;
+    public static final int DEFAULT_MAXIMUM_DRAW_HEIGHT = 768;
 
     /** The minimum size required to perform a zoom on a rectangle */
     public static final int DEFAULT_ZOOM_TRIGGER_DISTANCE = 10;
@@ -269,7 +276,7 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     private JFreeChart chart;
 
     /** Storage for registered (chart) mouse listeners. */
-    private EventListenerList chartMouseListeners;
+    private transient EventListenerList chartMouseListeners;
 
     /** A flag that controls whether or not the off-screen buffer is used. */
     private boolean useBuffer;
@@ -278,7 +285,7 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     private boolean refreshBuffer;
 
     /** A buffer for the rendered chart. */
-    private Image chartBuffer;
+    private transient Image chartBuffer;
 
     /** The height of the chart buffer. */
     private int chartBufferHeight;
@@ -338,7 +345,7 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      * click).  This is a point on the screen, not the chart (which may have
      * been scaled up or down to fit the panel).
      */
-    private Point zoomPoint = null;
+    private Point2D zoomPoint = null;
 
     /** The zoom rectangle (selected by the user with the mouse). */
     private transient Rectangle2D zoomRectangle = null;
@@ -565,7 +572,7 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                       boolean zoom,
                       boolean tooltips) {
 
-        this.setChart(chart);
+        setChart(chart);
         this.chartMouseListeners = new EventListenerList();
         this.info = new ChartRenderingInfo();
         setPreferredSize(new Dimension(width, height));
@@ -1169,16 +1176,16 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      * Applies any scaling that is in effect for the chart drawing to the
      * given rectangle.
      *
-     * @param rect  the rectangle.
+     * @param rect  the rectangle (<code>null</code> not permitted).
      *
      * @return A new scaled rectangle.
      */
     public Rectangle2D scale(Rectangle2D rect) {
         Insets insets = getInsets();
         double x = rect.getX() * getScaleX() + insets.left;
-        double y = rect.getY() * this.getScaleY() + insets.top;
-        double w = rect.getWidth() * this.getScaleX();
-        double h = rect.getHeight() * this.getScaleY();
+        double y = rect.getY() * getScaleY() + insets.top;
+        double w = rect.getWidth() * getScaleX();
+        double h = rect.getHeight() * getScaleY();
         return new Rectangle2D.Double(x, y, w, h);
     }
 
@@ -1308,6 +1315,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
             // do we need to redraw the buffer?
             if (this.refreshBuffer) {
 
+                this.refreshBuffer = false; // clear the flag
+
                 Rectangle2D bufferArea = new Rectangle2D.Double(
                         0, 0, this.chartBufferWidth, this.chartBufferHeight);
 
@@ -1330,8 +1339,6 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                     this.chart.draw(bufferG2, bufferArea, this.anchor,
                             this.info);
                 }
-
-                this.refreshBuffer = false;
 
             }
 
@@ -1531,12 +1538,10 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      *
      * @return A point within the rectangle.
      */
-    private Point getPointInRectangle(int x, int y, Rectangle2D area) {
-        x = (int) Math.max(Math.ceil(area.getMinX()), Math.min(x,
-                Math.floor(area.getMaxX())));
-        y = (int) Math.max(Math.ceil(area.getMinY()), Math.min(y,
-                Math.floor(area.getMaxY())));
-        return new Point(x, y);
+    private Point2D getPointInRectangle(int x, int y, Rectangle2D area) {
+        double xx = Math.max(area.getMinX(), Math.min(x, area.getMaxX()));
+        double yy = Math.max(area.getMinY(), Math.min(y, area.getMaxY()));
+        return new Point2D.Double(xx, yy);
     }
 
     /**
@@ -1634,6 +1639,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                     Rectangle2D screenDataArea = getScreenDataArea(
                             (int) this.zoomPoint.getX(),
                             (int) this.zoomPoint.getY());
+                    double maxX = screenDataArea.getMaxX();
+                    double maxY = screenDataArea.getMaxY();
                     // for mouseReleased event, (horizontalZoom || verticalZoom)
                     // will be true, so we can just test for either being false;
                     // otherwise both are true
@@ -1641,8 +1648,7 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                         x = this.zoomPoint.getX();
                         y = screenDataArea.getMinY();
                         w = Math.min(this.zoomRectangle.getWidth(),
-                                screenDataArea.getMaxX()
-                                - this.zoomPoint.getX());
+                                maxX - this.zoomPoint.getX());
                         h = screenDataArea.getHeight();
                     }
                     else if (!hZoom) {
@@ -1650,18 +1656,15 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                         y = this.zoomPoint.getY();
                         w = screenDataArea.getWidth();
                         h = Math.min(this.zoomRectangle.getHeight(),
-                                screenDataArea.getMaxY()
-                                - this.zoomPoint.getY());
+                                maxY - this.zoomPoint.getY());
                     }
                     else {
                         x = this.zoomPoint.getX();
                         y = this.zoomPoint.getY();
                         w = Math.min(this.zoomRectangle.getWidth(),
-                                screenDataArea.getMaxX()
-                                - this.zoomPoint.getX());
+                                maxX - this.zoomPoint.getX());
                         h = Math.min(this.zoomRectangle.getHeight(),
-                                screenDataArea.getMaxY()
-                                - this.zoomPoint.getY());
+                                maxY - this.zoomPoint.getY());
                     }
                     Rectangle2D zoomArea = new Rectangle2D.Double(x, y, w, h);
                     zoom(zoomArea);
@@ -1690,7 +1693,7 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
 
     /**
      * Receives notification of mouse clicks on the panel. These are
-     * translated and passed on to any registered chart mouse click listeners.
+     * translated and passed on to any registered {@link ChartMouseListener}s.
      *
      * @param event  Information about the mouse event.
      */
@@ -1923,7 +1926,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         if (p instanceof Zoomable) {
             Zoomable z = (Zoomable) p;
             // we need to guard against this.zoomPoint being null
-            Point zp = (this.zoomPoint != null ? this.zoomPoint : new Point());
+            Point2D zp = (this.zoomPoint != null
+            		? this.zoomPoint : new Point());
             z.zoomDomainAxes(0.0, this.info.getPlotInfo(), zp);
         }
     }
@@ -1936,7 +1940,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         if (p instanceof Zoomable) {
             Zoomable z = (Zoomable) p;
             // we need to guard against this.zoomPoint being null
-            Point zp = (this.zoomPoint != null ? this.zoomPoint : new Point());
+            Point2D zp = (this.zoomPoint != null
+            		? this.zoomPoint : new Point());
             z.zoomRangeAxes(0.0, this.info.getPlotInfo(), zp);
         }
     }
@@ -2523,8 +2528,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
 
     }
 
-    /* (non-Javadoc)
-     * @see javax.swing.JPanel#updateUI()
+    /**
+     * Updates the UI for a LookAndFeel change.
      */
     public void updateUI() {
         // here we need to update the UI for the popup menu, if the panel
@@ -2534,5 +2539,39 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         }
         super.updateUI();
     }
+
+    /**
+     * Provides serialization support.
+     *
+     * @param stream  the output stream.
+     *
+     * @throws IOException  if there is an I/O error.
+     */
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+    }
+
+    /**
+     * Provides serialization support.
+     *
+     * @param stream  the input stream.
+     *
+     * @throws IOException  if there is an I/O error.
+     * @throws ClassNotFoundException  if there is a classpath problem.
+     */
+    private void readObject(ObjectInputStream stream)
+        throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+
+        // we create a new but empty chartMouseListeners list
+        this.chartMouseListeners = new EventListenerList();
+
+        // register as a listener with sub-components...
+        if (this.chart != null) {
+            this.chart.addChangeListener(this);
+        }
+
+    }
+
 
 }
