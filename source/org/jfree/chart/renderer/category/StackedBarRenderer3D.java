@@ -82,6 +82,7 @@
  *               (shading) (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 31-Jul-2007 : Added flag for handling zero values (DG);
+ * 15-Aug-2008 : Fixed bug 2031407 - no negative zero for stack encoding (DG);
  *
  */
 
@@ -349,7 +350,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
                     baseIndex = 0;
                 }
                 negBase = negBase + v; // '+' because v is negative
-                result.add(0, new Object[] {new Integer(-s),
+                result.add(0, new Object[] {new Integer(-s - 1),
                         new Double(negBase)});
                 baseIndex++;
             }
@@ -456,12 +457,12 @@ public class StackedBarRenderer3D extends BarRenderer3D
             Object[] curr = (Object[]) values.get(index + 1);
             int series = 0;
             if (curr[0] == null) {
-                series = -((Integer) prev[0]).intValue();
+                series = -((Integer) prev[0]).intValue() - 1;
             }
             else {
                 series = ((Integer) curr[0]).intValue();
                 if (series < 0) {
-                    series = -((Integer) prev[0]).intValue();
+                    series = -((Integer) prev[0]).intValue() - 1;
                 }
             }
             double v0 = ((Double) prev[1]).doubleValue();
@@ -652,12 +653,12 @@ public class StackedBarRenderer3D extends BarRenderer3D
             Object[] curr = (Object[]) values.get(index + 1);
             int series = 0;
             if (curr[0] == null) {
-                series = -((Integer) prev[0]).intValue();
+                series = -((Integer) prev[0]).intValue() - 1;
             }
             else {
                 series = ((Integer) curr[0]).intValue();
                 if (series < 0) {
-                    series = -((Integer) prev[0]).intValue();
+                    series = -((Integer) prev[0]).intValue() - 1;
                 }
             }
             double v0 = ((Double) prev[1]).doubleValue();
