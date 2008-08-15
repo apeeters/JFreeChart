@@ -70,6 +70,8 @@
  * 06-Feb-2006 : API doc update (DG);
  * 19-Mar-2007 : Use try-finally to close output stream in saveChartAsXXX()
  *               methods (DG);
+ * 10-Jan-2008 : Fix bug 1868251 - don't create image with transparency when
+ *               saving to JPEG format (DG);
  *
  */
 
@@ -104,6 +106,19 @@ import org.jfree.chart.encoders.ImageFormat;
  * @see ImageMapUtilities
  */
 public abstract class ChartUtilities {
+
+	/**
+	 * Applies the current theme to the specified chart.  This method is
+	 * provided for convenience, the theme itself is stored in the
+	 * {@link ChartFactory} class.
+	 *
+	 * @param chart  the chart (<code>null</code> not permitted).
+	 *
+	 * @since 1.0.11
+	 */
+	public static void applyCurrentTheme(JFreeChart chart) {
+		ChartFactory.getChartTheme().apply(chart);
+	}
 
     /**
      * Writes a chart to an output stream in PNG format.
@@ -409,7 +424,8 @@ public abstract class ChartUtilities {
         if (chart == null) {
             throw new IllegalArgumentException("Null 'chart' argument.");
         }
-        BufferedImage image = chart.createBufferedImage(width, height, info);
+        BufferedImage image = chart.createBufferedImage(width, height,
+                BufferedImage.TYPE_INT_RGB, info);
         EncoderUtil.writeBufferedImage(image, ImageFormat.JPEG, out);
 
     }
@@ -436,7 +452,8 @@ public abstract class ChartUtilities {
         if (chart == null) {
             throw new IllegalArgumentException("Null 'chart' argument.");
         }
-        BufferedImage image = chart.createBufferedImage(width, height, info);
+        BufferedImage image = chart.createBufferedImage(width, height,
+                BufferedImage.TYPE_INT_RGB, info);
         EncoderUtil.writeBufferedImage(image, ImageFormat.JPEG, out, quality);
 
     }
