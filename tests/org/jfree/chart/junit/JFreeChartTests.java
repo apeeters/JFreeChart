@@ -578,12 +578,13 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
     /** The last ChartChangeEvent received. */
     private ChartChangeEvent lastChartChangeEvent;
 
-    /* (non-Javadoc)
-     * @see org.jfree.chart.event.ChartChangeListener#chartChanged(org.jfree.chart.event.ChartChangeEvent)
+    /**
+     * Records the last chart change event.
+     *
+     * @param event  the event.
      */
     public void chartChanged(ChartChangeEvent event) {
         this.lastChartChangeEvent = event;
     }
-
 
 }
