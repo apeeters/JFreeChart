@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------
@@ -35,7 +35,7 @@
  * Changes
  * -------
  * 30-Jan-2007 : Adapted for SWT from TimeSeriesDemo.java (HP);
- * 
+ *
  */
 package org.jfree.experimental.chart.swt.demo;
 
@@ -63,17 +63,17 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.experimental.chart.swt.ChartComposite;
 
 /**
- * An example of a time series chart.  For the most part, default settings are 
- * used, except that the renderer is modified to show filled shapes (as well as 
+ * An example of a time series chart.  For the most part, default settings are
+ * used, except that the renderer is modified to show filled shapes (as well as
  * lines) at each data point.
  */
 public class SWTTimeSeriesDemo {
 
     /**
      * Creates a chart.
-     * 
+     *
      * @param dataset  a dataset.
-     * 
+     *
      * @return A chart.
      */
     private static JFreeChart createChart(XYDataset dataset) {
@@ -105,23 +105,23 @@ public class SWTTimeSeriesDemo {
             renderer.setBaseShapesVisible(true);
             renderer.setBaseShapesFilled(true);
         }
-        
+
         // code to test the alpha channel
         IntervalMarker interv = new IntervalMarker(120, 150,
-        		Color.blue, new BasicStroke(5.0f),null,null,0.2f);
+                Color.blue, new BasicStroke(5.0f),null,null,0.2f);
         plot.addRangeMarker(interv);
-        
+
         // code to test the alpha channel within awt colors
         XYDifferenceRenderer differenceRenderer= new XYDifferenceRenderer(new Color(255,0,0,128),new Color(0,255,0,128),false);
         plot.setRenderer(differenceRenderer);
-        
+
         DateAxis axis = (DateAxis) plot.getDomainAxis();
         axis.setDateFormatOverride(new SimpleDateFormat("MMM-yyyy"));
-        
+
         return chart;
 
     }
-    
+
     /**
      * Creates a dataset, consisting of two series of monthly data.
      *
@@ -160,7 +160,7 @@ public class SWTTimeSeriesDemo {
         s2.add(new Month(9, 2001), 112.7);
         s2.add(new Month(10, 2001), 180.5);
         s2.add(new Month(11, 2001), 140.1);
-        s2.add(new Month(12, 2001), 110.3);         
+        s2.add(new Month(12, 2001), 110.3);
 //        s2.add(new Month(9, 2001), 112.7);
 //        s2.add(new Month(10, 2001), 101.5);
 //        s2.add(new Month(11, 2001), 106.1);
@@ -175,10 +175,10 @@ public class SWTTimeSeriesDemo {
         TimeSeriesCollection dataset = new TimeSeriesCollection();
         dataset.addSeries(s1);
         dataset.addSeries(s2);
-        
+
         return dataset;
     }
-    
+
     /**
      * Starting point for the demonstration application.
      *

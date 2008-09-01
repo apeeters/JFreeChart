@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------
@@ -35,7 +35,7 @@
  * Changes
  * -------
  * 23-Aug-2006 : New class (DG);
- * 
+ *
  */
 
 package org.jfree.experimental.chart.swt.demo;
@@ -60,10 +60,10 @@ import org.jfree.experimental.chart.swt.ChartComposite;
  * This demo shows a time series chart that has multiple range axes.
  */
 public class SWTPieChartDemo1 {
-    
+
     /**
      * Creates a sample dataset.
-     * 
+     *
      * @return A sample dataset.
      */
     private static PieDataset createDataset() {
@@ -74,18 +74,18 @@ public class SWTPieChartDemo1 {
         dataset.setValue("Four", new Double(17.5));
         dataset.setValue("Five", new Double(11.0));
         dataset.setValue("Six", new Double(19.4));
-        return dataset;        
+        return dataset;
     }
-    
+
     /**
      * Creates a chart.
-     * 
+     *
      * @param dataset  the dataset.
-     * 
+     *
      * @return A chart.
      */
     private static JFreeChart createChart(PieDataset dataset) {
-        
+
         JFreeChart chart = ChartFactory.createPieChart(
             "Pie Chart Demo 1",  // chart title
             dataset,             // data
@@ -100,9 +100,9 @@ public class SWTPieChartDemo1 {
         plot.setNoDataMessage("No data available");
         plot.setCircular(false);
         plot.setLabelGap(0.02);
-        return chart;        
+        return chart;
     }
-    
+
     /**
      * Starting point for the demonstration application.
      *
@@ -117,27 +117,27 @@ public class SWTPieChartDemo1 {
         shell.setText("Test for jfreechart running with SWT");
         final ChartComposite frame = new ChartComposite(shell, SWT.NONE, chart, true);
         //frame.setDisplayToolTips(false);
-    	frame.addChartMouseListener(new ChartMouseListener() {
-	  		String slice;
-    		public void chartMouseClicked(ChartMouseEvent event) {
-    			PieSectionEntity entity = (PieSectionEntity) event.getEntity();
-    			if (entity != null) {
-    				String slice = (String) entity.getSectionKey();
-    				PiePlot plot = (PiePlot) chart.getPlot();
-    				if (this.slice != null) {
-        				plot.setExplodePercent(this.slice, 0.0);
-    				}
-    				if (slice == this.slice) {
-        				this.slice = null;
-    				} else {
-        				plot.setExplodePercent(slice, 0.25);
-        				this.slice = slice;
-    				}
-    			}
-    		}
-    		
-    		public void chartMouseMoved(ChartMouseEvent event) {}
-    	});
+        frame.addChartMouseListener(new ChartMouseListener() {
+              String slice;
+            public void chartMouseClicked(ChartMouseEvent event) {
+                PieSectionEntity entity = (PieSectionEntity) event.getEntity();
+                if (entity != null) {
+                    String slice = (String) entity.getSectionKey();
+                    PiePlot plot = (PiePlot) chart.getPlot();
+                    if (this.slice != null) {
+                        plot.setExplodePercent(this.slice, 0.0);
+                    }
+                    if (slice == this.slice) {
+                        this.slice = null;
+                    } else {
+                        plot.setExplodePercent(slice, 0.25);
+                        this.slice = slice;
+                    }
+                }
+            }
+
+            public void chartMouseMoved(ChartMouseEvent event) {}
+        });
 
         frame.pack();
         shell.open();

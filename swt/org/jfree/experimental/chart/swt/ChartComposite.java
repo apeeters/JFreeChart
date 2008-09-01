@@ -1527,7 +1527,7 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     /**
      * Hook an SWT listener on the canvas where the chart is drawn.
      * The purpose of this method is to allow some degree of customization.
-	 *
+     *
      * @param listener The SWT listener to attach to the canvas.
      */
     public void addSWTListener(EventListener listener) {
@@ -1883,16 +1883,16 @@ public class ChartComposite extends Composite implements ChartChangeListener,
     }
 
     /* (non-Javadoc)
-	 * @see org.eclipse.swt.widgets.Widget#dispose()
-	 */
-	public void dispose() {
-		if (this.chartBuffer != null) this.chartBuffer.dispose();
-		// de-register the composite as a listener for the chart.
+     * @see org.eclipse.swt.widgets.Widget#dispose()
+     */
+    public void dispose() {
+        if (this.chartBuffer != null) this.chartBuffer.dispose();
+        // de-register the composite as a listener for the chart.
         if (this.chart != null) {
             this.chart.removeChangeListener(this);
             this.chart.removeProgressListener(this);
         }
-		super.dispose();
-	}
+        super.dispose();
+    }
 
 }
