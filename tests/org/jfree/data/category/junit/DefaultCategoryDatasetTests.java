@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------------------------
@@ -60,7 +60,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
  * Tests for the {@link DefaultCategoryDataset} class.
  */
 public class DefaultCategoryDatasetTests extends TestCase {
-    
+
     /**
      * Returns the tests as a test suite.
      *
@@ -78,7 +78,7 @@ public class DefaultCategoryDatasetTests extends TestCase {
     public DefaultCategoryDatasetTests(String name) {
         super(name);
     }
-    
+
     /**
      * Some checks for the getValue() method.
      */
@@ -91,20 +91,20 @@ public class DefaultCategoryDatasetTests extends TestCase {
             d.getValue("XX", "C1");
         }
         catch (UnknownKeyException e) {
-            pass = true;   
+            pass = true;
         }
         assertTrue(pass);
-        
+
         pass = false;
         try {
             d.getValue("R1", "XX");
         }
         catch (UnknownKeyException e) {
-            pass = true;   
+            pass = true;
         }
         assertTrue(pass);
     }
-    
+
     /**
      * A simple check for the getValue(int, int) method.
      */
@@ -119,7 +119,7 @@ public class DefaultCategoryDatasetTests extends TestCase {
         }
         assertTrue(pass);
     }
-    
+
     /**
      * Some checks for the incrementValue() method.
      */
@@ -128,49 +128,49 @@ public class DefaultCategoryDatasetTests extends TestCase {
         d.addValue(1.0, "R1", "C1");
         d.incrementValue(2.0, "R1", "C1");
         assertEquals(new Double(3.0), d.getValue("R1", "C1"));
-        
+
         // increment a null value
         d.addValue(null, "R2", "C1");
         d.incrementValue(2.0, "R2", "C1");
         assertEquals(new Double(2.0), d.getValue("R2", "C1"));
-        
+
         // increment an unknown row
         boolean pass = false;
         try {
             d.incrementValue(1.0, "XX", "C1");
         }
         catch (UnknownKeyException e) {
-            pass = true;   
+            pass = true;
         }
         assertTrue(pass);
-        
+
         // increment an unknown column
         pass = false;
         try {
             d.incrementValue(1.0, "R1", "XX");
         }
         catch (UnknownKeyException e) {
-            pass = true;   
+            pass = true;
         }
-        assertTrue(pass); 
+        assertTrue(pass);
     }
-    
+
     /**
      * Some tests for the getRowCount() method.
      */
     public void testGetRowCount() {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         assertTrue(d.getRowCount() == 0);
-        
+
         d.addValue(1.0, "R1", "C1");
         assertTrue(d.getRowCount() == 1);
-        
+
         d.addValue(1.0, "R2", "C1");
         assertTrue(d.getRowCount() == 2);
-        
+
         d.addValue(2.0, "R2", "C1");
         assertTrue(d.getRowCount() == 2);
-        
+
         // a row of all null values is still counted...
         d.setValue(null, "R2", "C1");
         assertTrue(d.getRowCount() == 2);
@@ -182,16 +182,16 @@ public class DefaultCategoryDatasetTests extends TestCase {
     public void testGetColumnCount() {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
         assertTrue(d.getColumnCount() == 0);
-        
+
         d.addValue(1.0, "R1", "C1");
         assertTrue(d.getColumnCount() == 1);
-        
+
         d.addValue(1.0, "R1", "C2");
         assertTrue(d.getColumnCount() == 2);
-        
+
         d.addValue(2.0, "R1", "C2");
         assertTrue(d.getColumnCount() == 2);
-        
+
         // a column of all null values is still counted...
         d.setValue(null, "R1", "C2");
         assertTrue(d.getColumnCount() == 2);
@@ -245,7 +245,7 @@ public class DefaultCategoryDatasetTests extends TestCase {
         assertEquals(d1, d2);
 
     }
-    
+
     /**
      * Some checks for the addValue() method.
      */
@@ -255,7 +255,7 @@ public class DefaultCategoryDatasetTests extends TestCase {
         assertNull(d1.getValue("R1", "C1"));
         d1.addValue(new Double(1.0), "R2", "C1");
         assertEquals(new Double(1.0), d1.getValue("R2", "C1"));
-        
+
         boolean pass = false;
         try {
             d1.addValue(new Double(1.1), null, "C2");
@@ -265,7 +265,7 @@ public class DefaultCategoryDatasetTests extends TestCase {
         }
         assertTrue(pass);
     }
-    
+
     /**
      * Some basic checks for the removeValue() method.
      */
@@ -276,12 +276,12 @@ public class DefaultCategoryDatasetTests extends TestCase {
         d.removeValue("R1", "C1");
         assertEquals(0, d.getRowCount());
         assertEquals(0, d.getColumnCount());
-        
+
         d.addValue(new Double(1.0), "R1", "C1");
         d.addValue(new Double(2.0), "R2", "C1");
         d.removeValue("R1", "C1");
         assertEquals(new Double(2.0), d.getValue(0, 0));
-        
+
         boolean pass = false;
         try {
             d.removeValue(null, "C1");
@@ -300,7 +300,7 @@ public class DefaultCategoryDatasetTests extends TestCase {
         }
         assertTrue(pass);
     }
-    
+
     /**
      * Confirm that cloning works.
      */
@@ -316,7 +316,7 @@ public class DefaultCategoryDatasetTests extends TestCase {
         assertTrue(d1 != d2);
         assertTrue(d1.getClass() == d2.getClass());
         assertTrue(d1.equals(d2));
-        
+
         // try a dataset with some content...
         d1.addValue(1.0, "R1", "C1");
         d1.addValue(2.0, "R1", "C2");
@@ -329,7 +329,7 @@ public class DefaultCategoryDatasetTests extends TestCase {
         assertTrue(d1 != d2);
         assertTrue(d1.getClass() == d2.getClass());
         assertTrue(d1.equals(d2));
-        
+
         // check that the clone doesn't share the same underlying arrays.
         d1.addValue(3.0, "R1", "C1");
         assertFalse(d1.equals(d2));
@@ -338,16 +338,16 @@ public class DefaultCategoryDatasetTests extends TestCase {
     }
 
     private static final double EPSILON = 0.0000000001;
-    
+
     /**
      * A test for bug 1835955.
      */
     public void testBug1835955() {
-    	DefaultCategoryDataset d = new DefaultCategoryDataset();
-    	d.addValue(1.0, "R1", "C1");
-    	d.addValue(2.0, "R2", "C2");
-    	d.removeColumn("C2");
-    	d.addValue(3.0, "R2", "C2");
-    	assertEquals(3.0, d.getValue("R2", "C2").doubleValue(), EPSILON);
+        DefaultCategoryDataset d = new DefaultCategoryDataset();
+        d.addValue(1.0, "R1", "C1");
+        d.addValue(2.0, "R2", "C2");
+        d.removeColumn("C2");
+        d.addValue(3.0, "R2", "C2");
+        assertEquals(3.0, d.getValue("R2", "C2").doubleValue(), EPSILON);
     }
 }
