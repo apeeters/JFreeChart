@@ -205,7 +205,7 @@ public class PeriodAxisTests extends TestCase {
         PeriodAxisLabelInfo[] info = new PeriodAxisLabelInfo[2];
         info[0] = new PeriodAxisLabelInfo(Day.class, new SimpleDateFormat("d"));
         info[1] = new PeriodAxisLabelInfo(Year.class,
-        		new SimpleDateFormat("yyyy"));
+                new SimpleDateFormat("yyyy"));
         a1.setLabelInfo(info);
         assertFalse(a1.equals(a2));
         a2.setLabelInfo(info);
