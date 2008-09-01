@@ -371,8 +371,8 @@ public class CombinedDomainCategoryPlot extends CategoryPlot
         int n = this.subplots.size();
         int totalWeight = 0;
         for (int i = 0; i < n; i++) {
-        	CategoryPlot sub = (CategoryPlot) this.subplots.get(i);
-        	totalWeight += sub.getWeight();
+            CategoryPlot sub = (CategoryPlot) this.subplots.get(i);
+            totalWeight += sub.getWeight();
         }
         this.subplotAreas = new Rectangle2D[n];
         double x = adjustedPlotArea.getX();
@@ -472,10 +472,10 @@ public class CombinedDomainCategoryPlot extends CategoryPlot
             }
             Point2D subAnchor = null;
             if (anchor != null && this.subplotAreas[i].contains(anchor)) {
-            	subAnchor = anchor;
+                subAnchor = anchor;
             }
             plot.draw(g2, this.subplotAreas[i], subAnchor, parentState,
-            		subplotInfo);
+                    subplotInfo);
         }
 
         if (info != null) {

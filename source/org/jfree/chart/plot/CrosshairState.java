@@ -455,7 +455,7 @@ public class CrosshairState {
      * @since 1.0.11
      */
     public int getDatasetIndex() {
-    	return this.datasetIndex;
+        return this.datasetIndex;
     }
 
     /**
@@ -468,7 +468,7 @@ public class CrosshairState {
      * @since 1.0.11
      */
     public void setDatasetIndex(int index) {
-    	this.datasetIndex = index;
+        this.datasetIndex = index;
     }
 
     /**

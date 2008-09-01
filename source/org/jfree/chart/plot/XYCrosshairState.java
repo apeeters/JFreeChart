@@ -46,11 +46,11 @@ package org.jfree.chart.plot;
  */
 public class XYCrosshairState extends CrosshairState {
 
-	/**
-	 * Creates a new instance.
-	 */
-	public XYCrosshairState() {
+    /**
+     * Creates a new instance.
+     */
+    public XYCrosshairState() {
 
-	}
+    }
 
 }

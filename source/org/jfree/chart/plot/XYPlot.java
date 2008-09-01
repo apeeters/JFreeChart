@@ -1389,7 +1389,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
      * @since 1.0.11
      */
     public int getRendererCount() {
-    	return this.renderers.size();
+        return this.renderers.size();
     }
 
     /**
@@ -3060,14 +3060,14 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
 
         ValueAxis xAxis = getDomainAxis();
         if (xAxis == null) {  // we can't draw quadrants without a valid x-axis
-        	return;
+            return;
         }
         double x = xAxis.getRange().constrain(this.quadrantOrigin.getX());
         double xx = xAxis.valueToJava2D(x, area, getDomainAxisEdge());
 
         ValueAxis yAxis = getRangeAxis();
         if (yAxis == null) {  // we can't draw quadrants without a valid y-axis
-        	return;
+            return;
         }
         double y = yAxis.getRange().constrain(this.quadrantOrigin.getY());
         double yy = yAxis.valueToJava2D(y, area, getRangeAxisEdge());
@@ -3342,7 +3342,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
             ValueAxis xAxis = getDomainAxisForDataset(index);
             ValueAxis yAxis = getRangeAxisForDataset(index);
             if (xAxis == null || yAxis == null) {
-            	return foundData;  // can't render anything without axes
+                return foundData;  // can't render anything without axes
             }
             XYItemRenderer renderer = getRenderer(index);
             if (renderer == null) {
@@ -3375,14 +3375,14 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
                             lastItem = itemBounds[1];
                         }
                         state.startSeriesPass(dataset, series, firstItem,
-                        		lastItem, pass, passCount);
+                                lastItem, pass, passCount);
                         for (int item = firstItem; item <= lastItem; item++) {
                             renderer.drawItem(g2, state, dataArea, info,
                                     this, xAxis, yAxis, dataset, series, item,
                                     crosshairState, pass);
                         }
                         state.endSeriesPass(dataset, series, firstItem,
-                        		lastItem, pass, passCount);
+                                lastItem, pass, passCount);
                     }
                 }
             }
@@ -3401,14 +3401,14 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
                             lastItem = itemBounds[1];
                         }
                         state.startSeriesPass(dataset, series, firstItem,
-                        		lastItem, pass, passCount);
+                                lastItem, pass, passCount);
                         for (int item = firstItem; item <= lastItem; item++) {
                             renderer.drawItem(g2, state, dataArea, info,
                                     this, xAxis, yAxis, dataset, series, item,
                                     crosshairState, pass);
                         }
                         state.endSeriesPass(dataset, series, firstItem,
-                        		lastItem, pass, passCount);
+                                lastItem, pass, passCount);
                     }
                 }
             }
