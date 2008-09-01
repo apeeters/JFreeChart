@@ -71,8 +71,8 @@ public class ShapeList extends AbstractObjectList {
     }
 
     /**
-     * Sets the {@link Shape} for an item in the list.  The list is expanded 
-	 * if necessary.
+     * Sets the {@link Shape} for an item in the list.  The list is expanded
+     * if necessary.
      *
      * @param index  the index (zero-based).
      * @param shape  the {@link Shape}.
