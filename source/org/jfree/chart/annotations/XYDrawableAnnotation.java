@@ -116,7 +116,7 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
      * @since 1.0.11
      */
     public XYDrawableAnnotation(double x, double y, double displayWidth,
-    		double displayHeight, double drawScaleFactor, Drawable drawable) {
+            double displayHeight, double drawScaleFactor, Drawable drawable) {
 
         if (drawable == null) {
             throw new IllegalArgumentException("Null 'drawable' argument.");
@@ -157,7 +157,7 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
         float j2DY = (float) rangeAxis.valueToJava2D(this.y, dataArea,
                 rangeEdge);
         Rectangle2D displayArea = new Rectangle2D.Double(
-        		j2DX - this.displayWidth / 2.0,
+                j2DX - this.displayWidth / 2.0,
                 j2DY - this.displayHeight / 2.0, this.displayWidth,
                 this.displayHeight);
 
@@ -166,12 +166,12 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
         // afterwards, the original transform is restored
         AffineTransform savedTransform = g2.getTransform();
         Rectangle2D drawArea = new Rectangle2D.Double(0.0, 0.0,
-        		this.displayWidth * this.drawScaleFactor,
-        		this.displayHeight * this.drawScaleFactor);
+                this.displayWidth * this.drawScaleFactor,
+                this.displayHeight * this.drawScaleFactor);
 
         g2.scale(1/this.drawScaleFactor, 1/this.drawScaleFactor);
         g2.translate((j2DX - this.displayWidth / 2.0) * this.drawScaleFactor,
-        		(j2DY - this.displayHeight / 2.0) * this.drawScaleFactor);
+                (j2DY - this.displayHeight / 2.0) * this.drawScaleFactor);
         this.drawable.draw(g2, drawArea);
         g2.setTransform(savedTransform);
         String toolTip = getToolTipText();
@@ -215,7 +215,7 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
             return false;
         }
         if (this.drawScaleFactor != that.drawScaleFactor) {
-        	return false;
+            return false;
         }
         if (!ObjectUtilities.equal(this.drawable, that.drawable)) {
             return false;
