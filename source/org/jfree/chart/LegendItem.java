@@ -647,7 +647,7 @@ public class LegendItem implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public Font getLabelFont() {
-    	return this.labelFont;
+        return this.labelFont;
     }
 
     /**
@@ -658,7 +658,7 @@ public class LegendItem implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setLabelFont(Font font) {
-    	this.labelFont = font;
+        this.labelFont = font;
     }
 
     /**
@@ -669,7 +669,7 @@ public class LegendItem implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public Paint getLabelPaint() {
-    	return this.labelPaint;
+        return this.labelPaint;
     }
 
     /**
@@ -680,7 +680,7 @@ public class LegendItem implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setLabelPaint(Paint paint) {
-    	this.labelPaint = paint;
+        this.labelPaint = paint;
     }
 
     /**
@@ -764,10 +764,10 @@ public class LegendItem implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setFillPaint(Paint paint) {
-    	if (paint == null) {
-    		throw new IllegalArgumentException("Null 'paint' argument.");
-    	}
-    	this.fillPaint = paint;
+        if (paint == null) {
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        this.fillPaint = paint;
     }
 
     /**
@@ -806,10 +806,10 @@ public class LegendItem implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setLinePaint(Paint paint) {
-    	if (paint == null) {
-    		throw new IllegalArgumentException("Null 'paint' argument.");
-    	}
-    	this.linePaint = paint;
+        if (paint == null) {
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        this.linePaint = paint;
     }
 
     /**
@@ -829,10 +829,10 @@ public class LegendItem implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setOutlinePaint(Paint paint) {
-    	if (paint == null) {
-    		throw new IllegalArgumentException("Null 'paint' argument.");
-    	}
-    	this.outlinePaint = paint;
+        if (paint == null) {
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        this.outlinePaint = paint;
     }
 
     /**
@@ -962,10 +962,10 @@ public class LegendItem implements Cloneable, Serializable {
             return false;
         }
         if (!ObjectUtilities.equal(this.labelFont, that.labelFont)) {
-        	return false;
+            return false;
         }
         if (!PaintUtilities.equal(this.labelPaint, that.labelPaint)) {
-        	return false;
+            return false;
         }
         return true;
     }
