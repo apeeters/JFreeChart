@@ -6,31 +6,31 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
- * 
+ *
  * -----------------------
  * AbstractObjectList.java
  * -----------------------
  * (C)opyright 2003-2007, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Bill Kelemen; 
+ * Contributor(s):   Bill Kelemen;
  *                   Nicolas Brodu;
  *
  * Changes
@@ -57,7 +57,7 @@ public class AbstractObjectList implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 7789833772597351595L;
-    
+
     /** The default initial capacity of the list. */
     public static final int DEFAULT_INITIAL_CAPACITY = 8;
 
@@ -88,7 +88,7 @@ public class AbstractObjectList implements Cloneable, Serializable {
 
     /**
      * Creates a new list.
-     * 
+     *
      * @param initialCapacity  the initial capacity.
      * @param increment  the increment.
      */
@@ -98,7 +98,7 @@ public class AbstractObjectList implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the object at the specified index, if there is one, or 
+     * Returns the object at the specified index, if there is one, or
      * <code>null</code>.
      *
      * @param index  the object index.
@@ -170,7 +170,7 @@ public class AbstractObjectList implements Cloneable, Serializable {
      * Tests this list for equality with another object.
      *
      * @param obj  the object to test.
-     * 
+     *
      * @return A boolean.
      */
     public boolean equals(Object obj) {
@@ -203,9 +203,9 @@ public class AbstractObjectList implements Cloneable, Serializable {
      * @return The hashcode.
      */
     public int hashCode() {
-    	int result = 127;
-    	int size = size();
-    	result = HashUtilities.hashCode(result, size());
+        int result = 127;
+        int size = size();
+        result = HashUtilities.hashCode(result, size());
         // for efficiency, we just use the first, last and middle items to
         // compute a hashCode...
         if (size > 0) {
@@ -213,8 +213,8 @@ public class AbstractObjectList implements Cloneable, Serializable {
             if (size > 1) {
                 result = HashUtilities.hashCode(result, this.objects[size - 1]);
                 if (size > 2) {
-                    result = HashUtilities.hashCode(result, 
-                    		this.objects[size / 2]);
+                    result = HashUtilities.hashCode(result,
+                            this.objects[size / 2]);
                 }
             }
         }
@@ -222,12 +222,12 @@ public class AbstractObjectList implements Cloneable, Serializable {
     }
 
     /**
-     * Clones the list of objects.  The objects in the list are not cloned, so 
+     * Clones the list of objects.  The objects in the list are not cloned, so
      * this is method makes a 'shallow' copy of the list.
      *
      * @return A clone.
-     * 
-     * @throws CloneNotSupportedException if an item in the list does not 
+     *
+     * @throws CloneNotSupportedException if an item in the list does not
      *         support cloning.
      */
     public Object clone() throws CloneNotSupportedException {
@@ -235,7 +235,7 @@ public class AbstractObjectList implements Cloneable, Serializable {
         AbstractObjectList clone = (AbstractObjectList) super.clone();
         if (this.objects != null) {
             clone.objects = new Object[this.objects.length];
-            System.arraycopy(this.objects, 0, clone.objects, 0, 
+            System.arraycopy(this.objects, 0, clone.objects, 0,
                     this.objects.length);
         }
         return clone;
@@ -249,7 +249,7 @@ public class AbstractObjectList implements Cloneable, Serializable {
      *
      * @throws IOException  if there is an I/O error.
      */
-    private void writeObject(ObjectOutputStream stream) 
+    private void writeObject(ObjectOutputStream stream)
             throws IOException {
 
         stream.defaultWriteObject();
@@ -267,7 +267,7 @@ public class AbstractObjectList implements Cloneable, Serializable {
         }
 
     }
-    
+
     /**
      * Provides serialization support.
      *
@@ -276,7 +276,7 @@ public class AbstractObjectList implements Cloneable, Serializable {
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream) 
+    private void readObject(ObjectInputStream stream)
             throws IOException, ClassNotFoundException {
 
         stream.defaultReadObject();
@@ -288,7 +288,7 @@ public class AbstractObjectList implements Cloneable, Serializable {
                 set(index, stream.readObject());
             }
         }
-        
+
     }
-  
+
 }

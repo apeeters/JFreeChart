@@ -60,7 +60,7 @@ import org.jfree.data.xy.XYDataset;
 public class CustomXYURLGenerator implements XYURLGenerator, Cloneable,
         PublicCloneable, Serializable {
 
-	/** For serialization. */
+    /** For serialization. */
     private static final long serialVersionUID = -8565933356596551832L;
 
     /** Storage for the URLs. */
