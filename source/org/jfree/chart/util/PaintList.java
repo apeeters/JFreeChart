@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
- * 
+ *
  * --------------
  * PaintList.java
  * --------------
- * (C) Copyright 2003-2007, by Object Refinery Limited.
+ * (C) Copyright 2003-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -37,7 +37,7 @@
  * 13-Aug-2003 : Version 1 (DG);
  * 27-Jun-2005 : Fixed equals() method to handle GradientPaint (DG);
  * 21-Jun-2007 : Copied from JCommon (DG);
- * 
+ *
  */
 
 package org.jfree.chart.util;
@@ -71,7 +71,7 @@ public class PaintList extends AbstractObjectList {
     }
 
     /**
-     * Sets the {@link Paint} for an item in the list.  The list is expanded 
+     * Sets the {@link Paint} for an item in the list.  The list is expanded
      * if necessary.
      *
      * @param index  the index (zero-based).
@@ -110,10 +110,24 @@ public class PaintList extends AbstractObjectList {
     /**
      * Returns a hash code value for the object.
      *
-     * @return the hashcode
+     * @return The hashcode.
      */
     public int hashCode() {
-        return super.hashCode();
+        int result = 127;
+        int size = size();
+        result = HashUtilities.hashCode(result, size());
+        // for efficiency, we just use the first, last and middle items to
+        // compute a hashCode...
+        if (size > 0) {
+            result = HashUtilities.hashCode(result, getPaint(0));
+            if (size > 1) {
+                result = HashUtilities.hashCode(result, getPaint(size - 1));
+                if (size > 2) {
+                    result = HashUtilities.hashCode(result, getPaint(size / 2));
+                }
+            }
+        }
+        return result;
     }
 
     /**
@@ -140,7 +154,7 @@ public class PaintList extends AbstractObjectList {
         }
 
     }
-    
+
     /**
      * Provides serialization support.
      *
@@ -160,7 +174,7 @@ public class PaintList extends AbstractObjectList {
                 setPaint(index, SerialUtilities.readPaint(stream));
             }
         }
-        
+
     }
 
 }
