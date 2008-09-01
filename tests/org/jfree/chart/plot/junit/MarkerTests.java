@@ -402,6 +402,11 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         assertFalse(Arrays.asList(listeners2).contains(plot));
     }
 
+    /**
+     * Records the last event.
+     *
+     * @param event  the event.
+     */
     public void markerChanged(MarkerChangeEvent event) {
         this.lastEvent = event;
     }

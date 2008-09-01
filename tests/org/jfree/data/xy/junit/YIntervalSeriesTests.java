@@ -64,6 +64,11 @@ public class YIntervalSeriesTests extends TestCase
 
     SeriesChangeEvent lastEvent;
 
+    /**
+     * Records the last event.
+     *
+     * @param event  the event.
+     */
     public void seriesChanged(SeriesChangeEvent event) {
         this.lastEvent = event;
     }

@@ -66,6 +66,11 @@ public class CategoryMarkerTests extends TestCase
 
     MarkerChangeEvent lastEvent;
 
+    /**
+     * Records the last event.
+     *
+     * @param event  the event.
+     */
     public void markerChanged(MarkerChangeEvent event) {
         this.lastEvent = event;
     }
