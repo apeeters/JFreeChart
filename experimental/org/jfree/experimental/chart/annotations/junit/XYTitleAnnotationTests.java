@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------------
@@ -92,7 +92,7 @@ public class XYTitleAnnotationTests extends TestCase {
         XYTitleAnnotation a1 = new XYTitleAnnotation(1.0, 2.0, t);
         XYTitleAnnotation a2 = new XYTitleAnnotation(1.0, 2.0, t);
         assertTrue(a1.equals(a2));
-        
+
         a1 = new XYTitleAnnotation(1.1, 2.0, t);
         assertFalse(a1.equals(a2));
         a2 = new XYTitleAnnotation(1.1, 2.0, t);
@@ -102,7 +102,7 @@ public class XYTitleAnnotationTests extends TestCase {
         assertFalse(a1.equals(a2));
         a2 = new XYTitleAnnotation(1.1, 2.2, t);
         assertTrue(a1.equals(a2));
-        
+
         TextTitle t2 = new TextTitle("Title 2");
         a1 = new XYTitleAnnotation(1.1, 2.2, t2);
         assertFalse(a1.equals(a2));
@@ -111,7 +111,7 @@ public class XYTitleAnnotationTests extends TestCase {
     }
 
     /**
-     * Two objects that are equal are required to return the same hashCode. 
+     * Two objects that are equal are required to return the same hashCode.
      */
     public void testHashCode() {
         TextTitle t = new TextTitle("Title");
@@ -122,7 +122,7 @@ public class XYTitleAnnotationTests extends TestCase {
         int h2 = a2.hashCode();
         assertEquals(h1, h2);
     }
-    
+
     /**
      * Confirm that cloning works.
      */
@@ -164,36 +164,36 @@ public class XYTitleAnnotationTests extends TestCase {
         }
         assertEquals(a1, a2);
     }
-    
+
     /**
-     * Draws the chart with a <code>null</code> info object to make sure that 
+     * Draws the chart with a <code>null</code> info object to make sure that
      * no exceptions are thrown.
      */
     public void testDrawWithNullInfo() {
         boolean success = false;
         try {
             DefaultTableXYDataset dataset = new DefaultTableXYDataset();
-        
+
             XYSeries s1 = new XYSeries("Series 1", true, false);
             s1.add(5.0, 5.0);
             s1.add(10.0, 15.5);
             s1.add(15.0, 9.5);
             s1.add(20.0, 7.5);
             dataset.addSeries(s1);
-        
+
             XYSeries s2 = new XYSeries("Series 2", true, false);
             s2.add(5.0, 5.0);
             s2.add(10.0, 15.5);
             s2.add(15.0, 9.5);
             s2.add(20.0, 3.5);
             dataset.addSeries(s2);
-            XYPlot plot = new XYPlot(dataset, 
-                    new NumberAxis("X"), new NumberAxis("Y"), 
+            XYPlot plot = new XYPlot(dataset,
+                    new NumberAxis("X"), new NumberAxis("Y"),
                     new XYLineAndShapeRenderer());
-            plot.addAnnotation(new XYTitleAnnotation(5.0, 6.0, 
-            		new TextTitle("Hello World!")));
+            plot.addAnnotation(new XYTitleAnnotation(5.0, 6.0,
+                    new TextTitle("Hello World!")));
             JFreeChart chart = new JFreeChart(plot);
-            /* BufferedImage image = */ chart.createBufferedImage(300, 200, 
+            /* BufferedImage image = */ chart.createBufferedImage(300, 200,
                     null);
             success = true;
         }
