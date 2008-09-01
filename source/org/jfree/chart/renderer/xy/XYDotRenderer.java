@@ -44,7 +44,7 @@
  * 19-Jan-2005 : Now uses only primitives from dataset (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 10-Jul-2006 : Added dotWidth and dotHeight attributes (DG);
- * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG)
+ * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 09-Nov-2007 : Added legend shape attribute, plus override for
  *               getLegendItem() (DG);
@@ -80,10 +80,7 @@ import org.jfree.data.xy.XYDataset;
  * A renderer that draws a small dot at each data point for an {@link XYPlot}.
  */
 public class XYDotRenderer extends AbstractXYItemRenderer
-                           implements XYItemRenderer,
-                                      Cloneable,
-                                      PublicCloneable,
-                                      Serializable {
+        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -2764344339073566425L;
@@ -234,6 +231,11 @@ public class XYDotRenderer extends AbstractXYItemRenderer
                          int item,
                          CrosshairState crosshairState,
                          int pass) {
+
+        // do nothing if item is not visible
+        if (!getItemVisible(series, item)) {
+            return;
+        }
 
         // get the data point...
         double x = dataset.getXValue(series, item);
