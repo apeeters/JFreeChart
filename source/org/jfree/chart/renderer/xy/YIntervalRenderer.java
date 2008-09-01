@@ -119,7 +119,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
      * @since 1.0.10
      */
     public XYItemLabelGenerator getAdditionalItemLabelGenerator() {
-    	return this.additionalItemLabelGenerator;
+        return this.additionalItemLabelGenerator;
     }
 
     /**
@@ -135,9 +135,9 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
      * @since 1.0.10
      */
     public void setAdditionalItemLabelGenerator(
-    		XYItemLabelGenerator generator) {
-    	this.additionalItemLabelGenerator = generator;
-    	fireChangeEvent();
+            XYItemLabelGenerator generator) {
+        this.additionalItemLabelGenerator = generator;
+        fireChangeEvent();
     }
 
     /**
@@ -241,7 +241,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
             drawItemLabel(g2, orientation, dataset, series, item, xx, yyHigh,
                     false);
             drawAdditionalItemLabel(g2, orientation, dataset, series, item,
-            		xx, yyLow);
+                    xx, yyLow);
         }
 
         // add an entity for the item...
@@ -266,19 +266,19 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
      *                  label position).
      */
     private void drawAdditionalItemLabel(Graphics2D g2,
-    		PlotOrientation orientation, XYDataset dataset, int series,
-    		int item, double x, double y) {
+            PlotOrientation orientation, XYDataset dataset, int series,
+            int item, double x, double y) {
 
-    	if (this.additionalItemLabelGenerator == null) {
-    		return;
-    	}
+        if (this.additionalItemLabelGenerator == null) {
+            return;
+        }
 
         Font labelFont = getItemLabelFont(series, item);
         Paint paint = getItemLabelPaint(series, item);
         g2.setFont(labelFont);
         g2.setPaint(paint);
         String label = this.additionalItemLabelGenerator.generateLabel(dataset,
-        		series, item);
+                series, item);
 
         ItemLabelPosition position = getNegativeItemLabelPosition(series, item);
         Point2D anchorPoint = calculateLabelAnchorPoint(
@@ -297,18 +297,18 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
      * @return A boolean.
      */
     public boolean equals(Object obj) {
-    	if (obj == this) {
-    		return true;
-    	}
-    	if (!(obj instanceof YIntervalRenderer)) {
-    		return false;
-    	}
-    	YIntervalRenderer that = (YIntervalRenderer) obj;
-    	if (!ObjectUtilities.equal(this.additionalItemLabelGenerator,
-    			that.additionalItemLabelGenerator)) {
-    		return false;
-    	}
-    	return super.equals(obj);
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof YIntervalRenderer)) {
+            return false;
+        }
+        YIntervalRenderer that = (YIntervalRenderer) obj;
+        if (!ObjectUtilities.equal(this.additionalItemLabelGenerator,
+                that.additionalItemLabelGenerator)) {
+            return false;
+        }
+        return super.equals(obj);
     }
 
     /**

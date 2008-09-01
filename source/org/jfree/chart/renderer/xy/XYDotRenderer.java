@@ -307,13 +307,13 @@ public class XYDotRenderer extends AbstractXYItemRenderer
                         dataset, series);
             }
             Paint fillPaint = lookupSeriesPaint(series);
-			// FIXME: getLegendShape() should be deprecated
+            // FIXME: getLegendShape() should be deprecated
             result = new LegendItem(label, description, toolTipText, urlText,
                     getLegendShape(), fillPaint);
             result.setLabelFont(lookupLegendTextFont(series));
             Paint labelPaint = lookupLegendTextPaint(series);
             if (labelPaint != null) {
-            	result.setLabelPaint(labelPaint);
+                result.setLabelPaint(labelPaint);
             }
             result.setSeriesKey(dataset.getSeriesKey(series));
             result.setSeriesIndex(series);
