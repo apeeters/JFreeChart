@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ----------------------------------------------
@@ -76,12 +76,12 @@ public class StandardCategorySeriesLabelGeneratorTests extends TestCase {
     public StandardCategorySeriesLabelGeneratorTests(String name) {
         super(name);
     }
-    
+
     /**
      * Some checks for the generalLabel() method.
      */
     public void testGenerateLabel() {
-        StandardCategorySeriesLabelGenerator g 
+        StandardCategorySeriesLabelGenerator g
                 = new StandardCategorySeriesLabelGenerator("{0}");
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         dataset.addValue(1.0, "R0", "C0");
@@ -91,32 +91,32 @@ public class StandardCategorySeriesLabelGeneratorTests extends TestCase {
         String s = g.generateLabel(dataset, 0);
         assertEquals("R0", s);
     }
-    
+
     /**
      * Some checks for the equals() method.
      */
     public void testEquals() {
-        StandardCategorySeriesLabelGenerator g1 
+        StandardCategorySeriesLabelGenerator g1
                 = new StandardCategorySeriesLabelGenerator();
-        StandardCategorySeriesLabelGenerator g2 
+        StandardCategorySeriesLabelGenerator g2
                 = new StandardCategorySeriesLabelGenerator();
         assertTrue(g1.equals(g2));
         assertTrue(g2.equals(g1));
-        
+
         g1 = new StandardCategorySeriesLabelGenerator("{1}");
         assertFalse(g1.equals(g2));
         g2 = new StandardCategorySeriesLabelGenerator("{1}");
-        assertTrue(g1.equals(g2));        
+        assertTrue(g1.equals(g2));
     }
 
     /**
      * Simple check that hashCode is implemented.
      */
     public void testHashCode() {
-    	StandardCategorySeriesLabelGenerator g1 
-    	        = new StandardCategorySeriesLabelGenerator();
-    	StandardCategorySeriesLabelGenerator g2 
-    	        = new StandardCategorySeriesLabelGenerator();
+        StandardCategorySeriesLabelGenerator g1
+                = new StandardCategorySeriesLabelGenerator();
+        StandardCategorySeriesLabelGenerator g2
+                = new StandardCategorySeriesLabelGenerator();
         assertTrue(g1.equals(g2));
         assertTrue(g1.hashCode() == g2.hashCode());
     }
@@ -125,7 +125,7 @@ public class StandardCategorySeriesLabelGeneratorTests extends TestCase {
      * Confirm that cloning works.
      */
     public void testCloning() {
-        StandardCategorySeriesLabelGenerator g1 
+        StandardCategorySeriesLabelGenerator g1
                 = new StandardCategorySeriesLabelGenerator("{1}");
         StandardCategorySeriesLabelGenerator g2 = null;
         try {

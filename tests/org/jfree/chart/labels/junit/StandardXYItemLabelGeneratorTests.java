@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------------------------------
@@ -87,8 +87,8 @@ public class StandardXYItemLabelGeneratorTests extends TestCase {
      * A series of tests for the equals() method.
      */
     public void testEquals() {
-        
-        // some setup...        
+
+        // some setup...
         String f1 = "{1}";
         String f2 = "{2}";
         NumberFormat xnf1 = new DecimalFormat("0.00");
@@ -98,17 +98,17 @@ public class StandardXYItemLabelGeneratorTests extends TestCase {
 
         StandardXYItemLabelGenerator g1 = null;
         StandardXYItemLabelGenerator g2 = null;
-        
+
         g1 = new StandardXYItemLabelGenerator(f1, xnf1, ynf1);
         g2 = new StandardXYItemLabelGenerator(f1, xnf1, ynf1);
         assertTrue(g1.equals(g2));
         assertTrue(g2.equals(g1));
-        
+
         g1 = new StandardXYItemLabelGenerator(f2, xnf1, ynf1);
         assertFalse(g1.equals(g2));
         g2 = new StandardXYItemLabelGenerator(f2, xnf1, ynf1);
         assertTrue(g1.equals(g2));
-                
+
         g1 = new StandardXYItemLabelGenerator(f2, xnf2, ynf1);
         assertFalse(g1.equals(g2));
         g2 = new StandardXYItemLabelGenerator(f2, xnf2, ynf1);
@@ -118,7 +118,7 @@ public class StandardXYItemLabelGeneratorTests extends TestCase {
         assertFalse(g1.equals(g2));
         g2 = new StandardXYItemLabelGenerator(f2, xnf2, ynf2);
         assertTrue(g1.equals(g2));
-                
+
         DateFormat xdf1 = new SimpleDateFormat("d-MMM");
         DateFormat xdf2 = new SimpleDateFormat("d-MMM-yyyy");
         DateFormat ydf1 = new SimpleDateFormat("d-MMM");
@@ -128,27 +128,27 @@ public class StandardXYItemLabelGeneratorTests extends TestCase {
         g2 = new StandardXYItemLabelGenerator(f1, xdf1, ydf1);
         assertTrue(g1.equals(g2));
         assertTrue(g2.equals(g1));
-        
+
         g1 = new StandardXYItemLabelGenerator(f1, xdf2, ydf1);
         assertFalse(g1.equals(g2));
         g2 = new StandardXYItemLabelGenerator(f1, xdf2, ydf1);
         assertTrue(g1.equals(g2));
-                
+
         g1 = new StandardXYItemLabelGenerator(f1, xdf2, ydf2);
         assertFalse(g1.equals(g2));
         g2 = new StandardXYItemLabelGenerator(f1, xdf2, ydf2);
         assertTrue(g1.equals(g2));
 
     }
-    
+
     /**
      * Simple check that hashCode is implemented.
      */
     public void testHashCode() {
-    	StandardXYItemLabelGenerator g1 
-    	        = new StandardXYItemLabelGenerator();
-    	StandardXYItemLabelGenerator g2 
-    	        = new StandardXYItemLabelGenerator();
+        StandardXYItemLabelGenerator g1
+                = new StandardXYItemLabelGenerator();
+        StandardXYItemLabelGenerator g2
+                = new StandardXYItemLabelGenerator();
         assertTrue(g1.equals(g2));
         assertTrue(g1.hashCode() == g2.hashCode());
     }
@@ -168,20 +168,20 @@ public class StandardXYItemLabelGeneratorTests extends TestCase {
         assertTrue(g1 != g2);
         assertTrue(g1.getClass() == g2.getClass());
         assertTrue(g1.equals(g2));
-        
+
         // check independence
         g1.getXFormat().setMinimumIntegerDigits(2);
         assertFalse(g1.equals(g2));
         g2.getXFormat().setMinimumIntegerDigits(2);
         assertTrue(g1.equals(g2));
-        
+
         g1.getYFormat().setMinimumIntegerDigits(2);
         assertFalse(g1.equals(g2));
         g2.getYFormat().setMinimumIntegerDigits(2);
         assertTrue(g1.equals(g2));
-        
+
         // another test...
-        g1 = new StandardXYItemLabelGenerator("{0} {1} {2}", 
+        g1 = new StandardXYItemLabelGenerator("{0} {1} {2}",
                 DateFormat.getInstance(), DateFormat.getInstance());
         try {
             g2 = (StandardXYItemLabelGenerator) g1.clone();
@@ -192,7 +192,7 @@ public class StandardXYItemLabelGeneratorTests extends TestCase {
         assertTrue(g1 != g2);
         assertTrue(g1.getClass() == g2.getClass());
         assertTrue(g1.equals(g2));
-        
+
         // check independence
         g1.getXDateFormat().setNumberFormat(new DecimalFormat("0.000"));
         assertFalse(g1.equals(g2));
@@ -203,7 +203,7 @@ public class StandardXYItemLabelGeneratorTests extends TestCase {
         assertFalse(g1.equals(g2));
         g2.getYDateFormat().setNumberFormat(new DecimalFormat("0.000"));
         assertTrue(g1.equals(g2));
-    
+
     }
 
     /**

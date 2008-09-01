@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------------------------
@@ -81,28 +81,28 @@ public class BoxAndWhiskerToolTipGeneratorTests extends TestCase {
      * A series of tests for the equals() method.
      */
     public void testEquals() {
-        
+
         // standard test
         BoxAndWhiskerToolTipGenerator g1 = new BoxAndWhiskerToolTipGenerator();
         BoxAndWhiskerToolTipGenerator g2 = new BoxAndWhiskerToolTipGenerator();
         assertTrue(g1.equals(g2));
         assertTrue(g2.equals(g1));
-        
+
         // tooltip format
-        g1 = new BoxAndWhiskerToolTipGenerator("{0} --> {1} {2}", 
-        		new DecimalFormat("0.0"));
-        g2 = new BoxAndWhiskerToolTipGenerator("{1} {2}", 
-        		new DecimalFormat("0.0"));
+        g1 = new BoxAndWhiskerToolTipGenerator("{0} --> {1} {2}",
+                new DecimalFormat("0.0"));
+        g2 = new BoxAndWhiskerToolTipGenerator("{1} {2}",
+                new DecimalFormat("0.0"));
         assertFalse(g1.equals(g2));
-        g2 = new BoxAndWhiskerToolTipGenerator("{0} --> {1} {2}", 
-        		new DecimalFormat("0.0"));
+        g2 = new BoxAndWhiskerToolTipGenerator("{0} --> {1} {2}",
+                new DecimalFormat("0.0"));
         assertTrue(g1.equals(g2));
 
         // Y format
-        g1 = new BoxAndWhiskerToolTipGenerator("{0} --> {1} {2}", 
-        		new DecimalFormat("0.0"));
-        g2 = new BoxAndWhiskerToolTipGenerator("{0} --> {1} {2}", 
-        		new DecimalFormat("0.00"));
+        g1 = new BoxAndWhiskerToolTipGenerator("{0} --> {1} {2}",
+                new DecimalFormat("0.0"));
+        g2 = new BoxAndWhiskerToolTipGenerator("{0} --> {1} {2}",
+                new DecimalFormat("0.00"));
         assertFalse(g1.equals(g2));
     }
 

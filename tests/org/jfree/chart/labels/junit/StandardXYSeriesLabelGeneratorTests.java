@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ----------------------------------------
@@ -77,12 +77,12 @@ public class StandardXYSeriesLabelGeneratorTests extends TestCase {
     public StandardXYSeriesLabelGeneratorTests(String name) {
         super(name);
     }
-    
+
     /**
      * Some checks for the generalLabel() method.
      */
     public void testGenerateLabel() {
-        StandardXYSeriesLabelGenerator g 
+        StandardXYSeriesLabelGenerator g
                 = new StandardXYSeriesLabelGenerator("Series {0}");
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(new XYSeries("1"));
@@ -90,32 +90,32 @@ public class StandardXYSeriesLabelGeneratorTests extends TestCase {
         assertEquals("Series 1", g.generateLabel(dataset, 0));
         assertEquals("Series 2", g.generateLabel(dataset, 1));
     }
-    
+
     /**
      * Some checks for the equals() method.
      */
     public void testEquals() {
-        StandardXYSeriesLabelGenerator g1 
+        StandardXYSeriesLabelGenerator g1
                 = new StandardXYSeriesLabelGenerator("Series {0}");
-        StandardXYSeriesLabelGenerator g2 
+        StandardXYSeriesLabelGenerator g2
                 = new StandardXYSeriesLabelGenerator("Series {0}");
         assertTrue(g1.equals(g2));
         assertTrue(g2.equals(g1));
-        
+
         g1 = new StandardXYSeriesLabelGenerator("{1}");
         assertFalse(g1.equals(g2));
         g2 = new StandardXYSeriesLabelGenerator("{1}");
-        assertTrue(g1.equals(g2));        
+        assertTrue(g1.equals(g2));
     }
 
     /**
      * Simple check that hashCode is implemented.
      */
     public void testHashCode() {
-    	StandardXYSeriesLabelGenerator g1 
-    	        = new StandardXYSeriesLabelGenerator();
-    	StandardXYSeriesLabelGenerator g2 
-    	        = new StandardXYSeriesLabelGenerator();
+        StandardXYSeriesLabelGenerator g1
+                = new StandardXYSeriesLabelGenerator();
+        StandardXYSeriesLabelGenerator g2
+                = new StandardXYSeriesLabelGenerator();
         assertTrue(g1.equals(g2));
         assertTrue(g1.hashCode() == g2.hashCode());
     }
@@ -124,7 +124,7 @@ public class StandardXYSeriesLabelGeneratorTests extends TestCase {
      * Confirm that cloning works.
      */
     public void testCloning() {
-        StandardXYSeriesLabelGenerator g1 
+        StandardXYSeriesLabelGenerator g1
                 = new StandardXYSeriesLabelGenerator("Series {0}");
         StandardXYSeriesLabelGenerator g2 = null;
         try {
@@ -142,7 +142,7 @@ public class StandardXYSeriesLabelGeneratorTests extends TestCase {
      * Serialize an instance, restore it, and check for equality.
      */
     public void testSerialization() {
-        StandardXYSeriesLabelGenerator g1 
+        StandardXYSeriesLabelGenerator g1
                 = new StandardXYSeriesLabelGenerator("Series {0}");
         StandardXYSeriesLabelGenerator g2 = null;
 

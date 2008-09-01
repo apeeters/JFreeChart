@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * -------------------------------------
@@ -39,7 +39,7 @@
  * 04-Mar-2004 : Added test for equals() method (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 03-May-2006 : Extended test for clone() method (DG);
- * 03-May-2006 : Renamed StandardPieItemLabelGeneratorTests 
+ * 03-May-2006 : Renamed StandardPieItemLabelGeneratorTests
  *               --> StandardPieToolTipGeneratorTests (DG);
  *
  */
@@ -92,48 +92,48 @@ public class StandardPieToolTipGeneratorTests extends TestCase {
         StandardPieToolTipGenerator g2 = new StandardPieToolTipGenerator();
         assertTrue(g1.equals(g2));
         assertTrue(g2.equals(g1));
-        
-        g1 = new StandardPieToolTipGenerator("{0}", 
-                new DecimalFormat("#,##0.00"), 
+
+        g1 = new StandardPieToolTipGenerator("{0}",
+                new DecimalFormat("#,##0.00"),
                 NumberFormat.getPercentInstance());
         assertFalse(g1.equals(g2));
-        g2 = new StandardPieToolTipGenerator("{0}", 
-                new DecimalFormat("#,##0.00"), 
+        g2 = new StandardPieToolTipGenerator("{0}",
+                new DecimalFormat("#,##0.00"),
                 NumberFormat.getPercentInstance());
         assertTrue(g1.equals(g2));
 
-        g1 = new StandardPieToolTipGenerator("{0} {1}", 
-                new DecimalFormat("#,##0.00"), 
+        g1 = new StandardPieToolTipGenerator("{0} {1}",
+                new DecimalFormat("#,##0.00"),
                 NumberFormat.getPercentInstance());
         assertFalse(g1.equals(g2));
-        g2 = new StandardPieToolTipGenerator("{0} {1}", 
-                new DecimalFormat("#,##0.00"), 
+        g2 = new StandardPieToolTipGenerator("{0} {1}",
+                new DecimalFormat("#,##0.00"),
                 NumberFormat.getPercentInstance());
         assertTrue(g1.equals(g2));
-    
-        g1 = new StandardPieToolTipGenerator("{0} {1}", 
+
+        g1 = new StandardPieToolTipGenerator("{0} {1}",
                 new DecimalFormat("#,##0"), NumberFormat.getPercentInstance());
         assertFalse(g1.equals(g2));
-        g2 = new StandardPieToolTipGenerator("{0} {1}", 
+        g2 = new StandardPieToolTipGenerator("{0} {1}",
                 new DecimalFormat("#,##0"), NumberFormat.getPercentInstance());
         assertTrue(g1.equals(g2));
 
-        g1 = new StandardPieToolTipGenerator("{0} {1}", 
+        g1 = new StandardPieToolTipGenerator("{0} {1}",
                 new DecimalFormat("#,##0"), new DecimalFormat("0.000%"));
         assertFalse(g1.equals(g2));
-        g2 = new StandardPieToolTipGenerator("{0} {1}", 
+        g2 = new StandardPieToolTipGenerator("{0} {1}",
                 new DecimalFormat("#,##0"), new DecimalFormat("0.000%"));
         assertTrue(g1.equals(g2));
     }
-    
+
     /**
      * Simple check that hashCode is implemented.
      */
     public void testHashCode() {
-    	StandardPieToolTipGenerator g1 
-    	        = new StandardPieToolTipGenerator();
-    	StandardPieToolTipGenerator g2 
-    	        = new StandardPieToolTipGenerator();
+        StandardPieToolTipGenerator g1
+                = new StandardPieToolTipGenerator();
+        StandardPieToolTipGenerator g2
+                = new StandardPieToolTipGenerator();
         assertTrue(g1.equals(g2));
         assertTrue(g1.hashCode() == g2.hashCode());
     }

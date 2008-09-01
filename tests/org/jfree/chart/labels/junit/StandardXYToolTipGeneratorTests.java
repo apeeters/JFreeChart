@@ -6,22 +6,22 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ------------------------------------
@@ -79,13 +79,13 @@ public class StandardXYToolTipGeneratorTests extends TestCase {
     public StandardXYToolTipGeneratorTests(String name) {
         super(name);
     }
-    
+
     /**
      * Tests the equals() method.
      */
     public void testEquals() {
-        
-        // some setup...        
+
+        // some setup...
         String f1 = "{1}";
         String f2 = "{2}";
         NumberFormat xnf1 = new DecimalFormat("0.00");
@@ -95,17 +95,17 @@ public class StandardXYToolTipGeneratorTests extends TestCase {
 
         StandardXYToolTipGenerator g1 = null;
         StandardXYToolTipGenerator g2 = null;
-        
+
         g1 = new StandardXYToolTipGenerator(f1, xnf1, ynf1);
         g2 = new StandardXYToolTipGenerator(f1, xnf1, ynf1);
         assertTrue(g1.equals(g2));
         assertTrue(g2.equals(g1));
-        
+
         g1 = new StandardXYToolTipGenerator(f2, xnf1, ynf1);
         assertFalse(g1.equals(g2));
         g2 = new StandardXYToolTipGenerator(f2, xnf1, ynf1);
         assertTrue(g1.equals(g2));
-                
+
         g1 = new StandardXYToolTipGenerator(f2, xnf2, ynf1);
         assertFalse(g1.equals(g2));
         g2 = new StandardXYToolTipGenerator(f2, xnf2, ynf1);
@@ -115,7 +115,7 @@ public class StandardXYToolTipGeneratorTests extends TestCase {
         assertFalse(g1.equals(g2));
         g2 = new StandardXYToolTipGenerator(f2, xnf2, ynf2);
         assertTrue(g1.equals(g2));
-                
+
         DateFormat xdf1 = new SimpleDateFormat("d-MMM");
         DateFormat xdf2 = new SimpleDateFormat("d-MMM-yyyy");
         DateFormat ydf1 = new SimpleDateFormat("d-MMM");
@@ -125,12 +125,12 @@ public class StandardXYToolTipGeneratorTests extends TestCase {
         g2 = new StandardXYToolTipGenerator(f1, xdf1, ydf1);
         assertTrue(g1.equals(g2));
         assertTrue(g2.equals(g1));
-        
+
         g1 = new StandardXYToolTipGenerator(f1, xdf2, ydf1);
         assertFalse(g1.equals(g2));
         g2 = new StandardXYToolTipGenerator(f1, xdf2, ydf1);
         assertTrue(g1.equals(g2));
-                
+
         g1 = new StandardXYToolTipGenerator(f1, xdf2, ydf2);
         assertFalse(g1.equals(g2));
         g2 = new StandardXYToolTipGenerator(f1, xdf2, ydf2);
@@ -142,10 +142,10 @@ public class StandardXYToolTipGeneratorTests extends TestCase {
      * Simple check that hashCode is implemented.
      */
     public void testHashCode() {
-    	StandardXYToolTipGenerator g1 
-    	        = new StandardXYToolTipGenerator();
-    	StandardXYToolTipGenerator g2 
-    	        = new StandardXYToolTipGenerator();
+        StandardXYToolTipGenerator g1
+                = new StandardXYToolTipGenerator();
+        StandardXYToolTipGenerator g2
+                = new StandardXYToolTipGenerator();
         assertTrue(g1.equals(g2));
         assertTrue(g1.hashCode() == g2.hashCode());
     }
