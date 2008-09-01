@@ -129,7 +129,7 @@ public class CategoryPlotTests extends TestCase {
     public void testConstructor() {
         CategoryPlot plot = new CategoryPlot();
         assertEquals(new RectangleInsets(4.0, 4.0, 4.0, 4.0),
-        		plot.getAxisOffset());
+                plot.getAxisOffset());
     }
 
     /**
@@ -444,10 +444,10 @@ public class CategoryPlotTests extends TestCase {
 
         // domainCrosshairPaint
         plot1.setDomainCrosshairPaint(new GradientPaint(1.0f, 2.0f, Color.red,
-        		3.0f, 4.0f, Color.blue));
+                3.0f, 4.0f, Color.blue));
         assertFalse(plot1.equals(plot2));
         plot2.setDomainCrosshairPaint(new GradientPaint(1.0f, 2.0f, Color.red,
-        		3.0f, 4.0f, Color.blue));
+                3.0f, 4.0f, Color.blue));
         assertTrue(plot1.equals(plot2));
 
         // domainCrosshairStroke

@@ -69,8 +69,8 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class MultiplePiePlotTests extends TestCase
         implements PlotChangeListener {
 
-	/** The last event received. */
-	PlotChangeEvent lastEvent;
+    /** The last event received. */
+    PlotChangeEvent lastEvent;
 
     /**
      * Returns the tests as a test suite.
@@ -85,9 +85,9 @@ public class MultiplePiePlotTests extends TestCase
      * Receives a plot change event and records it.  Some tests will use this
      * to check that events have been generated (or not) when required.
      */
-	public void plotChanged(PlotChangeEvent event) {
-		this.lastEvent = event;
-	}
+    public void plotChanged(PlotChangeEvent event) {
+        this.lastEvent = event;
+    }
 
     /**
      * Constructs a new set of tests.
@@ -102,14 +102,14 @@ public class MultiplePiePlotTests extends TestCase
      * Some checks for the constructors.
      */
     public void testConstructor() {
-    	MultiplePiePlot plot = new MultiplePiePlot();
-    	assertNull(plot.getDataset());
+        MultiplePiePlot plot = new MultiplePiePlot();
+        assertNull(plot.getDataset());
 
-    	// the following checks that the plot registers itself as a listener
-    	// with the dataset passed to the constructor - see patch 1943021
-    	DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    	plot = new MultiplePiePlot(dataset);
-    	assertTrue(dataset.hasListener(plot));
+        // the following checks that the plot registers itself as a listener
+        // with the dataset passed to the constructor - see patch 1943021
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        plot = new MultiplePiePlot(dataset);
+        assertTrue(dataset.hasListener(plot));
     }
 
     /**

@@ -89,8 +89,8 @@ public class CompositeTitleTests extends TestCase {
      * Some checks for the constructor.
      */
     public void testConstructor() {
-    	CompositeTitle t = new CompositeTitle();
-    	assertNull(t.getBackgroundPaint());
+        CompositeTitle t = new CompositeTitle();
+        assertNull(t.getBackgroundPaint());
     }
 
     /**
@@ -127,10 +127,10 @@ public class CompositeTitleTests extends TestCase {
         assertTrue(t1.equals(t2));
 
         t1.setBackgroundPaint(new GradientPaint(1.0f, 2.0f, Color.red,
-        		3.0f, 4.0f, Color.yellow));
+                3.0f, 4.0f, Color.yellow));
         assertFalse(t1.equals(t2));
         t2.setBackgroundPaint(new GradientPaint(1.0f, 2.0f, Color.red,
-        		3.0f, 4.0f, Color.yellow));
+                3.0f, 4.0f, Color.yellow));
         assertTrue(t1.equals(t2));
 
     }
@@ -156,7 +156,7 @@ public class CompositeTitleTests extends TestCase {
         CompositeTitle t1 = new CompositeTitle(new BlockContainer());
         t1.getContainer().add(new TextTitle("T1"));
         t1.setBackgroundPaint(new GradientPaint(1.0f, 2.0f, Color.red,
-        		3.0f, 4.0f, Color.yellow));
+                3.0f, 4.0f, Color.yellow));
         CompositeTitle t2 = null;
         try {
             t2 = (CompositeTitle) t1.clone();
@@ -176,7 +176,7 @@ public class CompositeTitleTests extends TestCase {
         CompositeTitle t1 = new CompositeTitle(new BlockContainer());
         t1.getContainer().add(new TextTitle("T1"));
         t1.setBackgroundPaint(new GradientPaint(1.0f, 2.0f, Color.red,
-        		3.0f, 4.0f, Color.blue));
+                3.0f, 4.0f, Color.blue));
         CompositeTitle t2 = null;
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();

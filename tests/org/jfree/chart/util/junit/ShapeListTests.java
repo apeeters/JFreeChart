@@ -141,7 +141,7 @@ public class ShapeListTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(
-            		buffer.toByteArray()));
+                    buffer.toByteArray()));
             l2 = (ShapeList) in.readObject();
             in.close();
         }

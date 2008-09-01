@@ -160,7 +160,7 @@ public class SerialUtilitiesTests extends TestCase {
     public void testGradientPaintSerialization() {
 
         Paint p1 = new GradientPaint(0.0f, 0.0f, Color.blue,
-        		100.0f, 200.0f, Color.red);
+                100.0f, 200.0f, Color.red);
         Paint p2 = null;
 
         try {
@@ -200,7 +200,7 @@ public class SerialUtilitiesTests extends TestCase {
     public void testTexturePaintSerialization() {
 
         Paint p1 = new TexturePaint(
-        		new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB),
+                new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB),
                 new Rectangle2D.Double(0, 0, 5, 5));
         Paint p2 = null;
 
@@ -330,7 +330,7 @@ public class SerialUtilitiesTests extends TestCase {
      */
     public void testArc2DFloatSerialization() {
         Arc2D a1 = new Arc2D.Float(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
-        		Arc2D.PIE);
+                Arc2D.PIE);
         Arc2D a2 = null;
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
