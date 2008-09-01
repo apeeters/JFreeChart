@@ -331,7 +331,7 @@ public class StackedBarRenderer extends BarRenderer
                 barBase = RectangleEdge.RIGHT;
             }
             else {
-            	barBase = RectangleEdge.LEFT;
+                barBase = RectangleEdge.LEFT;
             }
         }
         else {
@@ -339,7 +339,7 @@ public class StackedBarRenderer extends BarRenderer
                 barBase = RectangleEdge.BOTTOM;
             }
             else {
-            	barBase = RectangleEdge.TOP;
+                barBase = RectangleEdge.TOP;
             }
         }
 
@@ -370,15 +370,15 @@ public class StackedBarRenderer extends BarRenderer
                     barLength);
         }
         if (pass == 0) {
-        	if (getShadowsVisible()) {
+            if (getShadowsVisible()) {
                 boolean pegToBase = (positive && (positiveBase == getBase()))
                         || (!positive && (negativeBase == getBase()));
                 getBarPainter().paintBarShadow(g2, this, row, column, bar,
-                		barBase, pegToBase);
-        	}
+                        barBase, pegToBase);
+            }
         }
         else if (pass == 1) {
-        	getBarPainter().paintBar(g2, this, row, column, bar, barBase);
+            getBarPainter().paintBar(g2, this, row, column, bar, barBase);
 
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();

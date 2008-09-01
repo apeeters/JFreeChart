@@ -787,10 +787,10 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @since 1.0.11
      */
     public double getItemMiddle(Comparable rowKey, Comparable columnKey,
-    		CategoryDataset dataset, CategoryAxis axis, Rectangle2D area,
-    		RectangleEdge edge) {
+            CategoryDataset dataset, CategoryAxis axis, Rectangle2D area,
+            RectangleEdge edge) {
         return axis.getCategoryMiddle(columnKey, dataset.getColumnKeys(), area,
-        		edge);
+                edge);
     }
 
     /**
@@ -1299,7 +1299,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         item.setLabelFont(lookupLegendTextFont(series));
         Paint labelPaint = lookupLegendTextPaint(series);
         if (labelPaint != null) {
-        	item.setLabelPaint(labelPaint);
+            item.setLabelPaint(labelPaint);
         }
         item.setSeriesKey(dataset.getRowKey(series));
         item.setSeriesIndex(series);
@@ -1427,11 +1427,11 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             if (this.plot.isRangeCrosshairLockedOnData()) {
                 // both axes
                 crosshairState.updateCrosshairPoint(rowKey, columnKey, value,
-                		datasetIndex, transX, transY, orientation);
+                        datasetIndex, transX, transY, orientation);
             }
             else {
                 crosshairState.updateCrosshairX(rowKey, columnKey,
-                		datasetIndex, transX, orientation);
+                        datasetIndex, transX, orientation);
             }
         }
     }

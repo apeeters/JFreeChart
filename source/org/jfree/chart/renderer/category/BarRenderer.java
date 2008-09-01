@@ -175,10 +175,10 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public static void setDefaultBarPainter(BarPainter painter) {
-    	if (painter == null) {
-    		throw new IllegalArgumentException("Null 'painter' argument.");
-    	}
-    	BarRenderer.defaultBarPainter = painter;
+        if (painter == null) {
+            throw new IllegalArgumentException("Null 'painter' argument.");
+        }
+        BarRenderer.defaultBarPainter = painter;
     }
 
     /** The margin between items (bars) within a category. */
@@ -547,7 +547,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public BarPainter getBarPainter() {
-    	return this.barPainter;
+        return this.barPainter;
     }
 
     /**
@@ -561,11 +561,11 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public void setBarPainter(BarPainter painter) {
-    	if (painter == null) {
-    		throw new IllegalArgumentException("Null 'painter' argument.");
-    	}
-    	this.barPainter = painter;
-    	fireChangeEvent();
+        if (painter == null) {
+            throw new IllegalArgumentException("Null 'painter' argument.");
+        }
+        this.barPainter = painter;
+        fireChangeEvent();
     }
 
     /**
@@ -577,7 +577,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public boolean getShadowsVisible() {
-    	return this.shadowsVisible;
+        return this.shadowsVisible;
     }
 
     /**
@@ -603,7 +603,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public Paint getShadowPaint() {
-    	return this.shadowPaint;
+        return this.shadowPaint;
     }
 
     /**
@@ -617,11 +617,11 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public void setShadowPaint(Paint paint) {
-    	if (paint == null) {
-    		throw new IllegalArgumentException("Null 'paint' argument.");
-    	}
-    	this.shadowPaint = paint;
-    	fireChangeEvent();
+        if (paint == null) {
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        this.shadowPaint = paint;
+        fireChangeEvent();
     }
 
     /**
@@ -632,7 +632,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public double getShadowXOffset() {
-    	return this.shadowXOffset;
+        return this.shadowXOffset;
     }
 
     /**
@@ -644,8 +644,8 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public void setShadowXOffset(double offset) {
-    	this.shadowXOffset = offset;
-    	fireChangeEvent();
+        this.shadowXOffset = offset;
+        fireChangeEvent();
     }
 
     /**
@@ -656,7 +656,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public double getShadowYOffset() {
-    	return this.shadowYOffset;
+        return this.shadowYOffset;
     }
 
     /**
@@ -668,8 +668,8 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @since 1.0.11
      */
     public void setShadowYOffset(double offset) {
-    	this.shadowYOffset = offset;
-    	fireChangeEvent();
+        this.shadowYOffset = offset;
+        fireChangeEvent();
     }
 
     /**
@@ -916,7 +916,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         result.setLabelFont(lookupLegendTextFont(series));
         Paint labelPaint = lookupLegendTextPaint(series);
         if (labelPaint != null) {
-        	result.setLabelPaint(labelPaint);
+            result.setLabelPaint(labelPaint);
         }
         result.setDataset(dataset);
         result.setDatasetIndex(datasetIndex);
@@ -995,7 +995,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
                 barBase = RectangleEdge.RIGHT;
             }
             else {
-            	barBase = RectangleEdge.LEFT;
+                barBase = RectangleEdge.LEFT;
             }
         }
         else {
@@ -1004,7 +1004,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
                 barBase = RectangleEdge.BOTTOM;
             }
             else {
-            	barBase = RectangleEdge.TOP;
+                barBase = RectangleEdge.TOP;
             }
         }
 
@@ -1020,7 +1020,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         }
         if (getShadowsVisible()) {
             this.barPainter.paintBarShadow(g2, this, row, column, bar, barBase,
-        		true);
+                true);
         }
         this.barPainter.paintBar(g2, this, row, column, bar, barBase);
 
@@ -1034,8 +1034,8 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         // submit the current data point as a crosshair candidate
         int datasetIndex = plot.indexOf(dataset);
         updateCrosshairValues(state.getCrosshairState(),
-        		dataset.getRowKey(row), dataset.getColumnKey(column), value,
-        		datasetIndex, barW0, barL0, orientation);
+                dataset.getRowKey(row), dataset.getColumnKey(column), value,
+                datasetIndex, barW0, barL0, orientation);
 
         // add an item entity, if this information is being collected
         EntityCollection entities = state.getEntityCollection();
@@ -1319,19 +1319,19 @@ public class BarRenderer extends AbstractCategoryItemRenderer
             return false;
         }
         if (!this.barPainter.equals(that.barPainter)) {
-        	return false;
+            return false;
         }
         if (this.shadowsVisible != that.shadowsVisible) {
-        	return false;
+            return false;
         }
         if (!PaintUtilities.equal(this.shadowPaint, that.shadowPaint)) {
-        	return false;
+            return false;
         }
         if (this.shadowXOffset != that.shadowXOffset) {
-        	return false;
+            return false;
         }
         if (this.shadowYOffset != that.shadowYOffset) {
-        	return false;
+            return false;
         }
         return super.equals(obj);
     }

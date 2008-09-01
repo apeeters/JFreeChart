@@ -176,7 +176,7 @@ public class IntervalBarRenderer extends BarRenderer
             return;
         }
         double java2dValue0 = rangeAxis.valueToJava2D(value0.doubleValue(),
-        		dataArea, rangeAxisLocation);
+                dataArea, rangeAxisLocation);
 
         // Y1
         Number value1 = dataset.getStartValue(row, column);
@@ -205,7 +205,7 @@ public class IntervalBarRenderer extends BarRenderer
         if (orientation == PlotOrientation.HORIZONTAL) {
             // BAR Y
             rectY = domainAxis.getCategoryStart(column, getColumnCount(),
-            		dataArea, domainAxisLocation);
+                    dataArea, domainAxisLocation);
             if (seriesCount > 1) {
                 double seriesGap = dataArea.getHeight() * getItemMargin()
                                    / (categoryCount * (seriesCount - 1));
@@ -242,7 +242,7 @@ public class IntervalBarRenderer extends BarRenderer
                 rectHeight);
         BarPainter painter = getBarPainter();
         if (getShadowsVisible()) {
-        	painter.paintBarShadow(g2, this, row, column, bar, barBase, false);
+            painter.paintBarShadow(g2, this, row, column, bar, barBase, false);
         }
         getBarPainter().paintBar(g2, this, row, column, bar, barBase);
 

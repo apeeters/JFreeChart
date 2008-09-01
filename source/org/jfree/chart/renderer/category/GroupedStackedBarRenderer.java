@@ -291,7 +291,7 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
                 barBase = RectangleEdge.RIGHT;
             }
             else {
-            	barBase = RectangleEdge.LEFT;
+                barBase = RectangleEdge.LEFT;
             }
         }
         else {
@@ -299,7 +299,7 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
                 barBase = RectangleEdge.BOTTOM;
             }
             else {
-            	barBase = RectangleEdge.TOP;
+                barBase = RectangleEdge.TOP;
             }
         }
         RectangleEdge location = plot.getRangeAxisEdge();
