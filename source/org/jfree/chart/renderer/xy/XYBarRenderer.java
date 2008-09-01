@@ -174,10 +174,10 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @since 1.0.11
      */
     public static void setDefaultBarPainter(XYBarPainter painter) {
-    	if (painter == null) {
-    		throw new IllegalArgumentException("Null 'painter' argument.");
-    	}
-    	XYBarRenderer.defaultBarPainter = painter;
+        if (painter == null) {
+            throw new IllegalArgumentException("Null 'painter' argument.");
+        }
+        XYBarRenderer.defaultBarPainter = painter;
     }
 
     /**
@@ -532,7 +532,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @since 1.0.11
      */
     public XYBarPainter getBarPainter() {
-    	return this.barPainter;
+        return this.barPainter;
     }
 
     /**
@@ -544,11 +544,11 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @since 1.0.11
      */
     public void setBarPainter(XYBarPainter painter) {
-    	if (painter == null) {
-    		throw new IllegalArgumentException("Null 'painter' argument.");
-    	}
-    	this.barPainter = painter;
-    	fireChangeEvent();
+        if (painter == null) {
+            throw new IllegalArgumentException("Null 'painter' argument.");
+        }
+        this.barPainter = painter;
+        fireChangeEvent();
     }
 
     /**
@@ -560,7 +560,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @since 1.0.11
      */
     public boolean getShadowsVisible() {
-    	return this.shadowsVisible;
+        return this.shadowsVisible;
     }
 
     /**
@@ -585,7 +585,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @since 1.0.11
      */
     public double getShadowXOffset() {
-    	return this.shadowXOffset;
+        return this.shadowXOffset;
     }
 
     /**
@@ -597,8 +597,8 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @since 1.0.11
      */
     public void setShadowXOffset(double offset) {
-    	this.shadowXOffset = offset;
-    	fireChangeEvent();
+        this.shadowXOffset = offset;
+        fireChangeEvent();
     }
 
     /**
@@ -609,7 +609,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @since 1.0.11
      */
     public double getShadowYOffset() {
-    	return this.shadowYOffset;
+        return this.shadowYOffset;
     }
 
     /**
@@ -621,8 +621,8 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @since 1.0.11
      */
     public void setShadowYOffset(double offset) {
-    	this.shadowYOffset = offset;
-    	fireChangeEvent();
+        this.shadowYOffset = offset;
+        fireChangeEvent();
     }
 
     /**
@@ -680,7 +680,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                     urlText = getLegendItemURLGenerator().generateLabel(
                             dataset, series);
                 }
-				// FIXME: Use the general mechanism
+                // FIXME: Use the general mechanism
                 Shape shape = this.legendBar;
                 Paint paint = lookupSeriesPaint(series);
                 Paint outlinePaint = lookupSeriesOutlinePaint(series);
@@ -696,7 +696,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                 result.setLabelFont(lookupLegendTextFont(series));
                 Paint labelPaint = lookupLegendTextPaint(series);
                 if (labelPaint != null) {
-                	result.setLabelPaint(labelPaint);
+                    result.setLabelPaint(labelPaint);
                 }
                 result.setDataset(dataset);
                 result.setDatasetIndex(datasetIndex);
@@ -838,7 +838,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                 barBase = RectangleEdge.RIGHT;
             }
             else {
-            	barBase = RectangleEdge.LEFT;
+                barBase = RectangleEdge.LEFT;
             }
         }
         else {
@@ -846,12 +846,12 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                 barBase = RectangleEdge.BOTTOM;
             }
             else {
-            	barBase = RectangleEdge.TOP;
+                barBase = RectangleEdge.TOP;
             }
         }
         if (getShadowsVisible()) {
             this.barPainter.paintBarShadow(g2, this, series, item, bar, barBase,
-        		!this.useYInterval);
+                !this.useYInterval);
         }
         this.barPainter.paintBar(g2, this, series, item, bar, barBase);
 
@@ -1123,7 +1123,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public Range findRangeBounds(XYDataset dataset) {
         if (dataset != null) {
             return DatasetUtilities.findRangeBounds(dataset,
-            		this.useYInterval);
+                    this.useYInterval);
         }
         else {
             return null;
@@ -1191,16 +1191,16 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             return false;
         }
         if (!this.barPainter.equals(that.barPainter)) {
-        	return false;
+            return false;
         }
         if (this.shadowsVisible != that.shadowsVisible) {
-        	return false;
+            return false;
         }
         if (this.shadowXOffset != that.shadowXOffset) {
-        	return false;
+            return false;
         }
         if (this.shadowYOffset != that.shadowYOffset) {
-        	return false;
+            return false;
         }
         return super.equals(obj);
     }

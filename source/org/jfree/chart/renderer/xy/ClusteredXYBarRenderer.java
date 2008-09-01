@@ -121,16 +121,16 @@ public class ClusteredXYBarRenderer extends XYBarRenderer
         this.centerBarAtStartValue = centerBarAtStartValue;
     }
 
-	/**
-	 * Returns the number of passes through the dataset that this renderer
-	 * requires.  In this case, two passes are required, the first for drawing
-	 * the shadows (if visible), and the second for drawing the bars.
-	 *
-	 * @return <code>2</code>.
-	 */
+    /**
+     * Returns the number of passes through the dataset that this renderer
+     * requires.  In this case, two passes are required, the first for drawing
+     * the shadows (if visible), and the second for drawing the bars.
+     *
+     * @return <code>2</code>.
+     */
     public int getPassCount() {
-		return 2;
-	}
+        return 2;
+    }
 
     /**
      * Returns the x-value bounds for the specified dataset.
@@ -299,7 +299,7 @@ public class ClusteredXYBarRenderer extends XYBarRenderer
                 barBase = RectangleEdge.RIGHT;
             }
             else {
-            	barBase = RectangleEdge.LEFT;
+                barBase = RectangleEdge.LEFT;
             }
         }
         else {
@@ -307,12 +307,12 @@ public class ClusteredXYBarRenderer extends XYBarRenderer
                 barBase = RectangleEdge.BOTTOM;
             }
             else {
-            	barBase = RectangleEdge.TOP;
+                barBase = RectangleEdge.TOP;
             }
         }
         if (pass == 0 && getShadowsVisible()) {
             getBarPainter().paintBarShadow(g2, this, series, item, bar, barBase,
-        		!getUseYInterval());
+                !getUseYInterval());
         }
         if (pass == 1) {
             getBarPainter().paintBar(g2, this, series, item, bar, barBase);
