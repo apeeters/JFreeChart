@@ -132,10 +132,20 @@ public class ChartPanelTests extends TestCase implements ChartMouseListener {
         assertTrue(pass);
     }
 
+    /**
+     * Ignores a mouse click event.
+     *
+     * @param event  the event.
+     */
     public void chartMouseClicked(ChartMouseEvent event) {
         // ignore
     }
 
+    /**
+     * Ignores a mouse move event.
+     *
+     * @param event  the event.
+     */
     public void chartMouseMoved(ChartMouseEvent event) {
         // ignore
     }

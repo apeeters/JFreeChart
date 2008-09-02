@@ -243,6 +243,11 @@ public class ValueMarkerTests
         assertEquals(m, this.lastEvent.getMarker());
     }
 
+    /**
+     * Records the last event.
+     *
+     * @param event  the event.
+     */
     public void markerChanged(MarkerChangeEvent event) {
         this.lastEvent = event;
     }
