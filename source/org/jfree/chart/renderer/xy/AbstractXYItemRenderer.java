@@ -1473,6 +1473,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param dataArea  the data area.
      * @param markerArea  the marker area.
      * @param markerOffset  the marker offset.
+     * @param labelOffsetForRange  the label offset.
      * @param anchor  the label anchor.
      *
      * @return The coordinates for drawing the marker label.

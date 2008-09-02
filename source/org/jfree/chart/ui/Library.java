@@ -6,24 +6,24 @@
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
- * 
+ *
  * ------------
  * Library.java
  * ------------
@@ -121,7 +121,7 @@ public class Library {
 
     /**
      * Sets the project info.
-     * 
+     *
      * @param info  the project info.
      */
     protected void setInfo(String info) {
@@ -130,7 +130,7 @@ public class Library {
 
     /**
      * Sets the licence name.
-     * 
+     *
      * @param licenceName  the licence name.
      */
     protected void setLicenceName(String licenceName) {
@@ -139,7 +139,7 @@ public class Library {
 
     /**
      * Sets the project name.
-     * 
+     *
      * @param name  the project name.
      */
     protected void setName(String name) {
@@ -148,13 +148,20 @@ public class Library {
 
     /**
      * Sets the version identifier.
-     * 
+     *
      * @param version  the version identifier.
      */
     protected void setVersion(String version) {
         this.version = version;
     }
 
+    /**
+     * Tests this instance for equality with an arbitrary object.
+     *
+     * @param obj  the object (<code>null</code> permitted).
+     *
+     * @return A boolean.
+     */
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -165,7 +172,7 @@ public class Library {
 
         Library library = (Library) obj;
 
-        if (this.name != null ? !this.name.equals(library.name) 
+        if (this.name != null ? !this.name.equals(library.name)
               : library.name != null) {
             return false;
         }
@@ -173,6 +180,11 @@ public class Library {
         return true;
     }
 
+    /**
+     * Returns a hash code for this instance.
+     *
+     * @return A hash code.
+     */
     public int hashCode() {
       return (this.name != null ? this.name.hashCode() : 0);
     }

@@ -191,6 +191,9 @@ public class CustomXYURLGenerator implements XYURLGenerator, Cloneable,
      * generator.
      *
      * @return A clone.
+     *
+     * @throws CloneNotSupportedException if there is a problem cloning this
+     *     object.
      */
     public Object clone() throws CloneNotSupportedException {
         CustomXYURLGenerator clone = (CustomXYURLGenerator) super.clone();
