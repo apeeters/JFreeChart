@@ -92,18 +92,28 @@ public class CompassFormat extends NumberFormat {
 
     }
 
-    /* (non-Javadoc)
-     * @see java.text.NumberFormat#format(double, java.lang.StringBuffer,
-     *      java.text.FieldPosition)
+    /**
+     * Formats a number into the specified string buffer.
+     *
+     * @param number  the number to format.
+     * @param toAppendTo  the string buffer.
+     * @param pos  the field position (ignored here).
+     *
+     * @return The string buffer.
      */
     public StringBuffer format(double number, StringBuffer toAppendTo,
                                FieldPosition pos) {
         return toAppendTo.append(getDirectionCode(number));
     }
 
-    /* (non-Javadoc)
-     * @see java.text.NumberFormat#format(long, java.lang.StringBuffer,
-     *      java.text.FieldPosition)
+    /**
+     * Formats a number into the specified string buffer.
+     *
+     * @param number  the number to format.
+     * @param toAppendTo  the string buffer.
+     * @param pos  the field position (ignored here).
+     *
+     * @return The string buffer.
      */
     public StringBuffer format(long number, StringBuffer toAppendTo,
                                FieldPosition pos) {

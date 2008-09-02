@@ -977,6 +977,8 @@ public class LegendItem implements Cloneable, Serializable {
      *
      * @return A clone.
      *
+     * @throws CloneNotSupportedException if there is a problem cloning.
+     *
      * @since 1.0.10
      */
     public Object clone() throws CloneNotSupportedException {
