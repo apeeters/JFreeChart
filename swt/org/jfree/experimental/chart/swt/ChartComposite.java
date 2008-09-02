@@ -1504,6 +1504,17 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         this.forceRedraw();
     }
 
+    /**
+     * Not implemented.
+     *
+     * @param graphics  the graphics.
+     * @param pageFormat  the page format.
+     * @param pageIndex  the page index.
+     *
+     * @return ?.
+     *
+     * @throws PrinterException if there is a problem.
+     */
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
         throws PrinterException {
         if (pageIndex != 0) {
@@ -1572,17 +1583,19 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.swt.events.MouseListener#mouseDoubleClick(
-     * org.eclipse.swt.events.MouseEvent)
+    /**
+     * Does nothing - override if necessary.
+     *
+     * @param event  the mouse event.
      */
     public void mouseDoubleClick(MouseEvent event) {
         // do nothing, override if necessary
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.swt.events.MouseListener#mouseDown(
-     * org.eclipse.swt.events.MouseEvent)
+    /**
+     * Handles a mouse down event.
+     *
+     * @param event  the event.
      */
     public void mouseDown(MouseEvent event) {
 
@@ -1620,9 +1633,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.swt.events.MouseListener#mouseUp(
-     * org.eclipse.swt.events.MouseEvent)
+    /**
+     * Handles a mouse up event.
+     *
+     * @param event  the event.
      */
     public void mouseUp(MouseEvent event) {
 
@@ -1671,9 +1685,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         this.zoomRectangle = null;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.swt.events.MouseMoveListener#mouseMove(
-     * org.eclipse.swt.events.MouseEvent)
+    /**
+     * Handles a mouse move event.
+     *
+     * @param event  the mouse event.
      */
     public void mouseMove(MouseEvent event) {
 
@@ -1754,9 +1769,10 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.swt.events.PaintListener#paintComponent(
-     * org.eclipse.swt.events.PaintEvent)
+    /**
+     * Paints the control.
+     *
+     * @param e  the paint event.
      */
     public void paintControl(PaintEvent e) {
         // first determine the size of the chart rendering area...
@@ -1882,8 +1898,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
         sg2.dispose();
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.swt.widgets.Widget#dispose()
+    /**
+     * Disposes the control.
      */
     public void dispose() {
         if (this.chartBuffer != null) this.chartBuffer.dispose();
