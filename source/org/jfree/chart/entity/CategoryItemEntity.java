@@ -63,7 +63,7 @@ import org.jfree.data.category.CategoryDataset;
  * A chart entity that represents one item within a category plot.
  */
 public class CategoryItemEntity extends ChartEntity
-                                implements Cloneable, Serializable {
+        implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -8657249457902337349L;
