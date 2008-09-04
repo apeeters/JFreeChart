@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------
  * FontChooserPanel.java
  * ---------------------
- * (C) Copyright 2000-2007, by Object Refinery Limited.
+ * (C) Copyright 2000-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Arnaud Lelievre;
@@ -36,11 +36,11 @@
  * --------------------------
  * 26-Oct-2001 : Changed package to com.jrefinery.ui.*;
  * 14-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 08-Sep-2003 : Added internationalization via use of properties 
+ * 08-Sep-2003 : Added internationalization via use of properties
  *               resourceBundle (RFE 690236) (AL);
  * 21-Feb-2004 : The FontParameter of the constructor was never used (TM);
  * 21-Jun-2007 : Copied from JCommon (DG);
- * 
+ *
  */
 
 package org.jfree.chart.ui;
@@ -65,7 +65,7 @@ import javax.swing.ListModel;
 public class FontChooserPanel extends JPanel {
 
     /** The font sizes that can be selected. */
-    public static final String[] SIZES = {"9", "10", "11", "12", "14", "16", 
+    public static final String[] SIZES = {"9", "10", "11", "12", "14", "16",
             "18", "20", "22", "24", "28", "36", "48", "72"};
 
     /** The list of fonts. */
@@ -81,11 +81,11 @@ public class FontChooserPanel extends JPanel {
     private JCheckBox italic;
 
     /** The resourceBundle for the localization. */
-    protected static ResourceBundle localizationResources = 
+    protected static ResourceBundle localizationResources =
             ResourceBundle.getBundle("org.jfree.chart.ui.LocalizationBundle");
 
     /**
-     * Standard constructor - builds a FontChooserPanel initialised with the 
+     * Standard constructor - builds a FontChooserPanel initialised with the
      * specified font.
      *
      * @param font  the initial font to display.
@@ -100,7 +100,7 @@ public class FontChooserPanel extends JPanel {
 
         JPanel fontPanel = new JPanel(new BorderLayout());
         fontPanel.setBorder(BorderFactory.createTitledBorder(
-                            BorderFactory.createEtchedBorder(), 
+                            BorderFactory.createEtchedBorder(),
                             localizationResources.getString("Font")));
         this.fontlist = new JList(fonts);
         JScrollPane fontpane = new JScrollPane(this.fontlist);
@@ -110,7 +110,7 @@ public class FontChooserPanel extends JPanel {
 
         JPanel sizePanel = new JPanel(new BorderLayout());
         sizePanel.setBorder(BorderFactory.createTitledBorder(
-                            BorderFactory.createEtchedBorder(), 
+                            BorderFactory.createEtchedBorder(),
                             localizationResources.getString("Size")));
         this.sizelist = new JList(SIZES);
         JScrollPane sizepane = new JScrollPane(this.sizelist);
@@ -140,7 +140,7 @@ public class FontChooserPanel extends JPanel {
      * @return the font.
      */
     public Font getSelectedFont() {
-        return new Font(getSelectedName(), getSelectedStyle(), 
+        return new Font(getSelectedName(), getSelectedStyle(),
                 getSelectedSize());
     }
 

@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
- * 
+ *
  * ---------------------
  * BasicProjectInfo.java
  * ---------------------
- * (C)opyright 2004-2007, by Thomas Morgner and Contributors.
+ * (C)opyright 2004-2008, by Thomas Morgner and Contributors.
  *
  * Original Author:  Thomas Morgner;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -50,10 +50,10 @@ import org.jfree.chart.util.ObjectUtilities;
  * Basic project info.
  */
 public class BasicProjectInfo extends Library {
-    
+
     /**
      * A helper class, which simplifies the loading of optional library
-     * implementations. 
+     * implementations.
      */
     private static class OptionalLibraryHolder {
         private String libraryClass;
@@ -61,7 +61,7 @@ public class BasicProjectInfo extends Library {
 
         /**
          * Creates a new instance.
-         * 
+         *
          * @param libraryClass  the library class.
          */
         public OptionalLibraryHolder(String libraryClass) {
@@ -74,7 +74,7 @@ public class BasicProjectInfo extends Library {
 
         /**
          * Creates a new instance.
-         * 
+         *
          * @param library  the library (<code>null</code> not permitted).
          */
         public OptionalLibraryHolder(Library library) {
@@ -87,7 +87,7 @@ public class BasicProjectInfo extends Library {
 
         /**
          * Returns the library class.
-         * 
+         *
          * @return The library class.
          */
         public String getLibraryClass() {
@@ -96,7 +96,7 @@ public class BasicProjectInfo extends Library {
 
         /**
          * Returns the library.
-         * 
+         *
          * @return The library.
          */
         public Library getLibrary() {
@@ -166,7 +166,7 @@ public class BasicProjectInfo extends Library {
 
     /**
      * Creates a new project info instance.
-     * 
+     *
      * @param name  the project name.
      * @param version  the project version.
      * @param info  the project info (web site for example).
@@ -200,7 +200,7 @@ public class BasicProjectInfo extends Library {
 
     /**
      * Sets the project info string (for example, this could be the project URL).
-     * 
+     *
      * @param info  the info string.
      */
     public void setInfo(String info) {
@@ -209,7 +209,7 @@ public class BasicProjectInfo extends Library {
 
     /**
      * Sets the license name.
-     * 
+     *
      * @param licence  the license name.
      */
     public void setLicenceName(String licence) {
@@ -218,7 +218,7 @@ public class BasicProjectInfo extends Library {
 
     /**
      * Sets the project name.
-     * 
+     *
      * @param name  the project name.
      */
     public void setName(String name) {
@@ -227,7 +227,7 @@ public class BasicProjectInfo extends Library {
 
     /**
      * Sets the project version number.
-     * 
+     *
      * @param version  the version number.
      */
     public void setVersion(String version) {
@@ -246,7 +246,7 @@ public class BasicProjectInfo extends Library {
 
     /**
      * Adds a library.
-     * 
+     *
      * @param library  the library.
      */
     public void addLibrary(Library library) {

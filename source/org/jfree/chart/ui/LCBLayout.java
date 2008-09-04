@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------
  * LCBLayout.java
  * --------------
- * (C) Copyright 2000-2007, by Object Refinery Limited.
+ * (C) Copyright 2000-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -55,7 +55,7 @@ public class LCBLayout implements LayoutManager, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -2531780832406163833L;
-    
+
     /** A constant for the number of columns in the layout. */
     private static final int COLUMNS = 3;
 
@@ -116,10 +116,10 @@ public class LCBLayout implements LayoutManager, Serializable {
             for (int r = 0; r < nrows; r++) {
                 totalHeight = totalHeight + this.rowHeight[r];
             }
-            int totalWidth = this.colWidth[0] + this.labelGap 
+            int totalWidth = this.colWidth[0] + this.labelGap
                     + this.colWidth[1] + this.buttonGap + this.colWidth[2];
-            return new Dimension(insets.left + insets.right + totalWidth 
-                    + this.labelGap + this.buttonGap, insets.top 
+            return new Dimension(insets.left + insets.right + totalWidth
+                    + this.labelGap + this.buttonGap, insets.top
                     + insets.bottom + totalHeight + this.vGap);
         }
 
@@ -154,10 +154,10 @@ public class LCBLayout implements LayoutManager, Serializable {
             for (int r = 0; r < nrows; r++) {
                 totalHeight = totalHeight + this.rowHeight[r];
             }
-            int totalWidth = this.colWidth[0] + this.labelGap 
+            int totalWidth = this.colWidth[0] + this.labelGap
                     + this.colWidth[1] + this.buttonGap + this.colWidth[2];
-            return new Dimension(insets.left + insets.right + totalWidth 
-                    + this.labelGap + this.buttonGap, insets.top 
+            return new Dimension(insets.left + insets.right + totalWidth
+                    + this.labelGap + this.buttonGap, insets.top
                     + insets.bottom + totalHeight + this.vGap);
         }
 
@@ -190,11 +190,11 @@ public class LCBLayout implements LayoutManager, Serializable {
             for (int r = 0; r < nrows; r++) {
                 totalHeight = totalHeight + this.rowHeight[r];
             }
-            int totalWidth = this.colWidth[0] + this.colWidth[1] 
+            int totalWidth = this.colWidth[0] + this.colWidth[1]
                                                     + this.colWidth[2];
 
             // adjust the width of the second column to use up all of parent
-            int available = parent.getWidth() - insets.left 
+            int available = parent.getWidth() - insets.left
                     - insets.right - this.labelGap - this.buttonGap;
             this.colWidth[1] = this.colWidth[1] + (available - totalWidth);
 
@@ -209,7 +209,7 @@ public class LCBLayout implements LayoutManager, Serializable {
                         Dimension d = component.getPreferredSize();
                         int h = d.height;
                         int adjust = (this.rowHeight[r] - h) / 2;
-                        parent.getComponent(i).setBounds(x, y + adjust, 
+                        parent.getComponent(i).setBounds(x, y + adjust,
                                 this.colWidth[c], h);
                     }
                     y = y + this.rowHeight[r] + this.vGap;
