@@ -72,7 +72,7 @@ import org.jfree.data.category.CategoryDataset;
  */
 public class CategoryTextAnnotation extends TextAnnotation
         implements CategoryAnnotation, Cloneable, PublicCloneable,
-        Serializable {
+                   Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 3333360090781320147L;
