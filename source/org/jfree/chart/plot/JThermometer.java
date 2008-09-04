@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -29,7 +29,7 @@
  * -----------------
  * A plot that displays a single value in a thermometer type display.
  *
- * (C) Copyright 2000-2007, Australian Antarctic Division and Contributors.
+ * (C) Copyright 2000-2008, Australian Antarctic Division and Contributors.
  *
  * Original Author:  Bryan Scott.
  * Contributor(s):   David Gilbert (for Object Refinery Limited);

@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ----------------
  * CompassPlot.java
  * ----------------
- * (C) Copyright 2002-2007, by the Australian Antarctic Division and 
+ * (C) Copyright 2002-2008, by the Australian Antarctic Division and
  * Contributors.
  *
  * Original Author:  Bryan Scott (for the Australian Antarctic Division);
@@ -41,7 +41,7 @@
  * 26-Mar-2003 : Implemented Serializable (DG);
  * 27-Mar-2003 : Changed MeterDataset to ValueDataset (DG);
  * 21-Aug-2003 : Implemented Cloneable (DG);
- * 08-Sep-2003 : Added internationalization via use of properties 
+ * 08-Sep-2003 : Added internationalization via use of properties
  *               resourceBundle (RFE 690236) (AL);
  * 09-Sep-2003 : Changed Color --> Paint (DG);
  * 15-Sep-2003 : Added null data value check (bug report 805009) (DG);
@@ -53,7 +53,7 @@
  * 17-Apr-2005 : Fixed bug in clone() method (DG);
  * 05-May-2005 : Updated draw() method parameters (DG);
  * 08-Jun-2005 : Fixed equals() method to handle GradientPaint (DG);
- * 16-Jun-2005 : Renamed getData() --> getDatasets() and 
+ * 16-Jun-2005 : Renamed getData() --> getDatasets() and
  *               addData() --> addDataset() (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 20-Mar-2007 : Fixed serialization (DG);
@@ -108,9 +108,9 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 6924382802125527395L;
-    
+
     /** The default label font. */
-    public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", 
+    public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif",
             Font.BOLD, 10);
 
     /** A constant for the label type. */
@@ -162,11 +162,11 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
     private MeterNeedle[] seriesNeedle = new MeterNeedle[1];
 
     /** The resourceBundle for the localization. */
-    protected static ResourceBundle localizationResources 
+    protected static ResourceBundle localizationResources
             = ResourceBundle.getBundle(
                     "org.jfree.chart.plot.LocalizationBundle");
 
-    /** 
+    /**
      * The count to complete one revolution.  Can be arbitrarily set
      * For degrees (the default) it is 360, for radians this is 2*Pi, etc
      */
@@ -201,7 +201,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * and {@link #VALUE_LABELS}.
      *
      * @return The label type.
-     * 
+     *
      * @see #setLabelType(int)
      */
     public int getLabelType() {
@@ -213,7 +213,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * Sets the label type (either {@link #NO_LABELS} or {@link #VALUE_LABELS}.
      *
      * @param type  the type.
-     * 
+     *
      * @see #getLabelType()
      */
     public void setLabelType(int type) {
@@ -232,7 +232,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * Returns the label font.
      *
      * @return The label font.
-     * 
+     *
      * @see #setLabelFont(Font)
      */
     public Font getLabelFont() {
@@ -241,11 +241,11 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
     }
 
     /**
-     * Sets the label font and sends a {@link PlotChangeEvent} to all 
+     * Sets the label font and sends a {@link PlotChangeEvent} to all
      * registered listeners.
      *
      * @param font  the new label font.
-     * 
+     *
      * @see #getLabelFont()
      */
     public void setLabelFont(Font font) {
@@ -259,92 +259,92 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
 
     /**
      * Returns the paint used to fill the outer circle of the compass.
-     * 
+     *
      * @return The paint (never <code>null</code>).
-     * 
+     *
      * @see #setRosePaint(Paint)
      */
     public Paint getRosePaint() {
-        return this.rosePaint;   
-    }
-    
-    /**
-     * Sets the paint used to fill the outer circle of the compass, 
-     * and sends a {@link PlotChangeEvent} to all registered listeners.
-     * 
-     * @param paint  the paint (<code>null</code> not permitted).
-     * 
-     * @see #getRosePaint()
-     */
-    public void setRosePaint(Paint paint) {
-        if (paint == null) {   
-            throw new IllegalArgumentException("Null 'paint' argument.");
-        }
-        this.rosePaint = paint;
-        fireChangeEvent();        
+        return this.rosePaint;
     }
 
     /**
-     * Returns the paint used to fill the inner background area of the 
+     * Sets the paint used to fill the outer circle of the compass,
+     * and sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param paint  the paint (<code>null</code> not permitted).
+     *
+     * @see #getRosePaint()
+     */
+    public void setRosePaint(Paint paint) {
+        if (paint == null) {
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        this.rosePaint = paint;
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns the paint used to fill the inner background area of the
      * compass.
-     * 
+     *
      * @return The paint (never <code>null</code>).
-     * 
+     *
      * @see #setRoseCenterPaint(Paint)
      */
     public Paint getRoseCenterPaint() {
-        return this.roseCenterPaint;   
+        return this.roseCenterPaint;
     }
-    
+
     /**
-     * Sets the paint used to fill the inner background area of the compass, 
+     * Sets the paint used to fill the inner background area of the compass,
      * and sends a {@link PlotChangeEvent} to all registered listeners.
-     * 
+     *
      * @param paint  the paint (<code>null</code> not permitted).
-     * 
+     *
      * @see #getRoseCenterPaint()
      */
     public void setRoseCenterPaint(Paint paint) {
-        if (paint == null) {   
+        if (paint == null) {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.roseCenterPaint = paint;
-        fireChangeEvent();        
+        fireChangeEvent();
     }
-    
+
     /**
      * Returns the paint used to draw the circles, symbols and labels on the
      * compass.
-     * 
+     *
      * @return The paint (never <code>null</code>).
-     * 
+     *
      * @see #setRoseHighlightPaint(Paint)
      */
     public Paint getRoseHighlightPaint() {
-        return this.roseHighlightPaint;   
+        return this.roseHighlightPaint;
     }
-    
+
     /**
-     * Sets the paint used to draw the circles, symbols and labels of the 
+     * Sets the paint used to draw the circles, symbols and labels of the
      * compass, and sends a {@link PlotChangeEvent} to all registered listeners.
-     * 
+     *
      * @param paint  the paint (<code>null</code> not permitted).
-     * 
+     *
      * @see #getRoseHighlightPaint()
      */
     public void setRoseHighlightPaint(Paint paint) {
-        if (paint == null) {   
+        if (paint == null) {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.roseHighlightPaint = paint;
-        fireChangeEvent();        
+        fireChangeEvent();
     }
-    
+
     /**
      * Returns a flag that controls whether or not a border is drawn.
      *
      * @return The flag.
-     * 
+     *
      * @see #setDrawBorder(boolean)
      */
     public boolean getDrawBorder() {
@@ -355,7 +355,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * Sets a flag that controls whether or not a border is drawn.
      *
      * @param status  the flag status.
-     * 
+     *
      * @see #getDrawBorder()
      */
     public void setDrawBorder(boolean status) {
@@ -368,7 +368,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      *
      * @param series  the series index.
      * @param paint  the paint.
-     * 
+     *
      * @see #setSeriesOutlinePaint(int, Paint)
      */
     public void setSeriesPaint(int series, Paint paint) {
@@ -383,7 +383,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      *
      * @param series  the series index.
      * @param p  the paint.
-     * 
+     *
      * @see #setSeriesPaint(int, Paint)
      */
     public void setSeriesOutlinePaint(int series, Paint p) {
@@ -399,7 +399,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      *
      * @param series  the series index.
      * @param stroke  the stroke.
-     * 
+     *
      * @see #setSeriesOutlinePaint(int, Paint)
      */
     public void setSeriesOutlineStroke(int series, Stroke stroke) {
@@ -414,7 +414,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * Sets the needle type.
      *
      * @param type  the type.
-     * 
+     *
      * @see #setSeriesNeedle(int, int)
      */
     public void setSeriesNeedle(int type) {
@@ -437,7 +437,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * </ul>
      * @param index  the series index.
      * @param type  the needle type.
-     * 
+     *
      * @see #setSeriesNeedle(int)
      */
     public void setSeriesNeedle(int index, int type) {
@@ -494,19 +494,17 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * @param needle  the needle.
      */
     public void setSeriesNeedle(int index, MeterNeedle needle) {
-
         if ((needle != null) && (index < this.seriesNeedle.length)) {
             this.seriesNeedle[index] = needle;
         }
         fireChangeEvent();
-
     }
 
     /**
      * Returns an array of dataset references for the plot.
      *
      * @return The dataset for the plot, cast as a ValueDataset.
-     * 
+     *
      * @see #addDataset(ValueDataset)
      */
     public ValueDataset[] getDatasets() {
@@ -517,7 +515,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * Adds a dataset to the compass.
      *
      * @param dataset  the new dataset (<code>null</code> ignored).
-     * 
+     *
      * @see #addDataset(ValueDataset, MeterNeedle)
      */
     public void addDataset(ValueDataset dataset) {
@@ -559,7 +557,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
     }
 
     /**
-     * Draws the plot on a Java 2D graphics device (such as the screen or a 
+     * Draws the plot on a Java 2D graphics device (such as the screen or a
      * printer).
      *
      * @param g2  the graphics device.
@@ -604,7 +602,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
 
         this.circle1.setFrame(midX - radius, midY - radius, diameter, diameter);
         this.circle2.setFrame(
-            midX - radius + 15, midY - radius + 15, 
+            midX - radius + 15, midY - radius + 15,
             diameter - 30, diameter - 30
         );
         g2.setPaint(this.rosePaint);
@@ -643,7 +641,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
             a = Math.toRadians(w);
             x1 = midX - ((int) (Math.sin(a) * innerRadius));
             y1 = midY - ((int) (Math.cos(a) * innerRadius));
-            g2.fillOval(x1 - outerRadius, y1 - outerRadius, 2 * outerRadius, 
+            g2.fillOval(x1 - outerRadius, y1 - outerRadius, 2 * outerRadius,
                     2 * outerRadius);
         }
 
@@ -684,7 +682,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
             ValueDataset data = this.datasets[i];
 
             if (data != null && data.getValue() != null) {
-                value = (data.getValue().doubleValue()) 
+                value = (data.getValue().doubleValue())
                     % this.revolutionDistance;
                 value = value / this.revolutionDistance * 360;
                 current = i % x;
@@ -708,7 +706,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the legend items for the plot.  For now, no legend is available 
+     * Returns the legend items for the plot.  For now, no legend is available
      * - this method returns null.
      *
      * @return The legend items.
@@ -769,14 +767,14 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
         if (this.drawBorder != that.drawBorder) {
             return false;
         }
-        if (!PaintUtilities.equal(this.roseHighlightPaint, 
+        if (!PaintUtilities.equal(this.roseHighlightPaint,
                 that.roseHighlightPaint)) {
             return false;
         }
         if (!PaintUtilities.equal(this.rosePaint, that.rosePaint)) {
             return false;
         }
-        if (!PaintUtilities.equal(this.roseCenterPaint, 
+        if (!PaintUtilities.equal(this.roseCenterPaint,
                 that.roseCenterPaint)) {
             return false;
         }
@@ -798,7 +796,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      *
      * @return A clone.
      *
-     * @throws CloneNotSupportedException  this class will not throw this 
+     * @throws CloneNotSupportedException  this class will not throw this
      *         exception, but subclasses (if any) might.
      */
     public Object clone() throws CloneNotSupportedException {
@@ -817,7 +815,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
             clone.a2 = (Area) this.a2.clone();
         }
         if (this.rect1 != null) {
-            clone.rect1 = (Rectangle2D) this.rect1.clone();            
+            clone.rect1 = (Rectangle2D) this.rect1.clone();
         }
         clone.datasets = (ValueDataset[]) this.datasets.clone();
         clone.seriesNeedle = (MeterNeedle[]) this.seriesNeedle.clone();
@@ -837,7 +835,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * For degrees (the default) it is 360, for radians this is 2*Pi, etc
      *
      * @param size the count to complete one revolution.
-     * 
+     *
      * @see #getRevolutionDistance()
      */
     public void setRevolutionDistance(double size) {
@@ -850,13 +848,13 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * Gets the count to complete one revolution.
      *
      * @return The count to complete one revolution.
-     * 
+     *
      * @see #setRevolutionDistance(double)
      */
     public double getRevolutionDistance() {
         return this.revolutionDistance;
     }
-    
+
     /**
      * Provides serialization support.
      *
@@ -879,7 +877,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream) 
+    private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.rosePaint = SerialUtilities.readPaint(stream);

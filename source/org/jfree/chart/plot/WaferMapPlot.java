@@ -72,8 +72,7 @@ import org.jfree.data.general.WaferMapDataset;
  * A wafer map plot.
  */
 public class WaferMapPlot extends Plot implements RendererChangeListener,
-                                                  Cloneable,
-                                                  Serializable {
+        Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 4668320403707308155L;
@@ -209,18 +208,14 @@ public class WaferMapPlot extends Plot implements RendererChangeListener,
      * @param renderer  the new renderer (<code>null</code> permitted).
      */
     public void setRenderer(WaferMapRenderer renderer) {
-
         if (this.renderer != null) {
             this.renderer.removeChangeListener(this);
         }
-
         this.renderer = renderer;
         if (renderer != null) {
             renderer.setPlot(this);
         }
-
         fireChangeEvent();
-
     }
 
     /**
