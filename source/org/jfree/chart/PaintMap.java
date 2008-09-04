@@ -68,6 +68,9 @@ import org.jfree.chart.util.SerialUtilities;
  */
 public class PaintMap implements Cloneable, Serializable {
 
+    /** For serialization. */
+    static final long serialVersionUID = -4639833772123069274L;
+
     /** Storage for the keys and values. */
     private transient Map store;
 
