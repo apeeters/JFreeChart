@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ------------------
  * HashUtilities.java
  * ------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited;
+ * (C) Copyright 2006-2008, by Object Refinery Limited;
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -48,18 +48,18 @@ import java.awt.Paint;
 import java.awt.Stroke;
 
 /**
- * Some utility methods for calculating hash codes.  
- * 
+ * Some utility methods for calculating hash codes.
+ *
  * @since 1.0.3
  */
 public class HashUtilities {
-    
+
     /**
-     * Returns a hash code for a <code>Paint</code> instance.  If 
+     * Returns a hash code for a <code>Paint</code> instance.  If
      * <code>p</code> is <code>null</code>, this method returns zero.
-     * 
+     *
      * @param p  the paint (<code>null</code> permitted).
-     * 
+     *
      * @return The hash code.
      */
     public static int hashCodeForPaint(Paint p) {
@@ -84,17 +84,17 @@ public class HashUtilities {
         }
         return result;
     }
-    
+
     /**
      * Returns a hash code for a <code>double[]</code> instance.  If the array
      * is <code>null</code>, this method returns zero.
-     * 
+     *
      * @param a  the array (<code>null</code> permitted).
-     * 
+     *
      * @return The hash code.
      */
     public static int hashCodeForDoubleArray(double[] a) {
-        if (a == null) { 
+        if (a == null) {
             return 0;
         }
         int result = 193;
@@ -105,31 +105,31 @@ public class HashUtilities {
         }
         return result;
     }
-    
+
     /**
      * Returns a hash value based on a seed value and the value of a boolean
      * primitive.
-     * 
+     *
      * @param pre  the seed value.
      * @param b  the boolean value.
-     * 
+     *
      * @return A hash value.
-     * 
+     *
      * @since 1.0.7
      */
     public static int hashCode(int pre, boolean b) {
         return 37 * pre + (b ? 0 : 1);
     }
-    
+
     /**
      * Returns a hash value based on a seed value and the value of an int
      * primitive.
-     * 
+     *
      * @param pre  the seed value.
      * @param i  the int value.
-     * 
+     *
      * @return A hash value.
-     * 
+     *
      * @since 1.0.8
      */
     public static int hashCode(int pre, int i) {
@@ -139,27 +139,27 @@ public class HashUtilities {
     /**
      * Returns a hash value based on a seed value and the value of a double
      * primitive.
-     * 
+     *
      * @param pre  the seed value.
      * @param d  the double value.
-     * 
+     *
      * @return A hash value.
-     * 
+     *
      * @since 1.0.7
      */
     public static int hashCode(int pre, double d) {
         long l = Double.doubleToLongBits(d);
         return 37 * pre + (int) (l ^ (l >>> 32));
     }
-    
+
     /**
      * Returns a hash value based on a seed value and a paint instance.
-     * 
+     *
      * @param pre  the seed value.
      * @param p  the paint (<code>null</code> permitted).
-     * 
+     *
      * @return A hash value.
-     * 
+     *
      * @since 1.0.7
      */
     public static int hashCode(int pre, Paint p) {
@@ -168,12 +168,12 @@ public class HashUtilities {
 
     /**
      * Returns a hash value based on a seed value and a stroke instance.
-     * 
+     *
      * @param pre  the seed value.
      * @param s  the stroke (<code>null</code> permitted).
-     * 
+     *
      * @return A hash value.
-     * 
+     *
      * @since 1.0.7
      */
     public static int hashCode(int pre, Stroke s) {
@@ -183,12 +183,12 @@ public class HashUtilities {
 
     /**
      * Returns a hash value based on a seed value and a string instance.
-     * 
+     *
      * @param pre  the seed value.
      * @param s  the string (<code>null</code> permitted).
-     * 
+     *
      * @return A hash value.
-     * 
+     *
      * @since 1.0.7
      */
     public static int hashCode(int pre, String s) {
@@ -199,12 +199,12 @@ public class HashUtilities {
     /**
      * Returns a hash value based on a seed value and a <code>Comparable</code>
      * instance.
-     * 
+     *
      * @param pre  the seed value.
      * @param c  the comparable (<code>null</code> permitted).
-     * 
+     *
      * @return A hash value.
-     * 
+     *
      * @since 1.0.7
      */
     public static int hashCode(int pre, Comparable c) {
@@ -215,12 +215,12 @@ public class HashUtilities {
     /**
      * Returns a hash value based on a seed value and an <code>Object</code>
      * instance.
-     * 
+     *
      * @param pre  the seed value.
      * @param obj  the object (<code>null</code> permitted).
-     * 
+     *
      * @return A hash value.
-     * 
+     *
      * @since 1.0.8
      */
     public static int hashCode(int pre, Object obj) {

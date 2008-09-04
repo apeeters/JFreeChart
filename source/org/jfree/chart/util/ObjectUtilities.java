@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * --------------------
  * ObjectUtilities.java
  * --------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Thomas Morgner;
@@ -40,10 +40,10 @@
  *               cannot be cloned, added new deepClone(Collection) method.
  *               Renamed ObjectUtils --> ObjectUtilities (DG);
  * 11-Jan-2005 : Removed deprecated code in preparation for 1.0.0 release (DG);
- * 18-Aug-2005 : Added casts to suppress compiler warnings, as suggested in 
+ * 18-Aug-2005 : Added casts to suppress compiler warnings, as suggested in
  *               patch 1260622 (DG);
  * 20-Jun-2007 : Copied from JCommon (DG);
- * 
+ *
  */
 
 package org.jfree.chart.util;
@@ -114,7 +114,7 @@ public final class ObjectUtilities {
     }
 
     /**
-     * Returns <code>true</code> if the two objects are equal OR both 
+     * Returns <code>true</code> if the two objects are equal OR both
      * <code>null</code>.
      *
      * @param o1 object 1 (<code>null</code> permitted).
@@ -134,7 +134,7 @@ public final class ObjectUtilities {
     }
 
     /**
-     * Returns a hash code for an object, or zero if the object is 
+     * Returns a hash code for an object, or zero if the object is
      * <code>null</code>.
      *
      * @param object the object (<code>null</code> permitted).
@@ -192,7 +192,7 @@ public final class ObjectUtilities {
      * specified collection.
      *
      * @param collection the collection (<code>null</code> not permitted).
-     * @return A new collection containing clones of all the items in the 
+     * @return A new collection containing clones of all the items in the
      *         specified collection.
      * @throws CloneNotSupportedException if any of the items in the collection
      *                                    cannot be cloned.
@@ -306,9 +306,9 @@ public final class ObjectUtilities {
     }
 
     /**
-     * Transform the class-relative resource name into a global name by 
-     * appending it to the classes package name. If the name is already a 
-     * global name (the name starts with a "/"), then the name is returned 
+     * Transform the class-relative resource name into a global name by
+     * appending it to the classes package name. If the name is already a
+     * global name (the name starts with a "/"), then the name is returned
      * unchanged.
      *
      * @param name the resource name
@@ -411,7 +411,7 @@ public final class ObjectUtilities {
      * @param className the class name as String, never null.
      * @param source    the source class, from where to get the classloader.
      * @param type  the type.
-     * 
+     *
      * @return the instantiated object or null, if an error occured.
      */
     public static Object loadAndInstantiate(String className,
@@ -432,7 +432,7 @@ public final class ObjectUtilities {
 
     /**
      * Returns <code>true</code> if we are running on JRE 1.4 or later.
-     * 
+     *
      * @return A boolean.
      */
     public static boolean isJDK14() {
