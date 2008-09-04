@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ------------------------
  * SWTNumberAxisEditor.java
  * ------------------------
- * (C) Copyright 2006, 2007, by Henry Proudhon and Contributors.
+ * (C) Copyright 2006-2008, by Henry Proudhon and Contributors.
  *
  * Original Author:  Henry Proudhon (henry.proudhon AT ensmp.fr);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -35,7 +35,7 @@
  * Changes
  * -------
  * 01-Aug-2006 : New class (HP);
- * 
+ *
  */
 
 package org.jfree.experimental.chart.swt.editor;
@@ -59,7 +59,7 @@ import org.jfree.chart.axis.NumberAxis;
  * An editor for {@link NumberAxis} properties.
  */
 class SWTNumberAxisEditor extends SWTAxisEditor implements FocusListener {
-    
+
     /** A flag that indicates whether or not the axis range is determined
      *  automatically.
      */
@@ -84,7 +84,7 @@ class SWTNumberAxisEditor extends SWTAxisEditor implements FocusListener {
 
     /**
      * Creates a new editor.
-     * 
+     *
      * @param parent  the parent.
      * @param style  the style.
      * @param axis  the axis.
@@ -100,16 +100,16 @@ class SWTNumberAxisEditor extends SWTAxisEditor implements FocusListener {
         Composite range = new Composite(getOtherTabs(), SWT.NONE);
         range.setLayout(new GridLayout(2, true));
         item2.setControl(range);
-        
+
         this.autoRangeCheckBox = new Button(range, SWT.CHECK);
         this.autoRangeCheckBox.setText(localizationResources.getString(
                 "Auto-adjust_range"));
-        this.autoRangeCheckBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, 
+        this.autoRangeCheckBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
                 true, false, 2, 1));
         this.autoRangeCheckBox.setSelection(this.autoRange);
-        this.autoRangeCheckBox.addSelectionListener( 
+        this.autoRangeCheckBox.addSelectionListener(
                 new SelectionAdapter() {
-                    public void widgetSelected(SelectionEvent e) { 
+                    public void widgetSelected(SelectionEvent e) {
                         toggleAutoRange();
                     }
                 });
@@ -155,9 +155,9 @@ class SWTNumberAxisEditor extends SWTAxisEditor implements FocusListener {
     /**
      * Revalidate the range minimum:
      * it should be less than the current maximum.
-     * 
+     *
      * @param candidate  the minimum value
-     * 
+     *
      * @return A boolean.
      */
     public boolean validateMinimum(String candidate)
@@ -177,9 +177,9 @@ class SWTNumberAxisEditor extends SWTAxisEditor implements FocusListener {
     /**
      * Revalidate the range maximum:
      * it should be greater than the current minimum
-     * 
+     *
      * @param candidate  the maximum value
-     * 
+     *
      * @return A boolean.
      */
     public boolean validateMaximum(String candidate)
@@ -230,7 +230,7 @@ class SWTNumberAxisEditor extends SWTAxisEditor implements FocusListener {
     }
 
     /**
-     * Sets the properties of the specified axis to match 
+     * Sets the properties of the specified axis to match
      * the properties defined on this panel.
      *
      * @param axis  the axis.
