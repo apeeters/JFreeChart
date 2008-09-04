@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------
  * RangeTests.java
  * ---------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -80,7 +80,7 @@ public class RangeTests extends TestCase {
      * Confirm that the equals method can distinguish all the required fields.
      */
     public void testEquals() {
-        
+
         Range r1 = new Range(0.0, 1.0);
         Range r2 = new Range(0.0, 1.0);
         assertEquals(r1, r2);
@@ -93,9 +93,9 @@ public class RangeTests extends TestCase {
         r1 = new Range(0.0, 1.0);
         r2 = new Range(0.0, 2.0);
         assertFalse(r1.equals(r2));
-        
+
     }
-    
+
     /**
      * Simple tests for the contains() method.
      */
@@ -110,25 +110,25 @@ public class RangeTests extends TestCase {
         assertFalse(r1.contains(2.0));
         assertFalse(r1.contains(Double.POSITIVE_INFINITY));
     }
-    
+
     /**
      * Tests the constrain() method for various values.
      */
     public void testConstrain() {
         Range r1 = new Range(0.0, 1.0);
-        
+
         double d = r1.constrain(0.5);
         assertEquals(0.5, d, 0.0000001);
-        
+
         d = r1.constrain(0.0);
         assertEquals(0.0, d, 0.0000001);
 
         d = r1.constrain(1.0);
         assertEquals(1.0, d, 0.0000001);
-        
+
         d = r1.constrain(-1.0);
         assertEquals(0.0, d, 0.0000001);
-        
+
         d = r1.constrain(2.0);
         assertEquals(1.0, d, 0.0000001);
 
@@ -141,7 +141,7 @@ public class RangeTests extends TestCase {
         d = r1.constrain(Double.NaN);
         assertTrue(Double.isNaN(d));
     }
-    
+
     /**
      * Simple tests for the intersects() method.
      */
@@ -161,7 +161,7 @@ public class RangeTests extends TestCase {
         assertFalse(r1.intersects(1.0, 1.1));
         assertFalse(r1.intersects(1.5, 2.0));
     }
-    
+
     /**
      * A simple test for the expand() method.
      */
@@ -171,7 +171,7 @@ public class RangeTests extends TestCase {
         assertEquals(-10.0, r2.getLowerBound(), 0.001);
         assertEquals(110.0, r2.getUpperBound(), 0.001);
     }
-    
+
     /**
      * Serialize an instance, restore it, and check for equality.
      */
