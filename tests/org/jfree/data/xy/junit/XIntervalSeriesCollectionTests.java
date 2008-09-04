@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * -----------------------------------
  * XIntervalSeriesCollectionTests.java
  * -----------------------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,6 +35,8 @@
  * Changes
  * -------
  * 20-Oct-2006 : Version 1 (DG);
+ * 18-Jan-2008 : Added testRemoveSeries() (DG);
+ * 22-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -51,6 +53,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.xy.XIntervalSeries;
 import org.jfree.data.xy.XIntervalSeriesCollection;
 
@@ -84,7 +87,7 @@ public class XIntervalSeriesCollectionTests extends TestCase {
         XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
         XIntervalSeriesCollection c2 = new XIntervalSeriesCollection();
         assertEquals(c1, c2);
-        
+
         // add a series
         XIntervalSeries s1 = new XIntervalSeries("Series");
         s1.add(1.0, 1.1, 1.2, 1.3);
@@ -94,7 +97,7 @@ public class XIntervalSeriesCollectionTests extends TestCase {
         s2.add(1.0, 1.1, 1.2, 1.3);
         c2.addSeries(s2);
         assertTrue(c1.equals(c2));
-        
+
         // add an empty series
         c1.addSeries(new XIntervalSeries("Empty Series"));
         assertFalse(c1.equals(c2));
@@ -120,10 +123,18 @@ public class XIntervalSeriesCollectionTests extends TestCase {
         assertTrue(c1 != c2);
         assertTrue(c1.getClass() == c2.getClass());
         assertTrue(c1.equals(c2));
-        
+
         // check independence
         s1.setDescription("XYZ");
         assertFalse(c1.equals(c2));
+    }
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    public void testPublicCloneable() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+        assertTrue(c1 instanceof PublicCloneable);
     }
 
     /**
@@ -134,7 +145,7 @@ public class XIntervalSeriesCollectionTests extends TestCase {
         XIntervalSeries s1 = new XIntervalSeries("Series");
         s1.add(1.0, 1.1, 1.2, 1.3);
         XIntervalSeriesCollection c2 = null;
-        
+
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(buffer);
@@ -151,9 +162,39 @@ public class XIntervalSeriesCollectionTests extends TestCase {
         }
         assertEquals(c1, c2);
     }
-    
+
     /**
-     * A test for bug report 1170825 (originally affected XYSeriesCollection, 
+     * Some basic checks for the removeSeries() method.
+     */
+    public void testRemoveSeries() {
+        XIntervalSeriesCollection c = new XIntervalSeriesCollection();
+        XIntervalSeries s1 = new XIntervalSeries("s1");
+        c.addSeries(s1);
+        c.removeSeries(0);
+        assertEquals(0, c.getSeriesCount());
+        c.addSeries(s1);
+
+        boolean pass = false;
+        try {
+            c.removeSeries(-1);
+        }
+        catch (IllegalArgumentException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+
+        pass = false;
+        try {
+            c.removeSeries(1);
+        }
+        catch (IllegalArgumentException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
+
+    /**
+     * A test for bug report 1170825 (originally affected XYSeriesCollection,
      * this test is just copied over).
      */
     public void test1170825() {
@@ -170,5 +211,5 @@ public class XIntervalSeriesCollectionTests extends TestCase {
             assertTrue(false);  // wrong outcome
         }
     }
-    
+
 }
