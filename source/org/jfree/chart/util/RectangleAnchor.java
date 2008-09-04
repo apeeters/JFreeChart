@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
- * 
+ *
  * --------------------
  * RectangleAnchor.java
  * --------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited.
+ * (C) Copyright 2003-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,11 +35,11 @@
  * Changes:
  * --------
  * 31-Oct-2003 (DG);
- * 01-Apr-2004 : Changed java.awt.geom.Dimension2D to org.jfree.ui.Size2D 
+ * 01-Apr-2004 : Changed java.awt.geom.Dimension2D to org.jfree.ui.Size2D
  *               because of JDK bug 4976448 which persists on JDK 1.3.1 (DG);
  * 21-Jan-2005 : Changed return type of coordinates() method (DG);
  * 20-Jun-2007 : New class copied from JCommon (DG);
- * 
+ *
  */
 
 package org.jfree.chart.util;
@@ -58,41 +58,41 @@ public final class RectangleAnchor implements Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -2457494205644416327L;
-    
+
     /** Center. */
-    public static final RectangleAnchor CENTER 
+    public static final RectangleAnchor CENTER
         = new RectangleAnchor("RectangleAnchor.CENTER");
 
     /** Top. */
-    public static final RectangleAnchor TOP 
+    public static final RectangleAnchor TOP
         = new RectangleAnchor("RectangleAnchor.TOP");
 
     /** Top-Left. */
-    public static final RectangleAnchor TOP_LEFT 
+    public static final RectangleAnchor TOP_LEFT
         = new RectangleAnchor("RectangleAnchor.TOP_LEFT");
 
     /** Top-Right. */
-    public static final RectangleAnchor TOP_RIGHT 
+    public static final RectangleAnchor TOP_RIGHT
         = new RectangleAnchor("RectangleAnchor.TOP_RIGHT");
 
     /** Bottom. */
-    public static final RectangleAnchor BOTTOM 
+    public static final RectangleAnchor BOTTOM
         = new RectangleAnchor("RectangleAnchor.BOTTOM");
 
     /** Bottom-Left. */
-    public static final RectangleAnchor BOTTOM_LEFT 
+    public static final RectangleAnchor BOTTOM_LEFT
         = new RectangleAnchor("RectangleAnchor.BOTTOM_LEFT");
 
     /** Bottom-Right. */
-    public static final RectangleAnchor BOTTOM_RIGHT 
+    public static final RectangleAnchor BOTTOM_RIGHT
         = new RectangleAnchor("RectangleAnchor.BOTTOM_RIGHT");
 
     /** Left. */
-    public static final RectangleAnchor LEFT 
+    public static final RectangleAnchor LEFT
         = new RectangleAnchor("RectangleAnchor.LEFT");
 
     /** Right. */
-    public static final RectangleAnchor RIGHT 
+    public static final RectangleAnchor RIGHT
         = new RectangleAnchor("RectangleAnchor.RIGHT");
 
     /** The name. */
@@ -117,7 +117,7 @@ public final class RectangleAnchor implements Serializable {
     }
 
     /**
-     * Returns <code>true</code> if this object is equal to the specified 
+     * Returns <code>true</code> if this object is equal to the specified
      * object, and <code>false</code> otherwise.
      *
      * @param obj  the other object (<code>null</code> permitted).
@@ -152,13 +152,13 @@ public final class RectangleAnchor implements Serializable {
 
     /**
      * Returns the (x, y) coordinates of the specified anchor.
-     * 
+     *
      * @param rectangle  the rectangle.
      * @param anchor  the anchor.
-     * 
+     *
      * @return The (x, y) coordinates.
      */
-    public static Point2D coordinates(final Rectangle2D rectangle, 
+    public static Point2D coordinates(final Rectangle2D rectangle,
                                       final RectangleAnchor anchor) {
         Point2D result = new Point2D.Double();
         if (anchor == RectangleAnchor.CENTER) {
@@ -190,16 +190,16 @@ public final class RectangleAnchor implements Serializable {
         }
         return result;
     }
-    
+
     /**
      * Creates a new rectangle with the specified dimensions that is aligned to
      * the given anchor point <code>(anchorX, anchorY)</code>.
-     * 
+     *
      * @param dimensions  the dimensions (<code>null</code> not permitted).
      * @param anchorX  the x-anchor.
      * @param anchorY  the y-anchor.
      * @param anchor  the anchor (<code>null</code> not permitted).
-     * 
+     *
      * @return A rectangle.
      */
     public static Rectangle2D createRectangle(final Size2D dimensions,
@@ -256,12 +256,12 @@ public final class RectangleAnchor implements Serializable {
         }
         return result;
     }
-    
+
     /**
      * Ensures that serialization returns the unique instances.
-     * 
+     *
      * @return The object.
-     * 
+     *
      * @throws ObjectStreamException if there is a problem.
      */
     private Object readResolve() throws ObjectStreamException {
@@ -295,5 +295,5 @@ public final class RectangleAnchor implements Serializable {
         }
         return result;
     }
-    
+
 }

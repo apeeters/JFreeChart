@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
- * 
+ *
  * ---------------
  * StrokeList.java
  * ---------------
- * (C) Copyright 2003-2007, by Object Refinery Limited.
+ * (C) Copyright 2003-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -36,7 +36,7 @@
  * -------
  * 19-Aug-2003 : Version 1 (DG);
  * 21-Jun-2007 : Copied from JCommon (DG);
- * 
+ *
  */
 
 package org.jfree.chart.util;
@@ -70,7 +70,7 @@ public class StrokeList extends AbstractObjectList {
     }
 
     /**
-     * Sets the {@link Stroke} for an item in the list.  The list is expanded 
+     * Sets the {@link Stroke} for an item in the list.  The list is expanded
      * if necessary.
      *
      * @param index  the index (zero-based).
@@ -82,15 +82,15 @@ public class StrokeList extends AbstractObjectList {
 
     /**
      * Returns an independent copy of the list.
-     * 
+     *
      * @return A clone.
-     * 
+     *
      * @throws CloneNotSupportedException if an item in the list cannot be cloned.
      */
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-    
+
     /**
      * Tests the list for equality with another object (typically also a list).
      *
@@ -103,11 +103,11 @@ public class StrokeList extends AbstractObjectList {
         if (obj == null) {
             return false;
         }
-        
+
         if (obj == this) {
             return true;
         }
-        
+
         if (obj instanceof StrokeList) {
             return super.equals(obj);
         }
@@ -115,7 +115,7 @@ public class StrokeList extends AbstractObjectList {
         return false;
 
     }
-    
+
     /**
      * Returns a hash code value for the object.
      *
@@ -149,7 +149,7 @@ public class StrokeList extends AbstractObjectList {
         }
 
     }
-    
+
     /**
      * Provides serialization support.
      *
@@ -158,7 +158,7 @@ public class StrokeList extends AbstractObjectList {
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream) throws IOException, 
+    private void readObject(ObjectInputStream stream) throws IOException,
             ClassNotFoundException {
 
         stream.defaultReadObject();
@@ -169,7 +169,7 @@ public class StrokeList extends AbstractObjectList {
                 setStroke(index, SerialUtilities.readStroke(stream));
             }
         }
-        
+
     }
 
 }
