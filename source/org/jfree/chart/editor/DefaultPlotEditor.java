@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ----------------------
  * DefaultPlotEditor.java
  * ----------------------
- * (C) Copyright 2005, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2005-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Andrzej Porebski;
@@ -39,7 +39,7 @@
  * 24-Nov-2005 : Version 1, based on PlotPropertyEditPanel.java (DG);
  * 19-Jun-2007 : Removed DefaultColorBarEditor which has been deprecated (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
- * 
+ *
  */
 
 package org.jfree.chart.editor;
@@ -78,7 +78,6 @@ import org.jfree.chart.ui.StrokeChooserPanel;
 import org.jfree.chart.ui.StrokeSample;
 import org.jfree.chart.util.RectangleInsets;
 
-
 /**
  * A panel for editing the properties of a {@link Plot}.
  */
@@ -98,12 +97,12 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
     /** The paint (color) used to draw the outline of the plot. */
     private PaintSample outlinePaintSample;
 
-    /** 
-     * A panel used to display/edit the properties of the domain axis (if any). 
+    /**
+     * A panel used to display/edit the properties of the domain axis (if any).
      */
     private DefaultAxisEditor domainAxisPropertyPanel;
 
-    /** 
+    /**
      * A panel used to display/edit the properties of the range axis (if any).
      */
     private DefaultAxisEditor rangeAxisPropertyPanel;
@@ -114,15 +113,15 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
     /** The insets for the plot. */
     private RectangleInsets plotInsets;
 
-    /** 
-     * The orientation for the plot (for <tt>CategoryPlot</tt>s and 
-     * <tt>XYPlot</tt>s). 
+    /**
+     * The orientation for the plot (for <tt>CategoryPlot</tt>s and
+     * <tt>XYPlot</tt>s).
      */
     private PlotOrientation plotOrientation;
 
-    /** 
-     * The orientation combo box (for <tt>CategoryPlot</tt>s and 
-     * <tt>XYPlot</tt>s). 
+    /**
+     * The orientation combo box (for <tt>CategoryPlot</tt>s and
+     * <tt>XYPlot</tt>s).
      */
     private JComboBox orientationCombo;
 
@@ -147,7 +146,7 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
     private JCheckBox drawShapesCheckBox;
 
     /** The resourceBundle for the localization. */
-    protected static ResourceBundle localizationResources 
+    protected static ResourceBundle localizationResources
         = ResourceBundle.getBundle("org.jfree.chart.editor.LocalizationBundle");
 
     /**
@@ -193,11 +192,11 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         this.availableStrokeSamples = new StrokeSample[3];
-        this.availableStrokeSamples[0] 
+        this.availableStrokeSamples[0]
                 = new StrokeSample(new BasicStroke(1.0f));
-        this.availableStrokeSamples[1] 
+        this.availableStrokeSamples[1]
                 = new StrokeSample(new BasicStroke(2.0f));
-        this.availableStrokeSamples[2] 
+        this.availableStrokeSamples[2]
                 = new StrokeSample(new BasicStroke(3.0f));
 
         // create a panel for the settings...
@@ -234,7 +233,8 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
         interior.add(
             new JLabel(localizationResources.getString("Outline_stroke"))
         );
-        JButton button = new JButton(localizationResources.getString("Select..."));
+        JButton button = new JButton(localizationResources.getString(
+                "Select..."));
         button.setActionCommand("OutlineStroke");
         button.addActionListener(this);
         interior.add(this.outlineStrokeSample);
@@ -259,9 +259,9 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
         interior.add(button);
 
         if (this.plotOrientation != null) {
-            boolean isVertical 
+            boolean isVertical
                 = this.plotOrientation.equals(PlotOrientation.VERTICAL);
-            int index 
+            int index
                 = isVertical ? ORIENTATION_VERTICAL : ORIENTATION_HORIZONTAL;
             interior.add(
                 new JLabel(localizationResources.getString("Orientation"))
@@ -314,14 +314,14 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
         else if (plot instanceof XYPlot) {
             domainAxis = ((XYPlot) plot).getDomainAxis();
         }
-        this.domainAxisPropertyPanel 
+        this.domainAxisPropertyPanel
             = DefaultAxisEditor.getInstance(domainAxis);
         if (this.domainAxisPropertyPanel != null) {
             this.domainAxisPropertyPanel.setBorder(
                 BorderFactory.createEmptyBorder(2, 2, 2, 2)
             );
             tabs.add(
-                localizationResources.getString("Domain_Axis"), 
+                localizationResources.getString("Domain_Axis"),
                 this.domainAxisPropertyPanel
             );
         }
@@ -334,14 +334,14 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
             rangeAxis = ((XYPlot) plot).getRangeAxis();
         }
 
-        this.rangeAxisPropertyPanel 
+        this.rangeAxisPropertyPanel
             = DefaultAxisEditor.getInstance(rangeAxis);
         if (this.rangeAxisPropertyPanel != null) {
             this.rangeAxisPropertyPanel.setBorder(
                 BorderFactory.createEmptyBorder(2, 2, 2, 2)
             );
             tabs.add(
-                localizationResources.getString("Range_Axis"), 
+                localizationResources.getString("Range_Axis"),
                 this.rangeAxisPropertyPanel
             );
         }
@@ -354,7 +354,7 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
 
     /**
      * Returns the current plot insets.
-     * 
+     *
      * @return The current plot insets.
      */
     public RectangleInsets getPlotInsets() {
@@ -366,7 +366,7 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
 
     /**
      * Returns the current background paint.
-     * 
+     *
      * @return The current background paint.
      */
     public Paint getBackgroundPaint() {
@@ -375,7 +375,7 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
 
     /**
      * Returns the current outline stroke.
-     * 
+     *
      * @return The current outline stroke.
      */
     public Stroke getOutlineStroke() {
@@ -384,7 +384,7 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
 
     /**
      * Returns the current outline paint.
-     * 
+     *
      * @return The current outline paint.
      */
     public Paint getOutlinePaint() {
@@ -458,7 +458,7 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
      * Allow the user to change the outline stroke.
      */
     private void attemptOutlineStrokeSelection() {
-        StrokeChooserPanel panel 
+        StrokeChooserPanel panel
             = new StrokeChooserPanel(null, this.availableStrokeSamples);
         int result = JOptionPane.showConfirmDialog(this, panel,
             localizationResources.getString("Stroke_Selection"),
@@ -517,8 +517,8 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
     }
 
     /**
-     * Allow the user to modify whether or not lines are drawn between data 
-     * points by <tt>LineAndShapeRenderer</tt>s and 
+     * Allow the user to modify whether or not lines are drawn between data
+     * points by <tt>LineAndShapeRenderer</tt>s and
      * <tt>StandardXYItemRenderer</tt>s.
      */
     private void attemptDrawLinesSelection() {
@@ -594,8 +594,7 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
                 CategoryItemRenderer r = p.getRenderer();
                 if (r instanceof LineAndShapeRenderer) {
                     ((LineAndShapeRenderer) r).setBaseLinesVisible(
-                        this.drawLines.booleanValue()
-                    );
+                            this.drawLines.booleanValue());
                 }
             }
             else if (plot instanceof XYPlot) {
@@ -615,8 +614,7 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
                 CategoryItemRenderer r = p.getRenderer();
                 if (r instanceof LineAndShapeRenderer) {
                     ((LineAndShapeRenderer) r).setBaseShapesVisible(
-                        this.drawShapes.booleanValue()
-                    );
+                            this.drawShapes.booleanValue());
                 }
             }
             else if (plot instanceof XYPlot) {
