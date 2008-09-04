@@ -67,7 +67,7 @@ import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.ValueDataset;
 
 /**
- * A dial plot.
+ * A dial plot composed of user-definable layers.
  *
  * @since 1.0.7
  */
@@ -149,7 +149,7 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         this.dialFrame = new ArcDialFrame();
         this.datasets = new ObjectList();
         if (dataset != null) {
-            this.setDataset(dataset);
+            setDataset(dataset);
         }
         this.scales = new ObjectList();
         this.datasetToScaleMap = new ObjectList();

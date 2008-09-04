@@ -69,6 +69,9 @@ import org.jfree.chart.util.SerialUtilities;
 public class StandardDialFrame extends AbstractDialLayer implements DialFrame,
         Cloneable, PublicCloneable, Serializable {
 
+    /** For serialization. */
+    static final long serialVersionUID = 1016585407507121596L;
+
     /** The outer radius, relative to the framing rectangle. */
     private double radius;
 
@@ -121,8 +124,8 @@ public class StandardDialFrame extends AbstractDialLayer implements DialFrame,
      */
     public void setRadius(double radius) {
         if (radius <= 0) {
-            throw new IllegalArgumentException("" +
-                        "The 'radius' must be positive.");
+            throw new IllegalArgumentException(
+                    "The 'radius' must be positive.");
         }
         this.radius = radius;
         notifyListeners(new DialLayerChangeEvent(this));

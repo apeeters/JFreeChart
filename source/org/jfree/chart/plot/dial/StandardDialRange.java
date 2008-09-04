@@ -68,6 +68,9 @@ import org.jfree.chart.util.SerialUtilities;
 public class StandardDialRange extends AbstractDialLayer implements DialLayer,
         Cloneable, PublicCloneable, Serializable {
 
+    /** For serialization. */
+    static final long serialVersionUID = 345515648249364904L;
+
     /** The scale index. */
     private int scaleIndex;
 

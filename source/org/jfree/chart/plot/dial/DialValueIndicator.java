@@ -78,6 +78,9 @@ import org.jfree.chart.util.Size2D;
 public class DialValueIndicator extends AbstractDialLayer implements DialLayer,
         Cloneable, PublicCloneable, Serializable {
 
+    /** For serialization. */
+    static final long serialVersionUID = 803094354130942585L;
+
     /** The dataset index. */
     private int datasetIndex;
 

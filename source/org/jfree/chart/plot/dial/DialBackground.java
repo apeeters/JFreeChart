@@ -67,6 +67,9 @@ import org.jfree.chart.util.StandardGradientPaintTransformer;
 public class DialBackground extends AbstractDialLayer implements DialLayer,
         Cloneable, PublicCloneable, Serializable {
 
+    /** For serialization. */
+    static final long serialVersionUID = -9019069533317612375L;
+
     /**
      * The background paint.  This field is transient because serialization
      * requires special handling.
@@ -184,7 +187,8 @@ public class DialBackground extends AbstractDialLayer implements DialLayer,
 
         Paint p = this.paint;
         if (p instanceof GradientPaint) {
-            p = this.gradientPaintTransformer.transform((GradientPaint) p, view);
+            p = this.gradientPaintTransformer.transform((GradientPaint) p,
+                    view);
         }
         g2.setPaint(p);
         g2.fill(view);

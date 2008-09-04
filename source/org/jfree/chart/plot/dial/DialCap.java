@@ -68,6 +68,9 @@ import org.jfree.chart.util.SerialUtilities;
 public class DialCap extends AbstractDialLayer implements DialLayer, Cloneable,
         PublicCloneable, Serializable {
 
+    /** For serialization. */
+    static final long serialVersionUID = -2929484264982524463L;
+
     /**
      * The radius of the cap, as a percentage of the framing rectangle.
      */
