@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------------
  * DefaultCategoryDatasetTests.java
  * --------------------------------
- * (C) Copyright 2004, 2005, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -37,6 +37,7 @@
  * 23-Mar-2004 : Version 1 (DG);
  * 08-Mar-2007 : Added testCloning() (DG);
  * 21-Nov-2007 : Added testBug1835955() method (DG);
+ * 09-May-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -53,6 +54,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -337,6 +339,14 @@ public class DefaultCategoryDatasetTests extends TestCase {
         assertTrue(d1.equals(d2));
     }
 
+    /**
+     * Check that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        DefaultCategoryDataset d = new DefaultCategoryDataset();
+        assertTrue(d instanceof PublicCloneable);
+    }
+
     private static final double EPSILON = 0.0000000001;
 
     /**
@@ -350,4 +360,65 @@ public class DefaultCategoryDatasetTests extends TestCase {
         d.addValue(3.0, "R2", "C2");
         assertEquals(3.0, d.getValue("R2", "C2").doubleValue(), EPSILON);
     }
+
+    /**
+     * Some checks for the removeColumn(Comparable) method.
+     */
+    public void testRemoveColumn() {
+        DefaultCategoryDataset d = new DefaultCategoryDataset();
+        d.addValue(1.0, "R1", "C1");
+        d.addValue(2.0, "R2", "C2");
+        assertEquals(2, d.getColumnCount());
+        d.removeColumn("C2");
+        assertEquals(1, d.getColumnCount());
+
+        boolean pass = false;
+        try {
+            d.removeColumn("XXX");
+        }
+        catch (UnknownKeyException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+
+        pass = false;
+        try {
+            d.removeColumn(null);
+        }
+        catch (IllegalArgumentException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
+
+    /**
+     * Some checks for the removeRow(Comparable) method.
+     */
+    public void testRemoveRow() {
+        DefaultCategoryDataset d = new DefaultCategoryDataset();
+        d.addValue(1.0, "R1", "C1");
+        d.addValue(2.0, "R2", "C2");
+        assertEquals(2, d.getRowCount());
+        d.removeRow("R2");
+        assertEquals(1, d.getRowCount());
+
+        boolean pass = false;
+        try {
+            d.removeRow("XXX");
+        }
+        catch (UnknownKeyException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+
+        pass = false;
+        try {
+            d.removeRow(null);
+        }
+        catch (IllegalArgumentException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
+
 }
