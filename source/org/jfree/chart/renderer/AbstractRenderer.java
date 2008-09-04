@@ -84,6 +84,7 @@
  * 29-Apr-2008 : Minor API doc update (DG);
  * 17-Jun-2008 : Added legendShape, legendTextFont and legendTextPaint
  *               attributes (DG);
+ * 18-Aug-2008 : Added clearSeriesPaints() and clearSeriesStrokes() (DG);
  *
  */
 

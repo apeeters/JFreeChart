@@ -55,22 +55,19 @@ public final class AreaRendererEndType implements Serializable {
      * The area tapers from the first or last value down to zero.
      */
     public static final AreaRendererEndType TAPER = new AreaRendererEndType(
-        "AreaRendererEndType.TAPER"
-    );
+            "AreaRendererEndType.TAPER");
 
     /**
      * The area is truncated at the first or last value.
      */
     public static final AreaRendererEndType TRUNCATE = new AreaRendererEndType(
-        "AreaRendererEndType.TRUNCATE"
-    );
+            "AreaRendererEndType.TRUNCATE");
 
     /**
      * The area is levelled at the first or last value.
      */
     public static final AreaRendererEndType LEVEL = new AreaRendererEndType(
-        "AreaRendererEndType.LEVEL"
-    );
+            "AreaRendererEndType.LEVEL");
 
     /** The name. */
     private String name;
@@ -97,20 +94,20 @@ public final class AreaRendererEndType implements Serializable {
      * Returns <code>true</code> if this object is equal to the specified
      * object, and <code>false</code> otherwise.
      *
-     * @param o  the other object.
+     * @param obj  the object (<code>null</code> permitted).
      *
      * @return A boolean.
      */
-    public boolean equals(Object o) {
+    public boolean equals(Object obj) {
 
-        if (this == o) {
+        if (this == obj) {
             return true;
         }
-        if (!(o instanceof AreaRendererEndType)) {
+        if (!(obj instanceof AreaRendererEndType)) {
             return false;
         }
 
-        AreaRendererEndType t = (AreaRendererEndType) o;
+        AreaRendererEndType t = (AreaRendererEndType) obj;
         if (!this.name.equals(t.toString())) {
             return false;
         }
