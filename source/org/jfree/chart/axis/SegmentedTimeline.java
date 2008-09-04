@@ -557,25 +557,22 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
         if (baseTimeline != null) {
             if (baseTimeline.getSegmentSize() < this.segmentSize) {
                 throw new IllegalArgumentException(
-                    "baseTimeline.getSegmentSize() is smaller than segmentSize"
-                );
+                        "baseTimeline.getSegmentSize() "
+                        + "is smaller than segmentSize");
             }
             else if (baseTimeline.getStartTime() > this.startTime) {
                 throw new IllegalArgumentException(
-                    "baseTimeline.getStartTime() is after startTime"
-                );
+                        "baseTimeline.getStartTime() is after startTime");
             }
             else if ((baseTimeline.getSegmentSize() % this.segmentSize) != 0) {
                 throw new IllegalArgumentException(
-                    "baseTimeline.getSegmentSize() is not multiple of "
-                    + "segmentSize"
-                );
+                        "baseTimeline.getSegmentSize() is not multiple of "
+                        + "segmentSize");
             }
             else if (((this.startTime
                     - baseTimeline.getStartTime()) % this.segmentSize) != 0) {
                 throw new IllegalArgumentException(
-                    "baseTimeline is not aligned"
-                );
+                        "baseTimeline is not aligned");
             }
         }
 
@@ -599,17 +596,17 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
         long groupIndex = rawMilliseconds / this.segmentsGroupSize;
 
         if (groupMilliseconds >= this.segmentsIncludedSize) {
-            result = toTimelineValue(
-                this.startTime + this.segmentsGroupSize * (groupIndex + 1)
-            );
+            result = toTimelineValue(this.startTime + this.segmentsGroupSize
+                    * (groupIndex + 1));
         }
         else {
             Segment segment = getSegment(millisecond);
             if (segment.inExceptionSegments()) {
-                do {
-                    segment = getSegment(millisecond = segment.getSegmentEnd()
-                            + 1);
-                } while (segment.inExceptionSegments());
+                int p;
+                while ((p = binarySearchExceptionSegments(segment)) >= 0) {
+                    segment = getSegment(millisecond = ((Segment)
+                            this.exceptionSegments.get(p)).getSegmentEnd() + 1);
+                }
                 result = toTimelineValue(millisecond);
             }
             else {
@@ -631,7 +628,7 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
                     result = this.segmentsIncludedSize * y
                              + x - wholeExceptionsBeforeDomainValue
                              * this.segmentSize;
-                             // - partialTimeInException;;
+                             // - partialTimeInException;
                 }
                 else {
                     result = this.segmentsIncludedSize * (y + 1)
@@ -670,8 +667,8 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
 
         // calculate the result as if no exceptions
         Segment result = new Segment(this.startTime + timelineValue
-            + (timelineValue / this.segmentsIncludedSize)
-            * this.segmentsExcludedSize);
+                + (timelineValue / this.segmentsIncludedSize)
+                * this.segmentsExcludedSize);
 
         long lastIndex = this.startTime;
 
@@ -727,10 +724,8 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
                 this.workingCalendarNoDST.get(Calendar.MINUTE),
                 this.workingCalendarNoDST.get(Calendar.SECOND)
             );
-            this.workingCalendar.set(
-                Calendar.MILLISECOND,
-                this.workingCalendarNoDST.get(Calendar.MILLISECOND)
-            );
+            this.workingCalendar.set(Calendar.MILLISECOND,
+                    this.workingCalendarNoDST.get(Calendar.MILLISECOND));
             // result = this.workingCalendar.getTimeInMillis();
             // preceding code won't work with JDK 1.3
             result = this.workingCalendar.getTime().getTime();
@@ -775,9 +770,8 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
                                        long domainValueEnd) {
         if (domainValueEnd < domainValueStart) {
             throw new IllegalArgumentException(
-                "domainValueEnd (" + domainValueEnd
-                + ") < domainValueStart (" + domainValueStart + ")"
-            );
+                    "domainValueEnd (" + domainValueEnd
+                    + ") < domainValueStart (" + domainValueStart + ")");
         }
         Segment segment = getSegment(domainValueStart);
         boolean contains = true;
@@ -806,9 +800,8 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
      */
     public boolean containsDomainRange(Date dateDomainValueStart,
                                        Date dateDomainValueEnd) {
-        return containsDomainRange(
-            getTime(dateDomainValueStart), getTime(dateDomainValueEnd)
-        );
+        return containsDomainRange(getTime(dateDomainValueStart),
+                getTime(dateDomainValueEnd));
     }
 
     /**
@@ -1006,8 +999,7 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
 
                     // add the interval as an exception
                     addException(new BaseTimelineSegmentRange(
-                        fromDomainValue, toDomainValue
-                    ));
+                            fromDomainValue, toDomainValue));
                 }
                 else {
                     // this is not one of our included segment, skip it
@@ -1039,8 +1031,8 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
         for (Iterator iter = this.exceptionSegments.iterator();
              iter.hasNext();) {
             Segment segment = (Segment) iter.next();
-            Segment intersection
-                = segment.intersect(fromMillisecond, toMillisecond);
+            Segment intersection = segment.intersect(fromMillisecond,
+                    toMillisecond);
             if (intersection != null) {
                 n += intersection.getSegmentCount();
             }
@@ -1111,9 +1103,8 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
             boolean b1 = (this.segmentsIncluded == other.getSegmentsIncluded());
             boolean b2 = (this.segmentsExcluded == other.getSegmentsExcluded());
             boolean b3 = (this.startTime == other.getStartTime());
-            boolean b4 = equals(
-                this.exceptionSegments, other.getExceptionSegments()
-            );
+            boolean b4 = equals(this.exceptionSegments,
+                    other.getExceptionSegments());
             return b0 && b1 && b2 && b3 && b4;
         }
         else {
@@ -1190,17 +1181,14 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
         if (this.adjustForDaylightSaving) {
             this.workingCalendar.setTime(date);
             this.workingCalendarNoDST.set(
-                this.workingCalendar.get(Calendar.YEAR),
-                this.workingCalendar.get(Calendar.MONTH),
-                this.workingCalendar.get(Calendar.DATE),
-                this.workingCalendar.get(Calendar.HOUR_OF_DAY),
-                this.workingCalendar.get(Calendar.MINUTE),
-                this.workingCalendar.get(Calendar.SECOND)
-            );
-            this.workingCalendarNoDST.set(
-                Calendar.MILLISECOND,
-                this.workingCalendar.get(Calendar.MILLISECOND)
-            );
+                    this.workingCalendar.get(Calendar.YEAR),
+                    this.workingCalendar.get(Calendar.MONTH),
+                    this.workingCalendar.get(Calendar.DATE),
+                    this.workingCalendar.get(Calendar.HOUR_OF_DAY),
+                    this.workingCalendar.get(Calendar.MINUTE),
+                    this.workingCalendar.get(Calendar.SECOND));
+            this.workingCalendarNoDST.set(Calendar.MILLISECOND,
+                    this.workingCalendar.get(Calendar.MILLISECOND));
             Date revisedDate = this.workingCalendarNoDST.getTime();
             result = revisedDate.getTime();
         }
@@ -1526,7 +1514,7 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
          */
         public boolean inExcludeSegments() {
             return getSegmentNumberRelativeToGroup()
-                >= SegmentedTimeline.this.segmentsIncluded;
+                    >= SegmentedTimeline.this.segmentsIncluded;
         }
 
         /**
@@ -1736,8 +1724,7 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
          */
         public void inc(long n) {
             throw new IllegalArgumentException(
-                "Not implemented in SegmentRange"
-            );
+                    "Not implemented in SegmentRange");
         }
 
     }

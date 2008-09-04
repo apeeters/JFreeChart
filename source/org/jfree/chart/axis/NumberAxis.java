@@ -32,8 +32,8 @@
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Laurence Vanhelsuwe;
  *
- * Changes (from 18-Sep-2001)
- * --------------------------
+ * Changes
+ * -------
  * 18-Sep-2001 : Added standard header and fixed DOS encoding problem (DG);
  * 22-Sep-2001 : Changed setMinimumAxisValue() and setMaximumAxisValue() so
  *               that they clear the autoRange flag (DG);
@@ -1237,7 +1237,6 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
      * @param edge  the location of the axis.
      *
      * @return A list of ticks.
-     *
      */
     protected List refreshTicksVertical(Graphics2D g2,
                                         Rectangle2D dataArea,
@@ -1294,10 +1293,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
                     }
                 }
 
-                Tick tick = new NumberTick(
-                    new Double(currentTickValue), tickLabel, anchor,
-                    rotationAnchor, angle
-                );
+                Tick tick = new NumberTick(new Double(currentTickValue),
+                        tickLabel, anchor, rotationAnchor, angle);
                 result.add(tick);
             }
         }

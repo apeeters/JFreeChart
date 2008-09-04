@@ -126,6 +126,9 @@ A Cyclic item renderer is provided to do exactly this.
  */
 public class CyclicNumberAxis extends NumberAxis {
 
+    /** For serialization. */
+    static final long serialVersionUID = -7514160997164582554L;
+
     /** The default axis line stroke. */
     public static Stroke DEFAULT_ADVANCE_LINE_STROKE = new BasicStroke(1.0f);
 
@@ -1006,9 +1009,8 @@ public class CyclicNumberAxis extends NumberAxis {
 
         double il = 0;
         if (isTickMarksVisible()) {
-            float xx = (float) valueToJava2D(
-                getRange().getUpperBound(), dataArea, edge
-            );
+            float xx = (float) valueToJava2D(getRange().getUpperBound(),
+                    dataArea, edge);
             Line2D mark = null;
             g2.setStroke(getTickMarkStroke());
             g2.setPaint(getTickMarkPaint());

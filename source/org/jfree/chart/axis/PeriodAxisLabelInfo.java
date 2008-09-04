@@ -170,7 +170,8 @@ public class PeriodAxisLabelInfo implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'labelPaint' argument.");
         }
         if (dividerStroke == null) {
-            throw new IllegalArgumentException("Null 'dividerStroke' argument.");
+            throw new IllegalArgumentException(
+                    "Null 'dividerStroke' argument.");
         }
         if (dividerPaint == null) {
             throw new IllegalArgumentException("Null 'dividerPaint' argument.");
@@ -271,11 +272,9 @@ public class PeriodAxisLabelInfo implements Cloneable, Serializable {
         RegularTimePeriod result = null;
         try {
             Constructor c = this.periodClass.getDeclaredConstructor(
-                new Class[] {Date.class, TimeZone.class}
-            );
-            result = (RegularTimePeriod) c.newInstance(
-                new Object[] {millisecond, zone}
-            );
+                    new Class[] {Date.class, TimeZone.class});
+            result = (RegularTimePeriod) c.newInstance(new Object[] {
+                    millisecond, zone});
         }
         catch (Exception e) {
             // do nothing

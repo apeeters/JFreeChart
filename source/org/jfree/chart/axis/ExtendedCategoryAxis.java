@@ -69,6 +69,9 @@ import org.jfree.chart.util.SerialUtilities;
  */
 public class ExtendedCategoryAxis extends CategoryAxis {
 
+    /** For serialization. */
+    static final long serialVersionUID = -3004429093959826567L;
+
     /** Storage for the sublabels. */
     private Map sublabels;
 

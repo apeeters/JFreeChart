@@ -51,6 +51,8 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
  * 31-Jul-2007 : Fix for inverted axis labelling (see bug 1763413) (DG);
+ * 08-Apr-2008 : Notify listeners in setRange(Range, boolean, boolean) - fixes
+ *               bug 1932146 (DG);
  *
  */
 
@@ -101,7 +103,7 @@ import org.jfree.data.time.Year;
  * the left or right of charts.
  */
 public class PeriodAxis extends ValueAxis
-                        implements Cloneable, PublicCloneable, Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 8353295532075872069L;
@@ -203,6 +205,7 @@ public class PeriodAxis extends ValueAxis
         this.first = first;
         this.last = last;
         this.timeZone = timeZone;
+        // FIXME: this calendar may need a locale as well
         this.calendar = Calendar.getInstance(timeZone);
         this.autoRangeTimePeriodClass = first.getClass();
         this.majorTickTimePeriodClass = first.getClass();
@@ -285,6 +288,7 @@ public class PeriodAxis extends ValueAxis
             throw new IllegalArgumentException("Null 'zone' argument.");
         }
         this.timeZone = zone;
+        // FIXME: this calendar may need a locale as well
         this.calendar = Calendar.getInstance(zone);
         notifyListeners(new AxisChangeEvent(this));
     }
@@ -484,13 +488,14 @@ public class PeriodAxis extends ValueAxis
     }
 
     /**
-     * Sets the array of label info records.
+     * Sets the array of label info records and sends an
+     * {@link AxisChangeEvent} to all registered listeners.
      *
      * @param info  the info.
      */
     public void setLabelInfo(PeriodAxisLabelInfo[] info) {
         this.labelInfo = info;
-        // FIXME: shouldn't this generate an event?
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -524,6 +529,9 @@ public class PeriodAxis extends ValueAxis
                 new Date(lower), this.timeZone);
         this.last = createInstance(this.autoRangeTimePeriodClass,
                 new Date(upper), this.timeZone);
+        if (notify) {
+            notifyListeners(new AxisChangeEvent(this));
+        }
     }
 
     /**

@@ -71,7 +71,7 @@ import org.jfree.chart.util.RectangleEdge;
  * Used for bar charts and line charts.
  */
 public class CategoryAxis3D extends CategoryAxis
-                            implements Cloneable, Serializable {
+        implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 4114732251353700972L;

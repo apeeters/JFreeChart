@@ -61,7 +61,7 @@ import java.util.TimeZone;
  * '2004 IV' for the last quarter of 2004.
  */
 public class QuarterDateFormat extends DateFormat
-                               implements Cloneable, Serializable {
+        implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -6738465248529797176L;

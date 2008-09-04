@@ -34,8 +34,8 @@
  *                   Nicolas Brodu (for Astrium and EADS Corporate Research
  *                   Center);
  *
- * Changes (from 18-Sep-2001)
- * --------------------------
+ * Changes
+ * -------
  * 18-Sep-2001 : Added standard header and fixed DOS encoding problem (DG);
  * 23-Nov-2001 : Overhauled standard tick unit code (DG);
  * 04-Dec-2001 : Changed constructors to protected, and tidied up default
@@ -137,8 +137,7 @@ import org.jfree.data.Range;
  * {@link DateAxis} and {@link NumberAxis}.
  */
 public abstract class ValueAxis extends Axis
-                                implements Cloneable, PublicCloneable,
-                                           Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 3698345477322391456L;
@@ -683,7 +682,8 @@ public abstract class ValueAxis extends Axis
                         tick.getAngle(), tick.getRotationAnchor());
             }
 
-            if (isTickMarksVisible() && tick.getTickType().equals(TickType.MAJOR)) {
+            if (isTickMarksVisible() && tick.getTickType().equals(
+                    TickType.MAJOR)) {
                 float xx = (float) valueToJava2D(tick.getValue(), dataArea,
                         edge);
                 Line2D mark = null;
