@@ -82,6 +82,7 @@
  * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
  * 08-Oct-2007 : Added new volumePaint field (DG);
  * 08-Apr-2008 : Added findRangeBounds() method override (DG);
+ * 13-May-2008 : Fixed chart entity bugs (1962467 and 1962472) (DG);
  *
  */
 
@@ -92,7 +93,6 @@ import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -128,10 +128,7 @@ import org.jfree.data.xy.XYDataset;
  * plot.
  */
 public class CandlestickRenderer extends AbstractXYItemRenderer
-                                 implements XYItemRenderer,
-                                            Cloneable,
-                                            PublicCloneable,
-                                            Serializable {
+        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 50390395841817121L;
@@ -783,9 +780,8 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
 
             g2.setPaint(getVolumePaint());
             Composite originalComposite = g2.getComposite();
-            g2.setComposite(
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f)
-            );
+            g2.setComposite(AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, 0.3f));
 
             if (horiz) {
                 g2.fill(new Rectangle2D.Double(min, xx - volumeWidth / 2,
@@ -832,14 +828,21 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         }
 
         // draw the body
-        Shape body = null;
+        Rectangle2D body = null;
+        Rectangle2D hotspot = null;
+        double length = Math.abs(yyHigh - yyLow);
+        double base = Math.min(yyHigh, yyLow);
         if (horiz) {
             body = new Rectangle2D.Double(yyMinOpenClose, xx - stickWidth / 2,
                     yyMaxOpenClose - yyMinOpenClose, stickWidth);
+            hotspot = new Rectangle2D.Double(base, xx - stickWidth / 2,
+                    length, stickWidth);
         }
         else {
             body = new Rectangle2D.Double(xx - stickWidth / 2, yyMinOpenClose,
                     stickWidth, yyMaxOpenClose - yyMinOpenClose);
+            hotspot = new Rectangle2D.Double(xx - stickWidth / 2,
+                    base, stickWidth, length);
         }
         if (yClose > yOpen) {
             if (this.upPaint != null) {
@@ -867,7 +870,10 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         }
         g2.draw(body);
 
-        addEntity(entities, body, dataset, series, item, 0.0, 0.0);
+        // add an entity for the item...
+        if (entities != null) {
+            addEntity(entities, hotspot, dataset, series, item, 0.0, 0.0);
+        }
 
     }
 

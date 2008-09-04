@@ -24,9 +24,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * -----------------------------
- * XYSplineAndShapeRenderer.java
- * -----------------------------
+ * ---------------------
+ * XYSplineRenderer.java
+ * ---------------------
  * (C) Copyright 2007, 2008, by Klaus Rheinwald and Contributors.
  *
  * Original Author:  Klaus Rheinwald;
@@ -121,7 +121,7 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
             throw new IllegalArgumentException("Requires p > 0.");
         }
         this.precision = p;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -189,8 +189,9 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
                                 : (float) transX1, plot.getOrientation()
                                 == PlotOrientation.HORIZONTAL ? (float) transX1
                                         : (float) transY1);
-            if( !this.points. contains(p))
+            if (!this.points.contains(p)) {
                 this.points.add(p);
+            }
         }
         if (item == dataset.getItemCount(series) - 1) {
             State s = (State) state;

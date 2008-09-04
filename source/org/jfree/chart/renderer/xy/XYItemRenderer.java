@@ -277,8 +277,7 @@ public interface XYItemRenderer extends LegendItemSource {
      */
     public void setBaseSeriesVisible(boolean visible, boolean notify);
 
-
-    // SERIES VISIBLE IN LEGEND (not yet respected by all renderers) //////////
+    // SERIES VISIBLE IN LEGEND (not yet respected by all renderers)
 
     /**
      * Returns <code>true</code> if the series should be shown in the legend,
@@ -971,7 +970,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @see #getSeriesToolTipGenerator(int)
      */
     public void setSeriesToolTipGenerator(int series,
-            XYToolTipGenerator generator);
+                                          XYToolTipGenerator generator);
 
     /**
      * Sets the tool tip generator for the specified series and, if requested,
@@ -1299,7 +1298,6 @@ public interface XYItemRenderer extends LegendItemSource {
      */
     public void setBaseItemLabelGenerator(XYItemLabelGenerator generator,
             boolean notify);
-
 
     //// ITEM LABEL FONT ///////////////////////////////////////////////////////
 
@@ -1793,7 +1791,6 @@ public interface XYItemRenderer extends LegendItemSource {
                          int item,
                          CrosshairState crosshairState,
                          int pass);
-
 
     /**
      * Fills a band between two values on the axis.  This can be used to color

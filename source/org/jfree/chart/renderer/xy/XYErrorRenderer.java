@@ -75,6 +75,9 @@ import org.jfree.data.xy.XYDataset;
  */
 public class XYErrorRenderer extends XYLineAndShapeRenderer {
 
+    /** For serialization. */
+    static final long serialVersionUID = 5162283570955172424L;
+
     /** A flag that controls whether or not the x-error bars are drawn. */
     private boolean drawXError;
 
@@ -125,7 +128,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
     public void setDrawXError(boolean draw) {
         if (this.drawXError != draw) {
             this.drawXError = draw;
-            this.notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -153,7 +156,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
     public void setDrawYError(boolean draw) {
         if (this.drawYError != draw) {
             this.drawYError = draw;
-            notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -179,7 +182,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      */
     public void setCapLength(double length) {
         this.capLength = length;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -195,7 +198,8 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
     }
 
     /**
-     * Sets the paint used to draw the error bars.
+     * Sets the paint used to draw the error bars and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param paint  the paint (<code>null</code> permitted).
      *
@@ -203,7 +207,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      */
     public void setErrorPaint(Paint paint) {
         this.errorPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**

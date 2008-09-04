@@ -111,9 +111,7 @@ import org.jfree.data.xy.XYDataset;
  * is to use the {@link StackedXYAreaRenderer2} class instead.
  */
 public class StackedXYAreaRenderer extends XYAreaRenderer
-                                   implements Cloneable,
-                                              PublicCloneable,
-                                              Serializable {
+        implements Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 5217394318178570889L;
