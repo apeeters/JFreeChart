@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
- * 
+ *
  * ------------------
  * TextUtilities.java
  * ------------------
- * (C) Copyright 2004-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,20 +38,20 @@
  * 24-Mar-2004 : Added 'paint' argument to createTextBlock() method (DG);
  * 07-Apr-2004 : Added getTextBounds() method and useFontMetricsGetStringBounds
  *               flag (DG);
- * 08-Apr-2004 : Changed word break iterator to line break iterator in the 
+ * 08-Apr-2004 : Changed word break iterator to line break iterator in the
  *               createTextBlock() method - see bug report 926074 (DG);
- * 03-Sep-2004 : Updated createTextBlock() method to add ellipses when limit 
+ * 03-Sep-2004 : Updated createTextBlock() method to add ellipses when limit
  *               is reached (DG);
  * 30-Sep-2004 : Modified bounds returned by drawAlignedString() method (DG);
- * 10-Nov-2004 : Added new createTextBlock() method that works with 
+ * 10-Nov-2004 : Added new createTextBlock() method that works with
  *               newlines (DG);
  * 19-Apr-2005 : Changed default value of useFontMetricsGetStringBounds (DG);
  * 17-May-2005 : createTextBlock() now recognises '\n' (DG);
- * 27-Jun-2005 : Added code to getTextBounds() method to work around Sun's bug 
+ * 27-Jun-2005 : Added code to getTextBounds() method to work around Sun's bug
  *               parade item 6183356 (DG);
  * 06-Jan-2006 : Reformatted (DG);
  * 21-Jun-2007 : Copied from JCommon (DG);
- * 
+ *
  */
 
 package org.jfree.chart.text;
@@ -100,13 +100,13 @@ public class TextUtilities {
     }
 
     /**
-     * Creates a {@link TextBlock} from a <code>String</code>.  Line breaks 
+     * Creates a {@link TextBlock} from a <code>String</code>.  Line breaks
      * are added where the <code>String</code> contains '\n' characters.
-     * 
+     *
      * @param text  the text.
      * @param font  the font.
      * @param paint  the paint.
-     * 
+     *
      * @return A text block.
      */
     public static TextBlock createTextBlock(String text, Font font,
@@ -150,19 +150,19 @@ public class TextUtilities {
      * Creates a new text block from the given string, breaking the
      * text into lines so that the <code>maxWidth</code> value is
      * respected.
-     * 
+     *
      * @param text  the text.
      * @param font  the font.
      * @param paint  the paint.
      * @param maxWidth  the maximum width for each line.
      * @param measurer  the text measurer.
-     * 
+     *
      * @return A text block.
      */
     public static TextBlock createTextBlock(String text, Font font,
             Paint paint, float maxWidth, TextMeasurer measurer) {
-        
-        return createTextBlock(text, font, paint, maxWidth, Integer.MAX_VALUE, 
+
+        return createTextBlock(text, font, paint, maxWidth, Integer.MAX_VALUE,
                 measurer);
     }
 
@@ -170,19 +170,19 @@ public class TextUtilities {
      * Creates a new text block from the given string, breaking the
      * text into lines so that the <code>maxWidth</code> value is
      * respected.
-     * 
+     *
      * @param text  the text.
      * @param font  the font.
      * @param paint  the paint.
      * @param maxWidth  the maximum width for each line.
      * @param maxLines  the maximum number of lines.
      * @param measurer  the text measurer.
-     * 
+     *
      * @return A text block.
      */
     public static TextBlock createTextBlock(String text, Font font,
             Paint paint, float maxWidth, int maxLines, TextMeasurer measurer) {
-        
+
         TextBlock result = new TextBlock();
         BreakIterator iterator = BreakIterator.getLineInstance();
         iterator.setText(text);
@@ -190,7 +190,7 @@ public class TextUtilities {
         int lines = 0;
         int length = text.length();
         while (current < length && lines < maxLines) {
-            int next = nextLineBreak(text, current, maxWidth, iterator, 
+            int next = nextLineBreak(text, current, maxWidth, iterator,
                     measurer);
             if (next == BreakIterator.DONE) {
                 result.addLine(text.substring(current), font, paint);
@@ -213,7 +213,7 @@ public class TextUtilities {
             }
 
             lastLine.removeFragment(lastFragment);
-            TextFragment newFragment = new TextFragment(newStr, 
+            TextFragment newFragment = new TextFragment(newStr,
                     lastFragment.getFont(), lastFragment.getPaint());
             lastLine.addFragment(newFragment);
         }
@@ -222,19 +222,19 @@ public class TextUtilities {
 
     /**
      * Returns the character index of the next line break.
-     * 
+     *
      * @param text  the text.
      * @param start  the start index.
      * @param width  the target display width.
      * @param iterator  the word break iterator.
      * @param measurer  the text measurer.
-     * 
+     *
      * @return The index of the next line break.
      */
     private static int nextLineBreak(String text, int start,
             float width, BreakIterator iterator, TextMeasurer measurer) {
-        
-        // this method is (loosely) based on code in JFreeReport's 
+
+        // this method is (loosely) based on code in JFreeReport's
         // TextParagraph class
         int current = start;
         int end;
@@ -273,22 +273,22 @@ public class TextUtilities {
 
     /**
      * Returns the bounds for the specified text.
-     * 
+     *
      * @param text  the text (<code>null</code> permitted).
      * @param g2  the graphics context (not <code>null</code>).
      * @param fm  the font metrics (not <code>null</code>).
-     * 
-     * @return The text bounds (<code>null</code> if the <code>text</code> 
+     *
+     * @return The text bounds (<code>null</code> if the <code>text</code>
      *         argument is <code>null</code>).
      */
-    public static Rectangle2D getTextBounds(String text, Graphics2D g2, 
+    public static Rectangle2D getTextBounds(String text, Graphics2D g2,
             FontMetrics fm) {
-        
+
         final Rectangle2D bounds;
         if (TextUtilities.useFontMetricsGetStringBounds) {
             bounds = fm.getStringBounds(text, g2);
             // getStringBounds() can return incorrect height for some Unicode
-            // characters...see bug parade 6183356, let's replace it with 
+            // characters...see bug parade 6183356, let's replace it with
             // something correct
             LineMetrics lm = fm.getFont().getLineMetrics(text,
                     g2.getFontRenderContext());
@@ -298,14 +298,14 @@ public class TextUtilities {
         else {
             double width = fm.stringWidth(text);
             double height = fm.getHeight();
-            bounds = new Rectangle2D.Double(0.0, -fm.getAscent(), width, 
+            bounds = new Rectangle2D.Double(0.0, -fm.getAscent(), width,
                     height);
         }
         return bounds;
     }
 
     /**
-     * Draws a string such that the specified anchor point is aligned to the 
+     * Draws a string such that the specified anchor point is aligned to the
      * given (x, y) location.
      *
      * @param text  the text.
@@ -313,14 +313,14 @@ public class TextUtilities {
      * @param x  the x coordinate (Java 2D).
      * @param y  the y coordinate (Java 2D).
      * @param anchor  the anchor location.
-     * 
+     *
      * @return The text bounds (adjusted for the text position).
      */
     public static Rectangle2D drawAlignedString(String text,
             Graphics2D g2, float x, float y, TextAnchor anchor) {
 
         Rectangle2D textBounds = new Rectangle2D.Double();
-        float[] adjust = deriveTextBoundsAnchorOffsets(g2, text, anchor, 
+        float[] adjust = deriveTextBoundsAnchorOffsets(g2, text, anchor,
                 textBounds);
         // adjust text bounds to match string position
         textBounds.setRect(x + adjust[0], y + adjust[1] + adjust[2],
@@ -330,19 +330,19 @@ public class TextUtilities {
     }
 
     /**
-     * A utility method that calculates the anchor offsets for a string.  
-     * Normally, the (x, y) coordinate for drawing text is a point on the 
-     * baseline at the left of the text string.  If you add these offsets to 
-     * (x, y) and draw the string, then the anchor point should coincide with 
+     * A utility method that calculates the anchor offsets for a string.
+     * Normally, the (x, y) coordinate for drawing text is a point on the
+     * baseline at the left of the text string.  If you add these offsets to
+     * (x, y) and draw the string, then the anchor point should coincide with
      * the (x, y) point.
      *
      * @param g2  the graphics device (not <code>null</code>).
      * @param text  the text.
      * @param anchor  the anchor point.
-     * @param textBounds  the text bounds (if not <code>null</code>, this 
-     *                    object will be updated by this method to match the 
+     * @param textBounds  the text bounds (if not <code>null</code>, this
+     *                    object will be updated by this method to match the
      *                    string bounds).
-     * 
+     *
      * @return  The offsets.
      */
     private static float[] deriveTextBoundsAnchorOffsets(Graphics2D g2,
@@ -427,9 +427,9 @@ public class TextUtilities {
 
     /**
      * Sets the flag that controls whether or not a workaround is used for
-     * drawing rotated strings.  The related bug is on Sun's bug parade 
-     * (id 4312117) and the workaround involves using a <code>TextLayout</code> 
-     * instance to draw the text instead of calling the 
+     * drawing rotated strings.  The related bug is on Sun's bug parade
+     * (id 4312117) and the workaround involves using a <code>TextLayout</code>
+     * instance to draw the text instead of calling the
      * <code>drawString()</code> method in the <code>Graphics2D</code> class.
      *
      * @param use  the new flag value.
@@ -441,7 +441,7 @@ public class TextUtilities {
     /**
      * A utility method for drawing rotated text.
      * <P>
-     * A common rotation is -Math.PI/2 which draws text 'vertically' (with the 
+     * A common rotation is -Math.PI/2 which draws text 'vertically' (with the
      * top of the characters on the left).
      *
      * @param text  the text.
@@ -458,7 +458,7 @@ public class TextUtilities {
     /**
      * A utility method for drawing rotated text.
      * <P>
-     * A common rotation is -Math.PI/2 which draws text 'vertically' (with the 
+     * A common rotation is -Math.PI/2 which draws text 'vertically' (with the
      * top of the characters on the left).
      *
      * @param text  the text.
@@ -486,7 +486,7 @@ public class TextUtilities {
 
         if (useDrawRotatedStringWorkaround) {
             // workaround for JDC bug ID 4312117 and others...
-            TextLayout tl = new TextLayout(text, g2.getFont(), 
+            TextLayout tl = new TextLayout(text, g2.getFont(),
                     g2.getFontRenderContext());
             tl.draw(g2, textX, textY);
         }
@@ -499,7 +499,7 @@ public class TextUtilities {
     }
 
     /**
-     * Draws a string that is aligned by one anchor point and rotated about 
+     * Draws a string that is aligned by one anchor point and rotated about
      * another anchor point.
      *
      * @param text  the text.
@@ -511,20 +511,20 @@ public class TextUtilities {
      * @param rotationX  the x-coordinate for the rotation anchor point.
      * @param rotationY  the y-coordinate for the rotation anchor point.
      */
-    public static void drawRotatedString(String text, Graphics2D g2, float x, 
-            float y, TextAnchor textAnchor, double angle, float rotationX, 
+    public static void drawRotatedString(String text, Graphics2D g2, float x,
+            float y, TextAnchor textAnchor, double angle, float rotationX,
             float rotationY) {
 
         if (text == null || text.equals("")) {
             return;
         }
         float[] textAdj = deriveTextBoundsAnchorOffsets(g2, text, textAnchor);
-        drawRotatedString(text, g2, x + textAdj[0], y + textAdj[1], angle, 
+        drawRotatedString(text, g2, x + textAdj[0], y + textAdj[1], angle,
                 rotationX, rotationY);
     }
 
     /**
-     * Draws a string that is aligned by one anchor point and rotated about 
+     * Draws a string that is aligned by one anchor point and rotated about
      * another anchor point.
      *
      * @param text  the text.
@@ -543,18 +543,18 @@ public class TextUtilities {
             return;
         }
         float[] textAdj = deriveTextBoundsAnchorOffsets(g2, text, textAnchor);
-        float[] rotateAdj = deriveRotationAnchorOffsets(g2, text, 
+        float[] rotateAdj = deriveRotationAnchorOffsets(g2, text,
                 rotationAnchor);
         drawRotatedString(text, g2, x + textAdj[0], y + textAdj[1],
-                angle, x + textAdj[0] + rotateAdj[0], 
+                angle, x + textAdj[0] + rotateAdj[0],
                 y + textAdj[1] + rotateAdj[1]);
 
     }
 
     /**
-     * Returns a shape that represents the bounds of the string after the 
+     * Returns a shape that represents the bounds of the string after the
      * specified rotation has been applied.
-     * 
+     *
      * @param text  the text (<code>null</code> permitted).
      * @param g2  the graphics device.
      * @param x  the x coordinate for the anchor point.
@@ -562,7 +562,7 @@ public class TextUtilities {
      * @param textAnchor  the text anchor.
      * @param angle  the angle.
      * @param rotationAnchor  the rotation anchor.
-     * 
+     *
      * @return The bounds (possibly <code>null</code>).
      */
     public static Shape calculateRotatedStringBounds(String text,
@@ -574,20 +574,20 @@ public class TextUtilities {
             return null;
         }
         float[] textAdj = deriveTextBoundsAnchorOffsets(g2, text, textAnchor);
-        float[] rotateAdj = deriveRotationAnchorOffsets(g2, text, 
+        float[] rotateAdj = deriveRotationAnchorOffsets(g2, text,
                 rotationAnchor);
-        Shape result = calculateRotatedStringBounds(text, g2, 
-                x + textAdj[0], y + textAdj[1], angle, 
+        Shape result = calculateRotatedStringBounds(text, g2,
+                x + textAdj[0], y + textAdj[1], angle,
                 x + textAdj[0] + rotateAdj[0], y + textAdj[1] + rotateAdj[1]);
         return result;
 
     }
 
     /**
-     * A utility method that calculates the anchor offsets for a string.  
-     * Normally, the (x, y) coordinate for drawing text is a point on the 
-     * baseline at the left of the text string.  If you add these offsets to 
-     * (x, y) and draw the string, then the anchor point should coincide with 
+     * A utility method that calculates the anchor offsets for a string.
+     * Normally, the (x, y) coordinate for drawing text is a point on the
+     * baseline at the left of the text string.  If you add these offsets to
+     * (x, y) and draw the string, then the anchor point should coincide with
      * the (x, y) point.
      *
      * @param g2  the graphics device (not <code>null</code>).
@@ -673,8 +673,8 @@ public class TextUtilities {
     }
 
     /**
-     * A utility method that calculates the rotation anchor offsets for a 
-     * string.  These offsets are relative to the text starting coordinate 
+     * A utility method that calculates the rotation anchor offsets for a
+     * string.  These offsets are relative to the text starting coordinate
      * (BASELINE_LEFT).
      *
      * @param g2  the graphics device.
@@ -768,9 +768,9 @@ public class TextUtilities {
     }
 
     /**
-     * Returns a shape that represents the bounds of the string after the 
+     * Returns a shape that represents the bounds of the string after the
      * specified rotation has been applied.
-     * 
+     *
      * @param text  the text (<code>null</code> permitted).
      * @param g2  the graphics device.
      * @param textX  the x coordinate for the text.
@@ -778,8 +778,8 @@ public class TextUtilities {
      * @param angle  the angle.
      * @param rotateX  the x coordinate for the rotation point.
      * @param rotateY  the y coordinate for the rotation point.
-     * 
-     * @return The bounds (<code>null</code> if <code>text</code> is 
+     *
+     * @return The bounds (<code>null</code> if <code>text</code> is
      *         </code>null</code> or has zero length).
      */
     public static Shape calculateRotatedStringBounds(String text,
@@ -802,10 +802,10 @@ public class TextUtilities {
     }
 
     /**
-     * Returns the flag that controls whether the FontMetrics.getStringBounds() 
+     * Returns the flag that controls whether the FontMetrics.getStringBounds()
      * method is used or not.  If you are having trouble with label alignment
      * or positioning, try changing the value of this flag.
-     * 
+     *
      * @return A boolean.
      */
     public static boolean getUseFontMetricsGetStringBounds() {
@@ -813,10 +813,10 @@ public class TextUtilities {
     }
 
     /**
-     * Sets the flag that controls whether the FontMetrics.getStringBounds() 
-     * method is used or not.  If you are having trouble with label alignment 
+     * Sets the flag that controls whether the FontMetrics.getStringBounds()
+     * method is used or not.  If you are having trouble with label alignment
      * or positioning, try changing the value of this flag.
-     * 
+     *
      * @param use  the flag.
      */
     public static void setUseFontMetricsGetStringBounds(final boolean use) {
@@ -824,9 +824,9 @@ public class TextUtilities {
     }
 
     /**
-     * Returns the current value of the 
+     * Returns the current value of the
      * <code>useDrawRotatedStringWorkaround</code> flag.
-     * 
+     *
      * @return A boolean.
      */
     public static boolean isUseDrawRotatedStringWorkaround() {
