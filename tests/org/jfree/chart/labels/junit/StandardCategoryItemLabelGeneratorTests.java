@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -24,10 +24,10 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * ----------------------------------------
- * StandardCategoryLabelGeneratorTests.java
- * ----------------------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * --------------------------------------------
+ * StandardCategoryItemLabelGeneratorTests.java
+ * --------------------------------------------
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -37,6 +37,7 @@
  * 21-Mar-2003 : Version 1 (DG);
  * 13-Aug-2003 : Added cloning tests (DG);
  * 11-May-2004 : Renamed class (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -58,6 +59,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -166,6 +168,15 @@ public class StandardCategoryItemLabelGeneratorTests extends TestCase {
         assertTrue(g1 != g2);
         assertTrue(g1.getClass() == g2.getClass());
         assertTrue(g1.equals(g2));
+    }
+
+    /**
+     * Check to ensure that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        StandardCategoryItemLabelGenerator g1
+                = new StandardCategoryItemLabelGenerator();
+        assertTrue(g1 instanceof PublicCloneable);
     }
 
     /**

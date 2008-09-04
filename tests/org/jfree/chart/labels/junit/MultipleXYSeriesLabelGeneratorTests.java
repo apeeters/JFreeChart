@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------------------------
  * MultipleXYSeriesLabelGeneratorTests.java
  * ----------------------------------------
- * (C) Copyright 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2007, 2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 20-Jan-2007 : Version 1 (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -52,6 +53,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.labels.MultipleXYSeriesLabelGenerator;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link MultipleXYSeriesLabelGenerator} class.
@@ -132,6 +134,15 @@ public class MultipleXYSeriesLabelGeneratorTests extends TestCase {
         assertFalse(g1.equals(g2));
         g2.addSeriesLabel(3, "Add3");
         assertTrue(g1.equals(g2));
+    }
+
+    /**
+     * Check to ensure that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        MultipleXYSeriesLabelGenerator g1
+                = new MultipleXYSeriesLabelGenerator();
+        assertTrue(g1 instanceof PublicCloneable);
     }
 
     /**

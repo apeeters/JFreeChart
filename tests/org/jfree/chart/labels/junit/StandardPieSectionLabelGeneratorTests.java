@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------------------------
  * StandardPieSectionLabelGeneratorTests.java
  * ------------------------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,6 +38,7 @@
  * 13-Aug-2003 : Added clone tests (DG);
  * 04-Mar-2004 : Added test for equals() method (DG);
  * 23-Nov-2006 : Extended equals() test (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -58,6 +59,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link StandardPieSectionLabelGenerator} class.
@@ -160,6 +162,15 @@ public class StandardPieSectionLabelGeneratorTests extends TestCase {
         assertTrue(g1 != g2);
         assertTrue(g1.getClass() == g2.getClass());
         assertTrue(g1.equals(g2));
+    }
+
+    /**
+     * Check to ensure that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        StandardPieSectionLabelGenerator g1
+                = new StandardPieSectionLabelGenerator();
+        assertTrue(g1 instanceof PublicCloneable);
     }
 
     /**

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------------------
  * StandardXYItemLabelGeneratorTests.java
  * --------------------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,6 +38,7 @@
  * 26-Feb-2004 : Updates for new code (DG);
  * 20-Jan-2006 : Renamed StandardXYItemLabelGeneratorTests.java (DG);
  * 25-Jan-2007 : Added independence checks to testCloning() (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -59,6 +60,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link StandardXYItemLabelGenerator} class.
@@ -204,6 +206,14 @@ public class StandardXYItemLabelGeneratorTests extends TestCase {
         g2.getYDateFormat().setNumberFormat(new DecimalFormat("0.000"));
         assertTrue(g1.equals(g2));
 
+    }
+
+    /**
+     * Check to ensure that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        StandardXYItemLabelGenerator g1 = new StandardXYItemLabelGenerator();
+        assertTrue(g1 instanceof PublicCloneable);
     }
 
     /**

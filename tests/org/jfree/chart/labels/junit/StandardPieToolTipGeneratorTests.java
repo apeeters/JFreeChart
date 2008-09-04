@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------------------
  * StandardPieToolTipGeneratorTests.java
  * -------------------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -41,6 +41,7 @@
  * 03-May-2006 : Extended test for clone() method (DG);
  * 03-May-2006 : Renamed StandardPieItemLabelGeneratorTests
  *               --> StandardPieToolTipGeneratorTests (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
@@ -60,6 +61,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.labels.StandardPieToolTipGenerator;
+import org.jfree.chart.util.PublicCloneable;
 
 /**
  * Tests for the {@link StandardPieToolTipGenerator} class.
@@ -155,6 +157,14 @@ public class StandardPieToolTipGeneratorTests extends TestCase {
         assertTrue(g1.equals(g2));
         assertTrue(g1.getNumberFormat() != g2.getNumberFormat());
         assertTrue(g1.getPercentFormat() != g2.getPercentFormat());
+    }
+
+    /**
+     * Check to ensure that this class implements PublicCloneable.
+     */
+    public void testPublicCloneable() {
+        StandardPieToolTipGenerator g1 = new StandardPieToolTipGenerator();
+        assertTrue(g1 instanceof PublicCloneable);
     }
 
     /**
