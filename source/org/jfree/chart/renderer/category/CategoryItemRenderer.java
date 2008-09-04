@@ -1816,25 +1816,6 @@ public interface CategoryItemRenderer extends LegendItemSource {
             PlotRenderingInfo info);
 
     /**
-     * Draws a single data item.
-     *
-     * @param g2  the graphics device.
-     * @param state  state information for one chart.
-     * @param dataArea  the data plot area.
-     * @param plot  the plot.
-     * @param domainAxis  the domain axis.
-     * @param rangeAxis  the range axis.
-     * @param dataset  the data.
-     * @param row  the row index (zero-based).
-     * @param column  the column index (zero-based).
-     * @param pass  the pass index.
-     */
-    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
-            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
-            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
-            int pass);
-
-    /**
      * Draws a background for the data area.
      *
      * @param g2  the graphics device.
@@ -1853,6 +1834,25 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void drawOutline(Graphics2D g2, CategoryPlot plot,
             Rectangle2D dataArea);
+
+    /**
+     * Draws a single data item.
+     *
+     * @param g2  the graphics device.
+     * @param state  state information for one chart.
+     * @param dataArea  the data plot area.
+     * @param plot  the plot.
+     * @param domainAxis  the domain axis.
+     * @param rangeAxis  the range axis.
+     * @param dataset  the data.
+     * @param row  the row index (zero-based).
+     * @param column  the column index (zero-based).
+     * @param pass  the pass index.
+     */
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            int pass);
 
     /**
      * Draws a grid line against the domain axis.

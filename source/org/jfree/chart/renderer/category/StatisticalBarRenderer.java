@@ -339,17 +339,17 @@ public class StatisticalBarRenderer extends BarRenderer
             double lowVal = rangeAxis.valueToJava2D(meanValue.doubleValue()
                     - valueDelta, dataArea, yAxisLocation);
 
-            if (this.errorIndicatorStroke != null) {
-                g2.setStroke(this.errorIndicatorStroke);
-            }
-            else {
-                g2.setStroke(getItemOutlineStroke(row, column));
-            }
             if (this.errorIndicatorPaint != null) {
                 g2.setPaint(this.errorIndicatorPaint);
             }
             else {
                 g2.setPaint(getItemOutlinePaint(row, column));
+            }
+            if (this.errorIndicatorStroke != null) {
+                g2.setStroke(this.errorIndicatorStroke);
+            }
+            else {
+                g2.setStroke(getItemOutlineStroke(row, column));
             }
             Line2D line = null;
             line = new Line2D.Double(lowVal, rectY + rectHeight / 2.0d,
@@ -497,18 +497,19 @@ public class StatisticalBarRenderer extends BarRenderer
             double lowVal = rangeAxis.valueToJava2D(meanValue.doubleValue()
                     - valueDelta, dataArea, yAxisLocation);
 
-            if (this.errorIndicatorStroke != null) {
-                g2.setStroke(this.errorIndicatorStroke);
-            }
-            else {
-                g2.setStroke(getItemOutlineStroke(row, column));
-            }
             if (this.errorIndicatorPaint != null) {
                 g2.setPaint(this.errorIndicatorPaint);
             }
             else {
                 g2.setPaint(getItemOutlinePaint(row, column));
             }
+            if (this.errorIndicatorStroke != null) {
+                g2.setStroke(this.errorIndicatorStroke);
+            }
+            else {
+                g2.setStroke(getItemOutlineStroke(row, column));
+            }
+
             Line2D line = null;
             line = new Line2D.Double(rectX + rectWidth / 2.0d, lowVal,
                                      rectX + rectWidth / 2.0d, highVal);

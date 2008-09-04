@@ -134,7 +134,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
      */
     public void setErrorIndicatorPaint(Paint paint) {
         this.errorIndicatorPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -334,7 +334,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
 
         // collect entity and tool tip information...
         EntityCollection entities = state.getEntityCollection();
-        if (entities != null) {
+        if (entities != null && shape != null) {
             addItemEntity(entities, dataset, row, column, shape);
         }
 

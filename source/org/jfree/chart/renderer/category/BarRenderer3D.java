@@ -144,8 +144,7 @@ import org.jfree.data.category.CategoryDataset;
  * {@link org.jfree.chart.plot.CategoryPlot} class.
  */
 public class BarRenderer3D extends BarRenderer
-                           implements Effect3D, Cloneable, PublicCloneable,
-                                      Serializable {
+        implements Effect3D, Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 7686976503536003636L;
@@ -243,7 +242,7 @@ public class BarRenderer3D extends BarRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.wallPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
 

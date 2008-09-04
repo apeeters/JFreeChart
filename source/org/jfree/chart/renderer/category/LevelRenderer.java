@@ -164,7 +164,6 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      * @param info  collects chart rendering information for return to caller.
      *
      * @return The renderer state.
-     *
      */
     public CategoryItemRendererState initialise(Graphics2D g2,
             Rectangle2D dataArea, CategoryPlot plot, int rendererIndex,

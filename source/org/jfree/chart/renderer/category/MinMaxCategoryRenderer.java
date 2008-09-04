@@ -166,7 +166,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     public void setDrawLines(boolean draw) {
         if (this.plotLines != draw) {
             this.plotLines = draw;
-            this.notifyListeners(new RendererChangeEvent(this));
+            fireChangeEvent();
         }
 
     }
@@ -197,7 +197,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.groupPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -224,7 +224,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.groupStroke = stroke;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -239,7 +239,8 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     }
 
     /**
-     * Sets the icon drawn for each data item.
+     * Sets the icon drawn for each data item and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param icon  the icon.
      *
@@ -250,7 +251,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
             throw new IllegalArgumentException("Null 'icon' argument.");
         }
         this.objectIcon = icon;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -279,7 +280,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
             throw new IllegalArgumentException("Null 'icon' argument.");
         }
         this.maxIcon = icon;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -308,7 +309,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
             throw new IllegalArgumentException("Null 'icon' argument.");
         }
         this.minIcon = icon;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -421,8 +422,9 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     }
 
     /**
-     * Tests this instance for equality with an arbitrary object.  The icon fields
-     * are NOT included in the test, so this implementation is a little weak.
+     * Tests this instance for equality with an arbitrary object.  The icon
+     * fields are NOT included in the test, so this implementation is a little
+     * weak.
      *
      * @param obj  the object (<code>null</code> permitted).
      *

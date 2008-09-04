@@ -155,7 +155,7 @@ public class LineRenderer3D extends LineAndShapeRenderer
      */
     public void setXOffset(double xOffset) {
         this.xOffset = xOffset;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -168,7 +168,7 @@ public class LineRenderer3D extends LineAndShapeRenderer
      */
     public void setYOffset(double yOffset) {
         this.yOffset = yOffset;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -197,7 +197,7 @@ public class LineRenderer3D extends LineAndShapeRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.wallPaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
