@@ -38,6 +38,7 @@
  *               and StandardPieToolTipGenerator (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 03-May-2006 : Fixed bug 1480978, a problem in the clone() method (DG);
+ * 23-Nov-2007 : Implemented hashCode() (DG);
  *
  */
 
@@ -47,6 +48,7 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 
+import org.jfree.chart.util.HashUtilities;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.general.PieDataset;
 
@@ -89,8 +91,7 @@ public class AbstractPieItemLabelGenerator implements Serializable {
         }
         if (percentFormat == null) {
             throw new IllegalArgumentException(
-                "Null 'percentFormat' argument."
-            );
+                    "Null 'percentFormat' argument.");
         }
         this.labelFormat = labelFormat;
         this.numberFormat = numberFormat;
@@ -197,7 +198,7 @@ public class AbstractPieItemLabelGenerator implements Serializable {
         }
 
         AbstractPieItemLabelGenerator that
-            = (AbstractPieItemLabelGenerator) obj;
+                = (AbstractPieItemLabelGenerator) obj;
         if (!this.labelFormat.equals(that.labelFormat)) {
             return false;
         }
@@ -212,6 +213,19 @@ public class AbstractPieItemLabelGenerator implements Serializable {
     }
 
     /**
+     * Returns a hash code for this instance.
+     *
+     * @return A hash code.
+     */
+    public int hashCode() {
+        int result = 127;
+        result = HashUtilities.hashCode(result, this.labelFormat);
+        result = HashUtilities.hashCode(result, this.numberFormat);
+        result = HashUtilities.hashCode(result, this.percentFormat);
+        return result;
+    }
+
+    /**
      * Returns an independent copy of the generator.
      *
      * @return A clone.
@@ -220,7 +234,7 @@ public class AbstractPieItemLabelGenerator implements Serializable {
      */
     public Object clone() throws CloneNotSupportedException {
         AbstractPieItemLabelGenerator clone
-            = (AbstractPieItemLabelGenerator) super.clone();
+                = (AbstractPieItemLabelGenerator) super.clone();
         if (this.numberFormat != null) {
             clone.numberFormat = (NumberFormat) this.numberFormat.clone();
         }

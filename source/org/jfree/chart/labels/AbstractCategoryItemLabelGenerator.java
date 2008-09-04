@@ -40,6 +40,8 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 03-May-2006 : Added new constructor (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 23-Nov-2007 : Implemented hashCode() (DG);
+ *
  */
 
 package org.jfree.chart.labels;
@@ -49,6 +51,7 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 
+import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DataUtilities;
@@ -292,6 +295,21 @@ public abstract class AbstractCategoryItemLabelGenerator
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns a hash code for this instance.
+     *
+     * @return A hash code.
+     */
+    public int hashCode() {
+        int result = 127;
+        result = HashUtilities.hashCode(result, this.labelFormat);
+        result = HashUtilities.hashCode(result, this.nullValueString);
+        result = HashUtilities.hashCode(result, this.dateFormat);
+        result = HashUtilities.hashCode(result, this.numberFormat);
+        result = HashUtilities.hashCode(result, this.percentFormat);
+        return result;
     }
 
     /**
