@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------
  * SWTBarChartDemo1.java
  * ---------------------
- * (C) Copyright 2006, 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Henry Proudhon (henry.proudhon AT ensmp.fr).
@@ -36,7 +36,7 @@
  * -------
  * 23-Aug-2006 : New class (DG);
  * 19-Jun-2006 : Adapted for SWT (HP);
- * 
+ *
  */
 
 package org.jfree.experimental.chart.swt.demo;
@@ -63,14 +63,14 @@ import org.jfree.experimental.chart.swt.ChartComposite;
  * An SWT demo.
  */
 public class SWTBarChartDemo1 {
-    
+
     /**
      * Returns a sample dataset.
-     * 
+     *
      * @return The dataset.
      */
     private static CategoryDataset createDataset() {
-        
+
         // row keys...
         String series1 = "First";
         String series2 = "Second";
@@ -103,20 +103,20 @@ public class SWTBarChartDemo1 {
         dataset.addValue(2.0, series3, category3);
         dataset.addValue(3.0, series3, category4);
         dataset.addValue(6.0, series3, category5);
-        
+
         return dataset;
-        
+
     }
-    
+
     /**
      * Creates a sample chart.
-     * 
+     *
      * @param dataset  the dataset.
-     * 
+     *
      * @return The chart.
      */
     private static JFreeChart createChart(CategoryDataset dataset) {
-        
+
         // create the chart...
         JFreeChart chart = ChartFactory.createBarChart(
             "Bar Chart Demo",         // chart title
@@ -154,17 +154,17 @@ public class SWTBarChartDemo1 {
             CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 6.0)
         );
         // OPTIONAL CUSTOMISATION COMPLETED.
-        
+
         return chart;
-        
+
     }
-    
+
     /**
      * Starting point for the demonstration application.
      *
      * @param args  ignored.
      */
-    public static void main( String[] args ) 
+    public static void main( String[] args )
     {
         JFreeChart chart = createChart(createDataset());
         Display display = new Display();
