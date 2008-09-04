@@ -36,6 +36,7 @@
  * -------
  * 25-Mar-2003 : Version 1 (DG);
  * 18-Jan-2007 : Added many new tests (DG);
+ * 23-Apr-2008 : Added testPublicCloneable() (DG);
  *
  */
 
