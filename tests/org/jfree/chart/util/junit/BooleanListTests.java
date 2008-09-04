@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * ---------------------
  * BooleanListTests.java
  * ---------------------
- * (C) Copyright 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2007, 2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -80,33 +80,33 @@ public class BooleanListTests extends TestCase {
      * Tests the equals() method.
      */
     public void testEquals() {
-        
+
         BooleanList l1 = new BooleanList();
         l1.setBoolean(0, Boolean.TRUE);
         l1.setBoolean(1, Boolean.FALSE);
         l1.setBoolean(2, null);
-        
+
         BooleanList l2 = new BooleanList();
         l2.setBoolean(0, Boolean.TRUE);
         l2.setBoolean(1, Boolean.FALSE);
         l2.setBoolean(2, null);
-        
+
         assertTrue(l1.equals(l2));
         assertTrue(l2.equals(l2));
-        
+
     }
-    
-    
+
+
     /**
      * Confirm that cloning works.
      */
     public void testCloning() {
-        
+
         BooleanList l1 = new BooleanList();
         l1.setBoolean(0, Boolean.TRUE);
         l1.setBoolean(1, Boolean.FALSE);
         l1.setBoolean(2, null);
-        
+
         BooleanList l2 = null;
         try {
             l2 = (BooleanList) l1.clone();
@@ -118,12 +118,12 @@ public class BooleanListTests extends TestCase {
         assertTrue(l1 != l2);
         assertTrue(l1.getClass() == l2.getClass());
         assertTrue(l1.equals(l2));
-        
+
         l2.setBoolean(0, Boolean.FALSE);
         assertFalse(l1.equals(l2));
-        
+
     }
-    
+
     /**
      * Serialize an instance, restore it, and check for equality.
      */
@@ -161,7 +161,7 @@ public class BooleanListTests extends TestCase {
         BooleanList l1 = new BooleanList();
         BooleanList l2 = new BooleanList();
         assertTrue(l1.hashCode() == l2.hashCode());
-    
+
         l1.setBoolean(0, Boolean.TRUE);
         assertFalse(l1.hashCode() == l2.hashCode());
         l2.setBoolean(0, Boolean.TRUE);

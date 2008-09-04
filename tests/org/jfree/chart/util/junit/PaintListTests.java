@@ -2,32 +2,32 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc. 
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
  * -------------------
  * PaintListTests.java
  * -------------------
- * (C) Copyright 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2007, 2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,7 +35,7 @@
  * Changes
  * -------
  * 04-Dec-2007 : Version 1, copied over from JCommon (DG);
- * 
+ *
  */
 
 package org.jfree.chart.util.junit;
@@ -87,16 +87,16 @@ public class PaintListTests extends TestCase {
         l1.setPaint(0, Color.red);
         l1.setPaint(1, Color.blue);
         l1.setPaint(2, null);
-        
+
         PaintList l2 = new PaintList();
         l2.setPaint(0, Color.red);
         l2.setPaint(1, Color.blue);
         l2.setPaint(2, null);
-        
+
         assertTrue(l1.equals(l2));
         assertTrue(l2.equals(l2));
     }
-    
+
     /**
      * Tests the equals method.
      */
@@ -110,34 +110,34 @@ public class PaintListTests extends TestCase {
         l2.setPaint(0, color2);
         assertEquals(l1, l2);
     }
-    
+
     /**
-     * Tests the equals() method when the list contains a GradientPaint 
+     * Tests the equals() method when the list contains a GradientPaint
      * instance.
      */
     public void testEquals3() {
         // check two separate (but equal) colors
         PaintList l1 = new PaintList();
-        Paint p1 = new GradientPaint(1.0f, 2.0f, Color.red, 
+        Paint p1 = new GradientPaint(1.0f, 2.0f, Color.red,
                 3.0f, 4.0f, Color.blue);
         l1.setPaint(0, p1);
         PaintList l2 = new PaintList();
-        Paint p2 = new GradientPaint(1.0f, 2.0f, Color.red, 
+        Paint p2 = new GradientPaint(1.0f, 2.0f, Color.red,
                 3.0f, 4.0f, Color.blue);
         l2.setPaint(0, p2);
         assertEquals(l1, l2);
     }
-    
+
     /**
      * Confirm that cloning works.
      */
     public void testCloning() {
-        
+
         PaintList l1 = new PaintList();
         l1.setPaint(0, Color.red);
         l1.setPaint(1, Color.blue);
         l1.setPaint(2, null);
-        
+
         PaintList l2 = null;
         try {
             l2 = (PaintList) l1.clone();
@@ -148,12 +148,12 @@ public class PaintListTests extends TestCase {
         assertTrue(l1 != l2);
         assertTrue(l1.getClass() == l2.getClass());
         assertTrue(l1.equals(l2));
-        
+
         l2.setPaint(0, Color.green);
         assertFalse(l1.equals(l2));
-        
+
     }
-    
+
     /**
      * Serialize an instance, restore it, and check for equality.
      */
@@ -163,7 +163,7 @@ public class PaintListTests extends TestCase {
         l1.setPaint(0, Color.red);
         l1.setPaint(1, Color.blue);
         l1.setPaint(2, null);
-        
+
         PaintList l2 = null;
 
         try {
@@ -183,7 +183,7 @@ public class PaintListTests extends TestCase {
         assertEquals(l1, l2);
 
     }
-    
+
     /**
      * Some checks for the testHashCode() method.
      */
@@ -191,16 +191,16 @@ public class PaintListTests extends TestCase {
         PaintList p1 = new PaintList();
         PaintList p2 = new PaintList();
         assertTrue(p1.hashCode() == p2.hashCode());
-        
+
         p1.setPaint(0, Color.red);
         assertFalse(p1.hashCode() == p2.hashCode());
         p2.setPaint(0, Color.red);
         assertTrue(p1.hashCode() == p2.hashCode());
-        
-        p1.setPaint(1, new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 4.0f, 
+
+        p1.setPaint(1, new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 4.0f,
                 Color.GREEN));
         assertFalse(p1.hashCode() == p2.hashCode());
-        p2.setPaint(1, new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 4.0f, 
+        p2.setPaint(1, new GradientPaint(1.0f, 2.0f, Color.RED, 3.0f, 4.0f,
                 Color.GREEN));
         assertTrue(p1.hashCode() == p2.hashCode());
     }
