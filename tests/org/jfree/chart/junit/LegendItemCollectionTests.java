@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 18-Apr-2005 : Version 1 (DG);
+ * 23-Apr-2008 : Extended testCloning() (DG);
  *
  */
 
@@ -139,10 +140,9 @@ public class LegendItemCollectionTests extends TestCase {
      * Confirm that cloning works.
      */
     public void testCloning() {
-
         LegendItemCollection c1 = new LegendItemCollection();
-        c1.add(new LegendItem("Item", "Description", "ToolTip", "URL",
-                new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0), Color.red));
+        LegendItem item1 = new LegendItem("Item 1");
+        c1.add(item1);
         LegendItemCollection c2 = null;
         try {
             c2 = (LegendItemCollection) c1.clone();
@@ -154,6 +154,9 @@ public class LegendItemCollectionTests extends TestCase {
         assertTrue(c1.getClass() == c2.getClass());
         assertTrue(c1.equals(c2));
 
+        Rectangle2D item1Shape = (Rectangle2D) item1.getShape();
+        item1Shape.setRect(1.0, 2.0, 3.0, 4.0);
+        assertFalse(c1.equals(c2));
     }
 
 }
