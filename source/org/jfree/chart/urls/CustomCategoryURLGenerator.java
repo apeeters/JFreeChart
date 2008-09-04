@@ -1,6 +1,6 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
+/* ======================================
+ * JFreeChart : a free Java chart library
+ * ======================================
  *
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
@@ -24,27 +24,21 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * -------------------------
- * CustomXYURLGenerator.java
- * -------------------------
- * (C) Copyright 2002-2008, by Richard Atkinson and Contributors.
+ * -------------------------------
+ * CustomCategoryURLGenerator.java
+ * -------------------------------
+ * (C) Copyright 2008, by Diego Pierangeli and Contributors.
  *
- * Original Author:  Richard Atkinson;
+ * Original Author:  Diego Pierangeli;
  * Contributors:     David Gilbert (for Object Refinery Limited);
  *
  * Changes:
  * --------
- * 05-Aug-2002 : Version 1, contributed by Richard Atkinson;
- * 09-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 23-Mar-2003 : Implemented Serializable (DG);
- * 20-Jan-2005 : Minor Javadoc update (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 02-Feb-2007 : Removed author tags from all over JFreeChart sources (DG);
- * 11-Apr-2008 : Implemented Cloneable, otherwise charts using this URL
- *               generator will fail to clone (DG);
+ * 23-Apr-2008 : Version 1, contributed by Diego Pierangeli based on
+ *               CustomXYURLGenerator by Richard Atkinson, with some
+ *               modifications by David Gilbert(DG);
  *
  */
-
 package org.jfree.chart.urls;
 
 import java.io.Serializable;
@@ -52,16 +46,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.chart.util.PublicCloneable;
-import org.jfree.data.xy.XYDataset;
+import org.jfree.data.category.CategoryDataset;
 
 /**
  * A custom URL generator.
  */
-public class CustomXYURLGenerator implements XYURLGenerator, Cloneable,
-        PublicCloneable, Serializable {
-
-    /** For serialization. */
-    private static final long serialVersionUID = -8565933356596551832L;
+public class CustomCategoryURLGenerator implements CategoryURLGenerator,
+        Cloneable, PublicCloneable, Serializable {
 
     /** Storage for the URLs. */
     private ArrayList urlSeries = new ArrayList();
@@ -69,7 +60,7 @@ public class CustomXYURLGenerator implements XYURLGenerator, Cloneable,
     /**
      * Default constructor.
      */
-    public CustomXYURLGenerator() {
+    public CustomCategoryURLGenerator() {
         super();
     }
 
@@ -122,21 +113,20 @@ public class CustomXYURLGenerator implements XYURLGenerator, Cloneable,
     /**
      * Generates a URL.
      *
-     * @param dataset  the dataset.
+     * @param dataset  the dataset (ignored in this implementation).
      * @param series  the series (zero-based index).
      * @param item  the item (zero-based index).
      *
      * @return A string containing the URL (possibly <code>null</code>).
      */
-    public String generateURL(XYDataset dataset, int series, int item) {
+    public String generateURL(CategoryDataset dataset, int series, int item) {
         return getURL(series, item);
     }
 
     /**
      * Adds a list of URLs.
      *
-     * @param urls  the list of URLs (<code>null</code> permitted, the list
-     *     is copied).
+     * @param urls  the list of URLs (<code>null</code> permitted).
      */
     public void addURLSeries(List urls) {
         List listToAdd = null;
@@ -147,9 +137,9 @@ public class CustomXYURLGenerator implements XYURLGenerator, Cloneable,
     }
 
     /**
-     * Tests this generator for equality with an arbitrary object.
+     * Tests if this object is equal to another.
      *
-     * @param obj  the object (<code>null</code> permitted).
+     * @param obj  the other object.
      *
      * @return A boolean.
      */
@@ -157,30 +147,29 @@ public class CustomXYURLGenerator implements XYURLGenerator, Cloneable,
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof CustomXYURLGenerator)) {
+        if (!(obj instanceof CustomCategoryURLGenerator)) {
             return false;
         }
-        CustomXYURLGenerator that = (CustomXYURLGenerator) obj;
+        CustomCategoryURLGenerator generator = (CustomCategoryURLGenerator) obj;
         int listCount = getListCount();
-        if (listCount != that.getListCount()) {
+        if (listCount != generator.getListCount()) {
             return false;
         }
 
         for (int series = 0; series < listCount; series++) {
             int urlCount = getURLCount(series);
-            if (urlCount != that.getURLCount(series)) {
+            if (urlCount != generator.getURLCount(series)) {
                 return false;
             }
 
             for (int item = 0; item < urlCount; item++) {
                 String u1 = getURL(series, item);
-                String u2 = that.getURL(series, item);
+                String u2 = generator.getURL(series, item);
                 if (u1 != null) {
                     if (!u1.equals(u2)) {
                         return false;
                     }
-                }
-                else {
+                } else {
                     if (u2 != null) {
                         return false;
                     }
@@ -188,7 +177,6 @@ public class CustomXYURLGenerator implements XYURLGenerator, Cloneable,
             }
         }
         return true;
-
     }
 
     /**
@@ -200,7 +188,8 @@ public class CustomXYURLGenerator implements XYURLGenerator, Cloneable,
      * @throws CloneNotSupportedException if there is a problem with cloning.
      */
     public Object clone() throws CloneNotSupportedException {
-        CustomXYURLGenerator clone = (CustomXYURLGenerator) super.clone();
+        CustomCategoryURLGenerator clone
+                = (CustomCategoryURLGenerator) super.clone();
         clone.urlSeries = new java.util.ArrayList(this.urlSeries);
         return clone;
     }
