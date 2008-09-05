@@ -77,7 +77,7 @@ public class TextAnnotation implements Serializable {
 
     /** The default font. */
     public static final Font DEFAULT_FONT
-        = new Font("SansSerif", Font.PLAIN, 10);
+            = new Font("SansSerif", Font.PLAIN, 10);
 
     /** The default paint. */
     public static final Paint DEFAULT_PAINT = Color.black;
