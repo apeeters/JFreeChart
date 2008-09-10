@@ -41,6 +41,7 @@
  * 29-Jul-2005 : Added support for AttributedString (DG);
  * 21-Jun-2007 : Copied from JCommon (DG);
  * 02-Jun-2008 : Fixed bug 1977609 in readShape() for GeneralPath (DG);
+ * 10-Sep-2008 : Added readImage() and writeImage() methods (DG);
  *
  */
 
@@ -49,6 +50,8 @@ package org.jfree.chart.util;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -59,6 +62,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -68,6 +72,11 @@ import java.text.AttributedString;
 import java.text.CharacterIterator;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+
+import org.jfree.chart.encoders.EncoderUtil;
+import org.jfree.chart.encoders.ImageFormat;
 
 /**
  * A class containing useful utility methods relating to serialization.
@@ -563,6 +572,60 @@ public class SerialUtilities {
             stream.writeBoolean(true);
         }
 
+    }
+
+    /**
+     * Reads a boolean from the specified stream and, if the boolean is
+     * <code>false</code>, reads a PNG byte stream, then returns  the
+     * corresponding image.  If the boolean is <code>true</code>, this
+     * signifies that the original streamed image was <code>null</code>, and
+     * so the method returns <code>null</code>.
+     *
+     * @param stream  the input stream (<code>null</code> not permitted).
+     *
+     * @return An image, or <code>null</code>.
+     *
+     * @throws IOException if there is an input/output problem.
+     *
+     * @since 1.2.0
+     */
+    public static Image readImage(ObjectInputStream stream)
+            throws IOException {
+        if (stream == null) {
+            throw new IllegalArgumentException("Null 'stream' argument.");
+        }
+        BufferedImage result = null;
+        boolean isNull = stream.readBoolean();
+        if (!isNull) {
+            result = ImageIO.read(stream);
+        }
+        return result;
+    }
+
+    /**
+     * Writes an image to the stream in PNG format.
+     *
+     * @param image  the image.
+     * @param stream  the output stream.
+     *
+     * @throws IOException if there is an input/output error.
+     *
+     * @since 1.2.0
+     */
+    public static void writeImage(Image image, ObjectOutputStream stream)
+            throws IOException {
+        BufferedImage bi = null;
+        if (image instanceof BufferedImage) {
+            bi = (BufferedImage) image;
+        }
+        else {
+            bi = new BufferedImage(image.getWidth(null), image.getHeight(null),
+                    BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = bi.createGraphics();
+            g2.drawImage(image, 0, 0, null);
+            g2.dispose();
+        }
+        EncoderUtil.writeBufferedImage(bi, ImageFormat.PNG, stream);
     }
 
 }
