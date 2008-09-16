@@ -56,6 +56,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 05-Oct-2006 : Updated API docs (DG);
  * 06-Oct-2006 : Refactored to cache first and last millisecond values (DG);
+ * 16-Sep-2008 : Deprecated DEFAULT_TIME_ZONE (DG);
  *
  */
 
@@ -142,10 +143,12 @@ public class Day extends RegularTimePeriod implements Serializable {
      * default time zone.
      *
      * @param time  the time (<code>null</code> not permitted).
+     *
+     * @see #Day(Date, TimeZone)
      */
     public Day(Date time) {
         // defer argument checking...
-        this(time, RegularTimePeriod.DEFAULT_TIME_ZONE);
+        this(time, TimeZone.getDefault());
     }
 
     /**
@@ -155,6 +158,7 @@ public class Day extends RegularTimePeriod implements Serializable {
      * @param zone  the time zone.
      */
     public Day(Date time, TimeZone zone) {
+        // FIXME: need a Locale as well as a TimeZone
         if (time == null) {
             throw new IllegalArgumentException("Null 'time' argument.");
         }

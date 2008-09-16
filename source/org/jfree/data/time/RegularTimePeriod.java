@@ -48,6 +48,7 @@
  * 06-Oct-2006 : Deprecated the WORKING_CALENDAR field and several methods,
  *               added new peg() method (DG);
  * 20-Jun-2007 : Removed deprecated code (DG);
+ * 16-Sep-2008 : Deprecated DEFAULT_TIME_ZONE (DG);
  *
  */
 
@@ -154,11 +155,6 @@ public abstract class RegularTimePeriod implements TimePeriod, Comparable,
     public abstract long getSerialIndex();
 
     //////////////////////////////////////////////////////////////////////////
-
-    /**
-     * The default time zone.
-     */
-    public static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getDefault();
 
     /**
      * Recalculates the start date/time and end date/time for this time period
