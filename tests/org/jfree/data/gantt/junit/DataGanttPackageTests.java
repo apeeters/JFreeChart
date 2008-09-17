@@ -38,6 +38,7 @@
  * 12-Jan-2005 : Merged TaskSeriesCollectionTests2.java into
  *               TaskSeriesCollectionTests.java (DG);
  * 18-Jan-2005 : Added main() method (DG);
+ * 09-May-2008 : Added SlidingGanttCategoryDatasetTests (DG);
  *
  */
 
@@ -61,9 +62,11 @@ public class DataGanttPackageTests extends TestCase {
      */
     public static Test suite() {
         TestSuite suite = new TestSuite("org.jfree.data.gantt");
+        suite.addTestSuite(SlidingGanttCategoryDatasetTests.class);
         suite.addTestSuite(TaskTests.class);
         suite.addTestSuite(TaskSeriesTests.class);
         suite.addTestSuite(TaskSeriesCollectionTests.class);
+        suite.addTestSuite(XYTaskDatasetTests.class);
         return suite;
     }
 
