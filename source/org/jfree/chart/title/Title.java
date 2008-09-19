@@ -55,6 +55,7 @@
  * 02-Feb-2005 : Changed Spacer --> RectangleInsets for padding (DG);
  * 03-May-2005 : Fixed problem in equals() method (DG);
  * 20-Jun-2007 : Removed JCommon dependency (DG);
+ * 19-Sep-2008 : Added visibility flag (DG);
  *
  */
 
@@ -106,6 +107,13 @@ public abstract class Title extends AbstractBlock
     /** Default title padding. */
     public static final RectangleInsets DEFAULT_PADDING = new RectangleInsets(
             1, 1, 1, 1);
+
+    /**
+     * A flag that controls whether or not the title is visible.
+     *
+     * @since 1.0.11
+     */
+    public boolean visible;
 
     /** The title position. */
     private RectangleEdge position;
@@ -188,6 +196,7 @@ public abstract class Title extends AbstractBlock
             throw new IllegalArgumentException("Null 'spacer' argument.");
         }
 
+        this.visible = true;
         this.position = position;
         this.horizontalAlignment = horizontalAlignment;
         this.verticalAlignment = verticalAlignment;
@@ -195,6 +204,35 @@ public abstract class Title extends AbstractBlock
         this.listenerList = new EventListenerList();
         this.notify = true;
 
+    }
+
+    /**
+     * Returns a flag that controls whether or not the title should be
+     * drawn.  The default value is <code>true</code>.
+     *
+     * @return A boolean.
+     *
+     * @see #setVisible(boolean)
+     *
+     * @since 1.0.11
+     */
+    public boolean isVisible() {
+        return this.visible;
+    }
+
+    /**
+     * Sets a flag that controls whether or not the title should be drawn, and
+     * sends a {@link TitleChangeEvent} to all registered listeners.
+     *
+     * @param visible  the new flag value.
+     *
+     * @see #isVisible()
+     *
+     * @since 1.0.11
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -321,7 +359,6 @@ public abstract class Title extends AbstractBlock
      *         be thrown by subclasses.
      */
     public Object clone() throws CloneNotSupportedException {
-
         Title duplicate = (Title) super.clone();
         duplicate.listenerList = new EventListenerList();
         // RectangleInsets is immutable => same reference in clone OK
@@ -379,10 +416,10 @@ public abstract class Title extends AbstractBlock
         if (!(obj instanceof Title)) {
             return false;
         }
-        if (!super.equals(obj)) {
+        Title that = (Title) obj;
+        if (this.visible != that.visible) {
             return false;
         }
-        Title that = (Title) obj;
         if (this.position != that.position) {
             return false;
         }
@@ -395,7 +432,7 @@ public abstract class Title extends AbstractBlock
         if (this.notify != that.notify) {
             return false;
         }
-        return true;
+        return super.equals(obj);
     }
 
     /**
