@@ -49,6 +49,7 @@
  * 15-Mar-2007 : Added renderAsPercentages option (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 24-Jun-2008 : Added new barPainter mechanism (DG);
+ * 23-Sep-2008 : Check shadow visibility before drawing shadow (DG);
  *
  */
 
@@ -366,8 +367,10 @@ public class StackedXYBarRenderer extends XYBarRenderer {
         }
 
         if (pass == 0) {
-            getBarPainter().paintBarShadow(g2, this, series, item, bar, barBase,
-                    false);
+            if (getShadowsVisible()) {
+                getBarPainter().paintBarShadow(g2, this, series, item, bar,
+                        barBase, false);
+            }
         }
         else if (pass == 1) {
             getBarPainter().paintBar(g2, this, series, item, bar, barBase);
