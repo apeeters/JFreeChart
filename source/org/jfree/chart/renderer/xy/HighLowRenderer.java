@@ -64,6 +64,7 @@
  * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
  * 08-Apr-2008 : Added findRangeBounds() override (DG);
  * 29-Apr-2008 : Added tickLength field (DG);
+ * 25-Sep-2008 : Check for non-null entity collection (DG);
  *
  */
 
@@ -440,7 +441,9 @@ public class HighLowRenderer extends AbstractXYItemRenderer
             }
         }
 
-        addEntity(entities, entityArea, dataset, series, item, 0.0, 0.0);
+        if (entities != null) {
+            addEntity(entities, entityArea, dataset, series, item, 0.0, 0.0);
+        }
 
     }
 
