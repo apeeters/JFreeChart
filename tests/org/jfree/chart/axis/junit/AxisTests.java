@@ -38,6 +38,7 @@
  * 06-Jan-2004 : Added tests for axis line attributes (DG);
  * 07-Jan-2005 : Added hashCode() test (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 25-Sep-2008 : Extended equals() to cover new fields (DG);
  *
  */
 
@@ -237,6 +238,21 @@ public class AxisTests extends TestCase {
         a1.setFixedDimension(3.21f);
         assertFalse(a1.equals(a2));
         a2.setFixedDimension(3.21f);
+        assertTrue(a1.equals(a2));
+
+        a1.setMinorTickMarksVisible(true);
+        assertFalse(a1.equals(a2));
+        a2.setMinorTickMarksVisible(true);
+        assertTrue(a1.equals(a2));
+
+        a1.setMinorTickMarkInsideLength(1.23f);
+        assertFalse(a1.equals(a2));
+        a2.setMinorTickMarkInsideLength(1.23f);
+        assertTrue(a1.equals(a2));
+
+        a1.setMinorTickMarkOutsideLength(3.21f);
+        assertFalse(a1.equals(a2));
+        a2.setMinorTickMarkOutsideLength(3.21f);
         assertTrue(a1.equals(a2));
 
     }

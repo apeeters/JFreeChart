@@ -31,6 +31,7 @@
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Andrew Mickish (patch 1868745);
+ *                   Peter Kolb (patch 1934255);
  *
  * Changes
  * -------
@@ -49,6 +50,8 @@
  *               labels for vertical axis (DG);
  * 26-Mar-2008 : Changed createTickLabel() method from private to protected -
  *               see patch 1918209 by Andrew Mickish (DG);
+ * 25-Sep-2008 : Moved minor tick fields up to superclass, see patch 1934255 
+ *               by Peter Kolb (DG);
  *
  */
 
@@ -98,9 +101,6 @@ public class LogAxis extends ValueAxis {
     /** The override number format. */
     private NumberFormat numberFormatOverride;
 
-    /** The number of minor ticks per major tick unit. */
-    private int minorTickCount;
-
     /**
      * Creates a new <code>LogAxis</code> with no label.
      */
@@ -114,10 +114,10 @@ public class LogAxis extends ValueAxis {
      * @param label  the axis label (<code>null</code> permitted).
      */
     public LogAxis(String label) {
-        super(label,  createLogTickUnits(Locale.getDefault()));
+        super(label, createLogTickUnits(Locale.getDefault()));
         setDefaultAutoRange(new Range(0.01, 1.0));
         this.tickUnit = new NumberTickUnit(1.0, new DecimalFormat("0.#"));
-        this.minorTickCount = 9;
+        setMinorTickCount(9);
     }
 
     /**
@@ -253,33 +253,6 @@ public class LogAxis extends ValueAxis {
      */
     public void setNumberFormatOverride(NumberFormat formatter) {
         this.numberFormatOverride = formatter;
-        notifyListeners(new AxisChangeEvent(this));
-    }
-
-    /**
-     * Returns the number of minor tick marks to display.
-     *
-     * @return The number of minor tick marks to display.
-     *
-     * @see #setMinorTickCount(int)
-     */
-    public int getMinorTickCount() {
-        return this.minorTickCount;
-    }
-
-    /**
-     * Sets the number of minor tick marks to display, and sends an
-     * {@link AxisChangeEvent} to all registered listeners.
-     *
-     * @param count  the count.
-     *
-     * @see #getMinorTickCount()
-     */
-    public void setMinorTickCount(int count) {
-        if (count <= 0) {
-            throw new IllegalArgumentException("Requires 'count' > 0.");
-        }
-        this.minorTickCount = count;
         notifyListeners(new AxisChangeEvent(this));
     }
 
@@ -550,8 +523,8 @@ public class LogAxis extends ValueAxis {
             // add minor ticks (for gridlines)
             double next = Math.pow(this.base, current
                     + this.tickUnit.getSize());
-            for (int i = 1; i < this.minorTickCount; i++) {
-                double minorV = v + i * ((next - v) / this.minorTickCount);
+            for (int i = 1; i < getMinorTickCount(); i++) {
+                double minorV = v + i * ((next - v) / getMinorTickCount());
                 if (range.contains(minorV)) {
                     ticks.add(new NumberTick(TickType.MINOR, minorV, "",
                             textAnchor, TextAnchor.CENTER, 0.0));
@@ -601,8 +574,8 @@ public class LogAxis extends ValueAxis {
             // add minor ticks (for gridlines)
             double next = Math.pow(this.base, current
                     + this.tickUnit.getSize());
-            for (int i = 1; i < this.minorTickCount; i++) {
-                double minorV = v + i * ((next - v) / this.minorTickCount);
+            for (int i = 1; i < getMinorTickCount(); i++) {
+                double minorV = v + i * ((next - v) / getMinorTickCount());
                 if (range.contains(minorV)) {
                     ticks.add(new NumberTick(TickType.MINOR, minorV, "",
                             textAnchor, TextAnchor.CENTER, 0.0));
@@ -877,9 +850,6 @@ public class LogAxis extends ValueAxis {
         if (this.smallestValue != that.smallestValue) {
             return false;
         }
-        if (this.minorTickCount != that.minorTickCount) {
-            return false;
-        }
         return super.equals(obj);
     }
 
@@ -892,7 +862,6 @@ public class LogAxis extends ValueAxis {
         int result = 193;
         long temp = Double.doubleToLongBits(this.base);
         result = 37 * result + (int) (temp ^ (temp >>> 32));
-        result = 37 * result + this.minorTickCount;
         temp = Double.doubleToLongBits(this.smallestValue);
         result = 37 * result + (int) (temp ^ (temp >>> 32));
         if (this.numberFormatOverride != null) {
@@ -934,21 +903,21 @@ public class LogAxis extends ValueAxis {
         units.add(new NumberTickUnit(20000, numberFormat));
         units.add(new NumberTickUnit(50000, numberFormat));
         units.add(new NumberTickUnit(100000, numberFormat));
-        units.add(new NumberTickUnit(200000,         numberFormat));
-        units.add(new NumberTickUnit(500000,         numberFormat));
-        units.add(new NumberTickUnit(1000000,        numberFormat));
-        units.add(new NumberTickUnit(2000000,        numberFormat));
-        units.add(new NumberTickUnit(5000000,        numberFormat));
-        units.add(new NumberTickUnit(10000000,       numberFormat));
-        units.add(new NumberTickUnit(20000000,       numberFormat));
-        units.add(new NumberTickUnit(50000000,       numberFormat));
-        units.add(new NumberTickUnit(100000000,      numberFormat));
-        units.add(new NumberTickUnit(200000000,      numberFormat));
-        units.add(new NumberTickUnit(500000000,      numberFormat));
-        units.add(new NumberTickUnit(1000000000,     numberFormat));
-        units.add(new NumberTickUnit(2000000000,     numberFormat));
-        units.add(new NumberTickUnit(5000000000.0,   numberFormat));
-        units.add(new NumberTickUnit(10000000000.0,  numberFormat));
+        units.add(new NumberTickUnit(200000, numberFormat));
+        units.add(new NumberTickUnit(500000, numberFormat));
+        units.add(new NumberTickUnit(1000000, numberFormat));
+        units.add(new NumberTickUnit(2000000, numberFormat));
+        units.add(new NumberTickUnit(5000000, numberFormat));
+        units.add(new NumberTickUnit(10000000, numberFormat));
+        units.add(new NumberTickUnit(20000000, numberFormat));
+        units.add(new NumberTickUnit(50000000, numberFormat));
+        units.add(new NumberTickUnit(100000000, numberFormat));
+        units.add(new NumberTickUnit(200000000, numberFormat));
+        units.add(new NumberTickUnit(500000000, numberFormat));
+        units.add(new NumberTickUnit(1000000000, numberFormat));
+        units.add(new NumberTickUnit(2000000000, numberFormat));
+        units.add(new NumberTickUnit(5000000000.0, numberFormat));
+        units.add(new NumberTickUnit(10000000000.0, numberFormat));
 
         return units;
 

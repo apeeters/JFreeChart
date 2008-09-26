@@ -43,6 +43,7 @@
  *                   Sergei Ivanov;
  *                   Richard West, Advanced Micro Devices, Inc.;
  *                   Ulrich Voigt - patch 1997549;
+ *                   Peter Kolb - patch 1934255;
  *
  * Changes (from 21-Jun-2001)
  * --------------------------
@@ -209,6 +210,7 @@
  *               and ends - see patch 1997549 by Ulrich Voigt (DG);
  * 25-Jul-2008 : Fixed NullPointerException for plots with no axes (DG);
  * 15-Aug-2008 : Added getRendererCount() method (DG);
+ * 25-Sep-2008 : Added minor tick support, see patch 1934255 by Peter Kolb (DG);
  *
  */
 
@@ -248,6 +250,7 @@ import org.jfree.chart.axis.AxisCollection;
 import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.AxisSpace;
 import org.jfree.chart.axis.AxisState;
+import org.jfree.chart.axis.TickType;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.axis.ValueTick;
 import org.jfree.chart.event.ChartChangeEventType;
@@ -255,6 +258,7 @@ import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.event.RendererChangeListener;
 import org.jfree.chart.renderer.RendererUtilities;
+import org.jfree.chart.renderer.xy.AbstractXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRendererState;
 import org.jfree.chart.util.Layer;
@@ -373,6 +377,48 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
 
     /** The paint used to draw the range grid-lines. */
     private transient Paint rangeGridlinePaint;
+
+    /**
+     * A flag that controls whether the domain minor grid-lines are visible.
+     *
+     * @since 1.0.12
+     */
+    private boolean domainMinorGridlinesVisible;
+
+    /**
+     * The stroke used to draw the domain minor grid-lines.
+     *
+     * @since 1.0.12
+     */
+    private transient Stroke domainMinorGridlineStroke;
+
+    /**
+     * The paint used to draw the domain minor grid-lines.
+     *
+     * @since 1.0.12
+     */
+    private transient Paint domainMinorGridlinePaint;
+
+    /**
+     * A flag that controls whether the range minor grid-lines are visible.
+     *
+     * @since 1.0.12
+     */
+    private boolean rangeMinorGridlinesVisible;
+
+    /**
+     * The stroke used to draw the range minor grid-lines.
+     *
+     * @since 1.0.12
+     */
+    private transient Stroke rangeMinorGridlineStroke;
+
+    /**
+     * The paint used to draw the range minor grid-lines.
+     *
+     * @since 1.0.12
+     */
+    private transient Paint rangeMinorGridlinePaint;
 
     /**
      * A flag that controls whether or not the zero baseline against the domain
@@ -582,6 +628,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
         this.domainGridlineStroke = DEFAULT_GRIDLINE_STROKE;
         this.domainGridlinePaint = DEFAULT_GRIDLINE_PAINT;
 
+        this.domainMinorGridlinesVisible = false;
+        this.domainMinorGridlineStroke = DEFAULT_GRIDLINE_STROKE;
+        this.domainMinorGridlinePaint = Color.white;
+
         this.domainZeroBaselineVisible = false;
         this.domainZeroBaselinePaint = Color.black;
         this.domainZeroBaselineStroke = new BasicStroke(0.5f);
@@ -589,6 +639,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
         this.rangeGridlinesVisible = true;
         this.rangeGridlineStroke = DEFAULT_GRIDLINE_STROKE;
         this.rangeGridlinePaint = DEFAULT_GRIDLINE_PAINT;
+
+        this.rangeMinorGridlinesVisible = false;
+        this.rangeMinorGridlineStroke = DEFAULT_GRIDLINE_STROKE;
+        this.rangeMinorGridlinePaint = Color.white;
 
         this.rangeZeroBaselineVisible = false;
         this.rangeZeroBaselinePaint = Color.black;
@@ -1637,6 +1691,40 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
     }
 
     /**
+     * Returns <code>true</code> if the domain minor gridlines are visible, and
+     * <code>false<code> otherwise.
+     *
+     * @return <code>true</code> or <code>false</code>.
+     *
+     * @see #setDomainMinorGridlinesVisible(boolean)
+     *
+     * @since 1.0.12
+     */
+    public boolean isDomainMinorGridlinesVisible() {
+        return this.domainMinorGridlinesVisible;
+    }
+
+    /**
+     * Sets the flag that controls whether or not the domain minor grid-lines
+     * are visible.
+     * <p>
+     * If the flag value is changed, a {@link PlotChangeEvent} is sent to all
+     * registered listeners.
+     *
+     * @param visible  the new value of the flag.
+     *
+     * @see #isDomainMinorGridlinesVisible()
+     *
+     * @since 1.0.12
+     */
+    public void setDomainMinorGridlinesVisible(boolean visible) {
+        if (this.domainMinorGridlinesVisible != visible) {
+            this.domainMinorGridlinesVisible = visible;
+            fireChangeEvent();
+        }
+    }
+
+    /**
      * Returns the stroke for the grid-lines (if any) plotted against the
      * domain axis.
      *
@@ -1651,8 +1739,6 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
     /**
      * Sets the stroke for the grid lines plotted against the domain axis, and
      * sends a {@link PlotChangeEvent} to all registered listeners.
-     * <p>
-     * If you set this to <code>null</code>, no grid lines will be drawn.
      *
      * @param stroke  the stroke (<code>null</code> not permitted).
      *
@@ -1666,6 +1752,42 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.domainGridlineStroke = stroke;
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns the stroke for the minor grid-lines (if any) plotted against the
+     * domain axis.
+     *
+     * @return The stroke (never <code>null</code>).
+     *
+     * @see #setDomainMinorGridlineStroke(Stroke)
+     *
+     * @since 1.0.12
+     */
+
+    public Stroke getDomainMinorGridlineStroke() {
+        return this.domainMinorGridlineStroke;
+    }
+
+    /**
+     * Sets the stroke for the minor grid lines plotted against the domain
+     * axis, and sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param stroke  the stroke (<code>null</code> not permitted).
+     *
+     * @throws IllegalArgumentException if <code>stroke</code> is
+     *     <code>null</code>.
+     *
+     * @see #getDomainMinorGridlineStroke()
+     *
+     * @since 1.0.12
+     */
+    public void setDomainMinorGridlineStroke(Stroke stroke) {
+        if (stroke == null) {
+            throw new IllegalArgumentException("Null 'stroke' argument.");
+        }
+        this.domainMinorGridlineStroke = stroke;
         fireChangeEvent();
     }
 
@@ -1697,6 +1819,41 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.domainGridlinePaint = paint;
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns the paint for the minor grid lines (if any) plotted against the
+     * domain axis.
+     *
+     * @return The paint (never <code>null</code>).
+     *
+     * @see #setDomainMinorGridlinePaint(Paint)
+     *
+     * @since 1.0.12
+     */
+    public Paint getDomainMinorGridlinePaint() {
+        return this.domainMinorGridlinePaint;
+    }
+
+    /**
+     * Sets the paint for the minor grid lines plotted against the domain axis,
+     * and sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param paint  the paint (<code>null</code> not permitted).
+     *
+     * @throws IllegalArgumentException if <code>paint</code> is
+     *     <code>null</code>.
+     *
+     * @see #getDomainMinorGridlinePaint()
+     *
+     * @since 1.0.12
+     */
+    public void setDomainMinorGridlinePaint(Paint paint) {
+        if (paint == null) {
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        this.domainMinorGridlinePaint = paint;
         fireChangeEvent();
     }
 
@@ -1783,6 +1940,104 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeGridlinePaint = paint;
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns <code>true</code> if the range axis minor grid is visible, and
+     * <code>false<code> otherwise.
+     *
+     * @return A boolean.
+     *
+     * @see #setRangeMinorGridlinesVisible(boolean)
+     *
+     * @since 1.0.12
+     */
+    public boolean isRangeMinorGridlinesVisible() {
+        return this.rangeMinorGridlinesVisible;
+    }
+
+    /**
+     * Sets the flag that controls whether or not the range axis minor grid
+     * lines are visible.
+     * <p>
+     * If the flag value is changed, a {@link PlotChangeEvent} is sent to all
+     * registered listeners.
+     *
+     * @param visible  the new value of the flag.
+     *
+     * @see #isRangeMinorGridlinesVisible()
+     *
+     * @since 1.0.12
+     */
+    public void setRangeMinorGridlinesVisible(boolean visible) {
+        if (this.rangeMinorGridlinesVisible != visible) {
+            this.rangeMinorGridlinesVisible = visible;
+            fireChangeEvent();
+        }
+    }
+
+    /**
+     * Returns the stroke for the minor grid lines (if any) plotted against the
+     * range axis.
+     *
+     * @return The stroke (never <code>null</code>).
+     *
+     * @see #setRangeMinorGridlineStroke(Stroke)
+     *
+     * @since 1.0.12
+     */
+    public Stroke getRangeMinorGridlineStroke() {
+        return this.rangeMinorGridlineStroke;
+    }
+
+    /**
+     * Sets the stroke for the minor grid lines plotted against the range axis,
+     * and sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param stroke  the stroke (<code>null</code> not permitted).
+     *
+     * @see #getRangeMinorGridlineStroke()
+     *
+     * @since 1.0.12
+     */
+    public void setRangeMinorGridlineStroke(Stroke stroke) {
+        if (stroke == null) {
+            throw new IllegalArgumentException("Null 'stroke' argument.");
+        }
+        this.rangeMinorGridlineStroke = stroke;
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns the paint for the minor grid lines (if any) plotted against the range
+     * axis.
+     *
+     * @return The paint (never <code>null</code>).
+     *
+     * @see #setRangeMinorGridlinePaint(Paint)
+     *
+     * @since 1.0.12
+     */
+    public Paint getRangeMinorGridlinePaint() {
+        return this.rangeMinorGridlinePaint;
+    }
+
+    /**
+     * Sets the paint for the minor grid lines plotted against the range axis
+     * and sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param paint  the paint (<code>null</code> not permitted).
+     *
+     * @see #getRangeMinorGridlinePaint()
+     *
+     * @since 1.0.12
+     */
+    public void setRangeMinorGridlinePaint(Paint paint) {
+        if (paint == null) {
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        this.rangeMinorGridlinePaint = paint;
         fireChangeEvent();
     }
 
@@ -3488,14 +3743,30 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
         }
 
         // draw the domain grid lines, if any...
-        if (isDomainGridlinesVisible()) {
-            Stroke gridStroke = getDomainGridlineStroke();
-            Paint gridPaint = getDomainGridlinePaint();
+        if (isDomainGridlinesVisible() || isDomainMinorGridlinesVisible()) {
+            Stroke gridStroke = null;
+            Paint gridPaint = null;
             Iterator iterator = ticks.iterator();
+            boolean paintLine = false;
             while (iterator.hasNext()) {
+                paintLine = false;
                 ValueTick tick = (ValueTick) iterator.next();
-                getRenderer().drawDomainLine(g2, this, getDomainAxis(),
-                        dataArea, tick.getValue(), gridPaint, gridStroke);
+                if ((tick.getTickType() == TickType.MINOR) && isDomainMinorGridlinesVisible()){
+                    gridStroke = getDomainMinorGridlineStroke();
+                    gridPaint = getDomainMinorGridlinePaint();
+                    paintLine = true;
+                }
+                else if ((tick.getTickType() == TickType.MAJOR) && isDomainGridlinesVisible()){
+                    gridStroke = getDomainGridlineStroke();
+                    gridPaint = getDomainGridlinePaint();
+                    paintLine = true;
+                }
+                XYItemRenderer r = getRenderer();
+                if ((r instanceof AbstractXYItemRenderer) && paintLine) {
+                    ((AbstractXYItemRenderer) r).drawDomainLine(g2, this,
+                            getDomainAxis(), dataArea, tick.getValue(),
+                            gridPaint, gridStroke);
+                }
             }
         }
     }
@@ -3519,16 +3790,28 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
         }
 
         // draw the range grid lines, if any...
-        if (isRangeGridlinesVisible()) {
-            Stroke gridStroke = getRangeGridlineStroke();
-            Paint gridPaint = getRangeGridlinePaint();
+        if (isRangeGridlinesVisible() || isRangeMinorGridlinesVisible()) {
+            Stroke gridStroke = null;
+            Paint gridPaint = null;
             ValueAxis axis = getRangeAxis();
             if (axis != null) {
                 Iterator iterator = ticks.iterator();
+                   boolean paintLine = false;
                 while (iterator.hasNext()) {
+                    paintLine = false;
                     ValueTick tick = (ValueTick) iterator.next();
+                    if ((tick.getTickType() == TickType.MINOR) && isRangeMinorGridlinesVisible()){
+                        gridStroke = getRangeMinorGridlineStroke();
+                        gridPaint = getRangeMinorGridlinePaint();
+                        paintLine = true;
+                    }
+                    else if ((tick.getTickType() == TickType.MAJOR) && isRangeGridlinesVisible()){
+                        gridStroke = getRangeGridlineStroke();
+                        gridPaint = getRangeGridlinePaint();
+                        paintLine = true;
+                    }
                     if (tick.getValue() != 0.0
-                            || !isRangeZeroBaselineVisible()) {
+                            || !isRangeZeroBaselineVisible() && (paintLine)) {
                         getRenderer().drawRangeLine(g2, this, getRangeAxis(),
                                 area, tick.getValue(), gridPaint, gridStroke);
                     }
@@ -4742,14 +5025,12 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
      * @return <code>true</code> or <code>false</code>.
      */
     public boolean equals(Object obj) {
-
         if (obj == this) {
             return true;
         }
         if (!(obj instanceof XYPlot)) {
             return false;
         }
-
         XYPlot that = (XYPlot) obj;
         if (this.weight != that.weight) {
             return false;
@@ -4771,6 +5052,12 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
             return false;
         }
         if (this.rangeGridlinesVisible != that.rangeGridlinesVisible) {
+            return false;
+        }
+        if (this.domainMinorGridlinesVisible != that.domainMinorGridlinesVisible) {
+            return false;
+        }
+        if (this.rangeMinorGridlinesVisible != that.rangeMinorGridlinesVisible) {
             return false;
         }
         if (this.domainZeroBaselineVisible != that.domainZeroBaselineVisible) {
@@ -4829,6 +5116,22 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
         }
         if (!PaintUtilities.equal(this.rangeGridlinePaint,
                 that.rangeGridlinePaint)) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.domainMinorGridlineStroke,
+                that.domainMinorGridlineStroke)) {
+            return false;
+        }
+        if (!PaintUtilities.equal(this.domainMinorGridlinePaint,
+                that.domainMinorGridlinePaint)) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.rangeMinorGridlineStroke,
+                that.rangeMinorGridlineStroke)) {
+            return false;
+        }
+        if (!PaintUtilities.equal(this.rangeMinorGridlinePaint,
+                that.rangeMinorGridlinePaint)) {
             return false;
         }
         if (!PaintUtilities.equal(this.domainZeroBaselinePaint,
@@ -5015,6 +5318,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
         SerialUtilities.writePaint(this.domainGridlinePaint, stream);
         SerialUtilities.writeStroke(this.rangeGridlineStroke, stream);
         SerialUtilities.writePaint(this.rangeGridlinePaint, stream);
+        SerialUtilities.writeStroke(this.domainMinorGridlineStroke, stream);
+        SerialUtilities.writePaint(this.domainMinorGridlinePaint, stream);
+        SerialUtilities.writeStroke(this.rangeMinorGridlineStroke, stream);
+        SerialUtilities.writePaint(this.rangeMinorGridlinePaint, stream);
         SerialUtilities.writeStroke(this.rangeZeroBaselineStroke, stream);
         SerialUtilities.writePaint(this.rangeZeroBaselinePaint, stream);
         SerialUtilities.writeStroke(this.domainCrosshairStroke, stream);
@@ -5047,6 +5354,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
         this.domainGridlinePaint = SerialUtilities.readPaint(stream);
         this.rangeGridlineStroke = SerialUtilities.readStroke(stream);
         this.rangeGridlinePaint = SerialUtilities.readPaint(stream);
+        this.domainMinorGridlineStroke = SerialUtilities.readStroke(stream);
+        this.domainMinorGridlinePaint = SerialUtilities.readPaint(stream);
+        this.rangeMinorGridlineStroke = SerialUtilities.readStroke(stream);
+        this.rangeMinorGridlinePaint = SerialUtilities.readPaint(stream);
         this.rangeZeroBaselineStroke = SerialUtilities.readStroke(stream);
         this.rangeZeroBaselinePaint = SerialUtilities.readPaint(stream);
         this.domainCrosshairStroke = SerialUtilities.readStroke(stream);
