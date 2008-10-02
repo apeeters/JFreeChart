@@ -82,6 +82,7 @@
  * 02-Jul-2007 : Modifications to support entities for axis labels (DG);
  * 06-Jun-2008 : Added setTickLabelInsets(RectangleInsets, boolean) (DG);
  * 25-Sep-2008 : Added minor tick support, see patch 1934255 by Peter Kolb (DG);
+ * 26-Sep-2008 : Added fireChangeEvent() method (DG);
  *
  */
 
@@ -360,7 +361,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setVisible(boolean flag) {
         if (flag != this.visible) {
             this.visible = flag;
-            notifyListeners(new AxisChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -393,13 +394,13 @@ public abstract class Axis implements Cloneable, Serializable {
         if (existing != null) {
             if (!existing.equals(label)) {
                 this.label = label;
-                notifyListeners(new AxisChangeEvent(this));
+                fireChangeEvent();
             }
         }
         else {
             if (label != null) {
                 this.label = label;
-                notifyListeners(new AxisChangeEvent(this));
+                fireChangeEvent();
             }
         }
 
@@ -430,7 +431,7 @@ public abstract class Axis implements Cloneable, Serializable {
         }
         if (!this.labelFont.equals(font)) {
             this.labelFont = font;
-            notifyListeners(new AxisChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -458,7 +459,7 @@ public abstract class Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.labelPaint = paint;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -501,7 +502,7 @@ public abstract class Axis implements Cloneable, Serializable {
         if (!insets.equals(this.labelInsets)) {
             this.labelInsets = insets;
             if (notify) {
-                notifyListeners(new AxisChangeEvent(this));
+                fireChangeEvent();
             }
         }
     }
@@ -527,7 +528,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setLabelAngle(double angle) {
         this.labelAngle = angle;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -555,7 +556,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setLabelToolTip(String text) {
         this.labelToolTip = text;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -583,7 +584,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setLabelURL(String url) {
         this.labelURL = url;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -611,7 +612,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setAxisLineVisible(boolean visible) {
         this.axisLineVisible = visible;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -638,7 +639,7 @@ public abstract class Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.axisLinePaint = paint;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -665,7 +666,7 @@ public abstract class Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.axisLineStroke = stroke;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -696,7 +697,7 @@ public abstract class Axis implements Cloneable, Serializable {
 
         if (flag != this.tickLabelsVisible) {
             this.tickLabelsVisible = flag;
-            notifyListeners(new AxisChangeEvent(this));
+            fireChangeEvent();
         }
 
     }
@@ -729,7 +730,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setMinorTickMarksVisible(boolean flag) {
         if (flag != this.minorTickMarksVisible) {
             this.minorTickMarksVisible = flag;
-            notifyListeners(new AxisChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -760,7 +761,7 @@ public abstract class Axis implements Cloneable, Serializable {
 
         if (!this.tickLabelFont.equals(font)) {
             this.tickLabelFont = font;
-            notifyListeners(new AxisChangeEvent(this));
+            fireChangeEvent();
         }
 
     }
@@ -789,7 +790,7 @@ public abstract class Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.tickLabelPaint = paint;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -817,7 +818,7 @@ public abstract class Axis implements Cloneable, Serializable {
         }
         if (!this.tickLabelInsets.equals(insets)) {
             this.tickLabelInsets = insets;
-            notifyListeners(new AxisChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -845,7 +846,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setTickMarksVisible(boolean flag) {
         if (flag != this.tickMarksVisible) {
             this.tickMarksVisible = flag;
-            notifyListeners(new AxisChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -871,7 +872,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setTickMarkInsideLength(float length) {
         this.tickMarkInsideLength = length;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -896,7 +897,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setTickMarkOutsideLength(float length) {
         this.tickMarkOutsideLength = length;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -924,7 +925,7 @@ public abstract class Axis implements Cloneable, Serializable {
         }
         if (!this.tickMarkStroke.equals(stroke)) {
             this.tickMarkStroke = stroke;
-            notifyListeners(new AxisChangeEvent(this));
+            fireChangeEvent();
         }
     }
 
@@ -952,7 +953,7 @@ public abstract class Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.tickMarkPaint = paint;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -981,7 +982,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setMinorTickMarkInsideLength(float length) {
         this.minorTickMarkInsideLength = length;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1010,7 +1011,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setMinorTickMarkOutsideLength(float length) {
         this.minorTickMarkOutsideLength = length;
-        notifyListeners(new AxisChangeEvent(this));
+        fireChangeEvent();
     }
 
     /**
@@ -1172,14 +1173,21 @@ public abstract class Axis implements Cloneable, Serializable {
      * @param event  information about the change to the axis.
      */
     protected void notifyListeners(AxisChangeEvent event) {
-
         Object[] listeners = this.listenerList.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == AxisChangeListener.class) {
                 ((AxisChangeListener) listeners[i + 1]).axisChanged(event);
             }
         }
+    }
 
+    /**
+     * Sends an {@link AxisChangeEvent} to all registered listeners.
+     *
+     * @since 1.0.12
+     */
+    protected void fireChangeEvent() {
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
