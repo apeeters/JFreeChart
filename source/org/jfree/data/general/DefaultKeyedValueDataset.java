@@ -141,12 +141,11 @@ public class DefaultKeyedValueDataset extends AbstractDataset
     /**
      * Tests this dataset for equality with an arbitrary object.
      *
-     * @param obj  the object.
+     * @param obj  the object (<code>null</code> permitted).
      *
      * @return A boolean.
      */
     public boolean equals(Object obj) {
-
         if (obj == this) {
             return true;
         }
@@ -188,7 +187,7 @@ public class DefaultKeyedValueDataset extends AbstractDataset
      */
     public Object clone() throws CloneNotSupportedException {
         DefaultKeyedValueDataset clone
-            = (DefaultKeyedValueDataset) super.clone();
+                = (DefaultKeyedValueDataset) super.clone();
         return clone;
     }
 
