@@ -59,6 +59,7 @@
  * 29-Jun-2007 : Simplified entity generation by calling addEntity() (DG);
  * 06-Jul-2007 : Respect drawBarOutline attribute (DG);
  * 24-Jun-2008 : Added new barPainter mechanism (DG);
+ * 07-Oct-2008 : Override equals() method to fix minor bug (DG);
  *
  */
 
@@ -66,7 +67,6 @@ package org.jfree.chart.renderer.category;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
 
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
@@ -74,7 +74,6 @@ import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.IntervalCategoryDataset;
@@ -85,9 +84,7 @@ import org.jfree.data.category.IntervalCategoryDataset;
  * <p>
  * For use with the {@link CategoryPlot} class.
  */
-public class IntervalBarRenderer extends BarRenderer
-        implements CategoryItemRenderer, Cloneable, PublicCloneable,
-                   Serializable {
+public class IntervalBarRenderer extends BarRenderer {
 
     /** For serialization. */
     private static final long serialVersionUID = -5068857361615528725L;
@@ -253,12 +250,30 @@ public class IntervalBarRenderer extends BarRenderer
                     false);
         }
 
-        // collect entity and tool tip information...
+        // add an item entity, if this information is being collected
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
             addItemEntity(entities, dataset, row, column, bar);
         }
 
+    }
+
+    /**
+     * Tests this renderer for equality with an arbitrary object.
+     *
+     * @param obj  the object (<code>null</code> permitted).
+     *
+     * @return A boolean.
+     */
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof IntervalBarRenderer)) {
+            return false;
+        }
+        // there are no fields to check
+        return super.equals(obj);
     }
 
 }
