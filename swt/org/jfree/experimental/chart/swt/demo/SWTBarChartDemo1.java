@@ -35,13 +35,10 @@
  * Changes
  * -------
  * 23-Aug-2006 : New class (DG);
- * 19-Jun-2006 : Adapted for SWT (HP);
  *
  */
 
 package org.jfree.experimental.chart.swt.demo;
-
-import java.awt.Color;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -55,6 +52,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.experimental.chart.swt.ChartComposite;
@@ -119,7 +117,7 @@ public class SWTBarChartDemo1 {
 
         // create the chart...
         JFreeChart chart = ChartFactory.createBarChart(
-            "Bar Chart Demo",         // chart title
+            "SWTBarChartDemo1",       // chart title
             "Category",               // domain axis label
             "Value",                  // range axis label
             dataset,                  // data
@@ -131,28 +129,26 @@ public class SWTBarChartDemo1 {
 
         // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
 
-        // set the background color for the chart...
-        chart.setBackgroundPaint(Color.white);
-
         // get a reference to the plot for further customisation...
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        plot.setBackgroundPaint(Color.lightGray);
-        plot.setDomainGridlinePaint(Color.white);
-        plot.setDomainGridlinesVisible(true);
-        plot.setRangeGridlinePaint(Color.white);
 
         // set the range axis to display integers only...
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         // disable bar outlines...
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
 
+        // the SWTGraphics2D class doesn't handle GradientPaint well, so
+        // replace the gradient painter from the default theme with a
+        // standard painter...
+        renderer.setBarPainter(new StandardBarPainter());
+
         CategoryAxis domainAxis = plot.getDomainAxis();
         domainAxis.setCategoryLabelPositions(
-            CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 6.0)
-        );
+                CategoryLabelPositions.createUpRotationLabelPositions(
+                        Math.PI / 6.0));
         // OPTIONAL CUSTOMISATION COMPLETED.
 
         return chart;
@@ -164,15 +160,14 @@ public class SWTBarChartDemo1 {
      *
      * @param args  ignored.
      */
-    public static void main( String[] args )
-    {
+    public static void main(String[] args) {
         JFreeChart chart = createChart(createDataset());
         Display display = new Display();
         Shell shell = new Shell(display);
         shell.setSize(600, 300);
         shell.setLayout(new FillLayout());
         shell.setText("Test for jfreechart running with SWT");
-        final ChartComposite frame = new ChartComposite(shell, SWT.NONE, chart,
+        ChartComposite frame = new ChartComposite(shell, SWT.NONE, chart,
                 true);
         frame.pack();
         shell.open();
