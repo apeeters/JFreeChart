@@ -45,6 +45,8 @@
  *               addSubCategory() (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 02-Jul-2007 : Added entity support for axis labels (DG);
+ * 13-Nov-2008 : Fix NullPointerException when dataset is null - see bug
+ *               report 2275695 (DG);
  *
  */
 
@@ -77,7 +79,7 @@ import org.jfree.data.category.CategoryDataset;
  * A specialised category axis that can display sub-categories.
  */
 public class SubCategoryAxis extends CategoryAxis
-                             implements Cloneable, Serializable {
+        implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -1279463299793228344L;
@@ -269,9 +271,8 @@ public class SubCategoryAxis extends CategoryAxis
 
         // draw the category labels and axis label
         AxisState state = new AxisState(cursor);
-        state = drawSubCategoryLabels(
-            g2, plotArea, dataArea, edge, state, plotState
-        );
+        state = drawSubCategoryLabels(g2, plotArea, dataArea, edge, state, 
+                plotState);
         state = drawCategoryLabels(g2, plotArea, dataArea, edge, state,
                 plotState);
         state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state,
@@ -309,8 +310,11 @@ public class SubCategoryAxis extends CategoryAxis
         g2.setFont(this.subLabelFont);
         g2.setPaint(this.subLabelPaint);
         CategoryPlot plot = (CategoryPlot) getPlot();
+        int categoryCount = 0;
         CategoryDataset dataset = plot.getDataset();
-        int categoryCount = dataset.getColumnCount();
+        if (dataset != null) {
+            categoryCount = dataset.getColumnCount();
+        }
 
         double maxdim = getMaxDim(g2, edge);
         for (int categoryIndex = 0; categoryIndex < categoryCount;
