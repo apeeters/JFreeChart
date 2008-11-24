@@ -157,8 +157,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             = new Rectangle2D.Double(-3.0, -3.0, 6.0, 6.0);
 
     /** The default value label font. */
-    public static final Font DEFAULT_VALUE_LABEL_FONT
-            = new Font("SansSerif", Font.PLAIN, 10);
+    public static final Font DEFAULT_VALUE_LABEL_FONT = new Font("Tahoma",
+            Font.PLAIN, 10);
 
     /** The default value label paint. */
     public static final Paint DEFAULT_VALUE_LABEL_PAINT = Color.black;
@@ -397,7 +397,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.baseItemLabelsVisible = false;
 
         this.itemLabelFontList = new ObjectList();
-        this.baseItemLabelFont = new Font("SansSerif", Font.PLAIN, 10);
+        this.baseItemLabelFont = new Font("Tahoma", Font.PLAIN, 10);
 
         this.itemLabelPaintList = new PaintList();
         this.baseItemLabelPaint = Color.black;
