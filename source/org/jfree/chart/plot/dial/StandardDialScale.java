@@ -208,7 +208,7 @@ public class StandardDialScale extends AbstractDialLayer implements DialScale,
         this.tickLabelsVisible = true;
         this.tickLabelFormatter = new DecimalFormat("0.0");
         this.firstTickLabelVisible = true;
-        this.tickLabelFont = new Font("Dialog", Font.BOLD, 16);
+        this.tickLabelFont = new Font("Tahoma", Font.BOLD, 16);
         this.tickLabelPaint = Color.blue;
         this.tickLabelOffset = 0.10;
         this.majorTickIncrement = majorTickIncrement;

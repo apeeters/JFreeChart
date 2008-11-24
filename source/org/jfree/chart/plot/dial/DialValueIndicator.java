@@ -142,7 +142,7 @@ public class DialValueIndicator extends AbstractDialLayer implements DialLayer,
         this.frameAnchor = RectangleAnchor.CENTER;
         this.templateValue = new Double(100.0);
         this.formatter = new DecimalFormat("0.0");
-        this.font = new Font("Dialog", Font.BOLD, 14);
+        this.font = new Font("Tahoma", Font.BOLD, 14);
         this.paint = Color.black;
         this.backgroundPaint = Color.white;
         this.outlineStroke = new BasicStroke(1.0f);
