@@ -87,10 +87,8 @@ public class TextBox implements Serializable {
         this((TextBlock) null);
         if (text != null) {
             this.textBlock = new TextBlock();
-            this.textBlock.addLine(
-                text, new Font("SansSerif", Font.PLAIN, 10),
-                Color.black
-            );
+            this.textBlock.addLine(text, new Font("Tahoma", Font.PLAIN, 10),
+                    Color.black);
         }
     }
 
