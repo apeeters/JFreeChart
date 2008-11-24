@@ -158,7 +158,7 @@ public class PolarPlot extends Plot implements ValueAxisPlot, Zoomable,
     private boolean angleLabelsVisible = true;
 
     /** The font used to display the angle labels - never null. */
-    private Font angleLabelFont = new Font("SansSerif", Font.PLAIN, 12);
+    private Font angleLabelFont = new Font("Tahoma", Font.PLAIN, 12);
 
     /** The paint used to display the angle labels. */
     private transient Paint angleLabelPaint = Color.black;

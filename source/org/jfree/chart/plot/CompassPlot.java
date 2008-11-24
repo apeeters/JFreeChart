@@ -110,7 +110,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
     private static final long serialVersionUID = 6924382802125527395L;
 
     /** The default label font. */
-    public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif",
+    public static final Font DEFAULT_LABEL_FONT = new Font("Tahoma",
             Font.BOLD, 10);
 
     /** A constant for the label type. */
@@ -138,7 +138,7 @@ public class CompassPlot extends Plot implements Cloneable, Serializable {
     private transient Paint roseCenterPaint = Color.white;
 
     /** The compass font. */
-    private Font compassFont = new Font("Arial", Font.PLAIN, 10);
+    private Font compassFont = new Font("Tahoma", Font.PLAIN, 10);
 
     /** A working shape. */
     private transient Ellipse2D circle1;

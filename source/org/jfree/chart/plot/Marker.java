@@ -188,7 +188,7 @@ public abstract class Marker implements Cloneable, Serializable {
         this.outlineStroke = outlineStroke;
         this.alpha = alpha;
 
-        this.labelFont = new Font("SansSerif", Font.PLAIN, 9);
+        this.labelFont = new Font("Tahoma", Font.PLAIN, 9);
         this.labelPaint = Color.black;
         this.labelAnchor = RectangleAnchor.TOP_LEFT;
         this.labelOffset = new RectangleInsets(3.0, 3.0, 3.0, 3.0);

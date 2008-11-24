@@ -141,7 +141,7 @@ public class MeterPlot extends Plot implements Serializable, Cloneable {
     static final Paint DEFAULT_NEEDLE_PAINT = Color.green;
 
     /** The default value font. */
-    static final Font DEFAULT_VALUE_FONT = new Font("SansSerif", Font.BOLD, 12);
+    static final Font DEFAULT_VALUE_FONT = new Font("Tahoma", Font.BOLD, 12);
 
     /** The default value paint. */
     static final Paint DEFAULT_VALUE_PAINT = Color.yellow;
@@ -156,7 +156,7 @@ public class MeterPlot extends Plot implements Serializable, Cloneable {
     public static final float DEFAULT_CIRCLE_SIZE = 10f;
 
     /** The default label font. */
-    public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif",
+    public static final Font DEFAULT_LABEL_FONT = new Font("Tahoma",
             Font.BOLD, 10);
 
     /** The dataset (contains a single value). */

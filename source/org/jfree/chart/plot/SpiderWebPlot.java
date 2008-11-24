@@ -143,7 +143,7 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
     public static final double DEFAULT_START_ANGLE = 90.0;
 
     /** The default series label font. */
-    public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif",
+    public static final Font DEFAULT_LABEL_FONT = new Font("Tahoma",
             Font.PLAIN, 10);
 
     /** The default series label paint. */

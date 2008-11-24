@@ -260,7 +260,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     public static final Paint DEFAULT_GRIDLINE_PAINT = Color.WHITE;
 
     /** The default value label font. */
-    public static final Font DEFAULT_VALUE_LABEL_FONT = new Font("SansSerif",
+    public static final Font DEFAULT_VALUE_LABEL_FONT = new Font("Tahoma",
             Font.PLAIN, 10);
 
     /**

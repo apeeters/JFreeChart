@@ -328,7 +328,7 @@ public class ThermometerPlot extends Plot implements ValueAxisPlot,
     private int axisLocation = LEFT;
 
     /** The font to write the value in */
-    private Font valueFont = new Font("SansSerif", Font.BOLD, 16);
+    private Font valueFont = new Font("Tahoma", Font.BOLD, 16);
 
     /** Colour that the value is written in */
     private transient Paint valuePaint = Color.white;

@@ -295,7 +295,7 @@ public abstract class Plot implements AxisChangeListener,
         this.foregroundAlpha = DEFAULT_FOREGROUND_ALPHA;
 
         this.noDataMessage = null;
-        this.noDataMessageFont = new Font("SansSerif", Font.PLAIN, 12);
+        this.noDataMessageFont = new Font("Tahoma", Font.PLAIN, 12);
         this.noDataMessagePaint = Color.black;
 
         this.drawingSupplier = new DefaultDrawingSupplier();
