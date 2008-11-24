@@ -106,8 +106,8 @@ public class LegendTitle extends Title
     private static final long serialVersionUID = 2644010518533854633L;
 
     /** The default item font. */
-    public static final Font DEFAULT_ITEM_FONT
-            = new Font("SansSerif", Font.PLAIN, 12);
+    public static final Font DEFAULT_ITEM_FONT = new Font("Tahoma", Font.PLAIN,
+            12);
 
     /** The default item paint. */
     public static final Paint DEFAULT_ITEM_PAINT = Color.black;

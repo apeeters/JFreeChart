@@ -126,7 +126,7 @@ public class TextTitle extends Title
     private static final long serialVersionUID = 8372008692127477443L;
 
     /** The default font. */
-    public static final Font DEFAULT_FONT = new Font("SansSerif", Font.BOLD,
+    public static final Font DEFAULT_FONT = new Font("Tahoma", Font.BOLD,
             12);
 
     /** The default text color. */

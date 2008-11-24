@@ -101,7 +101,7 @@ public class DateTitle extends TextTitle implements Serializable {
      * @param style  the date style.
      */
     public DateTitle(int style) {
-        this(style, Locale.getDefault(), new Font("Dialog", Font.PLAIN, 12),
+        this(style, Locale.getDefault(), new Font("Tahoma", Font.PLAIN, 12),
                 Color.black);
     }
 
