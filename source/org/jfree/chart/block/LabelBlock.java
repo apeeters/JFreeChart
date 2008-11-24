@@ -110,7 +110,7 @@ public class LabelBlock extends AbstractBlock
      * @param label  the label (<code>null</code> not permitted).
      */
     public LabelBlock(String label) {
-        this(label, new Font("SansSerif", Font.PLAIN, 10), DEFAULT_PAINT);
+        this(label, new Font("Tahoma", Font.PLAIN, 10), DEFAULT_PAINT);
     }
 
     /**
