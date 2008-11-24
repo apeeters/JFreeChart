@@ -248,8 +248,8 @@ public class JFreeChart implements Drawable,
     public static final ProjectInfo INFO = new JFreeChartInfo();
 
     /** The default font for titles. */
-    public static final Font DEFAULT_TITLE_FONT
-            = new Font("SansSerif", Font.BOLD, 18);
+    public static final Font DEFAULT_TITLE_FONT = new Font("Tahoma", Font.BOLD,
+            18);
 
     /** The default background color. */
     public static final Paint DEFAULT_BACKGROUND_PAINT = Color.WHITE;

@@ -456,7 +456,7 @@ public abstract class ChartFactory {
                     : "green") + "=change >=-" + percentDiffForMaxScale
                     + "%, Bright " + (!greenForIncrease ? "red" : "green")
                     + "=change >=+" + percentDiffForMaxScale + "%",
-                    new Font("SansSerif", Font.PLAIN, 10));
+                    new Font("Tahoma", Font.PLAIN, 10));
             chart.addSubtitle(subtitle);
         }
         currentTheme.apply(chart);
@@ -582,7 +582,7 @@ public abstract class ChartFactory {
                     : "green") + "=change >=-" + percentDiffForMaxScale
                     + "%, Bright " + (!greenForIncrease ? "red" : "green")
                     + "=change >=+" + percentDiffForMaxScale + "%",
-                    new Font("SansSerif", Font.PLAIN, 10));
+                    new Font("Tahoma", Font.PLAIN, 10));
             chart.addSubtitle(subtitle);
         }
         currentTheme.apply(chart);
@@ -802,7 +802,7 @@ public abstract class ChartFactory {
 
         JFreeChart pieChart = new JFreeChart(new PiePlot3D(null));
         TextTitle seriesTitle = new TextTitle("Series Title",
-                new Font("SansSerif", Font.BOLD, 12));
+                new Font("Tahoma", Font.BOLD, 12));
         seriesTitle.setPosition(RectangleEdge.BOTTOM);
         pieChart.setTitle(seriesTitle);
         pieChart.removeLegend();
