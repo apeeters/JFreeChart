@@ -138,8 +138,8 @@ public abstract class Axis implements Cloneable, Serializable {
     public static final boolean DEFAULT_AXIS_VISIBLE = true;
 
     /** The default axis label font. */
-    public static final Font DEFAULT_AXIS_LABEL_FONT = new Font(
-            "SansSerif", Font.PLAIN, 12);
+    public static final Font DEFAULT_AXIS_LABEL_FONT = new Font("Tahoma",
+            Font.PLAIN, 12);
 
     /** The default axis label paint. */
     public static final Paint DEFAULT_AXIS_LABEL_PAINT = Color.black;
@@ -158,8 +158,8 @@ public abstract class Axis implements Cloneable, Serializable {
     public static final boolean DEFAULT_TICK_LABELS_VISIBLE = true;
 
     /** The default tick label font. */
-    public static final Font DEFAULT_TICK_LABEL_FONT = new Font("SansSerif",
-            Font.PLAIN, 10);
+    public static final Font DEFAULT_TICK_LABEL_FONT = new Font("Tahoma",
+            Font.PLAIN, 12);
 
     /** The default tick label paint. */
     public static final Paint DEFAULT_TICK_LABEL_PAINT = Color.black;

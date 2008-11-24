@@ -82,8 +82,7 @@ public class PeriodAxisLabelInfo implements Cloneable, Serializable {
             = new RectangleInsets(2, 2, 2, 2);
 
     /** The default font. */
-    public static final Font DEFAULT_FONT
-            = new Font("SansSerif", Font.PLAIN, 10);
+    public static final Font DEFAULT_FONT = new Font("Tahoma", Font.PLAIN, 10);
 
     /** The default label paint. */
     public static final Paint DEFAULT_LABEL_PAINT = Color.black;

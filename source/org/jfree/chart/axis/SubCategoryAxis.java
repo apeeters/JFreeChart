@@ -88,7 +88,7 @@ public class SubCategoryAxis extends CategoryAxis
     private List subCategories;
 
     /** The font for the sub-category labels. */
-    private Font subLabelFont = new Font("SansSerif", Font.PLAIN, 10);
+    private Font subLabelFont = new Font("Tahoma", Font.PLAIN, 10);
 
     /** The paint for the sub-category labels. */
     private transient Paint subLabelPaint = Color.black;
@@ -271,7 +271,7 @@ public class SubCategoryAxis extends CategoryAxis
 
         // draw the category labels and axis label
         AxisState state = new AxisState(cursor);
-        state = drawSubCategoryLabels(g2, plotArea, dataArea, edge, state, 
+        state = drawSubCategoryLabels(g2, plotArea, dataArea, edge, state,
                 plotState);
         state = drawCategoryLabels(g2, plotArea, dataArea, edge, state,
                 plotState);

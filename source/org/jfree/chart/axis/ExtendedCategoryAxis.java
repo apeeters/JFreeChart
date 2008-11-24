@@ -89,7 +89,7 @@ public class ExtendedCategoryAxis extends CategoryAxis {
     public ExtendedCategoryAxis(String label) {
         super(label);
         this.sublabels = new HashMap();
-        this.sublabelFont = new Font("SansSerif", Font.PLAIN, 10);
+        this.sublabelFont = new Font("Tahoma", Font.PLAIN, 10);
         this.sublabelPaint = Color.black;
     }
 
