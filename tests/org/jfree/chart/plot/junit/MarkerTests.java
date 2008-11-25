@@ -219,7 +219,7 @@ public class MarkerTests extends TestCase implements MarkerChangeListener {
         ValueMarker m = new ValueMarker(1.1);
         m.addChangeListener(this);
         this.lastEvent = null;
-        assertEquals(new Font("SansSerif", Font.PLAIN, 9), m.getLabelFont());
+        assertEquals(new Font("Tahoma", Font.PLAIN, 9), m.getLabelFont());
         m.setLabelFont(new Font("SansSerif", Font.BOLD, 10));
         assertEquals(new Font("SansSerif", Font.BOLD, 10), m.getLabelFont());
         assertEquals(m, this.lastEvent.getMarker());

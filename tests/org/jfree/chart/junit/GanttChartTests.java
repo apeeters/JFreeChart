@@ -117,6 +117,7 @@ public class GanttChartTests extends TestCase {
             success = true;
         }
         catch (Exception e) {
+            e.printStackTrace();
             success = false;
         }
         assertTrue(success);

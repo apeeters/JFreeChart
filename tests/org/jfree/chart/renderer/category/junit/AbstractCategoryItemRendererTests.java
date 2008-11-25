@@ -39,6 +39,8 @@
  * 07-Dec-2006 : Added testEquals() method (DG);
  * 26-Jun-2007 : Added testGetSeriesItemLabelGenerator() and
  *               testGetSeriesURLGenerator() (DG);
+ * 25-Nov-2008 : Added testFindRangeBounds() (DG);
+ *
  */
 
 package org.jfree.chart.renderer.category.junit;
@@ -57,8 +59,11 @@ import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
 import org.jfree.chart.renderer.category.AbstractCategoryItemRenderer;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.urls.StandardCategoryURLGenerator;
 import org.jfree.chart.util.Layer;
+import org.jfree.data.Range;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  * Tests for the {@link AbstractCategoryItemRenderer} class.
@@ -360,5 +365,27 @@ public class AbstractCategoryItemRendererTests extends TestCase {
         r.setBaseURLGenerator(new StandardCategoryURLGenerator());
         assertNull(r.getSeriesURLGenerator(2));
     }
+
+    /**
+     * Some checks for the findRangeBounds() method.
+     */
+    public void testFindRangeBounds() {
+        AbstractCategoryItemRenderer r = new LineAndShapeRenderer();
+        assertNull(r.findRangeBounds(null));
+
+        // an empty dataset should return a null range
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        assertNull(r.findRangeBounds(dataset));
+
+        dataset.addValue(1.0, "R1", "C1");
+        assertEquals(new Range(1.0, 1.0), r.findRangeBounds(dataset));
+
+        dataset.addValue(-2.0, "R1", "C2");
+        assertEquals(new Range(-2.0, 1.0), r.findRangeBounds(dataset));
+
+        dataset.addValue(null, "R1", "C3");
+        assertEquals(new Range(-2.0, 1.0), r.findRangeBounds(dataset));
+    }
+
 }
 
