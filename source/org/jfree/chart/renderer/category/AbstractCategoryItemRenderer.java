@@ -99,6 +99,7 @@
  * 06-Jul-2007 : Added annotation support (DG);
  * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  * 26-Jun-2008 : Added crosshair support (DG);
+ * 25-Nov-2008 : Fixed bug in findRangeBounds() method (DG);
  *
  */
 
@@ -769,6 +770,9 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *         <code>null</code> or empty).
      */
     public Range findRangeBounds(CategoryDataset dataset) {
+        if (dataset == null) {
+            return null;
+        }
         return DatasetUtilities.findRangeBounds(dataset);
     }
 
