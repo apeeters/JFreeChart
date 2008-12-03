@@ -203,7 +203,7 @@ public class XYTextAnnotationTests extends TestCase {
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(a1, a2);
 
