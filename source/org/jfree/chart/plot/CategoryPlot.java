@@ -163,6 +163,8 @@
  * 26-Jun-2008 : Fixed crosshair support (DG);
  * 10-Jul-2008 : Fixed outline visibility for 3D renderers (DG);
  * 12-Aug-2008 : Added rendererCount() method (DG);
+ * 25-Nov-2008 : Added facility to map datasets to multiples axes (DG);
+ * 15-Dec-2008 : Cleaned up grid drawing methods (DG);
  *
  */
 
@@ -188,11 +190,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
@@ -318,10 +322,10 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     private ObjectList datasets;
 
     /** Storage for keys that map datasets to domain axes. */
-    private ObjectList datasetToDomainAxisMap;
+    private TreeMap datasetToDomainAxesMap;
 
     /** Storage for keys that map datasets to range axes. */
-    private ObjectList datasetToRangeAxisMap;
+    private TreeMap datasetToRangeAxesMap;
 
     /** Storage for the renderers. */
     private ObjectList renderers;
@@ -501,8 +505,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         this.rangeAxes = new ObjectList();
         this.rangeAxisLocations = new ObjectList();
 
-        this.datasetToDomainAxisMap = new ObjectList();
-        this.datasetToRangeAxisMap = new ObjectList();
+        this.datasetToDomainAxesMap = new TreeMap();
+        this.datasetToRangeAxesMap = new TreeMap();
 
         this.renderers = new ObjectList();
 
@@ -1310,9 +1314,62 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @see #getDomainAxisForDataset(int)
      */
     public void mapDatasetToDomainAxis(int index, int axisIndex) {
-        this.datasetToDomainAxisMap.set(index, new Integer(axisIndex));
+        List axisIndices = new java.util.ArrayList(1);
+        axisIndices.add(new Integer(axisIndex));
+        mapDatasetToDomainAxes(index, axisIndices);
+    }
+
+    /**
+     * Maps the specified dataset to the axes in the list.  Note that the
+     * conversion of data values into Java2D space is always performed using
+     * the first axis in the list.
+     *
+     * @param index  the dataset index (zero-based).
+     * @param axisIndices  the axis indices (<code>null</code> permitted).
+     *
+     * @since 1.0.12
+     */
+    public void mapDatasetToDomainAxes(int index, List axisIndices) {
+        if (index < 0) {
+            throw new IllegalArgumentException("Requires 'index' >= 0.");
+        }
+        checkAxisIndices(axisIndices);
+        Integer key = new Integer(index);
+        this.datasetToDomainAxesMap.put(key, new ArrayList(axisIndices));
         // fake a dataset change event to update axes...
         datasetChanged(new DatasetChangeEvent(this, getDataset(index)));
+    }
+
+    /**
+     * This method is used to perform argument checking on the list of
+     * axis indices passed to mapDatasetToDomainAxes() and
+     * mapDatasetToRangeAxes().
+     *
+     * @param indices  the list of indices (<code>null</code> permitted).
+     */
+    private void checkAxisIndices(List indices) {
+        // axisIndices can be:
+        // 1.  null;
+        // 2.  non-empty, containing only Integer objects that are unique.
+        if (indices == null) {
+            return;  // OK
+        }
+        int count = indices.size();
+        if (count == 0) {
+            throw new IllegalArgumentException("Empty list not permitted.");
+        }
+        HashSet set = new HashSet();
+        for (int i = 0; i < count; i++) {
+            Object item = indices.get(i);
+            if (!(item instanceof Integer)) {
+                throw new IllegalArgumentException(
+                        "Indices must be Integer instances.");
+            }
+            if (set.contains(item)) {
+                throw new IllegalArgumentException("Indices must be unique.");
+            }
+            set.add(item);
+        }
     }
 
     /**
@@ -1326,12 +1383,21 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @see #mapDatasetToDomainAxis(int, int)
      */
     public CategoryAxis getDomainAxisForDataset(int index) {
-        CategoryAxis result = getDomainAxis();
-        Integer axisIndex = (Integer) this.datasetToDomainAxisMap.get(index);
-        if (axisIndex != null) {
-            result = getDomainAxis(axisIndex.intValue());
+        if (index < 0) {
+            throw new IllegalArgumentException("Negative 'index'.");
         }
-        return result;
+        CategoryAxis axis = null;
+        List axisIndices = (List) this.datasetToDomainAxesMap.get(
+                new Integer(index));
+        if (axisIndices != null) {
+            // the first axis in the list is used for data <--> Java2D
+            Integer axisIndex = (Integer) axisIndices.get(0);
+            axis = getDomainAxis(axisIndex.intValue());
+        }
+        else {
+            axis = getDomainAxis(0);
+        }
+        return axis;
     }
 
     /**
@@ -1343,7 +1409,28 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @see #getRangeAxisForDataset(int)
      */
     public void mapDatasetToRangeAxis(int index, int axisIndex) {
-        this.datasetToRangeAxisMap.set(index, new Integer(axisIndex));
+        List axisIndices = new java.util.ArrayList(1);
+        axisIndices.add(new Integer(axisIndex));
+        mapDatasetToRangeAxes(index, axisIndices);
+    }
+
+    /**
+     * Maps the specified dataset to the axes in the list.  Note that the
+     * conversion of data values into Java2D space is always performed using
+     * the first axis in the list.
+     *
+     * @param index  the dataset index (zero-based).
+     * @param axisIndices  the axis indices (<code>null</code> permitted).
+     *
+     * @since 1.0.12
+     */
+    public void mapDatasetToRangeAxes(int index, List axisIndices) {
+        if (index < 0) {
+            throw new IllegalArgumentException("Requires 'index' >= 0.");
+        }
+        checkAxisIndices(axisIndices);
+        Integer key = new Integer(index);
+        this.datasetToRangeAxesMap.put(key, new ArrayList(axisIndices));
         // fake a dataset change event to update axes...
         datasetChanged(new DatasetChangeEvent(this, getDataset(index)));
     }
@@ -1359,12 +1446,21 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @see #mapDatasetToRangeAxis(int, int)
      */
     public ValueAxis getRangeAxisForDataset(int index) {
-        ValueAxis result = getRangeAxis();
-        Integer axisIndex = (Integer) this.datasetToRangeAxisMap.get(index);
-        if (axisIndex != null) {
-            result = getRangeAxis(axisIndex.intValue());
+        if (index < 0) {
+            throw new IllegalArgumentException("Negative 'index'.");
         }
-        return result;
+        ValueAxis axis = null;
+        List axisIndices = (List) this.datasetToRangeAxesMap.get(
+                new Integer(index));
+        if (axisIndices != null) {
+            // the first axis in the list is used for data <--> Java2D
+            Integer axisIndex = (Integer) axisIndices.get(0);
+            axis = getRangeAxis(axisIndex.intValue());
+        }
+        else {
+            axis = getRangeAxis(0);
+        }
+        return axis;
     }
 
     /**
@@ -3557,7 +3653,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     }
 
     /**
-     * Draws the gridlines for the plot.
+     * Draws the domain gridlines for the plot, if they are visible.
      *
      * @param g2  the graphics device.
      * @param dataArea  the area inside the axes.
@@ -3566,37 +3662,31 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      */
     protected void drawDomainGridlines(Graphics2D g2, Rectangle2D dataArea) {
 
-        // draw the domain grid lines, if any...
-        if (isDomainGridlinesVisible()) {
-            CategoryAnchor anchor = getDomainGridlinePosition();
-            RectangleEdge domainAxisEdge = getDomainAxisEdge();
-            Stroke gridStroke = getDomainGridlineStroke();
-            Paint gridPaint = getDomainGridlinePaint();
-            if ((gridStroke != null) && (gridPaint != null)) {
-                // iterate over the categories
-                CategoryDataset data = getDataset();
-                if (data != null) {
-                    CategoryAxis axis = getDomainAxis();
-                    if (axis != null) {
-                        int columnCount = data.getColumnCount();
-                        for (int c = 0; c < columnCount; c++) {
-                            double xx = axis.getCategoryJava2DCoordinate(
-                                    anchor, c, columnCount, dataArea,
-                                    domainAxisEdge);
-                            CategoryItemRenderer renderer1 = getRenderer();
-                            if (renderer1 != null) {
-                                renderer1.drawDomainGridline(g2, this,
-                                        dataArea, xx);
-                            }
-                        }
-                    }
+        if (!isDomainGridlinesVisible()) {
+            return;
+        }
+        CategoryAnchor anchor = getDomainGridlinePosition();
+        RectangleEdge domainAxisEdge = getDomainAxisEdge();
+        CategoryDataset dataset = getDataset();
+        if (dataset == null) {
+            return;
+        }
+        CategoryAxis axis = getDomainAxis();
+        if (axis != null) {
+            int columnCount = dataset.getColumnCount();
+            for (int c = 0; c < columnCount; c++) {
+                double xx = axis.getCategoryJava2DCoordinate(anchor, c,
+                        columnCount, dataArea, domainAxisEdge);
+                CategoryItemRenderer renderer1 = getRenderer();
+                if (renderer1 != null) {
+                    renderer1.drawDomainGridline(g2, this, dataArea, xx);
                 }
             }
         }
     }
 
     /**
-     * Draws the gridlines for the plot.
+     * Draws the range gridlines for the plot, if they are visible.
      *
      * @param g2  the graphics device.
      * @param dataArea  the area inside the axes.
@@ -3607,22 +3697,20 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     protected void drawRangeGridlines(Graphics2D g2, Rectangle2D dataArea,
                                       List ticks) {
         // draw the range grid lines, if any...
-        if (isRangeGridlinesVisible()) {
-            Stroke gridStroke = getRangeGridlineStroke();
-            Paint gridPaint = getRangeGridlinePaint();
-            if ((gridStroke != null) && (gridPaint != null)) {
-                ValueAxis axis = getRangeAxis();
-                if (axis != null) {
-                    Iterator iterator = ticks.iterator();
-                    while (iterator.hasNext()) {
-                        ValueTick tick = (ValueTick) iterator.next();
-                        CategoryItemRenderer renderer1 = getRenderer();
-                        if (renderer1 != null) {
-                            renderer1.drawRangeGridline(g2, this,
-                                    getRangeAxis(), dataArea, tick.getValue());
-                        }
-                    }
-                }
+        if (!isRangeGridlinesVisible()) {
+            return;
+        }
+        ValueAxis axis = getRangeAxis();
+        if (axis == null) {
+            return;
+        }
+        Iterator iterator = ticks.iterator();
+        while (iterator.hasNext()) {
+            ValueTick tick = (ValueTick) iterator.next();
+            CategoryItemRenderer renderer1 = getRenderer();
+            if (renderer1 != null) {
+                renderer1.drawRangeGridline(g2, this, axis, dataArea,
+                        tick.getValue());
             }
         }
     }
@@ -3872,21 +3960,22 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @since 1.0.3
      */
     private List datasetsMappedToDomainAxis(int axisIndex) {
+        Integer key = new Integer(axisIndex);
         List result = new ArrayList();
-        for (int datasetIndex = 0; datasetIndex < this.datasets.size();
-                datasetIndex++) {
-            Object dataset = this.datasets.get(datasetIndex);
-            if (dataset != null) {
-                Integer m = (Integer) this.datasetToDomainAxisMap.get(
-                        datasetIndex);
-                if (m == null) {  // a dataset with no mapping is assigned to
-                                  // axis 0
-                    if (axisIndex == 0) {
+        for (int i = 0; i < this.datasets.size(); i++) {
+            List mappedAxes = (List) this.datasetToDomainAxesMap.get(
+                    new Integer(i));
+            CategoryDataset dataset = (CategoryDataset) this.datasets.get(i);
+            if (mappedAxes == null) {
+                if (key.equals(ZERO)) {
+                    if (dataset != null) {
                         result.add(dataset);
                     }
                 }
-                else {
-                    if (m.intValue() == axisIndex) {
+            }
+            else {
+                if (mappedAxes.contains(key)) {
+                    if (dataset != null) {
                         result.add(dataset);
                     }
                 }
@@ -3904,21 +3993,19 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @return A list of datasets.
      */
     private List datasetsMappedToRangeAxis(int index) {
+        Integer key = new Integer(index);
         List result = new ArrayList();
         for (int i = 0; i < this.datasets.size(); i++) {
-            Object dataset = this.datasets.get(i);
-            if (dataset != null) {
-                Integer m = (Integer) this.datasetToRangeAxisMap.get(i);
-                if (m == null) {  // a dataset with no mapping is assigned to
-                                  // axis 0
-                    if (index == 0) {
-                        result.add(dataset);
-                    }
+            List mappedAxes = (List) this.datasetToRangeAxesMap.get(
+                    new Integer(i));
+            if (mappedAxes == null) {
+                if (key.equals(ZERO)) {
+                    result.add(this.datasets.get(i));
                 }
-                else {
-                    if (m.intValue() == index) {
-                        result.add(dataset);
-                    }
+            }
+            else {
+                if (mappedAxes.contains(key)) {
+                    result.add(this.datasets.get(i));
                 }
             }
         }
@@ -4313,12 +4400,12 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         if (!this.rangeAxisLocations.equals(that.rangeAxisLocations)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.datasetToDomainAxisMap,
-                that.datasetToDomainAxisMap)) {
+        if (!ObjectUtilities.equal(this.datasetToDomainAxesMap,
+                that.datasetToDomainAxesMap)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.datasetToRangeAxisMap,
-                that.datasetToRangeAxisMap)) {
+        if (!ObjectUtilities.equal(this.datasetToRangeAxesMap,
+                that.datasetToRangeAxesMap)) {
             return false;
         }
         if (!ObjectUtilities.equal(this.renderers, that.renderers)) {
@@ -4478,10 +4565,11 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
                 dataset.addChangeListener(clone);
             }
         }
-        clone.datasetToDomainAxisMap
-                = (ObjectList) this.datasetToDomainAxisMap.clone();
-        clone.datasetToRangeAxisMap
-                = (ObjectList) this.datasetToRangeAxisMap.clone();
+        clone.datasetToDomainAxesMap = new TreeMap();
+        clone.datasetToDomainAxesMap.putAll(this.datasetToDomainAxesMap);
+        clone.datasetToRangeAxesMap = new TreeMap();
+        clone.datasetToRangeAxesMap.putAll(this.datasetToRangeAxesMap);
+
         clone.renderers = (ObjectList) this.renderers.clone();
         if (this.fixedDomainAxisSpace != null) {
             clone.fixedDomainAxisSpace = (AxisSpace) ObjectUtilities.clone(
