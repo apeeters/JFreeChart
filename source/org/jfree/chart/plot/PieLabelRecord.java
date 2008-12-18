@@ -49,7 +49,8 @@ import org.jfree.chart.text.TextBox;
 
 /**
  * A structure that retains information about the label for a section in a pie
- * chart.
+ * chart.  Instances of this class are created temporarily during chart drawing
+ * only.
  */
 public class PieLabelRecord implements Comparable, Serializable {
 
