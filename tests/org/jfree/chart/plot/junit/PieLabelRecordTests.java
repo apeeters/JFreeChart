@@ -51,12 +51,11 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jfree.chart.plot.CategoryMarker;
 import org.jfree.chart.plot.PieLabelRecord;
 import org.jfree.chart.text.TextBox;
 
 /**
- * Some tests for the {@link CategoryMarker} class.
+ * Some tests for the {@link PieLabelRecord} class.
  */
 public class PieLabelRecordTests extends TestCase {
 
