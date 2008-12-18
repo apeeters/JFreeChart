@@ -2,9 +2,9 @@
 *  JFREECHART: Version 1.2.0-pre1  *
 ************************************
 
-25 June 2007
+19 December 2008
 
-(C)opyright 2000-2007, by Object Refinery Limited and Contributors.
+(C)opyright 2000-2008, by Object Refinery Limited and Contributors.
 
 -----------------
 1.  INTRODUCTION
@@ -743,6 +743,7 @@ below:
     - Roger Studner
     - Irv Thomae
     - Eric Thomas
+    - Jess Thrysoee
     - Rich Unger
     - Daniel van Enckevort
     - Laurence Vanhelsuwe
