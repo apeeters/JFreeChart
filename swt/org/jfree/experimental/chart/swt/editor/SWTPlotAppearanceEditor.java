@@ -63,6 +63,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.experimental.swt.SWTPaintCanvas;
 import org.jfree.experimental.swt.SWTUtils;
 
@@ -96,7 +97,8 @@ class SWTPlotAppearanceEditor extends Composite
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources
-        = ResourceBundle.getBundle("org.jfree.chart.editor.LocalizationBundle");
+            = ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.editor.LocalizationBundle");
 
     SWTPlotAppearanceEditor(Composite parent, int style, Plot plot)
     {

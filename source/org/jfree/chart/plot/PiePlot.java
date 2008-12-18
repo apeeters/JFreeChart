@@ -215,6 +215,7 @@ import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.chart.util.Rotation;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.ShapeUtilities;
@@ -498,7 +499,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources =
-            ResourceBundle.getBundle("org.jfree.chart.plot.LocalizationBundle");
+            ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.plot.LocalizationBundle");
 
     /**
      * This debug flag controls whether or not an outline is drawn showing the

@@ -66,6 +66,7 @@ import org.jfree.chart.ui.FontChooserPanel;
 import org.jfree.chart.ui.FontDisplayField;
 import org.jfree.chart.ui.LCBLayout;
 import org.jfree.chart.ui.PaintSample;
+import org.jfree.chart.util.ResourceBundleWrapper;
 
 /**
  * A panel for editing the properties of a chart title.
@@ -98,7 +99,8 @@ class DefaultTitleEditor extends JPanel implements ActionListener {
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources
-        = ResourceBundle.getBundle("org.jfree.chart.editor.LocalizationBundle");
+            = ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.editor.LocalizationBundle");
 
     /**
      * Standard constructor: builds a panel for displaying/editing the

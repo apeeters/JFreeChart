@@ -52,6 +52,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.data.DataUtilities;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.general.AbstractSeriesDataset;
@@ -150,7 +151,8 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
         if (starts != null && ends != null) {
 
             String baseName = "org.jfree.data.resources.DataPackageResources";
-            ResourceBundle resources = ResourceBundle.getBundle(baseName);
+            ResourceBundle resources = ResourceBundleWrapper.getBundle(
+                    baseName);
 
             int seriesCount = starts.length;
             if (seriesCount != ends.length) {

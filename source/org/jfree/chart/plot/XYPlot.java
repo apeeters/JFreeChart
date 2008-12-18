@@ -268,6 +268,7 @@ import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.data.Range;
 import org.jfree.data.general.Dataset;
@@ -312,7 +313,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources
-            = ResourceBundle.getBundle(
+            = ResourceBundleWrapper.getBundle(
                     "org.jfree.chart.plot.LocalizationBundle");
 
     /** The plot orientation. */

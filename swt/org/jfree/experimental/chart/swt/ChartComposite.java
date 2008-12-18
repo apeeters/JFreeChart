@@ -138,6 +138,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueAxisPlot;
 import org.jfree.chart.plot.Zoomable;
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.experimental.chart.swt.editor.SWTChartEditor;
 import org.jfree.experimental.swt.SWTGraphics2D;
 import org.jfree.experimental.swt.SWTUtils;
@@ -356,7 +357,8 @@ public class ChartComposite extends Composite implements ChartChangeListener,
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources
-        = ResourceBundle.getBundle("org.jfree.chart.LocalizationBundle");
+            = ResourceBundleWrapper.getBundle(
+                "org.jfree.chart.LocalizationBundle");
 
     /**
      * Create a new chart composite with a default FillLayout.

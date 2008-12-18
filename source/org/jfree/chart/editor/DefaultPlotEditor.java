@@ -77,6 +77,7 @@ import org.jfree.chart.ui.PaintSample;
 import org.jfree.chart.ui.StrokeChooserPanel;
 import org.jfree.chart.ui.StrokeSample;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.ResourceBundleWrapper;
 
 /**
  * A panel for editing the properties of a {@link Plot}.
@@ -147,7 +148,8 @@ class DefaultPlotEditor extends JPanel implements ActionListener {
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources
-        = ResourceBundle.getBundle("org.jfree.chart.editor.LocalizationBundle");
+            = ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.editor.LocalizationBundle");
 
     /**
      * Standard constructor - constructs a panel for editing the properties of

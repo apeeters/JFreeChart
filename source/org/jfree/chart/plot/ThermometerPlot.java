@@ -122,6 +122,7 @@ import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.UnitType;
 import org.jfree.data.Range;
@@ -376,7 +377,8 @@ public class ThermometerPlot extends Plot implements ValueAxisPlot,
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources =
-        ResourceBundle.getBundle("org.jfree.chart.plot.LocalizationBundle");
+            ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.plot.LocalizationBundle");
 
     /**
      * Creates a new thermometer plot.

@@ -209,6 +209,7 @@ import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.Size2D;
 import org.jfree.chart.util.VerticalAlignment;
@@ -1742,7 +1743,8 @@ class JFreeChartInfo extends ProjectInfo {
         // get a locale-specific resource bundle...
         String baseResourceClass
                 = "org.jfree.chart.resources.JFreeChartResources";
-        ResourceBundle resources = ResourceBundle.getBundle(baseResourceClass);
+        ResourceBundle resources = ResourceBundleWrapper.getBundle(
+                baseResourceClass);
 
         setName(resources.getString("project.name"));
         setVersion(resources.getString("project.version"));
@@ -1834,6 +1836,7 @@ class JFreeChartInfo extends ProjectInfo {
                 new Contributor("Roger Studner", "-"),
                 new Contributor("Irv Thomae", "-"),
                 new Contributor("Eric Thomas", "-"),
+                new Contributor("Jess Thrysoee", "-"),
                 new Contributor("Rich Unger", "-"),
                 new Contributor("Daniel van Enckevort", "-"),
                 new Contributor("Laurence Vanhelsuwe", "-"),

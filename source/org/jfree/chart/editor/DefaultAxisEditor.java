@@ -67,6 +67,7 @@ import org.jfree.chart.ui.FontDisplayField;
 import org.jfree.chart.ui.LCBLayout;
 import org.jfree.chart.ui.PaintSample;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.ResourceBundleWrapper;
 
 /**
  * A panel for editing the properties of an axis.
@@ -132,7 +133,8 @@ class DefaultAxisEditor extends JPanel implements ActionListener {
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources =
-        ResourceBundle.getBundle("org.jfree.chart.editor.LocalizationBundle");
+            ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.editor.LocalizationBundle");
 
     /**
      * A static method that returns a panel that is appropriate for the axis

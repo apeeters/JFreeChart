@@ -62,6 +62,7 @@ import org.jfree.chart.plot.Plot;
 import org.jfree.chart.title.Title;
 import org.jfree.chart.ui.LCBLayout;
 import org.jfree.chart.ui.PaintSample;
+import org.jfree.chart.util.ResourceBundleWrapper;
 
 /**
  * A panel for editing chart properties (includes subpanels for the title,
@@ -86,7 +87,8 @@ class DefaultChartEditor extends JPanel implements ActionListener, ChartEditor {
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources
-        = ResourceBundle.getBundle("org.jfree.chart.editor.LocalizationBundle");
+            = ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.editor.LocalizationBundle");
 
     /**
      * Standard constructor - the property panel is made up of a number of

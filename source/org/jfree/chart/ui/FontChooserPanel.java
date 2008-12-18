@@ -58,6 +58,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
+import org.jfree.chart.util.ResourceBundleWrapper;
+
 /**
  * A panel for choosing a font from the available system fonts - still a bit of
  * a hack at the moment, but good enough for demonstration applications.
@@ -82,7 +84,8 @@ public class FontChooserPanel extends JPanel {
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources =
-            ResourceBundle.getBundle("org.jfree.chart.ui.LocalizationBundle");
+            ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.ui.LocalizationBundle");
 
     /**
      * Standard constructor - builds a FontChooserPanel initialised with the

@@ -223,6 +223,7 @@ import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.SortOrder;
@@ -291,8 +292,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources
-            = ResourceBundle.getBundle(
-            "org.jfree.chart.plot.LocalizationBundle");
+            = ResourceBundleWrapper.getBundle(
+                "org.jfree.chart.plot.LocalizationBundle");
 
     /** The plot orientation. */
     private PlotOrientation orientation;

@@ -48,6 +48,8 @@ import java.util.ResourceBundle;
 
 import javax.swing.JTextField;
 
+import org.jfree.chart.util.ResourceBundleWrapper;
+
 /**
  * A field for displaying a font selection.  The display field itself is
  * read-only, to the developer must provide another mechanism to allow the
@@ -60,7 +62,8 @@ public class FontDisplayField extends JTextField {
 
     /** The resourceBundle for the localization. */
     protected static final ResourceBundle localizationResources =
-            ResourceBundle.getBundle("org.jfree.chart.ui.LocalizationBundle");
+            ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.ui.LocalizationBundle");
 
     /**
      * Standard constructor - builds a FontDescriptionField initialised with

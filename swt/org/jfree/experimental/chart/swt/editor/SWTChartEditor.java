@@ -56,6 +56,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.editor.ChartEditor;
+import org.jfree.chart.util.ResourceBundleWrapper;
 
 /**
  * An editor for chart properties.
@@ -79,7 +80,8 @@ public class SWTChartEditor implements ChartEditor {
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources
-        = ResourceBundle.getBundle("org.jfree.chart.editor.LocalizationBundle");
+            = ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.editor.LocalizationBundle");
 
     /**
      * Creates a new editor.
@@ -91,7 +93,7 @@ public class SWTChartEditor implements ChartEditor {
         this.shell = new Shell(display, SWT.DIALOG_TRIM);
         this.shell.setSize(400, 500);
         this.chart = chart2edit;
-        this.shell.setText(ResourceBundle.getBundle(
+        this.shell.setText(ResourceBundleWrapper.getBundle(
                 "org.jfree.chart.LocalizationBundle").getString(
                         "Chart_Properties"));
         GridLayout layout = new GridLayout(2, true);

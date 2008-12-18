@@ -65,6 +65,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.experimental.swt.SWTPaintCanvas;
 import org.jfree.experimental.swt.SWTUtils;
 
@@ -99,7 +100,8 @@ class SWTAxisEditor extends Composite {
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources =
-        ResourceBundle.getBundle("org.jfree.chart.editor.LocalizationBundle");
+            ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.editor.LocalizationBundle");
 
     /** Font object used to handle a change of font. */
     private Font font;

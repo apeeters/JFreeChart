@@ -200,6 +200,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.Zoomable;
 import org.jfree.chart.ui.ExtensionFileFilter;
+import org.jfree.chart.util.ResourceBundleWrapper;
 
 /**
  * A Swing GUI component for displaying a {@link JFreeChart} object.
@@ -445,7 +446,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources
-            = ResourceBundle.getBundle("org.jfree.chart.LocalizationBundle");
+            = ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.LocalizationBundle");
 
     /**
      * Constructs a panel that displays the specified chart.

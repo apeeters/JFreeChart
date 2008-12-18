@@ -63,6 +63,7 @@ import org.jfree.chart.ui.LCBLayout;
 import org.jfree.chart.ui.PaintSample;
 import org.jfree.chart.ui.StrokeChooserPanel;
 import org.jfree.chart.ui.StrokeSample;
+import org.jfree.chart.util.ResourceBundleWrapper;
 
 /**
  * A panel for editing the properties of a value axis.
@@ -105,7 +106,8 @@ class DefaultNumberAxisEditor extends DefaultAxisEditor
 
     /** The resourceBundle for the localization. */
     protected static ResourceBundle localizationResources =
-        ResourceBundle.getBundle("org.jfree.chart.editor.LocalizationBundle");
+            ResourceBundleWrapper.getBundle(
+                    "org.jfree.chart.editor.LocalizationBundle");
 
     /**
      * Standard constructor: builds a property panel for the specified axis.
