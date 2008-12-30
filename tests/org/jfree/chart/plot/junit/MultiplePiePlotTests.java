@@ -38,6 +38,7 @@
  * 06-Apr-2006 : Added tests for new fields (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 18-Apr-2008 : Added testConstructor() (DG);
+ * 30-Dec-2008 : Updated for new legendItemShape field (DG);
  *
  */
 
@@ -45,6 +46,7 @@ package org.jfree.chart.plot.junit;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
+import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInput;
@@ -151,6 +153,11 @@ public class MultiplePiePlotTests extends TestCase
         p2.setPieChart(ChartFactory.createPieChart("Title", null, true, true,
                 true));
         assertTrue(p1.equals(p2));
+
+        p1.setLegendItemShape(new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0));
+        assertFalse(p1.equals(p2));
+        p2.setLegendItemShape(new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0));
+        assertTrue(p1.equals(p2));
     }
 
     /**
@@ -158,17 +165,22 @@ public class MultiplePiePlotTests extends TestCase
      */
     public void testCloning() {
         MultiplePiePlot p1 = new MultiplePiePlot();
+        Rectangle2D rect = new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0);
+        p1.setLegendItemShape(rect);
         MultiplePiePlot p2 = null;
         try {
             p2 = (MultiplePiePlot) p1.clone();
         }
         catch (CloneNotSupportedException e) {
             e.printStackTrace();
-            System.err.println("Failed to clone.");
         }
         assertTrue(p1 != p2);
         assertTrue(p1.getClass() == p2.getClass());
         assertTrue(p1.equals(p2));
+
+        // check independence
+        rect.setRect(2.0, 3.0, 4.0, 5.0);
+        assertFalse(p1.equals(p2));
     }
 
     /**
@@ -185,9 +197,8 @@ public class MultiplePiePlotTests extends TestCase
             out.writeObject(p1);
             out.close();
 
-            ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+            ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(
+                    buffer.toByteArray()));
             p2 = (MultiplePiePlot) in.readObject();
             in.close();
         }

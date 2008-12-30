@@ -50,6 +50,7 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 18-Apr-2008 : In the constructor, register the plot as a dataset listener -
  *               see patch 1943021 from Brian Cabana (DG);
+ * 30-Dec-2008 : Added legendItemShape field, and fixed cloning bug (DG);
  *
  */
 
@@ -60,6 +61,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -82,6 +85,7 @@ import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.SerialUtilities;
+import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CategoryToPieDataset;
@@ -129,6 +133,12 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
     private transient Map sectionPaints;
 
     /**
+     * The legend item shape (never null).
+     * @since 1.0.12
+     */
+    private transient Shape legendItemShape;
+
+    /**
      * Creates a new plot with no data.
      */
     public MultiplePiePlot() {
@@ -155,6 +165,7 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
         this.aggregatedItemsKey = "Other";
         this.aggregatedItemsPaint = Color.lightGray;
         this.sectionPaints = new HashMap();
+        this.legendItemShape = new Ellipse2D.Double(-4.0, -4.0, 8.0, 8.0);
     }
 
     /**
@@ -192,6 +203,8 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
 
     /**
      * Returns the pie chart that is used to draw the individual pie plots.
+     * Note that there are some attributes on this chart instance that will
+     * be ignored at rendering time (for example, legend item settings).
      *
      * @return The pie chart (never <code>null</code>).
      *
@@ -329,6 +342,37 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
     public String getPlotType() {
         return "Multiple Pie Plot";
          // TODO: need to fetch this from localised resources
+    }
+
+    /**
+     * Returns the shape used for legend items.
+     *
+     * @return The shape (never <code>null</code>).
+     *
+     * @see #setLegendItemShape(Shape)
+     *
+     * @since 1.0.12
+     */
+    public Shape getLegendItemShape() {
+        return this.legendItemShape;
+    }
+
+    /**
+     * Sets the shape used for legend items and sends a {@link PlotChangeEvent}
+     * to all registered listeners.
+     *
+     * @param shape  the shape (<code>null</code> not permitted).
+     *
+     * @see #getLegendItemShape()
+     *
+     * @since 1.0.12
+     */
+    public void setLegendItemShape(Shape shape) {
+        if (shape == null) {
+            throw new IllegalArgumentException("Null 'shape' argument.");
+        }
+        this.legendItemShape = shape;
+        fireChangeEvent();
     }
 
     /**
@@ -509,42 +553,40 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
     public LegendItemCollection getLegendItems() {
 
         LegendItemCollection result = new LegendItemCollection();
+        if (this.dataset == null) {
+            return result;
+        }
 
-        if (this.dataset != null) {
-            List keys = null;
+        List keys = null;
+        prefetchSectionPaints();
+        if (this.dataExtractOrder == TableOrder.BY_ROW) {
+            keys = this.dataset.getColumnKeys();
+        }
+        else if (this.dataExtractOrder == TableOrder.BY_COLUMN) {
+            keys = this.dataset.getRowKeys();
+        }
 
-            prefetchSectionPaints();
-            if (this.dataExtractOrder == TableOrder.BY_ROW) {
-                keys = this.dataset.getColumnKeys();
+        if (keys != null) {
+            int section = 0;
+            Iterator iterator = keys.iterator();
+            while (iterator.hasNext()) {
+                Comparable key = (Comparable) iterator.next();
+                String label = key.toString();  // TODO: use a generator here
+                String description = label;
+                Paint paint = (Paint) this.sectionPaints.get(key);
+                LegendItem item = new LegendItem(label, description, null,
+                        null, getLegendItemShape(), paint,
+                        Plot.DEFAULT_OUTLINE_STROKE, paint);
+                item.setDataset(getDataset());
+                result.add(item);
+                section++;
             }
-            else if (this.dataExtractOrder == TableOrder.BY_COLUMN) {
-                keys = this.dataset.getRowKeys();
-            }
-
-            if (keys != null) {
-                int section = 0;
-                Iterator iterator = keys.iterator();
-                while (iterator.hasNext()) {
-                    Comparable key = (Comparable) iterator.next();
-                    String label = key.toString();
-                    String description = label;
-                    Paint paint = (Paint) this.sectionPaints.get(key);
-                    LegendItem item = new LegendItem(label, description,
-                            null, null, Plot.DEFAULT_LEGEND_ITEM_CIRCLE,
-                            paint, Plot.DEFAULT_OUTLINE_STROKE, paint);
-                    item.setDataset(getDataset());
-                    result.add(item);
-                    section++;
-                }
-            }
-            if (this.limit > 0.0) {
-                result.add(new LegendItem(this.aggregatedItemsKey.toString(),
-                        this.aggregatedItemsKey.toString(), null, null,
-                        Plot.DEFAULT_LEGEND_ITEM_CIRCLE,
-                        this.aggregatedItemsPaint,
-                        Plot.DEFAULT_OUTLINE_STROKE,
-                        this.aggregatedItemsPaint));
-            }
+        }
+        if (this.limit > 0.0) {
+            result.add(new LegendItem(this.aggregatedItemsKey.toString(),
+                    this.aggregatedItemsKey.toString(), null, null,
+                    getLegendItemShape(), this.aggregatedItemsPaint,
+                    Plot.DEFAULT_OUTLINE_STROKE, this.aggregatedItemsPaint));
         }
         return result;
     }
@@ -582,10 +624,29 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
         if (!ObjectUtilities.equal(this.pieChart, that.pieChart)) {
             return false;
         }
+        if (!ShapeUtilities.equal(this.legendItemShape, that.legendItemShape)) {
+            return false;
+        }
         if (!super.equals(obj)) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns a clone of the plot.
+     *
+     * @return A clone.
+     *
+     * @throws CloneNotSupportedException if some component of the plot does
+     *         not support cloning.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        MultiplePiePlot clone = (MultiplePiePlot) super.clone();
+        clone.pieChart = (JFreeChart) this.pieChart.clone();
+        clone.sectionPaints = new HashMap(this.sectionPaints);
+        clone.legendItemShape = ShapeUtilities.clone(this.legendItemShape);
+        return clone;
     }
 
     /**
@@ -598,6 +659,7 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
         SerialUtilities.writePaint(this.aggregatedItemsPaint, stream);
+        SerialUtilities.writeShape(this.legendItemShape, stream);
     }
 
     /**
@@ -612,6 +674,7 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.aggregatedItemsPaint = SerialUtilities.readPaint(stream);
+        this.legendItemShape = SerialUtilities.readShape(stream);
         this.sectionPaints = new HashMap();
     }
 
