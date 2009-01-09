@@ -187,7 +187,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
 
     /** The default date tick unit. */
     public static final DateTickUnit DEFAULT_DATE_TICK_UNIT
-            = new DateTickUnit(DateTickUnit.DAY, 1, new SimpleDateFormat());
+            = new DateTickUnit(DateTickUnitType.DAY, 1, new SimpleDateFormat());
 
     /** The default anchor date. */
     public static final Date DEFAULT_ANCHOR_DATE = new Date();
@@ -884,168 +884,167 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         int current = calendar.get(unit.getCalendarField());
         int value = count * (current / count);
 
-        switch (unit.getUnit()) {
-
-            case (DateTickUnit.MILLISECOND) :
-                years = calendar.get(Calendar.YEAR);
-                months = calendar.get(Calendar.MONTH);
-                days = calendar.get(Calendar.DATE);
-                hours = calendar.get(Calendar.HOUR_OF_DAY);
-                minutes = calendar.get(Calendar.MINUTE);
-                seconds = calendar.get(Calendar.SECOND);
-                calendar.set(years, months, days, hours, minutes, seconds);
-                calendar.set(Calendar.MILLISECOND, value);
-                Date mm = calendar.getTime();
-                if (mm.getTime() >= date.getTime()) {
-                    calendar.set(Calendar.MILLISECOND, value - 1);
-                    mm = calendar.getTime();
-                }
-                return mm;
-
-            case (DateTickUnit.SECOND) :
-                years = calendar.get(Calendar.YEAR);
-                months = calendar.get(Calendar.MONTH);
-                days = calendar.get(Calendar.DATE);
-                hours = calendar.get(Calendar.HOUR_OF_DAY);
-                minutes = calendar.get(Calendar.MINUTE);
-                if (this.tickMarkPosition == DateTickMarkPosition.START) {
-                    milliseconds = 0;
-                }
-                else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
-                    milliseconds = 500;
-                }
-                else {
-                    milliseconds = 999;
-                }
-                calendar.set(Calendar.MILLISECOND, milliseconds);
-                calendar.set(years, months, days, hours, minutes, value);
-                Date dd = calendar.getTime();
-                if (dd.getTime() >= date.getTime()) {
-                    calendar.set(Calendar.SECOND, value - 1);
-                    dd = calendar.getTime();
-                }
-                return dd;
-
-            case (DateTickUnit.MINUTE) :
-                years = calendar.get(Calendar.YEAR);
-                months = calendar.get(Calendar.MONTH);
-                days = calendar.get(Calendar.DATE);
-                hours = calendar.get(Calendar.HOUR_OF_DAY);
-                if (this.tickMarkPosition == DateTickMarkPosition.START) {
-                    seconds = 0;
-                }
-                else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
-                    seconds = 30;
-                }
-                else {
-                    seconds = 59;
-                }
-                calendar.clear(Calendar.MILLISECOND);
-                calendar.set(years, months, days, hours, value, seconds);
-                Date d0 = calendar.getTime();
-                if (d0.getTime() >= date.getTime()) {
-                    calendar.set(Calendar.MINUTE, value - 1);
-                    d0 = calendar.getTime();
-                }
-                return d0;
-
-            case (DateTickUnit.HOUR) :
-                years = calendar.get(Calendar.YEAR);
-                months = calendar.get(Calendar.MONTH);
-                days = calendar.get(Calendar.DATE);
-                if (this.tickMarkPosition == DateTickMarkPosition.START) {
-                    minutes = 0;
-                    seconds = 0;
-                }
-                else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
-                    minutes = 30;
-                    seconds = 0;
-                }
-                else {
-                    minutes = 59;
-                    seconds = 59;
-                }
-                calendar.clear(Calendar.MILLISECOND);
-                calendar.set(years, months, days, value, minutes, seconds);
-                Date d1 = calendar.getTime();
-                if (d1.getTime() >= date.getTime()) {
-                    calendar.set(Calendar.HOUR_OF_DAY, value - 1);
-                    d1 = calendar.getTime();
-                }
-                return d1;
-
-            case (DateTickUnit.DAY) :
-                years = calendar.get(Calendar.YEAR);
-                months = calendar.get(Calendar.MONTH);
-                if (this.tickMarkPosition == DateTickMarkPosition.START) {
-                    hours = 0;
-                    minutes = 0;
-                    seconds = 0;
-                }
-                else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
-                    hours = 12;
-                    minutes = 0;
-                    seconds = 0;
-                }
-                else {
-                    hours = 23;
-                    minutes = 59;
-                    seconds = 59;
-                }
-                calendar.clear(Calendar.MILLISECOND);
-                calendar.set(years, months, value, hours, 0, 0);
-                // long result = calendar.getTimeInMillis();
-                    // won't work with JDK 1.3
-                Date d2 = calendar.getTime();
-                if (d2.getTime() >= date.getTime()) {
-                    calendar.set(Calendar.DATE, value - 1);
-                    d2 = calendar.getTime();
-                }
-                return d2;
-
-            case (DateTickUnit.MONTH) :
-                years = calendar.get(Calendar.YEAR);
-                calendar.clear(Calendar.MILLISECOND);
-                calendar.set(years, value, 1, 0, 0, 0);
-                Month month = new Month(calendar.getTime(), this.timeZone,
-                        this.locale);
-                Date standardDate = calculateDateForPosition(
+        DateTickUnitType t = unit.getUnitType();
+        if (t.equals(DateTickUnitType.MILLISECOND)) {
+            years = calendar.get(Calendar.YEAR);
+            months = calendar.get(Calendar.MONTH);
+            days = calendar.get(Calendar.DATE);
+            hours = calendar.get(Calendar.HOUR_OF_DAY);
+            minutes = calendar.get(Calendar.MINUTE);
+            seconds = calendar.get(Calendar.SECOND);
+            calendar.set(years, months, days, hours, minutes, seconds);
+            calendar.set(Calendar.MILLISECOND, value);
+            Date mm = calendar.getTime();
+            if (mm.getTime() >= date.getTime()) {
+                calendar.set(Calendar.MILLISECOND, value - 1);
+                mm = calendar.getTime();
+            }
+            return mm;
+        }
+        else if (t.equals(DateTickUnitType.SECOND)) {
+            years = calendar.get(Calendar.YEAR);
+            months = calendar.get(Calendar.MONTH);
+            days = calendar.get(Calendar.DATE);
+            hours = calendar.get(Calendar.HOUR_OF_DAY);
+            minutes = calendar.get(Calendar.MINUTE);
+            if (this.tickMarkPosition == DateTickMarkPosition.START) {
+                milliseconds = 0;
+            }
+            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
+                milliseconds = 500;
+            }
+            else {
+                milliseconds = 999;
+            }
+            calendar.set(Calendar.MILLISECOND, milliseconds);
+            calendar.set(years, months, days, hours, minutes, value);
+            Date dd = calendar.getTime();
+            if (dd.getTime() >= date.getTime()) {
+                calendar.set(Calendar.SECOND, value - 1);
+                dd = calendar.getTime();
+            }
+            return dd;
+        }
+        else if (t.equals(DateTickUnitType.MINUTE)) {
+            years = calendar.get(Calendar.YEAR);
+            months = calendar.get(Calendar.MONTH);
+            days = calendar.get(Calendar.DATE);
+            hours = calendar.get(Calendar.HOUR_OF_DAY);
+            if (this.tickMarkPosition == DateTickMarkPosition.START) {
+               seconds = 0;
+            }
+            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
+                seconds = 30;
+            }
+            else {
+                seconds = 59;
+            }
+            calendar.clear(Calendar.MILLISECOND);
+            calendar.set(years, months, days, hours, value, seconds);
+            Date d0 = calendar.getTime();
+            if (d0.getTime() >= date.getTime()) {
+                calendar.set(Calendar.MINUTE, value - 1);
+                d0 = calendar.getTime();
+            }
+            return d0;
+        }
+        else if (t.equals(DateTickUnitType.HOUR)) {
+            years = calendar.get(Calendar.YEAR);
+            months = calendar.get(Calendar.MONTH);
+            days = calendar.get(Calendar.DATE);
+            if (this.tickMarkPosition == DateTickMarkPosition.START) {
+                minutes = 0;
+                seconds = 0;
+            }
+            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
+                minutes = 30;
+                seconds = 0;
+            }
+            else {
+                minutes = 59;
+                seconds = 59;
+            }
+            calendar.clear(Calendar.MILLISECOND);
+            calendar.set(years, months, days, value, minutes, seconds);
+            Date d1 = calendar.getTime();
+            if (d1.getTime() >= date.getTime()) {
+                calendar.set(Calendar.HOUR_OF_DAY, value - 1);
+                d1 = calendar.getTime();
+            }
+            return d1;
+        }
+        else if (t.equals(DateTickUnitType.DAY)) {
+            years = calendar.get(Calendar.YEAR);
+            months = calendar.get(Calendar.MONTH);
+            if (this.tickMarkPosition == DateTickMarkPosition.START) {
+                hours = 0;
+                minutes = 0;
+                seconds = 0;
+            }
+            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
+                hours = 12;
+                minutes = 0;
+                seconds = 0;
+            }
+            else {
+                hours = 23;
+                minutes = 59;
+                seconds = 59;
+            }
+            calendar.clear(Calendar.MILLISECOND);
+            calendar.set(years, months, value, hours, 0, 0);
+            // long result = calendar.getTimeInMillis();
+                // won't work with JDK 1.3
+            Date d2 = calendar.getTime();
+            if (d2.getTime() >= date.getTime()) {
+                calendar.set(Calendar.DATE, value - 1);
+                d2 = calendar.getTime();
+            }
+            return d2;
+        }
+        else if (t.equals(DateTickUnitType.MONTH)) {
+            years = calendar.get(Calendar.YEAR);
+            calendar.clear(Calendar.MILLISECOND);
+            calendar.set(years, value, 1, 0, 0, 0);
+            Month month = new Month(calendar.getTime(), this.timeZone,
+                    this.locale);
+            Date standardDate = calculateDateForPosition(
+                    month, this.tickMarkPosition);
+            long millis = standardDate.getTime();
+            if (millis >= date.getTime()) {
+                month = (Month) month.previous();
+                // need to peg the month in case the time zone isn't the
+                // default - see bug 2078057
+                month.peg(Calendar.getInstance(this.timeZone));
+                standardDate = calculateDateForPosition(
                         month, this.tickMarkPosition);
-                long millis = standardDate.getTime();
-                if (millis >= date.getTime()) {
-                    month = (Month) month.previous();
-                    // need to peg the month in case the time zone isn't the
-                    // default - see bug 2078057
-                    month.peg(Calendar.getInstance(this.timeZone));
-                    standardDate = calculateDateForPosition(
-                            month, this.tickMarkPosition);
-                }
-                return standardDate;
-
-            case(DateTickUnit.YEAR) :
-                if (this.tickMarkPosition == DateTickMarkPosition.START) {
-                    months = 0;
-                    days = 1;
-                }
-                else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
-                    months = 6;
-                    days = 1;
-                }
-                else {
-                    months = 11;
-                    days = 31;
-                }
-                calendar.clear(Calendar.MILLISECOND);
-                calendar.set(value, months, days, 0, 0, 0);
-                Date d3 = calendar.getTime();
-                if (d3.getTime() >= date.getTime()) {
-                    calendar.set(Calendar.YEAR, value - 1);
-                    d3 = calendar.getTime();
-                }
-                return d3;
-
-            default: return null;
-
+            }
+            return standardDate;
+        }
+        else if (t.equals(DateTickUnitType.YEAR)) {
+            if (this.tickMarkPosition == DateTickMarkPosition.START) {
+                months = 0;
+                days = 1;
+            }
+            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
+                months = 6;
+                days = 1;
+            }
+            else {
+                months = 11;
+                days = 31;
+            }
+            calendar.clear(Calendar.MILLISECOND);
+            calendar.set(value, months, days, 0, 0, 0);
+            Date d3 = calendar.getTime();
+            if (d3.getTime() >= date.getTime()) {
+                calendar.set(Calendar.YEAR, value - 1);
+                d3 = calendar.getTime();
+            }
+            return d3;
+        }
+        else {
+            return null;
         }
 
     }
@@ -1172,97 +1171,97 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         f7.setTimeZone(zone);
 
         // milliseconds
-        units.add(new DateTickUnit(DateTickUnit.MILLISECOND, 1, f1));
-        units.add(new DateTickUnit(DateTickUnit.MILLISECOND, 5,
-                DateTickUnit.MILLISECOND, 1, f1));
-        units.add(new DateTickUnit(DateTickUnit.MILLISECOND, 10,
-                DateTickUnit.MILLISECOND, 1, f1));
-        units.add(new DateTickUnit(DateTickUnit.MILLISECOND, 25,
-                DateTickUnit.MILLISECOND, 5, f1));
-        units.add(new DateTickUnit(DateTickUnit.MILLISECOND, 50,
-                DateTickUnit.MILLISECOND, 10, f1));
-        units.add(new DateTickUnit(DateTickUnit.MILLISECOND, 100,
-                DateTickUnit.MILLISECOND, 10, f1));
-        units.add(new DateTickUnit(DateTickUnit.MILLISECOND, 250,
-                DateTickUnit.MILLISECOND, 10, f1));
-        units.add(new DateTickUnit(DateTickUnit.MILLISECOND, 500,
-                DateTickUnit.MILLISECOND, 50, f1));
+        units.add(new DateTickUnit(DateTickUnitType.MILLISECOND, 1, f1));
+        units.add(new DateTickUnit(DateTickUnitType.MILLISECOND, 5,
+                DateTickUnitType.MILLISECOND, 1, f1));
+        units.add(new DateTickUnit(DateTickUnitType.MILLISECOND, 10,
+                DateTickUnitType.MILLISECOND, 1, f1));
+        units.add(new DateTickUnit(DateTickUnitType.MILLISECOND, 25,
+                DateTickUnitType.MILLISECOND, 5, f1));
+        units.add(new DateTickUnit(DateTickUnitType.MILLISECOND, 50,
+                DateTickUnitType.MILLISECOND, 10, f1));
+        units.add(new DateTickUnit(DateTickUnitType.MILLISECOND, 100,
+                DateTickUnitType.MILLISECOND, 10, f1));
+        units.add(new DateTickUnit(DateTickUnitType.MILLISECOND, 250,
+                DateTickUnitType.MILLISECOND, 10, f1));
+        units.add(new DateTickUnit(DateTickUnitType.MILLISECOND, 500,
+                DateTickUnitType.MILLISECOND, 50, f1));
 
         // seconds
-        units.add(new DateTickUnit(DateTickUnit.SECOND, 1,
-                DateTickUnit.MILLISECOND, 50, f2));
-        units.add(new DateTickUnit(DateTickUnit.SECOND, 5,
-                DateTickUnit.SECOND, 1, f2));
-        units.add(new DateTickUnit(DateTickUnit.SECOND, 10,
-                DateTickUnit.SECOND, 1, f2));
-        units.add(new DateTickUnit(DateTickUnit.SECOND, 30,
-                DateTickUnit.SECOND, 5, f2));
+        units.add(new DateTickUnit(DateTickUnitType.SECOND, 1,
+                DateTickUnitType.MILLISECOND, 50, f2));
+        units.add(new DateTickUnit(DateTickUnitType.SECOND, 5,
+                DateTickUnitType.SECOND, 1, f2));
+        units.add(new DateTickUnit(DateTickUnitType.SECOND, 10,
+                DateTickUnitType.SECOND, 1, f2));
+        units.add(new DateTickUnit(DateTickUnitType.SECOND, 30,
+                DateTickUnitType.SECOND, 5, f2));
 
         // minutes
-        units.add(new DateTickUnit(DateTickUnit.MINUTE, 1,
-                DateTickUnit.SECOND, 5, f3));
-        units.add(new DateTickUnit(DateTickUnit.MINUTE, 2,
-                DateTickUnit.SECOND, 10, f3));
-        units.add(new DateTickUnit(DateTickUnit.MINUTE, 5,
-                DateTickUnit.MINUTE, 1, f3));
-        units.add(new DateTickUnit(DateTickUnit.MINUTE, 10,
-                DateTickUnit.MINUTE, 1, f3));
-        units.add(new DateTickUnit(DateTickUnit.MINUTE, 15,
-                DateTickUnit.MINUTE, 5, f3));
-        units.add(new DateTickUnit(DateTickUnit.MINUTE, 20,
-                DateTickUnit.MINUTE, 5, f3));
-        units.add(new DateTickUnit(DateTickUnit.MINUTE, 30,
-                DateTickUnit.MINUTE, 5, f3));
+        units.add(new DateTickUnit(DateTickUnitType.MINUTE, 1,
+                DateTickUnitType.SECOND, 5, f3));
+        units.add(new DateTickUnit(DateTickUnitType.MINUTE, 2,
+                DateTickUnitType.SECOND, 10, f3));
+        units.add(new DateTickUnit(DateTickUnitType.MINUTE, 5,
+                DateTickUnitType.MINUTE, 1, f3));
+        units.add(new DateTickUnit(DateTickUnitType.MINUTE, 10,
+                DateTickUnitType.MINUTE, 1, f3));
+        units.add(new DateTickUnit(DateTickUnitType.MINUTE, 15,
+                DateTickUnitType.MINUTE, 5, f3));
+        units.add(new DateTickUnit(DateTickUnitType.MINUTE, 20,
+                DateTickUnitType.MINUTE, 5, f3));
+        units.add(new DateTickUnit(DateTickUnitType.MINUTE, 30,
+                DateTickUnitType.MINUTE, 5, f3));
 
         // hours
-        units.add(new DateTickUnit(DateTickUnit.HOUR, 1,
-                DateTickUnit.MINUTE, 5, f3));
-        units.add(new DateTickUnit(DateTickUnit.HOUR, 2,
-                DateTickUnit.MINUTE, 10, f3));
-        units.add(new DateTickUnit(DateTickUnit.HOUR, 4,
-                DateTickUnit.MINUTE, 30, f3));
-        units.add(new DateTickUnit(DateTickUnit.HOUR, 6,
-                DateTickUnit.HOUR, 1, f3));
-        units.add(new DateTickUnit(DateTickUnit.HOUR, 12,
-                DateTickUnit.HOUR, 1, f4));
+        units.add(new DateTickUnit(DateTickUnitType.HOUR, 1,
+                DateTickUnitType.MINUTE, 5, f3));
+        units.add(new DateTickUnit(DateTickUnitType.HOUR, 2,
+                DateTickUnitType.MINUTE, 10, f3));
+        units.add(new DateTickUnit(DateTickUnitType.HOUR, 4,
+                DateTickUnitType.MINUTE, 30, f3));
+        units.add(new DateTickUnit(DateTickUnitType.HOUR, 6,
+                DateTickUnitType.HOUR, 1, f3));
+        units.add(new DateTickUnit(DateTickUnitType.HOUR, 12,
+                DateTickUnitType.HOUR, 1, f4));
 
         // days
-        units.add(new DateTickUnit(DateTickUnit.DAY, 1,
-                DateTickUnit.HOUR, 1, f5));
-        units.add(new DateTickUnit(DateTickUnit.DAY, 2,
-                DateTickUnit.HOUR, 1, f5));
-        units.add(new DateTickUnit(DateTickUnit.DAY, 7,
-                DateTickUnit.DAY, 1, f5));
-        units.add(new DateTickUnit(DateTickUnit.DAY, 15,
-                DateTickUnit.DAY, 1, f5));
+        units.add(new DateTickUnit(DateTickUnitType.DAY, 1,
+                DateTickUnitType.HOUR, 1, f5));
+        units.add(new DateTickUnit(DateTickUnitType.DAY, 2,
+                DateTickUnitType.HOUR, 1, f5));
+        units.add(new DateTickUnit(DateTickUnitType.DAY, 7,
+                DateTickUnitType.DAY, 1, f5));
+        units.add(new DateTickUnit(DateTickUnitType.DAY, 15,
+                DateTickUnitType.DAY, 1, f5));
 
         // months
-        units.add(new DateTickUnit(DateTickUnit.MONTH, 1,
-                DateTickUnit.DAY, 1, f6));
-        units.add(new DateTickUnit(DateTickUnit.MONTH, 2,
-                DateTickUnit.DAY, 1, f6));
-        units.add(new DateTickUnit(DateTickUnit.MONTH, 3,
-                DateTickUnit.MONTH, 1, f6));
-        units.add(new DateTickUnit(DateTickUnit.MONTH, 4,
-                DateTickUnit.MONTH, 1, f6));
-        units.add(new DateTickUnit(DateTickUnit.MONTH, 6,
-                DateTickUnit.MONTH, 1, f6));
+        units.add(new DateTickUnit(DateTickUnitType.MONTH, 1,
+                DateTickUnitType.DAY, 1, f6));
+        units.add(new DateTickUnit(DateTickUnitType.MONTH, 2,
+                DateTickUnitType.DAY, 1, f6));
+        units.add(new DateTickUnit(DateTickUnitType.MONTH, 3,
+                DateTickUnitType.MONTH, 1, f6));
+        units.add(new DateTickUnit(DateTickUnitType.MONTH, 4,
+                DateTickUnitType.MONTH, 1, f6));
+        units.add(new DateTickUnit(DateTickUnitType.MONTH, 6,
+                DateTickUnitType.MONTH, 1, f6));
 
         // years
-        units.add(new DateTickUnit(DateTickUnit.YEAR, 1,
-                DateTickUnit.MONTH, 1, f7));
-        units.add(new DateTickUnit(DateTickUnit.YEAR, 2,
-                DateTickUnit.MONTH, 3, f7));
-        units.add(new DateTickUnit(DateTickUnit.YEAR, 5,
-                DateTickUnit.YEAR, 1, f7));
-        units.add(new DateTickUnit(DateTickUnit.YEAR, 10,
-                DateTickUnit.YEAR, 1, f7));
-        units.add(new DateTickUnit(DateTickUnit.YEAR, 25,
-                DateTickUnit.YEAR, 5, f7));
-        units.add(new DateTickUnit(DateTickUnit.YEAR, 50,
-                DateTickUnit.YEAR, 10, f7));
-        units.add(new DateTickUnit(DateTickUnit.YEAR, 100,
-                DateTickUnit.YEAR, 20, f7));
+        units.add(new DateTickUnit(DateTickUnitType.YEAR, 1,
+                DateTickUnitType.MONTH, 1, f7));
+        units.add(new DateTickUnit(DateTickUnitType.YEAR, 2,
+                DateTickUnitType.MONTH, 3, f7));
+        units.add(new DateTickUnit(DateTickUnitType.YEAR, 5,
+                DateTickUnitType.YEAR, 1, f7));
+        units.add(new DateTickUnit(DateTickUnitType.YEAR, 10,
+                DateTickUnitType.YEAR, 1, f7));
+        units.add(new DateTickUnit(DateTickUnitType.YEAR, 25,
+                DateTickUnitType.YEAR, 5, f7));
+        units.add(new DateTickUnit(DateTickUnitType.YEAR, 50,
+                DateTickUnitType.YEAR, 10, f7));
+        units.add(new DateTickUnit(DateTickUnitType.YEAR, 100,
+                DateTickUnitType.YEAR, 20, f7));
 
         return units;
 
@@ -1575,23 +1574,14 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     private Date correctTickDateForPosition(Date time, DateTickUnit unit,
             DateTickMarkPosition position) {
         Date result = time;
-        switch (unit.getUnit()) {
-            case (DateTickUnit.MILLISECOND) :
-            case (DateTickUnit.SECOND) :
-            case (DateTickUnit.MINUTE) :
-            case (DateTickUnit.HOUR) :
-            case (DateTickUnit.DAY) :
-                break;
-            case (DateTickUnit.MONTH) :
-                result = calculateDateForPosition(new Month(time,
-                        this.timeZone, this.locale), position);
-                break;
-            case(DateTickUnit.YEAR) :
-                result = calculateDateForPosition(new Year(time,
-                        this.timeZone, this.locale), position);
-                break;
-
-            default: break;
+        DateTickUnitType t = unit.getUnitType();
+        if (t.equals(DateTickUnitType.MONTH)) {
+            result = calculateDateForPosition(new Month(time,
+                    this.timeZone, this.locale), position);
+        }
+        else if (t.equals(DateTickUnitType.YEAR)) {
+            result = calculateDateForPosition(new Year(time,
+                    this.timeZone, this.locale), position);
         }
         return result;
     }
