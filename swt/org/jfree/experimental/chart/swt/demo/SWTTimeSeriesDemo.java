@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------
  * SWTTimeSeriesDemo.java
  * ---------------------
- * (C) Copyright 2006, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006, 2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Henry Proudhon (henry.proudhon AT ensmp.fr);
@@ -112,7 +112,8 @@ public class SWTTimeSeriesDemo {
         plot.addRangeMarker(interv);
 
         // code to test the alpha channel within awt colors
-        XYDifferenceRenderer differenceRenderer= new XYDifferenceRenderer(new Color(255,0,0,128),new Color(0,255,0,128),false);
+        XYDifferenceRenderer differenceRenderer= new XYDifferenceRenderer(
+                new Color(255, 0, 0, 128),new Color(0, 255, 0, 128), false);
         plot.setRenderer(differenceRenderer);
 
         DateAxis axis = (DateAxis) plot.getDomainAxis();
@@ -129,7 +130,7 @@ public class SWTTimeSeriesDemo {
      */
     private static XYDataset createDataset() {
 
-        TimeSeries s1 = new TimeSeries("L&G European Index Trust", Month.class);
+        TimeSeries s1 = new TimeSeries("L&G European Index Trust");
         s1.add(new Month(2, 2001), 181.8);
         s1.add(new Month(3, 2001), 167.3);
         s1.add(new Month(4, 2001), 153.8);
@@ -149,7 +150,7 @@ public class SWTTimeSeriesDemo {
         s1.add(new Month(6, 2002), 137.0);
         s1.add(new Month(7, 2002), 132.8);
 
-        TimeSeries s2 = new TimeSeries("L&G UK Index Trust", Month.class);
+        TimeSeries s2 = new TimeSeries("L&G UK Index Trust");
         s2.add(new Month(2, 2001), 129.6);
         s2.add(new Month(3, 2001), 123.2);
         s2.add(new Month(4, 2001), 117.2);
