@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------
  * MovingAverage.java
  * ------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited.
+ * (C) Copyright 2003-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Benoit Xhenseval;
@@ -123,7 +123,7 @@ public class MovingAverage {
 
         }
 
-        TimeSeries result = new TimeSeries(name, source.getTimePeriodClass());
+        TimeSeries result = new TimeSeries(name);
 
         if (source.getItemCount() > 0) {
 
@@ -209,7 +209,7 @@ public class MovingAverage {
                     "than or equal to 2.");
         }
 
-        TimeSeries result = new TimeSeries(name, source.getTimePeriodClass());
+        TimeSeries result = new TimeSeries(name);
         double rollingSumForPeriod = 0.0;
         for (int i = 0; i < source.getItemCount(); i++) {
             // get the current data item...
