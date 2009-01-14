@@ -1795,6 +1795,7 @@ class JFreeChartInfo extends ProjectInfo {
                 new Contributor("Xun Kang", "-"),
                 new Contributor("Bill Kelemen", "-"),
                 new Contributor("Norbert Kiesel", "-"),
+                new Contributor("Peter Kolb", "-"),
                 new Contributor("Gideon Krause", "-"),
                 new Contributor("Pierre-Marie Le Biot", "-"),
                 new Contributor("Arnaud Lelievre", "-"),
