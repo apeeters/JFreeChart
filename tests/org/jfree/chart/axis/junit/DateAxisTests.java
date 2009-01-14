@@ -74,6 +74,7 @@ import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.DateTick;
 import org.jfree.chart.axis.DateTickMarkPosition;
 import org.jfree.chart.axis.DateTickUnit;
+import org.jfree.chart.axis.DateTickUnitType;
 import org.jfree.chart.axis.SegmentedTimeline;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.data.time.DateRange;
@@ -135,9 +136,9 @@ public class DateAxisTests extends TestCase {
         assertFalse(a1.equals("Some non-DateAxis object"));
 
         // tickUnit
-        a1.setTickUnit(new DateTickUnit(DateTickUnit.DAY, 7));
+        a1.setTickUnit(new DateTickUnit(DateTickUnitType.DAY, 7));
         assertFalse(a1.equals(a2));
-        a2.setTickUnit(new DateTickUnit(DateTickUnit.DAY, 7));
+        a2.setTickUnit(new DateTickUnit(DateTickUnitType.DAY, 7));
         assertTrue(a1.equals(a2));
 
         // dateFormatOverride
@@ -346,7 +347,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(y2007.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.YEAR, 1);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.YEAR, 1);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -419,7 +420,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(y2007.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.YEAR, 10);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.YEAR, 10);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -492,7 +493,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(dec2006.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.MONTH, 1);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.MONTH, 1);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -565,7 +566,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(dec2006.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.MONTH, 3);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.MONTH, 3);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -638,7 +639,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(apr22007.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.DAY, 1);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.DAY, 1);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -711,7 +712,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(apr22007.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.DAY, 7);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.DAY, 7);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -784,7 +785,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(h1.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.HOUR, 1);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -857,7 +858,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(h1.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.HOUR, 6);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 6);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -930,7 +931,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(s1.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.SECOND, 1);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.SECOND, 1);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -1003,7 +1004,7 @@ public class DateAxisTests extends TestCase {
 
         Date end = new Date(s1.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.SECOND, 5);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.SECOND, 5);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -1070,7 +1071,7 @@ public class DateAxisTests extends TestCase {
         Date d0 = new Date(m0.getFirstMillisecond());
         Date end = new Date(m1.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.MILLISECOND, 1);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.MILLISECOND, 1);
         axis.setTickUnit(unit);
 
         // START: check d0
@@ -1113,7 +1114,7 @@ public class DateAxisTests extends TestCase {
         Date d0 = new Date(m0.getFirstMillisecond());
         Date end = new Date(m1.getLastMillisecond());
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnit.MILLISECOND, 10);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.MILLISECOND, 10);
         axis.setTickUnit(unit);
 
         // START: check d0
@@ -1153,7 +1154,7 @@ public class DateAxisTests extends TestCase {
         DateAxis axis = new DateAxis("Date", tz, Locale.UK);
         SimpleDateFormat sdf = new SimpleDateFormat("d-MMM-yyyy", Locale.UK);
         sdf.setCalendar(c);
-        axis.setTickUnit(new DateTickUnit(DateTickUnit.MONTH, 1, sdf));
+        axis.setTickUnit(new DateTickUnit(DateTickUnitType.MONTH, 1, sdf));
         Day d1 = new Day(1, 3, 2008);
         d1.peg(c);
         Day d2 = new Day(30, 6, 2008);
