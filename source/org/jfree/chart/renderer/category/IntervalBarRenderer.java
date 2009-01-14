@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,11 +27,12 @@
  * ------------------------
  * IntervalBarRenderer.java
  * ------------------------
- * (C) Copyright 2002-2008, by Jeremy Bowman.
+ * (C) Copyright 2002-2009, by Jeremy Bowman.
  *
  * Original Author:  Jeremy Bowman;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *                   Christian W. Zuckschwerdt;
+ *                   Peter Kolb (patch 2497611);
  *
  * Changes
  * -------
@@ -60,6 +61,7 @@
  * 06-Jul-2007 : Respect drawBarOutline attribute (DG);
  * 24-Jun-2008 : Added new barPainter mechanism (DG);
  * 07-Oct-2008 : Override equals() method to fix minor bug (DG);
+ * 14-Jan-2009 : Added support for seriesVisible flags (PK);
  *
  */
 
@@ -160,7 +162,13 @@ public class IntervalBarRenderer extends BarRenderer {
                                  int row,
                                  int column) {
 
-        int seriesCount = getRowCount();
+        int visibleRow = state.getVisibleSeriesIndex(row);
+        if (visibleRow < 0) {
+            return;
+        }
+        int seriesCount = state.getVisibleSeriesCount() >= 0
+                ? state.getVisibleSeriesCount() : getRowCount();
+
         int categoryCount = getColumnCount();
 
         PlotOrientation orientation = plot.getOrientation();
@@ -210,10 +218,10 @@ public class IntervalBarRenderer extends BarRenderer {
             if (seriesCount > 1) {
                 double seriesGap = dataArea.getHeight() * getItemMargin()
                                    / (categoryCount * (seriesCount - 1));
-                rectY = rectY + row * (state.getBarWidth() + seriesGap);
+                rectY = rectY + visibleRow * (state.getBarWidth() + seriesGap);
             }
             else {
-                rectY = rectY + row * state.getBarWidth();
+                rectY = rectY + visibleRow * state.getBarWidth();
             }
 
             rectX = java2dValue0;
@@ -230,10 +238,10 @@ public class IntervalBarRenderer extends BarRenderer {
             if (seriesCount > 1) {
                 double seriesGap = dataArea.getWidth() * getItemMargin()
                                    / (categoryCount * (seriesCount - 1));
-                rectX = rectX + row * (state.getBarWidth() + seriesGap);
+                rectX = rectX + visibleRow * (state.getBarWidth() + seriesGap);
             }
             else {
-                rectX = rectX + row * state.getBarWidth();
+                rectX = rectX + visibleRow * state.getBarWidth();
             }
 
             rectY = java2dValue0;

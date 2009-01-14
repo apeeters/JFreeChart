@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,16 +27,18 @@
  * --------------------
  * ScatterRenderer.java
  * --------------------
- * (C) Copyright 2007, 2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2007-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   David Forslund;
+ *                   Peter Kolb (patch 2497611);
  *
  * Changes
  * -------
  * 08-Oct-2007 : Version 1, based on patch 1780779 by David Forslund (DG);
  * 11-Oct-2007 : Renamed ScatterRenderer (DG);
  * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
+ * 14-Jan-2009 : Added support for seriesVisible flags (PK);
  *
  */
 
@@ -373,6 +375,11 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
         if (!getItemVisible(row, column)) {
             return;
         }
+        int visibleRow = state.getVisibleSeriesIndex(row);
+        if (visibleRow < 0) {
+            return;
+        }
+        int visibleRowCount = state.getVisibleSeriesCount();
 
         PlotOrientation orientation = plot.getOrientation();
 
@@ -386,8 +393,8 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             // current data point...
             double x1;
             if (this.useSeriesOffset) {
-                x1 = domainAxis.getCategorySeriesMiddle(dataset.getColumnKey(
-                        column), dataset.getRowKey(row), dataset,
+                x1 = domainAxis.getCategorySeriesMiddle(column,dataset.getColumnCount(),
+						visibleRow, visibleRowCount,
                         this.itemMargin, dataArea, plot.getDomainAxisEdge());
             }
             else {
