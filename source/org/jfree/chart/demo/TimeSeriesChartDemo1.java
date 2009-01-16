@@ -79,7 +79,6 @@ public class TimeSeriesChartDemo1 extends ApplicationFrame {
         super(title);
         ChartPanel chartPanel = (ChartPanel) createDemoPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-        chartPanel.setMouseZoomable(true, false);
         setContentPane(chartPanel);
     }
 
@@ -117,6 +116,7 @@ public class TimeSeriesChartDemo1 extends ApplicationFrame {
             XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
             renderer.setBaseShapesVisible(true);
             renderer.setBaseShapesFilled(true);
+            renderer.setDrawSeriesLineAsPath(true);
         }
 
         DateAxis axis = (DateAxis) plot.getDomainAxis();
@@ -196,7 +196,9 @@ public class TimeSeriesChartDemo1 extends ApplicationFrame {
      */
     public static JPanel createDemoPanel() {
         JFreeChart chart = createChart(createDataset());
-        return new ChartPanel(chart);
+        ChartPanel panel = new ChartPanel(chart);
+        panel.setFillZoomRectangle(true);
+        return panel;
     }
 
     /**

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------
  * BarChartDemo1.java
  * ------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   ;
@@ -73,7 +73,8 @@ public class BarChartDemo1 extends ApplicationFrame {
         super(title);
         CategoryDataset dataset = createDataset();
         JFreeChart chart = createChart(dataset);
-        ChartPanel chartPanel = new ChartPanel(chart, false);
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setFillZoomRectangle(true);
         chartPanel.setPreferredSize(new Dimension(500, 270));
         setContentPane(chartPanel);
     }
@@ -150,10 +151,6 @@ public class BarChartDemo1 extends ApplicationFrame {
 
         // get a reference to the plot for further customisation...
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        plot.setBackgroundPaint(Color.lightGray);
-        plot.setDomainGridlinePaint(Color.white);
-        plot.setDomainGridlinesVisible(true);
-        plot.setRangeGridlinePaint(Color.white);
 
         // ******************************************************************
         //  More than 150 demo applications are included with the JFreeChart
