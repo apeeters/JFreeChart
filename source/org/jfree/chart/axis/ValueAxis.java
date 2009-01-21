@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------
  * ValueAxis.java
  * --------------
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Jonathan Nash;
@@ -102,6 +102,7 @@
  *               method (DG);
  * 02-Aug-2007 : Check for major tick when drawing label (DG);
  * 25-Sep-2008 : Added minor tick support, see patch 1934255 by Peter Kolb (DG);
+ * 21-Jan-2009 : Updated default behaviour of minor ticks (DG);
  *
  */
 
@@ -249,7 +250,11 @@ public abstract class ValueAxis extends Axis
     /** An index into an array of standard tick values. */
     private int autoTickIndex;
 
-    /** The number of minor ticks per major tick unit. */
+    /**
+     * The number of minor ticks per major tick unit.  This is an override
+     * field, if the value is > 0 it is used, otherwise the axis refers to the
+     * minorTickCount in the current tickUnit.
+     */
     private int minorTickCount; 
 
     /** A flag indicating whether or not tick labels are rotated to vertical. */
@@ -1425,9 +1430,6 @@ public abstract class ValueAxis extends Axis
      * @since 1.0.12
      */
     public void setMinorTickCount(int count) {
-        if (count <= 0) {
-            throw new IllegalArgumentException("Requires 'count' > 0.");
-        }
         this.minorTickCount = count;
         notifyListeners(new AxisChangeEvent(this));
     }

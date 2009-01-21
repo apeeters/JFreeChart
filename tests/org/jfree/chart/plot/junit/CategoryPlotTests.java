@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -45,6 +45,7 @@
  * 23-Apr-2008 : Extended testEquals() and testCloning(), and added
  *               testCloning2() and testCloning3() (DG);
  * 26-Jun-2008 : Updated testEquals() (DG);
+ * 21-Jan-2009 : Updated testEquals() for new fields (DG);
  *
  */
 
@@ -93,11 +94,13 @@ import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.renderer.category.AreaRenderer;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.renderer.category.DefaultCategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.util.Layer;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.SortOrder;
 import org.jfree.data.Range;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -455,6 +458,41 @@ public class CategoryPlotTests extends TestCase {
         assertFalse(plot1.equals(plot2));
         plot2.setDomainCrosshairStroke(new BasicStroke(1.23f));
         assertTrue(plot1.equals(plot2));
+
+        plot1.setRangeMinorGridlinesVisible(true);
+        assertFalse(plot1.equals(plot2));
+        plot2.setRangeMinorGridlinesVisible(true);
+        assertTrue(plot1.equals(plot2));
+
+        plot1.setRangeMinorGridlinePaint(new GradientPaint(1.0f, 2.0f,
+                Color.red, 3.0f, 4.0f, Color.blue));
+        assertFalse(plot1.equals(plot2));
+        plot2.setRangeMinorGridlinePaint(new GradientPaint(1.0f, 2.0f, Color.red,
+                3.0f, 4.0f, Color.blue));
+        assertTrue(plot1.equals(plot2));
+
+        plot1.setRangeMinorGridlineStroke(new BasicStroke(1.23f));
+        assertFalse(plot1.equals(plot2));
+        plot2.setRangeMinorGridlineStroke(new BasicStroke(1.23f));
+        assertTrue(plot1.equals(plot2));
+
+        plot1.setRangeZeroBaselineVisible(!plot1.isRangeZeroBaselineVisible());
+        assertFalse(plot1.equals(plot2));
+        plot2.setRangeZeroBaselineVisible(!plot2.isRangeZeroBaselineVisible());
+        assertTrue(plot1.equals(plot2));
+
+        plot1.setRangeZeroBaselinePaint(new GradientPaint(1.0f, 2.0f,
+                Color.red, 3.0f, 4.0f, Color.blue));
+        assertFalse(plot1.equals(plot2));
+        plot2.setRangeZeroBaselinePaint(new GradientPaint(1.0f, 2.0f, Color.red,
+                3.0f, 4.0f, Color.blue));
+        assertTrue(plot1.equals(plot2));
+
+        plot1.setRangeZeroBaselineStroke(new BasicStroke(1.23f));
+        assertFalse(plot1.equals(plot2));
+        plot2.setRangeZeroBaselineStroke(new BasicStroke(1.23f));
+        assertTrue(plot1.equals(plot2));
+
     }
 
     /**
@@ -602,7 +640,6 @@ public class CategoryPlotTests extends TestCase {
      * Serialize an instance, restore it, and check for equality.
      */
     public void testSerialization2() {
-
         DefaultCategoryDataset data = new DefaultCategoryDataset();
         CategoryAxis domainAxis = new CategoryAxis("Domain");
         NumberAxis rangeAxis = new NumberAxis("Range");
@@ -627,7 +664,6 @@ public class CategoryPlotTests extends TestCase {
             fail(e.toString());
         }
         assertEquals(p1, p2);
-
     }
 
     /**
@@ -930,6 +966,88 @@ public class CategoryPlotTests extends TestCase {
     public void testRemoveRangeMarker() {
         CategoryPlot plot = new CategoryPlot();
         assertFalse(plot.removeRangeMarker(new ValueMarker(0.5)));
+    }
+
+    /**
+     * Some tests for the getDomainAxisForDataset() method.
+     */
+    public void testGetDomainAxisForDataset() {
+        CategoryDataset dataset = new DefaultCategoryDataset();
+        CategoryAxis xAxis = new CategoryAxis("X");
+        NumberAxis yAxis = new NumberAxis("Y");
+        CategoryItemRenderer renderer = new BarRenderer();
+        CategoryPlot plot = new CategoryPlot(dataset, xAxis, yAxis, renderer);
+        assertEquals(xAxis, plot.getDomainAxisForDataset(0));
+
+        // should get IllegalArgumentException for negative index
+        boolean pass = false;
+        try {
+            plot.getDomainAxisForDataset(-1);
+}
+        catch (IllegalArgumentException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+
+        // if multiple axes are mapped, the first in the list should be
+        // returned...
+        CategoryAxis xAxis2 = new CategoryAxis("X2");
+        plot.setDomainAxis(1, xAxis2);
+        assertEquals(xAxis, plot.getDomainAxisForDataset(0));
+
+        plot.mapDatasetToDomainAxis(0, 1);
+        assertEquals(xAxis2, plot.getDomainAxisForDataset(0));
+
+        List axisIndices = Arrays.asList(new Integer[] {new Integer(0),
+                new Integer(1)});
+        plot.mapDatasetToDomainAxes(0, axisIndices);
+        assertEquals(xAxis, plot.getDomainAxisForDataset(0));
+
+        axisIndices = Arrays.asList(new Integer[] {new Integer(1),
+                new Integer(2)});
+        plot.mapDatasetToDomainAxes(0, axisIndices);
+        assertEquals(xAxis2, plot.getDomainAxisForDataset(0));
+    }
+
+    /**
+     * Some tests for the getRangeAxisForDataset() method.
+     */
+    public void testGetRangeAxisForDataset() {
+        CategoryDataset dataset = new DefaultCategoryDataset();
+        CategoryAxis xAxis = new CategoryAxis("X");
+        NumberAxis yAxis = new NumberAxis("Y");
+        CategoryItemRenderer renderer = new DefaultCategoryItemRenderer();
+        CategoryPlot plot = new CategoryPlot(dataset, xAxis, yAxis, renderer);
+        assertEquals(yAxis, plot.getRangeAxisForDataset(0));
+
+        // should get IllegalArgumentException for negative index
+        boolean pass = false;
+        try {
+            plot.getRangeAxisForDataset(-1);
+        }
+        catch (IllegalArgumentException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+
+        // if multiple axes are mapped, the first in the list should be
+        // returned...
+        NumberAxis yAxis2 = new NumberAxis("Y2");
+        plot.setRangeAxis(1, yAxis2);
+        assertEquals(yAxis, plot.getRangeAxisForDataset(0));
+
+        plot.mapDatasetToRangeAxis(0, 1);
+        assertEquals(yAxis2, plot.getRangeAxisForDataset(0));
+
+        List axisIndices = Arrays.asList(new Integer[] {new Integer(0),
+                new Integer(1)});
+        plot.mapDatasetToRangeAxes(0, axisIndices);
+        assertEquals(yAxis, plot.getRangeAxisForDataset(0));
+
+        axisIndices = Arrays.asList(new Integer[] {new Integer(1),
+                new Integer(2)});
+        plot.mapDatasetToRangeAxes(0, axisIndices);
+        assertEquals(yAxis2, plot.getRangeAxisForDataset(0));
     }
 
 }
