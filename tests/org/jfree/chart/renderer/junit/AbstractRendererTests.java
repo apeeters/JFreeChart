@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------
  * AbstractRendererTests.java
  * --------------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -40,6 +40,7 @@
  * 28-Feb-2007 : Added checks for cloning (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 04-Dec-2007 : Added testHashCode() (DG);
+ * 28-Jan-2009 : Updated testEquals() (DG);
  *
  */
 
@@ -51,6 +52,8 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Rectangle;
 import java.awt.Stroke;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -103,7 +106,6 @@ public class AbstractRendererTests extends TestCase {
      * Test that the equals() method distinguishes all fields.
      */
     public void testEquals() {
-
         // have to use a concrete subclass...
         BarRenderer r1 = new BarRenderer();
         BarRenderer r2 = new BarRenderer();
@@ -208,15 +210,15 @@ public class AbstractRendererTests extends TestCase {
         assertTrue(r1.equals(r2));
 
         // shapeList
-        r1.setSeriesShape(1, new Rectangle(1, 2, 3, 4));
+        r1.setSeriesShape(1, new Ellipse2D.Double(1, 2, 3, 4));
         assertFalse(r1.equals(r2));
-        r2.setSeriesShape(1, new Rectangle(1, 2, 3, 4));
+        r2.setSeriesShape(1, new Ellipse2D.Double(1, 2, 3, 4));
         assertTrue(r1.equals(r2));
 
         // baseShape
-        r1.setBaseShape(new Rectangle(1, 2, 3, 4));
+        r1.setBaseShape(new Ellipse2D.Double(1, 2, 3, 4));
         assertFalse(r1.equals(r2));
-        r2.setBaseShape(new Rectangle(1, 2, 3, 4));
+        r2.setBaseShape(new Ellipse2D.Double(1, 2, 3, 4));
         assertTrue(r1.equals(r2));
 
         // itemLabelsVisibleList
@@ -307,6 +309,46 @@ public class AbstractRendererTests extends TestCase {
         r2.setBaseCreateEntities(false);
         assertTrue(r1.equals(r2));
 
+        // legendShape
+        r1.setLegendShape(0, new Ellipse2D.Double(1.0, 2.0, 3.0, 4.0));
+        assertFalse(r1.equals(r2));
+        r2.setLegendShape(0, new Ellipse2D.Double(1.0, 2.0, 3.0, 4.0));
+        assertTrue(r1.equals(r2));
+
+        // baseLegendShape
+        r1.setBaseLegendShape(new Ellipse2D.Double(5.0, 6.0, 7.0, 8.0));
+        assertFalse(r1.equals(r2));
+        r2.setBaseLegendShape(new Ellipse2D.Double(5.0, 6.0, 7.0, 8.0));
+        assertTrue(r1.equals(r2));
+
+        // legendTextFont
+        r1.setLegendTextFont(0, new Font("Dialog", Font.PLAIN, 7));
+        assertFalse(r1.equals(r2));
+        r2.setLegendTextFont(0, new Font("Dialog", Font.PLAIN, 7));
+        assertTrue(r1.equals(r2));
+
+        // baseLegendTextFont
+        r1.setBaseLegendTextFont(new Font("Dialog", Font.PLAIN, 7));
+        assertFalse(r1.equals(r2));
+        r2.setBaseLegendTextFont(new Font("Dialog", Font.PLAIN, 7));
+        assertTrue(r1.equals(r2));
+
+        // legendTextPaint
+        r1.setLegendTextPaint(0, new GradientPaint(1.0f, 2.0f, Color.blue,
+                3.0f, 4.0f, Color.red));
+        assertFalse(r1.equals(r2));
+        r2.setLegendTextPaint(0, new GradientPaint(1.0f, 2.0f, Color.blue,
+                3.0f, 4.0f, Color.red));
+        assertTrue(r1.equals(r2));
+
+        // baseOutlinePaint
+        r1.setBaseLegendTextPaint(new GradientPaint(1.0f, 2.0f, Color.blue,
+                3.0f, 4.0f, Color.red));
+        assertFalse(r1.equals(r2));
+        r2.setBaseLegendTextPaint(new GradientPaint(1.0f, 2.0f, Color.blue,
+                3.0f, 4.0f, Color.red));
+        assertTrue(r1.equals(r2));
+
     }
 
     /**
@@ -316,6 +358,9 @@ public class AbstractRendererTests extends TestCase {
         LineAndShapeRenderer r1 = new LineAndShapeRenderer();
         Rectangle2D baseShape = new Rectangle2D.Double(11.0, 12.0, 13.0, 14.0);
         r1.setBaseShape(baseShape);
+        r1.setBaseLegendShape(new Rectangle(4, 3, 2, 1));
+        r1.setBaseLegendTextFont(new Font("Dialog", Font.PLAIN, 3));
+        r1.setBaseLegendTextPaint(new Color(1, 2, 3));
 
         LineAndShapeRenderer r2 = null;
         try {
@@ -397,6 +442,36 @@ public class AbstractRendererTests extends TestCase {
         assertFalse(r1.equals(r2));
         r2.setSeriesCreateEntities(0, Boolean.FALSE);
         assertTrue(r1.equals(r2));
+
+        r1.setLegendShape(0, new Rectangle(9, 7, 3, 4));
+        assertFalse(r1.equals(r2));
+        r2.setLegendShape(0, new Rectangle(9, 7, 3, 4));
+        assertTrue(r1.equals(r2));
+
+        r1.setBaseLegendShape(new Rectangle(3, 4, 1, 5));
+        assertFalse(r1.equals(r2));
+        r2.setBaseLegendShape(new Rectangle(3, 4, 1, 5));
+        assertTrue(r1.equals(r2));
+
+        r1.setLegendTextFont(1, new Font("Dialog", Font.PLAIN, 33));
+        assertFalse(r1.equals(r2));
+        r2.setLegendTextFont(1, new Font("Dialog", Font.PLAIN, 33));
+        assertTrue(r1.equals(r2));
+
+        r1.setBaseLegendTextFont(new Font("Dialog", Font.PLAIN, 11));
+        assertFalse(r1.equals(r2));
+        r2.setBaseLegendTextFont(new Font("Dialog", Font.PLAIN, 11));
+        assertTrue(r1.equals(r2));
+
+        r1.setLegendTextPaint(3, Color.red);
+        assertFalse(r1.equals(r2));
+        r2.setLegendTextPaint(3, Color.red);
+        assertTrue(r1.equals(r2));
+
+        r1.setBaseLegendTextPaint(Color.green);
+        assertFalse(r1.equals(r2));
+        r2.setBaseLegendTextPaint(Color.green);
+        assertTrue(r1.equals(r2));
     }
 
     /**
@@ -424,6 +499,8 @@ public class AbstractRendererTests extends TestCase {
     public void testCloning2() {
         LineAndShapeRenderer r1 = new LineAndShapeRenderer();
         r1.setBasePaint(Color.blue);
+        r1.setBaseLegendTextPaint(new GradientPaint(1.0f, 2.0f, Color.red,
+                3.0f, 4.0f, Color.blue));
         LineAndShapeRenderer r2 = null;
         try {
             r2 = (LineAndShapeRenderer) r1.clone();
@@ -556,6 +633,10 @@ public class AbstractRendererTests extends TestCase {
     public void testSerialization() {
 
         BarRenderer r1 = new BarRenderer();
+        r1.setBaseLegendTextFont(new Font("Dialog", Font.PLAIN, 4));
+        r1.setBaseLegendTextPaint(new GradientPaint(1.0f, 2.0f, Color.red,
+                3.0f, 4.0f, Color.green));
+        r1.setBaseLegendShape(new Line2D.Double(1.0, 2.0, 3.0, 4.0));
         BarRenderer r2 = null;
 
         try {

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -85,6 +85,7 @@
  * 17-Jun-2008 : Added legendShape, legendTextFont and legendTextPaint
  *               attributes (DG);
  * 18-Aug-2008 : Added clearSeriesPaints() and clearSeriesStrokes() (DG);
+ * 28-Jan-2009 : Equals method doesn't test Shape equality correctly (DG);
  *
  */
 
@@ -2820,7 +2821,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         if (!ObjectUtilities.equal(this.shapeList, that.shapeList)) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.baseShape, that.baseShape)) {
+        if (!ShapeUtilities.equal(this.baseShape, that.baseShape)) {
             return false;
         }
         if (!ObjectUtilities.equal(this.itemLabelsVisibleList,
