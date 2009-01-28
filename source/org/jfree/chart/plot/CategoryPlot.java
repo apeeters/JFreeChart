@@ -168,6 +168,7 @@
  * 18-Dec-2008 : Use ResourceBundleWrapper - see patch 1607918 by
  *               Jess Thrysoee (DG);
  * 21-Jan-2009 : Added rangeMinorGridlinesVisible flag (DG);
+ * 28-Jan-2009 : Updated for changes to CategoryItemRenderer interface (DG);
  *
  */
 
@@ -3924,7 +3925,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
                         columnCount, dataArea, domainAxisEdge);
                 CategoryItemRenderer renderer1 = getRenderer();
                 if (renderer1 != null) {
-                    renderer1.drawDomainGridline(g2, this, dataArea, xx);
+                    renderer1.drawDomainLine(g2, this, dataArea, xx,
+                            getDomainGridlinePaint(),
+                            getDomainGridlineStroke());
                 }
             }
         }
@@ -3977,22 +3980,10 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             }
             if (((tick.getValue() != 0.0)
                     || !isRangeZeroBaselineVisible()) && paintLine) {
-                // the method we want isn't in the CategoryItemRenderer
-                // interface...
-                if (r instanceof AbstractCategoryItemRenderer) {
-                    AbstractCategoryItemRenderer aci
-                            = (AbstractCategoryItemRenderer) r;
-                    aci.drawRangeLine(g2, this, axis, dataArea,
-                            tick.getValue(), gridPaint, gridStroke);
-                }
-                else {
-                    // we'll have to use the method in the interface, but
-                    // this doesn't have the paint and stroke settings...
-                    r.drawRangeGridline(g2, this, axis, dataArea,
-                        tick.getValue());
+                    r.drawRangeLine(g2, this, axis, dataArea, tick.getValue(),
+                            gridPaint, gridStroke);
             }
         }
-    }
     }
 
     /**
@@ -4010,14 +4001,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             return;
         }
         CategoryItemRenderer r = getRenderer();
-        if (r instanceof AbstractCategoryItemRenderer) {
-            AbstractCategoryItemRenderer aci = (AbstractCategoryItemRenderer) r;
-            aci.drawRangeLine(g2, this, getRangeAxis(), area, 0.0,
-                    this.rangeZeroBaselinePaint, this.rangeZeroBaselineStroke);
-        }
-        else {
-            r.drawRangeGridline(g2, this, getRangeAxis(), area, 0.0);
-        }
+        r.drawRangeLine(g2, this, getRangeAxis(), area, 0.0,
+                this.rangeZeroBaselinePaint, this.rangeZeroBaselineStroke);
     }
 
     /**

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -28,7 +28,7 @@
  * CategoryItemRenderer.java
  * -------------------------
  *
- * (C) Copyright 2001-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2001-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Mark Watson (www.markwatson.com);
@@ -99,6 +99,8 @@
  * 06-Jul-2007 : Added annotation support (DG);
  * 26-Jun-2008 : Added new method required for crosshair support - THIS CHANGES
  *               THE API as of version 1.0.11 (DG);
+ * 29-Jan-2009 : Changed drawDomainGridline() and drawRangeGridline() methods
+ *               to drawDomainLine() and drawRangeLine() (DG);
  *
  */
 
@@ -1855,34 +1857,41 @@ public interface CategoryItemRenderer extends LegendItemSource {
             int pass);
 
     /**
-     * Draws a grid line against the domain axis.
+     * Draws a line perpendicular to the specified domain axis.
      *
      * @param g2  the graphics device.
      * @param plot  the plot.
      * @param dataArea  the area for plotting data (not yet adjusted for any
      *                  3D effect).
      * @param value  the value.
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param stroke  the stroke (<code>null</code> not permitted).
      *
-     * @see #drawRangeGridline(Graphics2D, CategoryPlot, ValueAxis,
-     *     Rectangle2D, double)
+     * @see #drawRangeLine
+     *
+     * @since 1.2.0
      */
-    public void drawDomainGridline(Graphics2D g2, CategoryPlot plot,
-            Rectangle2D dataArea, double value);
+    public void drawDomainLine(Graphics2D g2, CategoryPlot plot,
+            Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
 
     /**
-     * Draws a grid line against the range axis.
+     * Draws a line perpendicular to the range axis.
      *
      * @param g2  the graphics device.
      * @param plot  the plot.
-     * @param axis  the value axis.
-     * @param dataArea  the area for plotting data (not yet adjusted for any
-     *                  3D effect).
-     * @param value  the value.
+     * @param axis  the range axis.
+     * @param dataArea  the area for plotting data (not yet adjusted for any 3D
+     *                  effect).
+     * @param value  the value at which the grid line should be drawn.
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param stroke  the stroke (<code>null</code> not permitted).
      *
-     * @see #drawDomainGridline(Graphics2D, CategoryPlot, Rectangle2D, double)
+     * @see #drawDomainLine
+     *
+     * @since 1.2.0
      */
-    public void drawRangeGridline(Graphics2D g2, CategoryPlot plot,
-            ValueAxis axis, Rectangle2D dataArea, double value);
+    public void drawRangeLine(Graphics2D g2, CategoryPlot plot, ValueAxis axis,
+            Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
 
     /**
      * Draws a line (or some other marker) to indicate a particular category on

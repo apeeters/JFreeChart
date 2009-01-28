@@ -103,6 +103,8 @@
  * 25-Nov-2008 : Fixed bug in findRangeBounds() method (DG);
  * 14-Jan-2009 : Update initialise() to store visible series indices (PK);
  * 21-Jan-2009 : Added drawRangeLine() method (DG);
+ * 28-Jan-2009 : Updated for changes to CategoryItemRenderer
+ *               interface (DG);
  *
  */
 
@@ -858,15 +860,23 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param dataArea  the area for plotting data (not yet adjusted for any
      *                  3D effect).
      * @param value  the Java2D value at which the grid line should be drawn.
+     * @param paint  the paint (<code>null</code> not permitted).
+     * @param stroke  the stroke (<code>null</code> not permitted).
      *
      * @see #drawRangeGridline(Graphics2D, CategoryPlot, ValueAxis,
      *     Rectangle2D, double)
+     *
+     * @since 1.2.0
      */
-    public void drawDomainGridline(Graphics2D g2,
-                                   CategoryPlot plot,
-                                   Rectangle2D dataArea,
-                                   double value) {
+    public void drawDomainLine(Graphics2D g2, CategoryPlot plot,
+            Rectangle2D dataArea, double value, Paint paint, Stroke stroke) {
 
+        if (paint == null) {
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        if (stroke == null) {
+            throw new IllegalArgumentException("Null 'stroke' argument.");
+        }
         Line2D line = null;
         PlotOrientation orientation = plot.getOrientation();
 
@@ -879,69 +889,8 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                     dataArea.getMaxY());
         }
 
-        Paint paint = plot.getDomainGridlinePaint();
-        if (paint == null) {
-            paint = CategoryPlot.DEFAULT_GRIDLINE_PAINT;
-        }
         g2.setPaint(paint);
-
-        Stroke stroke = plot.getDomainGridlineStroke();
-        if (stroke == null) {
-            stroke = CategoryPlot.DEFAULT_GRIDLINE_STROKE;
-        }
         g2.setStroke(stroke);
-
-        g2.draw(line);
-
-    }
-
-    /**
-     * Draws a grid line against the range axis.
-     *
-     * @param g2  the graphics device.
-     * @param plot  the plot.
-     * @param axis  the value axis.
-     * @param dataArea  the area for plotting data (not yet adjusted for any
-     *                  3D effect).
-     * @param value  the value at which the grid line should be drawn.
-     *
-     * @see #drawDomainGridline(Graphics2D, CategoryPlot, Rectangle2D, double)
-     */
-    public void drawRangeGridline(Graphics2D g2,
-                                  CategoryPlot plot,
-                                  ValueAxis axis,
-                                  Rectangle2D dataArea,
-                                  double value) {
-
-        Range range = axis.getRange();
-        if (!range.contains(value)) {
-            return;
-        }
-
-        PlotOrientation orientation = plot.getOrientation();
-        double v = axis.valueToJava2D(value, dataArea, plot.getRangeAxisEdge());
-        Line2D line = null;
-        if (orientation == PlotOrientation.HORIZONTAL) {
-            line = new Line2D.Double(v, dataArea.getMinY(), v,
-                    dataArea.getMaxY());
-        }
-        else if (orientation == PlotOrientation.VERTICAL) {
-            line = new Line2D.Double(dataArea.getMinX(), v,
-                    dataArea.getMaxX(), v);
-        }
-
-        Paint paint = plot.getRangeGridlinePaint();
-        if (paint == null) {
-            paint = CategoryPlot.DEFAULT_GRIDLINE_PAINT;
-        }
-        g2.setPaint(paint);
-
-        Stroke stroke = plot.getRangeGridlineStroke();
-        if (stroke == null) {
-            stroke = CategoryPlot.DEFAULT_GRIDLINE_STROKE;
-        }
-        g2.setStroke(stroke);
-
         g2.draw(line);
 
     }
@@ -965,8 +914,6 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public void drawRangeLine(Graphics2D g2, CategoryPlot plot, ValueAxis axis,
             Rectangle2D dataArea, double value, Paint paint, Stroke stroke) {
 
-        // TODO: In JFreeChart 1.2.0, put this method in the
-        // CategoryItemRenderer interface
         Range range = axis.getRange();
         if (!range.contains(value)) {
             return;
