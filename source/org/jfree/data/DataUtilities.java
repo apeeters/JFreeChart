@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------
  * DataUtilities.java
  * ------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited.
+ * (C) Copyright 2003-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -39,11 +39,14 @@
  *               from the DatasetUtilities class (DG);
  * 17-May-2005 : Added calculateColumnTotal() and calculateRowTotal()
  *               methods (DG);
+ * 28-Jan-2009 : Added equal(double[][], double[][]) method (DG);
+ * 28-Jan-2009 : Added clone(double[][]) method (DG);
  *
  */
 
 package org.jfree.data;
 
+import java.util.Arrays;
 import org.jfree.data.general.DatasetUtilities;
 
 /**
@@ -51,6 +54,61 @@ import org.jfree.data.general.DatasetUtilities;
  * see {@link DatasetUtilities}).
  */
 public abstract class DataUtilities {
+
+    /**
+     * Tests two arrays for equality.  To be considered equal, the arrays must
+     * have exactly the same dimensions, and the values in each array must also
+     * match (two values that qre both NaN or both INF are considered equal
+     * in this test).
+     *
+     * @param a  the first array (<code>null</code> permitted).
+     * @param b  the second array (<code>null</code> permitted).
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.13
+     */
+    public static boolean equal(double[][] a, double[][] b) {
+        if (a == null) {
+            return (b == null);
+        }
+        if (b == null) {
+            return false;  // already know 'a' isn't null
+        }
+        if (a.length != b.length) {
+            return false;
+        }
+        for (int i = 0; i < a.length; i++) {
+            if (!Arrays.equals(a[i], b[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns a clone of the specified array.
+     *
+     * @param source  the source array (<code>null</code> not permitted).
+     *
+     * @return A clone of the array.
+     *
+     * @since 1.0.13
+     */
+    public static double[][] clone(double[][] source) {
+        if (source == null) {
+            throw new IllegalArgumentException("Null 'source' argument.");
+        }
+        double[][] clone = new double[source.length][];
+        for (int i = 0; i < source.length; i++) {
+            if (source[i] != null) {
+                double[] row = new double[source[i].length];
+                System.arraycopy(source[i], 0, row, 0, source[i].length);
+                clone[i] = row;
+            }
+        }
+        return clone;
+    }
 
     /**
      * Returns the total of the values in one column of the supplied data
