@@ -39,6 +39,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 26-Jul-2006 : Added CategoryToPieDatasetTests (DG);
  * 08-Mar-2007 : Added DefaultIntervalCategoryDatasetTests (DG);
+ * 09-May-2008 : Added SlidingCategoryDatasetTests (DG);
  *
  */
 
@@ -65,6 +66,7 @@ public class DataCategoryPackageTests extends TestCase {
         suite.addTestSuite(CategoryToPieDatasetTests.class);
         suite.addTestSuite(DefaultCategoryDatasetTests.class);
         suite.addTestSuite(DefaultIntervalCategoryDatasetTests.class);
+        suite.addTestSuite(SlidingCategoryDatasetTests.class);
         return suite;
     }
 
