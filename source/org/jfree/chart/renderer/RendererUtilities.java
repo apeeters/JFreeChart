@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------
  * RendererUtilities.java
  * ----------------------
- * (C) Copyright 2007, 2008, by Object Refinery Limited.
+ * (C) Copyright 2007-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 19-Apr-2007 : Version 1 (DG);
+ * 27-Mar-2009 : Fixed results for unsorted datasets (DG);
  *
  */
 
@@ -67,16 +68,21 @@ public class RendererUtilities {
      */
     public static int findLiveItemsLowerBound(XYDataset dataset, int series,
             double xLow, double xHigh) {
+        if (dataset == null) {
+            throw new IllegalArgumentException("Null 'dataset' argument.");
+        }
+        if (xLow >= xHigh) {
+            throw new IllegalArgumentException("Requires xLow < xHigh.");
+        }
         int itemCount = dataset.getItemCount(series);
         if (itemCount <= 1) {
             return 0;
         }
         if (dataset.getDomainOrder() == DomainOrder.ASCENDING) {
             // for data in ascending order by x-value, we are (broadly) looking
-            // for the index of the highest x-value that is less that xLow
+            // for the index of the highest x-value that is less than xLow
             int low = 0;
             int high = itemCount - 1;
-            int mid = (low + high) / 2;
             double lowValue = dataset.getXValue(series, low);
             if (lowValue >= xLow) {
                 // special case where the lowest x-value is >= xLow
@@ -88,6 +94,7 @@ public class RendererUtilities {
                 return high;
             }
             while (high - low > 1) {
+                int mid = (low + high) / 2;
                 double midV = dataset.getXValue(series, mid);
                 if (midV >= xLow) {
                     high = mid;
@@ -95,16 +102,14 @@ public class RendererUtilities {
                 else {
                     low = mid;
                 }
-                mid = (low + high) / 2;
             }
-            return mid;
+            return high;
         }
         else if (dataset.getDomainOrder() == DomainOrder.DESCENDING) {
             // when the x-values are sorted in descending order, the lower
             // bound is found by calculating relative to the xHigh value
             int low = 0;
             int high = itemCount - 1;
-            int mid = (low + high) / 2;
             double lowValue = dataset.getXValue(series, low);
             if (lowValue <= xHigh) {
                 return low;
@@ -114,6 +119,7 @@ public class RendererUtilities {
                 return high;
             }
             while (high - low > 1) {
+                int mid = (low + high) / 2;
                 double midV = dataset.getXValue(series, mid);
                 if (midV > xHigh) {
                     low = mid;
@@ -123,7 +129,7 @@ public class RendererUtilities {
                 }
                 mid = (low + high) / 2;
             }
-            return mid;
+            return high;
         }
         else {
             // we don't know anything about the ordering of the x-values,
@@ -131,16 +137,20 @@ public class RendererUtilities {
             // range...
             int index = 0;
             // skip any items that don't need including...
-            while (index < itemCount && dataset.getXValue(series, index)
-                    < xLow) {
+            double x = dataset.getXValue(series, index);
+            while (index < itemCount && (x < xLow || x > xHigh)) {
                 index++;
+                if (index < itemCount) {
+                    x = dataset.getXValue(series, index);
+                }
             }
-            return Math.max(0, index - 1);
+            return Math.min(Math.max(0, index), itemCount - 1);
         }
     }
 
     /**
-     * Finds the index of the item in the specified series that...
+     * Finds the upper index of the range of live items in the specified data
+     * series.
      *
      * @param dataset  the dataset (<code>null</code> not permitted).
      * @param series  the series index.
@@ -155,6 +165,12 @@ public class RendererUtilities {
      */
     public static int findLiveItemsUpperBound(XYDataset dataset, int series,
             double xLow, double xHigh) {
+        if (dataset == null) {
+            throw new IllegalArgumentException("Null 'dataset' argument.");
+        }
+        if (xLow >= xHigh) {
+            throw new IllegalArgumentException("Requires xLow < xHigh.");
+        }
         int itemCount = dataset.getItemCount(series);
         if (itemCount <= 1) {
             return 0;
@@ -162,7 +178,6 @@ public class RendererUtilities {
         if (dataset.getDomainOrder() == DomainOrder.ASCENDING) {
             int low = 0;
             int high = itemCount - 1;
-            int mid = (low + high + 1) / 2;
             double lowValue = dataset.getXValue(series, low);
             if (lowValue > xHigh) {
                 return low;
@@ -171,6 +186,7 @@ public class RendererUtilities {
             if (highValue <= xHigh) {
                 return high;
             }
+            int mid = (low + high) / 2;
             while (high - low > 1) {
                 double midV = dataset.getXValue(series, mid);
                 if (midV <= xHigh) {
@@ -179,7 +195,7 @@ public class RendererUtilities {
                 else {
                     high = mid;
                 }
-                mid = (low + high + 1) / 2;
+                mid = (low + high) / 2;
             }
             return mid;
         }
@@ -215,11 +231,14 @@ public class RendererUtilities {
             // range...
             int index = itemCount - 1;
             // skip any items that don't need including...
-            while (index >= 0 && dataset.getXValue(series, index)
-                    > xHigh) {
+            double x = dataset.getXValue(series, index);
+            while (index >= 0 && (x < xLow || x > xHigh)) {
                 index--;
+                if (index >= 0) {
+                    x = dataset.getXValue(series, index);
+                }
             }
-            return Math.min(itemCount - 1, index + 1);
+            return Math.max(index, 0);
         }
     }
 
@@ -241,6 +260,9 @@ public class RendererUtilities {
         // like it matters...
         int i0 = findLiveItemsLowerBound(dataset, series, xLow, xHigh);
         int i1 = findLiveItemsUpperBound(dataset, series, xLow, xHigh);
+        if (i0 > i1) {
+            i0 = i1;
+        }
         return new int[] {i0, i1};
     }
 
