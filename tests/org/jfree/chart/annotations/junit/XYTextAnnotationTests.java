@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------
  * XYTextAnnotationTests.java
  * --------------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -39,11 +39,13 @@
  * 26-Jan-2006 : Extended equals() test (DG);
  * 20-Jun-2007 : Removed JCommon tests (DG);
  * 23-Apr-2008 : Added testPublicCloneable() (DG);
+ * 12-Feb-2009 : Updated testEquals() (DG);
  *
  */
 
 package org.jfree.chart.annotations.junit;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
@@ -144,6 +146,27 @@ public class XYTextAnnotationTests extends TestCase {
         assertFalse(a1.equals(a2));
         a2.setTextAnchor(TextAnchor.BASELINE_RIGHT);
         assertTrue(a1.equals(a2));
+
+        a1.setBackgroundPaint(gp1);
+        assertFalse(a1.equals(a2));
+        a2.setBackgroundPaint(gp1);
+        assertTrue(a1.equals(a2));
+
+        a1.setOutlinePaint(gp1);
+        assertFalse(a1.equals(a2));
+        a2.setOutlinePaint(gp1);
+        assertTrue(a1.equals(a2));
+
+        a1.setOutlineStroke(new BasicStroke(1.2f));
+        assertFalse(a1.equals(a2));
+        a2.setOutlineStroke(new BasicStroke(1.2f));
+        assertTrue(a1.equals(a2));
+
+        a1.setOutlineVisible(!a1.isOutlineVisible());
+        assertFalse(a1.equals(a2));
+        a2.setOutlineVisible(a1.isOutlineVisible());
+        assertTrue(a1.equals(a2));
+
     }
 
     /**
@@ -168,7 +191,7 @@ public class XYTextAnnotationTests extends TestCase {
             a2 = (XYTextAnnotation) a1.clone();
         }
         catch (CloneNotSupportedException e) {
-            System.err.println("Failed to clone.");
+            e.printStackTrace();
         }
         assertTrue(a1 != a2);
         assertTrue(a1.getClass() == a2.getClass());
@@ -187,8 +210,9 @@ public class XYTextAnnotationTests extends TestCase {
      * Serialize an instance, restore it, and check for equality.
      */
     public void testSerialization() {
-
         XYTextAnnotation a1 = new XYTextAnnotation("Text", 10.0, 20.0);
+        a1.setOutlinePaint(new GradientPaint(1.0f, 2.0f, Color.red, 3.0f, 4.0f,
+                Color.blue));
         XYTextAnnotation a2 = null;
 
         try {
@@ -206,7 +230,6 @@ public class XYTextAnnotationTests extends TestCase {
             e.printStackTrace();
         }
         assertEquals(a1, a2);
-
     }
 
 }
