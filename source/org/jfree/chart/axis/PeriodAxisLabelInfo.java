@@ -27,7 +27,7 @@
  * ------------------------
  * PeriodAxisLabelInfo.java
  * ------------------------
- * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -40,6 +40,7 @@
  * 20-May-2005 : Added default constants and null argument checks in the
  *               constructor (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 02-Mar-2009 : Updated createInstance to use locale (DG);
  *
  */
 
@@ -57,11 +58,12 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
-
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.data.time.RegularTimePeriod;
+
 
 /**
  * A record that contains information for one "band" of date labels in
@@ -264,16 +266,20 @@ public class PeriodAxisLabelInfo implements Cloneable, Serializable {
      *
      * @param millisecond  the time.
      * @param zone  the time zone.
+     * @param locale  the locale.
      *
      * @return The time period.
+     *
+     * @since 1.0.13.
      */
-    public RegularTimePeriod createInstance(Date millisecond, TimeZone zone) {
+    public RegularTimePeriod createInstance(Date millisecond, TimeZone zone,
+            Locale locale) {
         RegularTimePeriod result = null;
         try {
             Constructor c = this.periodClass.getDeclaredConstructor(
-                    new Class[] {Date.class, TimeZone.class});
+                    new Class[] {Date.class, TimeZone.class, Locale.class});
             result = (RegularTimePeriod) c.newInstance(new Object[] {
-                    millisecond, zone});
+                    millisecond, zone, locale});
         }
         catch (Exception e) {
             // do nothing
