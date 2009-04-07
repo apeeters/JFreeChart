@@ -53,7 +53,9 @@
  * 14-Jan-2009 : Added support for seriesVisible flags (PK);
  * 23-Jan-2009 : Observe useFillPaint and drawOutlines flags (PK);
  * 23-Jan-2009 : In drawItem, divide code into passes (DG);
- *
+ * 05-Feb-2009 : Added errorIndicatorStroke field (DG);
+ * 01-Apr-2009 : Added override for findRangeBounds(), and fixed NPE in
+ *               creating item entities (DG);
  */
 
 package org.jfree.chart.renderer.category;
@@ -61,6 +63,7 @@ package org.jfree.chart.renderer.category;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -75,11 +78,13 @@ import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.util.HashUtilities;
+import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PaintUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.ShapeUtilities;
+import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.statistics.StatisticalCategoryDataset;
 
@@ -103,6 +108,14 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
     private transient Paint errorIndicatorPaint;
 
     /**
+     * The stroke used to draw the error indicators.  If null, the renderer
+     * will use the itemOutlineStroke.
+     *
+     * @since 1.0.13
+     */
+    private transient Stroke errorIndicatorStroke;
+
+    /**
      * Constructs a default renderer (draws shapes and lines).
      */
     public StatisticalLineAndShapeRenderer() {
@@ -119,6 +132,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
                                            boolean shapesVisible) {
         super(linesVisible, shapesVisible);
         this.errorIndicatorPaint = null;
+        this.errorIndicatorStroke = null;
     }
 
     /**
@@ -135,7 +149,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
 
     /**
      * Sets the paint used for the error indicators (if <code>null</code>,
-     * the item outline paint is used instead) and sends a
+     * the item paint is used instead) and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param paint  the paint (<code>null</code> permitted).
@@ -145,6 +159,49 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
     public void setErrorIndicatorPaint(Paint paint) {
         this.errorIndicatorPaint = paint;
         fireChangeEvent();
+    }
+
+    /**
+     * Returns the stroke used for the error indicators.
+     *
+     * @return The stroke used for the error indicators (possibly
+     *         <code>null</code>).
+     *
+     * @see #setErrorIndicatorStroke(Stroke)
+     *
+     * @since 1.0.13
+     */
+    public Stroke getErrorIndicatorStroke() {
+        return this.errorIndicatorStroke;
+    }
+
+    /**
+     * Sets the stroke used for the error indicators (if <code>null</code>,
+     * the item outline stroke is used instead) and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param stroke  the stroke (<code>null</code> permitted).
+     *
+     * @see #getErrorIndicatorStroke()
+     *
+     * @since 1.0.13
+     */
+    public void setErrorIndicatorStroke(Stroke stroke) {
+        this.errorIndicatorStroke = stroke;
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns the range of values the renderer requires to display all the
+     * items from the specified dataset.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     *
+     * @return The range (or <code>null</code> if the dataset is
+     *         <code>null</code> or empty).
+     */
+    public Range findRangeBounds(CategoryDataset dataset) {
+        return findRangeBounds(dataset, true);
     }
 
     /**
@@ -252,6 +309,12 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
             else {
                 g2.setPaint(getItemPaint(row, column));
             }
+            if (this.errorIndicatorStroke != null) {
+                g2.setStroke(this.errorIndicatorStroke);
+            }
+            else {
+                g2.setStroke(getItemOutlineStroke(row, column));
+            }
             Line2D line = new Line2D.Double();
             if (orientation == PlotOrientation.HORIZONTAL) {
                 line.setLine(lowVal, x1, highVal, x1);
@@ -357,7 +420,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                addItemEntity(entities, dataset, row, column, hotspot);
+                addEntity(entities, hotspot, dataset, row, column, x1, y1);
             }
         }
 
@@ -381,6 +444,10 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
                 = (StatisticalLineAndShapeRenderer) obj;
         if (!PaintUtilities.equal(this.errorIndicatorPaint,
                 that.errorIndicatorPaint)) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.errorIndicatorStroke,
+                that.errorIndicatorStroke)) {
             return false;
         }
         return super.equals(obj);
@@ -407,6 +474,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
         SerialUtilities.writePaint(this.errorIndicatorPaint, stream);
+        SerialUtilities.writeStroke(this.errorIndicatorStroke, stream);
     }
 
     /**
@@ -421,6 +489,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
             throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.errorIndicatorPaint = SerialUtilities.readPaint(stream);
+        this.errorIndicatorStroke = SerialUtilities.readStroke(stream);
     }
 
 }
