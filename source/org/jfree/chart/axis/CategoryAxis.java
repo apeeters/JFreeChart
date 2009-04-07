@@ -31,7 +31,7 @@
  *
  * Original Author:  David Gilbert;
  * Contributor(s):   Pady Srinivasan (patch 1217634);
- *                   Peter Kolb (patch 2497611);
+ *                   Peter Kolb (patches 2497611 and 2603321);
  *
  * Changes
  * -------
@@ -94,6 +94,7 @@
  * 27-Oct-2008 : Set font on Graphics2D when creating category labels (DG);
  * 14-Jan-2009 : Added new variant of getCategorySeriesMiddle() to make it
  *               simpler for renderers with hidden series (PK);
+ * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  *
  */
 
@@ -916,12 +917,9 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      *
      * @return The axis state (never <code>null</code>).
      */
-    public AxisState draw(Graphics2D g2,
-                          double cursor,
-                          Rectangle2D plotArea,
-                          Rectangle2D dataArea,
-                          RectangleEdge edge,
-                          PlotRenderingInfo plotState) {
+    public AxisState draw(Graphics2D g2, double cursor, Rectangle2D plotArea,
+            Rectangle2D dataArea, RectangleEdge edge,
+            PlotRenderingInfo plotState) {
 
         // if the axis is not visible, don't draw it...
         if (!isVisible()) {
@@ -938,7 +936,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
                 plotState);
         state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state,
                 plotState);
-
+        createAndAddEntity(cursor, state, dataArea, edge, plotState);
         return state;
 
     }

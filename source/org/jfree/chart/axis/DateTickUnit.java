@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,13 +27,13 @@
  * -----------------
  * DateTickUnit.java
  * -----------------
- * (C) Copyright 2000-2008, by Object Refinery Limited.
+ * (C) Copyright 2000-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Chris Boek;
  *
- * Changes (from 8-Nov-2002)
- * --------------------------
+ * Changes
+ * -------
  * 08-Nov-2002 : Moved to new package com.jrefinery.chart.axis (DG);
  * 27-Nov-2002 : Added IllegalArgumentException to getMillisecondCount()
  *               method (DG);
@@ -49,6 +49,8 @@
  *               TimeZone) (CB);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 09-Jun-2008 : Deprecated addToDate(Date) (DG);
+ * 09-Jan-2009 : Replaced the unit and rollUnit fields with an enumerated
+ *               type (DG);
  *
  */
 
@@ -63,7 +65,7 @@ import java.util.TimeZone;
 import org.jfree.chart.util.ObjectUtilities;
 
 /**
- * A tick unit for use by subclasses of {@link DateAxis}. Instances of this
+ * A tick unit for use by subclasses of {@link DateAxis}.  Instances of this
  * class are immutable.
  */
 public class DateTickUnit extends TickUnit implements Serializable {
@@ -163,11 +165,11 @@ public class DateTickUnit extends TickUnit implements Serializable {
     }
 
     /**
-     * Returns the unit count.
+     * Returns the unit multiple.
      *
-     * @return The unit count.
+     * @return The unit multiple (always > 0).
      */
-    public int getCount() {
+    public int getMultiple() {
         return this.count;
     }
 
@@ -213,23 +215,6 @@ public class DateTickUnit extends TickUnit implements Serializable {
      */
     public String dateToString(Date date) {
         return this.formatter.format(date);
-    }
-
-    /**
-     * Calculates a new date by adding this unit to the base date, with
-     * calculations performed in the default timezone and locale.
-     *
-     * @param base  the base date.
-     *
-     * @return A new date one unit after the base date.
-     *
-     * @see #addToDate(Date, TimeZone)
-     *
-     * @deprecated As of JFreeChart 1.0.10, this method is deprecated - you
-     *     should use {@link #addToDate(Date, TimeZone)} instead.
-     */
-    public Date addToDate(Date base) {
-        return addToDate(base, TimeZone.getDefault());
     }
 
     /**
@@ -299,7 +284,6 @@ public class DateTickUnit extends TickUnit implements Serializable {
         return this.unitType.getCalendarField();
     }
 
-
     /**
      * Returns the (approximate) number of milliseconds for the given unit and
      * unit count.
@@ -342,6 +326,23 @@ public class DateTickUnit extends TickUnit implements Serializable {
                     "value that is not recognised.");
         }
 
+    }
+
+    /**
+     * A utility method to put a default in place if a null formatter is
+     * supplied.
+     *
+     * @param formatter  the formatter (<code>null</code> permitted).
+     *
+     * @return The formatter if it is not null, otherwise a default.
+     */
+    private static DateFormat notNull(DateFormat formatter) {
+        if (formatter == null) {
+            return DateFormat.getDateInstance(DateFormat.SHORT);
+        }
+        else {
+            return formatter;
+        }
     }
 
     /**

@@ -460,6 +460,7 @@ public class LogAxis extends ValueAxis {
                 plotState);
         state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state,
                 plotState);
+        createAndAddEntity(cursor, state, dataArea, edge, plotState);
         return state;
     }
 
