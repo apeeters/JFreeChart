@@ -41,6 +41,7 @@
  *                   Matthias Rose;
  *                   Onno vd Akker;
  *                   Sergei Ivanov;
+ *                   Ulrich Voigt - patch 2686040;
  *
  * Changes (from 28-Jun-2001)
  * --------------------------
@@ -146,6 +147,14 @@
  * 13-Jan-2009 : Fixed zooming methods to trigger only one plot
  *               change event (DG);
  * 16-Jan-2009 : Use XOR for zoom rectangle only if useBuffer is false (DG);
+ * 18-Mar-2009 : Added mouse wheel support (DG);
+ * 19-Mar-2009 : Added panning on mouse drag support - based on Ulrich
+ *               Voigt's patch 2686040 (DG);
+ * 26-Mar-2009 : Changed fillZoomRectangle default to true, and only change
+ *               cursor for CTRL-mouse-click if panning is enabled (DG);
+ * 01-Apr-2009 : Fixed panning, and added different mouse event mask for
+ *               MacOSX (DG);
+
  *
  */
 
@@ -153,6 +162,7 @@ package org.jfree.chart;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -164,6 +174,7 @@ import java.awt.Point;
 import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -180,6 +191,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.EventListener;
 import java.util.ResourceBundle;
 
@@ -201,6 +215,7 @@ import org.jfree.chart.event.ChartChangeEvent;
 import org.jfree.chart.event.ChartChangeListener;
 import org.jfree.chart.event.ChartProgressEvent;
 import org.jfree.chart.event.ChartProgressListener;
+import org.jfree.chart.plot.Pannable;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
@@ -362,7 +377,7 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     private transient Rectangle2D zoomRectangle = null;
 
     /** Controls if the zoom rectangle is drawn as an outline or filled. */
-    private boolean fillZoomRectangle = false;
+    private boolean fillZoomRectangle = true;
 
     /** The minimum distance required to drag the mouse to trigger a zoom. */
     private int zoomTriggerDistance;
@@ -471,6 +486,23 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                     "org.jfree.chart.LocalizationBundle");
 
     /**
+     * Temporary storage for the width and height of the chart
+     * drawing area during panning.
+     */
+    private double panW, panH;
+
+    /** The last mouse position during panning. */
+    private Point panLast;
+
+    /**
+     * The mask for mouse events to trigger panning.
+     *
+     * @since 1.0.13
+     */
+    private int panMask = InputEvent.CTRL_MASK;
+
+
+    /**
      * Constructs a panel that displays the specified chart.
      *
      * @param chart  the chart.
@@ -496,7 +528,15 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     }
 
     /**
-     * Constructs a panel containing a chart.
+     * Constructs a panel containing a chart.  The <code>useBuffer</code> flag
+     * controls whether or not an offscreen <code>BufferedImage</code> is
+     * maintained for the chart.  If the buffer is used, more memory is
+     * consumed, but panel repaints will be a lot quicker in cases where the
+     * chart itself hasn't changed (for example, when another frame is moved
+     * to reveal the panel).  WARNING: If you set the <code>useBuffer</code>
+     * flag to false, note that the mouse zooming rectangle will (in that case)
+     * be drawn using XOR, and there is a SEVERE performance problem with that
+     * on JRE6 on Windows.
      *
      * @param chart  the chart.
      * @param useBuffer  a flag controlling whether or not an off-screen buffer
@@ -635,6 +675,14 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         this.zoomAroundAnchor = false;
         this.zoomOutlinePaint = Color.blue;
         this.zoomFillPaint = new Color(0, 0, 255, 63);
+
+        this.panMask = InputEvent.CTRL_MASK;
+        // for MacOSX we can't use the CTRL key for mouse drags, see:
+        // http://developer.apple.com/qa/qa2004/qa1362.html
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.startsWith("mac os x")) {
+            this.panMask = InputEvent.ALT_MASK;
+        }
     }
 
     /**
@@ -1188,6 +1236,104 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     }
 
     /**
+     * The mouse wheel handler.  This will be an instance of MouseWheelHandler
+     * but we can't reference that class directly because it depends on JRE 1.4
+     * and we still want to support JRE 1.3.1.
+     */
+    private Object mouseWheelHandler;
+
+    /**
+     * Returns <code>true</code> if the mouse wheel handler is enabled, and
+     * <code>false</code> otherwise.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.13
+     */
+    public boolean isMouseWheelEnabled() {
+        return this.mouseWheelHandler != null;
+    }
+
+    /**
+     * Enables or disables mouse wheel support for the panel.
+     * Note that this method does nothing when running JFreeChart on JRE 1.3.1,
+     * because that older version of the Java runtime does not support
+     * mouse wheel events.
+     *
+     * @param flag  a boolean.
+     *
+     * @since 1.0.13
+     */
+    public void setMouseWheelEnabled(boolean flag) {
+        if (flag && this.mouseWheelHandler == null) {
+            // use reflection to instantiate a mouseWheelHandler because to
+            // continue supporting JRE 1.3.1 we cannot depend on the
+            // MouseWheelListener interface directly
+            try {
+                Class c = Class.forName("org.jfree.chart.MouseWheelHandler");
+                Constructor cc = c.getConstructor(new Class[] {
+                        ChartPanel.class});
+                Object mwh = cc.newInstance(new Object[] {this});
+                this.mouseWheelHandler = mwh;
+            }
+            catch (ClassNotFoundException e) {
+                // the class isn't there, so we must have compiled JFreeChart
+                // with JDK 1.3.1 - thus, we can't have mouse wheel support
+            }
+            catch (SecurityException e) {
+                e.printStackTrace();
+            }
+            catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+            catch (InstantiationException e) {
+                e.printStackTrace();
+            }
+            catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+
+            if (this.mouseWheelHandler != null) {
+                // use reflection to deregister the mouseWheelHandler
+                try {
+                    Class mwl = Class.forName(
+                            "java.awt.event.MouseWheelListener");
+                    Class c2 = ChartPanel.class;
+                    Method m = c2.getMethod("removeMouseWheelListener",
+                            new Class[] {mwl});
+                    m.invoke(this, this.mouseWheelHandler);
+                }
+                catch (ClassNotFoundException e) {
+                    // must be running on JRE 1.3.1, so just ignore this
+                }
+                catch (SecurityException e) {
+                    e.printStackTrace();
+                }
+                catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+                catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
      * Switches the display of tooltips for the panel on or off.  Note that
      * tooltips can only be displayed if the chart has been configured to
      * generate tooltip items.
@@ -1598,7 +1744,28 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      * @param e  The mouse event.
      */
     public void mousePressed(MouseEvent e) {
-        if (this.zoomRectangle == null) {
+        Plot plot = this.chart.getPlot();
+        int mods = e.getModifiers();
+        if ((mods & this.panMask) == this.panMask) {
+            // can we pan this plot?
+            if (plot instanceof Pannable) {
+                Pannable pannable = (Pannable) plot;
+                if (pannable.isDomainPannable() || pannable.isRangePannable()) {
+                    Rectangle2D screenDataArea = getScreenDataArea(e.getX(),
+                            e.getY());
+                    if (screenDataArea != null && screenDataArea.contains(
+                            e.getPoint())) {
+                        this.panW = screenDataArea.getWidth();
+                        this.panH = screenDataArea.getHeight();
+                        this.panLast = e.getPoint();
+                        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+                    }
+                }
+                // the actual panning occurs later in the mouseDragged()
+                // method
+            }
+        }
+        else if (this.zoomRectangle == null) {
             Rectangle2D screenDataArea = getScreenDataArea(e.getX(), e.getY());
             if (screenDataArea != null) {
                 this.zoomPoint = getPointInRectangle(e.getX(), e.getY(),
@@ -1642,6 +1809,36 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         if (this.popup != null && this.popup.isShowing()) {
             return;
         }
+
+        // handle panning if we have a start point
+        if (this.panLast != null) {
+            double dx = e.getX() - this.panLast.getX();
+            double dy = e.getY() - this.panLast.getY();
+            if (dx == 0.0 && dy == 0.0) {
+                return;
+            }
+            double wPercent = -dx / this.panW;
+            double hPercent = dy / this.panH;
+            boolean old = this.chart.getPlot().isNotify();
+            this.chart.getPlot().setNotify(false);
+            Pannable p = (Pannable) this.chart.getPlot();
+            if (p.getOrientation() == PlotOrientation.VERTICAL) {
+                p.panDomainAxes(wPercent, this.info.getPlotInfo(),
+                        this.panLast);
+                p.panRangeAxes(hPercent, this.info.getPlotInfo(),
+                        this.panLast);
+            }
+            else {
+                p.panDomainAxes(hPercent, this.info.getPlotInfo(),
+                        this.panLast);
+                p.panRangeAxes(wPercent, this.info.getPlotInfo(),
+                        this.panLast);
+            }
+            this.panLast = e.getPoint();
+            this.chart.getPlot().setNotify(old);
+            return;
+        }
+
         // if no initial zoom point was set, ignore dragging...
         if (this.zoomPoint == null) {
             return;
@@ -1711,7 +1908,14 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      */
     public void mouseReleased(MouseEvent e) {
 
-        if (this.zoomRectangle != null) {
+        // if we've been panning, we need to reset now that the mouse is
+        // released...
+        if (this.panLast != null) {
+            this.panLast = null;
+            setCursor(Cursor.getDefaultCursor());
+        }
+
+        else if (this.zoomRectangle != null) {
             boolean hZoom = false;
             boolean vZoom = false;
             if (this.orientation == PlotOrientation.HORIZONTAL) {

@@ -33,6 +33,8 @@
  * Contributor(s):   Jeremy Bowman;
  *                   Arnaud Lelievre;
  *                   Richard West, Advanced Micro Devices, Inc.;
+ *                   Ulrich Voigt - patch 2686040;
+ *                   Peter Kolb - patch 2603321;
  *
  * Changes
  * -------
@@ -169,6 +171,9 @@
  *               Jess Thrysoee (DG);
  * 21-Jan-2009 : Added rangeMinorGridlinesVisible flag (DG);
  * 28-Jan-2009 : Updated for changes to CategoryItemRenderer interface (DG);
+ * 18-Mar-2009 : Modified anchored zoom behaviour (DG);
+ * 19-Mar-2009 : Implemented Pannable interface - see patch 2686040 (DG);
+ * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  *
  */
 
@@ -243,7 +248,7 @@ import org.jfree.data.general.DatasetUtilities;
  * A general plotting class that uses data from a {@link CategoryDataset} and
  * renders each data item using a {@link CategoryItemRenderer}.
  */
-public class CategoryPlot extends Plot implements ValueAxisPlot,
+public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         Zoomable, RendererChangeListener, Cloneable, PublicCloneable,
         Serializable {
 
@@ -526,6 +531,14 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     private LegendItemCollection fixedLegendItems;
 
     /**
+     * A flag that controls whether or not panning is enabled for the
+     * range axis/axes.
+     *
+     * @since 1.0.13
+     */
+    private boolean rangePannable;
+
+    /**
      * Default constructor.
      */
     public CategoryPlot() {
@@ -631,6 +644,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
 
         this.annotations = new java.util.ArrayList();
 
+        this.rangePannable = false;
     }
 
     /**
@@ -2125,8 +2139,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     }
 
     /**
-     * Returns the paint for the minor grid lines (if any) plotted against the range
-     * axis.
+     * Returns the paint for the minor grid lines (if any) plotted against the
+     * range axis.
      *
      * @return The paint (never <code>null</code>).
      *
@@ -3472,10 +3486,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
      * @param state  collects info as the chart is drawn (possibly
      *               <code>null</code>).
      */
-    public void draw(Graphics2D g2, Rectangle2D area,
-                     Point2D anchor,
-                     PlotState parentState,
-                     PlotRenderingInfo state) {
+    public void draw(Graphics2D g2, Rectangle2D area, Point2D anchor,
+            PlotState parentState, PlotRenderingInfo state) {
 
         // if the plot area is too small, just return...
         boolean b1 = (area.getWidth() <= MINIMUM_WIDTH_TO_DRAW);
@@ -3503,6 +3515,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
         this.axisOffset.trim(dataArea);
 
         state.setDataArea(dataArea);
+        createAndAddEntity((Rectangle2D) dataArea.clone(), state, null, null);
 
         // if there is a renderer, it draws the background, otherwise use the
         // default background...
@@ -3696,7 +3709,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
             double y = getRangeCrosshairValue();
             Paint paint = getRangeCrosshairPaint();
             Stroke stroke = getRangeCrosshairStroke();
-            drawRangeCrosshair(g2, dataArea, getOrientation(), y, yAxis, stroke, paint);
+            drawRangeCrosshair(g2, dataArea, getOrientation(), y, yAxis,
+                    stroke, paint);
         }
 
         // draw an outline around the plot area...
@@ -4478,6 +4492,86 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
     }
 
     /**
+     * Returns <code>false</code> always, because the plot cannot be panned
+     * along the domain axis/axes.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.13
+     */
+    public boolean isDomainPannable() {
+        return false;
+    }
+
+    /**
+     * Returns <code>true</code> if panning is enabled for the range axes,
+     * and <code>false</code> otherwise.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.13
+     */
+    public boolean isRangePannable() {
+        return this.rangePannable;
+    }
+
+    /**
+     * Sets the flag that enables or disables panning of the plot along
+     * the range axes.
+     *
+     * @param pannable  the new flag value.
+     *
+     * @since 1.0.13
+     */
+    public void setRangePannable(boolean pannable) {
+        this.rangePannable = pannable;
+    }
+
+    /**
+     * Pans the domain axes by the specified percentage.
+     *
+     * @param percent  the distance to pan (as a percentage of the axis length).
+     * @param info the plot info
+     * @param source the source point where the pan action started.
+     *
+     * @since 1.0.13
+     */
+    public void panDomainAxes(double percent, PlotRenderingInfo info,
+            Point2D source) {
+        // do nothing, because the plot is not pannable along the domain axes
+    }
+
+    /**
+     * Pans the range axes by the specified percentage.
+     *
+     * @param percent  the distance to pan (as a percentage of the axis length).
+     * @param info the plot info
+     * @param source the source point where the pan action started.
+     *
+     * @since 1.0.13
+     */
+    public void panRangeAxes(double percent, PlotRenderingInfo info,
+            Point2D source) {
+        if (!isRangePannable()) {
+            return;
+        }
+        int rangeAxisCount = getRangeAxisCount();
+        for (int i = 0; i < rangeAxisCount; i++) {
+            ValueAxis axis = getRangeAxis(i);
+            if (axis == null) {
+                continue;
+            }
+            double length = axis.getRange().getLength();
+            double adj = percent * length;
+            if (axis.isInverted()) {
+                adj = -adj;
+            }
+            axis.setRange(axis.getLowerBound() + adj,
+                    axis.getUpperBound() + adj);
+        }
+    }
+
+    /**
      * Returns <code>false</code> to indicate that the domain axes are not
      * zoomable.
      *
@@ -4587,7 +4681,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot,
                     }
                     double anchorY = rangeAxis.java2DToValue(sourceY,
                             info.getDataArea(), getRangeAxisEdge());
-                    rangeAxis.resizeRange(factor, anchorY);
+                    rangeAxis.resizeRange2(factor, anchorY);
                 }
                 else {
                     rangeAxis.resizeRange(factor);
