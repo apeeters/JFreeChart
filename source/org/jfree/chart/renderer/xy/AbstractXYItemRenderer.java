@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------
  * AbstractXYItemRenderer.java
  * ---------------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2002-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard Atkinson;
@@ -107,6 +107,10 @@
  *               minor API doc update (DG);
  * 02-Jun-2008 : Added isPointInRect() method (DG);
  * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
+ * 09-Mar-2009 : Added getAnnotations() method (DG);
+ * 27-Mar-2009 : Added new findDomainBounds() and findRangeBounds() methods to
+ *               take account of hidden series (DG);
+ * 01-Apr-2009 : Moved defaultEntityRadius up to superclass (DG);
  *
  */
 
@@ -125,6 +129,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -207,9 +213,6 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      */
     private List foregroundAnnotations;
 
-    /** The default radius for the entity 'hotspot' */
-    private int defaultEntityRadius;
-
     /** The legend item label generator. */
     private XYSeriesLabelGenerator legendItemLabelGenerator;
 
@@ -231,7 +234,6 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         this.baseURLGenerator = null;
         this.backgroundAnnotations = new java.util.ArrayList();
         this.foregroundAnnotations = new java.util.ArrayList();
-        this.defaultEntityRadius = 3;
         this.legendItemLabelGenerator = new StandardXYSeriesLabelGenerator(
                 "{0}");
     }
@@ -690,27 +692,18 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     }
 
     /**
-     * Returns the radius of the circle used for the default entity area
-     * when no area is specified.
+     * Returns a collection of the annotations that are assigned to the
+     * renderer.
      *
-     * @return A radius.
+     * @return A collection of annotations (possibly empty but never
+     *     <code>null</code>).
      *
-     * @see #setDefaultEntityRadius(int)
+     * @since 1.0.13
      */
-    public int getDefaultEntityRadius() {
-        return this.defaultEntityRadius;
-    }
-
-    /**
-     * Sets the radius of the circle used for the default entity area
-     * when no area is specified.
-     *
-     * @param radius  the radius.
-     *
-     * @see #getDefaultEntityRadius()
-     */
-    public void setDefaultEntityRadius(int radius) {
-        this.defaultEntityRadius = radius;
+    public Collection getAnnotations() {
+        List result = new java.util.ArrayList(this.foregroundAnnotations);
+        result.addAll(this.backgroundAnnotations);
+        return result;
     }
 
     /**
@@ -801,11 +794,38 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @see #findRangeBounds(XYDataset)
      */
     public Range findDomainBounds(XYDataset dataset) {
-        if (dataset != null) {
-            return DatasetUtilities.findDomainBounds(dataset, false);
+        return findDomainBounds(dataset, false);
+    }
+
+    /**
+     * Returns the lower and upper bounds (range) of the x-values in the
+     * specified dataset.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     *
+     * @return The range (<code>null</code> if the dataset is <code>null</code>
+     *         or empty).
+     *
+     * @since 1.0.13
+     */
+    protected Range findDomainBounds(XYDataset dataset,
+            boolean includeInterval) {
+        if (dataset == null) {
+            return null;
+        }
+        if (getDataBoundsIncludesVisibleSeriesOnly()) {
+            List visibleSeriesKeys = new ArrayList();
+            int seriesCount = dataset.getSeriesCount();
+            for (int s = 0; s < seriesCount; s++) {
+                if (isSeriesVisible(s)) {
+                    visibleSeriesKeys.add(dataset.getSeriesKey(s));
+                }
+            }
+            return DatasetUtilities.findDomainBounds(dataset,
+                    visibleSeriesKeys, includeInterval);
         }
         else {
-            return null;
+            return DatasetUtilities.findDomainBounds(dataset, includeInterval);
         }
     }
 
@@ -821,11 +841,56 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @see #findDomainBounds(XYDataset)
      */
     public Range findRangeBounds(XYDataset dataset) {
-        if (dataset != null) {
-            return DatasetUtilities.findRangeBounds(dataset, false);
+        return findRangeBounds(dataset, false);
+    }
+
+    /**
+     * Returns the range of values the renderer requires to display all the
+     * items from the specified dataset.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     *
+     * @return The range (<code>null</code> if the dataset is <code>null</code>
+     *         or empty).
+     *
+     * @since 1.0.13
+     */
+    protected Range findRangeBounds(XYDataset dataset,
+            boolean includeInterval) {
+        if (dataset == null) {
+            return null;
+        }
+        if (getDataBoundsIncludesVisibleSeriesOnly()) {
+            List visibleSeriesKeys = new ArrayList();
+            int seriesCount = dataset.getSeriesCount();
+            for (int s = 0; s < seriesCount; s++) {
+                if (isSeriesVisible(s)) {
+                    visibleSeriesKeys.add(dataset.getSeriesKey(s));
+                }
+            }
+            // the bounds should be calculated using just the items within
+            // the current range of the x-axis...if there is one
+            Range xRange = null;
+            XYPlot p = getPlot();
+            if (p != null) {
+                ValueAxis xAxis = null;
+                int index = p.getIndexOf(this);
+                if (index >= 0) {
+                    xAxis = plot.getDomainAxisForDataset(index);
+                }
+                if (xAxis != null) {
+                    xRange = xAxis.getRange();
+                }
+            }
+            if (xRange == null) {
+                xRange = new Range(Double.NEGATIVE_INFINITY,
+                        Double.POSITIVE_INFINITY);
+            }
+            return DatasetUtilities.findRangeBounds(dataset,
+                    visibleSeriesKeys, xRange, includeInterval);
         }
         else {
-            return null;
+            return DatasetUtilities.findRangeBounds(dataset, includeInterval);
         }
     }
 
@@ -1603,9 +1668,6 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         if (!this.backgroundAnnotations.equals(that.backgroundAnnotations)) {
             return false;
         }
-        if (this.defaultEntityRadius != that.defaultEntityRadius) {
-            return false;
-        }
         if (!ObjectUtilities.equal(this.legendItemLabelGenerator,
                 that.legendItemLabelGenerator)) {
             return false;
@@ -1787,16 +1849,13 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         }
         Shape hotspot = area;
         if (hotspot == null) {
-            double w = this.defaultEntityRadius * 2;
+            double r = getDefaultEntityRadius();
+            double w = r * 2;
             if (getPlot().getOrientation() == PlotOrientation.VERTICAL) {
-                hotspot = new Ellipse2D.Double(
-                        entityX - this.defaultEntityRadius,
-                        entityY - this.defaultEntityRadius, w, w);
+                hotspot = new Ellipse2D.Double(entityX - r, entityY - r, w, w);
             }
             else {
-                hotspot = new Ellipse2D.Double(
-                        entityY - this.defaultEntityRadius,
-                        entityX - this.defaultEntityRadius, w, w);
+                hotspot = new Ellipse2D.Double(entityY - r, entityX - r, w, w);
             }
         }
         String tip = null;

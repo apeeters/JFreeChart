@@ -27,7 +27,7 @@
  * ---------------------
  * AbstractRenderer.java
  * ---------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited.
+ * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Nicolas Brodu;
@@ -86,7 +86,10 @@
  *               attributes (DG);
  * 18-Aug-2008 : Added clearSeriesPaints() and clearSeriesStrokes() (DG);
  * 28-Jan-2009 : Equals method doesn't test Shape equality correctly (DG);
- *
+ * 27-Mar-2009 : Added dataBoundsIncludesVisibleSeriesOnly attribute, and
+ *               updated renderer events for series visibility changes (DG);
+ * 01-Apr-2009 : Factored up the defaultEntityRadius field from the
+ *               AbstractXYItemRenderer class (DG);
  */
 
 package org.jfree.chart.renderer;
@@ -116,6 +119,7 @@ import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.text.TextAnchor;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.util.BooleanList;
 import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.ObjectList;
@@ -353,6 +357,17 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     private transient Paint baseLegendTextPaint;
 
+    /**
+     * A flag that controls whether or not the renderer will include the
+     * non-visible series when calculating the data bounds.
+     *
+     * @since 1.0.13
+     */
+    private boolean dataBoundsIncludesVisibleSeriesOnly = true;
+
+    /** The default radius for the entity 'hotspot' */
+    private int defaultEntityRadius;
+
     /** Storage for registered change listeners. */
     private transient EventListenerList listenerList;
 
@@ -413,6 +428,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
         this.createEntitiesList = new BooleanList();
         this.baseCreateEntities = true;
+
+        this.defaultEntityRadius = 3;
 
         this.legendShape = new ShapeList();
         this.baseLegendShape = null;
@@ -506,7 +523,12 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setSeriesVisible(int series, Boolean visible, boolean notify) {
         this.seriesVisibleList.setBoolean(series, visible);
         if (notify) {
-            fireChangeEvent();
+            // we create an event with a special flag set...the purpose of
+            // this is to communicate to the plot (the default receiver of
+            // the event) that series visibility has changed so the axis
+            // ranges might need updating...
+            RendererChangeEvent e = new RendererChangeEvent(this, true);
+            notifyListeners(e);
         }
     }
 
@@ -546,7 +568,12 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setBaseSeriesVisible(boolean visible, boolean notify) {
         this.baseSeriesVisible = visible;
         if (notify) {
-            fireChangeEvent();
+            // we create an event with a special flag set...the purpose of
+            // this is to communicate to the plot (the default receiver of
+            // the event) that series visibility has changed so the axis
+            // ranges might need updating...
+            RendererChangeEvent e = new RendererChangeEvent(this, true);
+            notifyListeners(e);
         }
     }
 
@@ -1080,6 +1107,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * Returns the base outline paint.
      *
      * @return The paint (never <code>null</code>).
+     *
+     * @see #setBaseOutlinePaint(Paint)
      */
     public Paint getBaseOutlinePaint() {
         return this.baseOutlinePaint;
@@ -2339,6 +2368,30 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     }
 
     /**
+     * Returns the radius of the circle used for the default entity area
+     * when no area is specified.
+     *
+     * @return A radius.
+     *
+     * @see #setDefaultEntityRadius(int)
+     */
+    public int getDefaultEntityRadius() {
+        return this.defaultEntityRadius;
+    }
+
+    /**
+     * Sets the radius of the circle used for the default entity area
+     * when no area is specified.
+     *
+     * @param radius  the radius.
+     *
+     * @see #getDefaultEntityRadius()
+     */
+    public void setDefaultEntityRadius(int radius) {
+        this.defaultEntityRadius = radius;
+    }
+
+    /**
      * Performs a lookup for the legend shape.
      *
      * @param series  the series index.
@@ -2552,6 +2605,32 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setBaseLegendTextPaint(Paint paint) {
         this.baseLegendTextPaint = paint;
         fireChangeEvent();
+    }
+
+    /**
+     * Returns the flag that controls whether or not the data bounds reported
+     * by this renderer will exclude non-visible series.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.13
+     */
+    public boolean getDataBoundsIncludesVisibleSeriesOnly() {
+        return this.dataBoundsIncludesVisibleSeriesOnly;
+    }
+
+    /**
+     * Sets the flag that controls whether or not the data bounds reported
+     * by this renderer will exclude non-visible series and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param visibleOnly  include only visible series.
+     *
+     * @since 1.0.13
+     */
+    public void setDataBoundsIncludesVisibleSeriesOnly(boolean visibleOnly) {
+        this.dataBoundsIncludesVisibleSeriesOnly = visibleOnly;
+        notifyListeners(new RendererChangeEvent(this, true));
     }
 
     /** The adjacent offset. */
@@ -2770,6 +2849,13 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             return false;
         }
         AbstractRenderer that = (AbstractRenderer) obj;
+        if (this.dataBoundsIncludesVisibleSeriesOnly
+                != that.dataBoundsIncludesVisibleSeriesOnly) {
+            return false;
+        }
+        if (this.defaultEntityRadius != that.defaultEntityRadius) {
+            return false;
+        }
         if (!this.seriesVisibleList.equals(that.seriesVisibleList)) {
             return false;
         }
@@ -3055,7 +3141,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @throws IOException  if there is an I/O error.
      */
     private void writeObject(ObjectOutputStream stream) throws IOException {
-
         stream.defaultWriteObject();
         SerialUtilities.writePaint(this.basePaint, stream);
         SerialUtilities.writePaint(this.baseFillPaint, stream);
@@ -3066,7 +3151,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         SerialUtilities.writePaint(this.baseItemLabelPaint, stream);
         SerialUtilities.writeShape(this.baseLegendShape, stream);
         SerialUtilities.writePaint(this.baseLegendTextPaint, stream);
-
     }
 
     /**
@@ -3078,7 +3162,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
     private void readObject(ObjectInputStream stream)
-        throws IOException, ClassNotFoundException {
+            throws IOException, ClassNotFoundException {
 
         stream.defaultReadObject();
         this.basePaint = SerialUtilities.readPaint(stream);
