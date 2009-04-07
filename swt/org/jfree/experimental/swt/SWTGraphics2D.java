@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -32,6 +32,7 @@
  * Original Author:  Henry Proudhon (henry.proudhon AT ensmp.fr);
  * Contributor(s):   Cedric Chabanois (cchabanois AT no-log.org);
  *                   David Gilbert (for Object Refinery Limited);
+ *                   Ronnie Duan (see bug report 2583891);
  *
  * Changes
  * -------
@@ -55,6 +56,7 @@
  * 24-May-2008 : Use color from pool for setBackground method (HP);
  * 24-May-2008 : New resource pool for tansform objects;
  * 18-Nov-2008 : Check for GradientPaint in setPaint() method (DG);
+ * 27-Feb-2009 : Implemented fillPolygon() - see bug 2583891 (DG);
  *
  */
 
@@ -804,14 +806,21 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Not implemented - see {@link Graphics#fillPolygon(int[], int[], int)}.
+     * Fills the specified polygon.
      *
      * @param xPoints  the x-coordinates.
      * @param yPoints  the y-coordinates.
      * @param npoints  the number of points.
      */
-    public void fillPolygon(int [] xPoints, int [] yPoints, int npoints) {
-        // TODO Auto-generated method stub
+    public void fillPolygon(int[] xPoints, int[] yPoints, int npoints) {
+        int[] pointArray = new int[npoints * 2];
+        for (int i = 0; i < npoints; i++) {
+            pointArray[2 * i] = xPoints[i];
+            pointArray[2 * i + 1] = yPoints[i];
+        }
+        switchColors();
+        this.gc.fillPolygon(pointArray);
+        switchColors();
     }
 
     /**
