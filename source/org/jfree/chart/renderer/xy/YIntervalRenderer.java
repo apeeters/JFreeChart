@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------
  * YIntervalRenderer.java
  * ----------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited.
+ * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -46,6 +46,8 @@
  * 27-Jun-2007 : Updated drawItem() to use addEntity() (DG);
  * 06-Jul-2007 : Override getLegendItem() (DG);
  * 11-Apr-2008 : New override for findRangeBounds() (DG);
+ * 26-May-2008 : Added item label support (DG);
+ * 27-Mar-2009 : Updated findRangeBounds() (DG);
  *
  */
 
@@ -76,7 +78,6 @@ import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.data.Range;
-import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
 
@@ -154,12 +155,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
      *         or empty).
      */
     public Range findRangeBounds(XYDataset dataset) {
-        if (dataset != null) {
-            return DatasetUtilities.findRangeBounds(dataset, true);
-        }
-        else {
-            return null;
-        }
+        return findRangeBounds(dataset, true);
     }
 
     /**
