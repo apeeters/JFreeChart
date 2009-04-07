@@ -103,6 +103,11 @@
  * 02-Aug-2007 : Check for major tick when drawing label (DG);
  * 25-Sep-2008 : Added minor tick support, see patch 1934255 by Peter Kolb (DG);
  * 21-Jan-2009 : Updated default behaviour of minor ticks (DG);
+ * 18-Mar-2008 : Added resizeRange2() method which provides more natural
+ *               anchored zooming for mouse wheel support (DG);
+ * 26-Mar-2009 : In equals(), only check current range if autoRange is
+ *               false (DG);
+ * 30-Mar-2009 : Added pan(double) method (DG);
  *
  */
 
@@ -318,7 +323,7 @@ public abstract class ValueAxis extends Axis
         this.leftArrow = p4;
 
         this.verticalTickLabels = false;
-        this.minorTickCount = 1;
+        this.minorTickCount = 0;
 
     }
 
@@ -1549,6 +1554,34 @@ public abstract class ValueAxis extends Axis
     }
 
     /**
+     * Increases or decreases the axis range by the specified percentage about
+     * the specified anchor value and sends an {@link AxisChangeEvent} to all
+     * registered listeners.
+     * <P>
+     * To double the length of the axis range, use 200% (2.0).
+     * To halve the length of the axis range, use 50% (0.5).
+     *
+     * @param percent  the resize factor.
+     * @param anchorValue  the new central value after the resize.
+     *
+     * @see #resizeRange(double)
+     *
+     * @since 1.0.13
+     */
+    public void resizeRange2(double percent, double anchorValue) {
+        if (percent > 0.0) {
+            double left = anchorValue - getLowerBound();
+            double right = getUpperBound() - anchorValue;
+            Range adjusted = new Range(anchorValue - left * percent,
+                    anchorValue + right * percent);
+            setRange(adjusted);
+        }
+        else {
+            setAutoRange(true);
+        }
+    }
+
+    /**
      * Zooms in on the current range.
      *
      * @param lowerPercent  the new lower bound.
@@ -1567,6 +1600,22 @@ public abstract class ValueAxis extends Axis
                     start + length * upperPercent);
         }
         setRange(adjusted);
+    }
+
+    /**
+     * Slides the axis range by the specified percentage.
+     *
+     * @param percent  the percentage.
+     *
+     * @since 1.0.13
+     */
+    public void pan(double percent) {
+        Range range = getRange();
+        double length = range.getLength();
+        double adj = length * percent;
+        double lower = range.getLowerBound() + adj;
+        double upper = range.getUpperBound() + adj;
+        setRange(lower, upper);
     }
 
     /**
@@ -1615,7 +1664,8 @@ public abstract class ValueAxis extends Axis
         if (this.inverted != that.inverted) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.range, that.range)) {
+        // if autoRange is true, then the current range is irrelevant
+        if (!this.autoRange && !ObjectUtilities.equal(this.range, that.range)) {
             return false;
         }
         if (this.autoRange != that.autoRange) {
@@ -1696,7 +1746,6 @@ public abstract class ValueAxis extends Axis
         this.downArrow = SerialUtilities.readShape(stream);
         this.leftArrow = SerialUtilities.readShape(stream);
         this.rightArrow = SerialUtilities.readShape(stream);
-
     }
 
 }
