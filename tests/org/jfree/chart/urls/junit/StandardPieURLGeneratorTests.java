@@ -38,6 +38,7 @@
  * 06-Jan-2003 : Added a test for URL generation (DG);
  * 24-Nov-2006 : New equals() test (DG);
  * 17-Apr-2007 : Added additional check to testURL() (DG);
+ * 23-Apr-2008 : Added testPublicCloneable (DG);
  *
  */
 
@@ -55,6 +56,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.chart.urls.StandardPieURLGenerator;
+import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.DefaultPieDataset;
 
 /**
@@ -112,6 +114,16 @@ public class StandardPieURLGeneratorTests extends TestCase {
         assertFalse(g1.equals(g2));
         g2 = new StandardPieURLGenerator("prefix2", "category2", null);
         assertTrue(g1.equals(g2));
+    }
+
+    /**
+     * Checks that the class does not implement PublicCloneable (the generator
+     * is immutable).
+     */
+    public void testPublicCloneable() {
+        StandardPieURLGenerator g1 = new StandardPieURLGenerator(
+                "index.html?", "cat");
+        assertFalse(g1 instanceof PublicCloneable);
     }
 
     /**
