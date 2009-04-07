@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------
  * XYBarRenderer.java
  * ------------------
- * (C) Copyright 2001-2008, by Object Refinery Limited.
+ * (C) Copyright 2001-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard Atkinson;
@@ -186,6 +186,37 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     }
 
     /**
+     * The default value for the initialisation of the shadowsVisible flag.
+     */
+    private static boolean defaultShadowsVisible = true;
+
+    /**
+     * Returns the default value for the <code>shadowsVisible</code> flag.
+     *
+     * @return A boolean.
+     *
+     * @see #setDefaultShadowsVisible(boolean)
+     *
+     * @since 1.0.13
+     */
+    public static boolean getDefaultShadowsVisible() {
+        return XYBarRenderer.defaultShadowsVisible;
+    }
+
+    /**
+     * Sets the default value for the shadows visible flag.
+     *
+     * @param visible  the new value for the default.
+     *
+     * @see #getDefaultShadowsVisible()
+     *
+     * @since 1.0.13
+     */
+    public static void setDefaultShadowsVisible(boolean visible) {
+        XYBarRenderer.defaultShadowsVisible = visible;
+    }
+
+    /**
      * The state class used by this renderer.
      */
     protected class XYBarRendererState extends XYItemRendererState {
@@ -289,6 +320,13 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     private double shadowYOffset;
 
     /**
+     * A factor used to align the bars about the x-value.
+     *
+     * @since 1.0.13
+     */
+    private double barAlignmentFactor;
+
+    /**
      * The default constructor.
      */
     public XYBarRenderer() {
@@ -309,9 +347,10 @@ public class XYBarRenderer extends AbstractXYItemRenderer
         this.drawBarOutline = false;
         this.legendBar = new Rectangle2D.Double(-3.0, -5.0, 6.0, 10.0);
         this.barPainter = getDefaultBarPainter();
-        this.shadowsVisible = true;
+        this.shadowsVisible = getDefaultShadowsVisible();
         this.shadowXOffset = 4.0;
         this.shadowYOffset = 4.0;
+        this.barAlignmentFactor = -1.0;
     }
 
     /**
@@ -631,6 +670,31 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     }
 
     /**
+     * Returns the bar alignment factor.
+     *
+     * @return The bar alignment factor.
+     *
+     * @since 1.0.13
+     */
+    public double getBarAlignmentFactor() {
+        return this.barAlignmentFactor;
+    }
+
+    /**
+     * Sets the bar alignment factor and sends a {@link RendererChangeEvent}
+     * to all registered listeners.  If the alignment factor is outside the
+     * range 0.0 to 1.0, no alignment will be performed by the renderer.
+     *
+     * @param factor  the factor.
+     *
+     * @since 1.0.13
+     */
+    public void setBarAlignmentFactor(double factor) {
+        this.barAlignmentFactor = factor;
+        fireChangeEvent();
+    }
+
+    /**
      * Initialises the renderer and returns a state object that should be
      * passed to all subsequent calls to the drawItem() method.  Here we
      * calculate the Java2D y-coordinate for zero, since all the bars have
@@ -800,6 +864,14 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             if (!domainAxis.getRange().intersects(endX, startX)) {
                 return;
             }
+        }
+
+        // is there an alignment adjustment to be made?
+        if (this.barAlignmentFactor >= 0.0 && this.barAlignmentFactor <= 1.0) {
+            double x = intervalDataset.getXValue(series, item);
+            double interval = endX - startX;
+            startX = x - interval * this.barAlignmentFactor;
+            endX = startX + interval;
         }
 
         RectangleEdge location = plot.getDomainAxisEdge();
@@ -1205,6 +1277,9 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             return false;
         }
         if (this.shadowYOffset != that.shadowYOffset) {
+            return false;
+        }
+        if (this.barAlignmentFactor != that.barAlignmentFactor) {
             return false;
         }
         return super.equals(obj);
