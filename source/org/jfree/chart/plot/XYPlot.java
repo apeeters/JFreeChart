@@ -42,8 +42,9 @@
  *                   Eduardo Ramalho;
  *                   Sergei Ivanov;
  *                   Richard West, Advanced Micro Devices, Inc.;
- *                   Ulrich Voigt - patch 1997549;
- *                   Peter Kolb - patch 1934255;
+ *                   Ulrich Voigt - patches 1997549 and 2686040;
+ *                   Peter Kolb - patches 1934255 and 2603321;
+ *                   Andrew Mickish - patch 1868749;
  *
  * Changes (from 21-Jun-2001)
  * --------------------------
@@ -215,6 +216,13 @@
  *               1868749 by Andrew Mickish (DG);
  * 18-Dec-2008 : Use ResourceBundleWrapper - see patch 1607918 by
  *               Jess Thrysoee (DG);
+ * 10-Mar-2009 : Allow some annotations to contribute to axis autoRange (DG);
+ * 18-Mar-2009 : Modified anchored zoom behaviour and fixed bug in
+ *               "process visible range" rendering (DG);
+ * 19-Mar-2009 : Added panning support based on patch 2686040 by Ulrich
+ *               Voigt (DG);
+ * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
+ * 30-Mar-2009 : Delegate panning to axes (DG);
  *
  */
 
@@ -250,6 +258,7 @@ import java.util.TreeMap;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.annotations.XYAnnotation;
+import org.jfree.chart.annotations.XYAnnotationBoundsInfo;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.AxisCollection;
 import org.jfree.chart.axis.AxisLocation;
@@ -292,7 +301,7 @@ import org.jfree.data.xy.XYDataset;
  * The {@link org.jfree.chart.ChartFactory} class contains static methods for
  * creating pre-configured charts.
  */
-public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
+public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         RendererChangeListener, Cloneable, PublicCloneable, Serializable {
 
     /** For serialization. */
@@ -560,6 +569,22 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
     private LegendItemCollection fixedLegendItems;
 
     /**
+     * A flag that controls whether or not panning is enabled for the domain
+     * axis/axes.
+     *
+     * @since 1.0.13
+     */
+    private boolean domainPannable;
+
+    /**
+     * A flag that controls whether or not panning is enabled for the range
+     * axis/axes.
+     *
+     * @since 1.0.13
+     */
+    private boolean rangePannable;
+
+    /**
      * Creates a new <code>XYPlot</code> instance with no dataset, no axes and
      * no renderer.  You should specify these items before using the plot.
      */
@@ -605,6 +630,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
 
         this.datasetToDomainAxesMap = new TreeMap();
         this.datasetToRangeAxesMap = new TreeMap();
+
+        this.annotations = new java.util.ArrayList();
 
         this.datasets.set(0, dataset);
         if (dataset != null) {
@@ -669,8 +696,6 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
         this.rangeCrosshairValue = 0.0;
         this.rangeCrosshairStroke = DEFAULT_CROSSHAIR_STROKE;
         this.rangeCrosshairPaint = DEFAULT_CROSSHAIR_PAINT;
-
-        this.annotations = new java.util.ArrayList();
 
     }
 
@@ -3112,11 +3137,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
      * @param info  collects chart drawing information (<code>null</code>
      *              permitted).
      */
-    public void draw(Graphics2D g2,
-                     Rectangle2D area,
-                     Point2D anchor,
-                     PlotState parentState,
-                     PlotRenderingInfo info) {
+    public void draw(Graphics2D g2, Rectangle2D area, Point2D anchor,
+            PlotState parentState, PlotRenderingInfo info) {
 
         // if the plot area is too small, just return...
         boolean b1 = (area.getWidth() <= MINIMUM_WIDTH_TO_DRAW);
@@ -3137,7 +3159,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
         AxisSpace space = calculateAxisSpace(g2, area);
         Rectangle2D dataArea = space.shrink(area, null);
         this.axisOffset.trim(dataArea);
-
+        createAndAddEntity((Rectangle2D) dataArea.clone(), info, null, null);
         if (info != null) {
             info.setDataArea(dataArea);
         }
@@ -3710,8 +3732,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
                             int[] itemBounds = RendererUtilities.findLiveItems(
                                     dataset, series, xAxis.getLowerBound(),
                                     xAxis.getUpperBound());
-                            firstItem = itemBounds[0];
-                            lastItem = itemBounds[1];
+                            firstItem = Math.max(itemBounds[0] - 1, 0);
+                            lastItem = Math.min(itemBounds[1] + 1, lastItem);
                         }
                         state.startSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);
@@ -3736,8 +3758,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
                             int[] itemBounds = RendererUtilities.findLiveItems(
                                     dataset, series, xAxis.getLowerBound(),
                                     xAxis.getUpperBound());
-                            firstItem = itemBounds[0];
-                            lastItem = itemBounds[1];
+                            firstItem = Math.max(itemBounds[0] - 1, 0);
+                            lastItem = Math.min(itemBounds[1] + 1, lastItem);
                         }
                         state.startSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);
@@ -4381,6 +4403,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
 
         Range result = null;
         List mappedDatasets = new ArrayList();
+        List includedAnnotations = new ArrayList();
         boolean isDomainAxis = true;
 
         // is it a domain axis?
@@ -4389,6 +4412,16 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
             isDomainAxis = true;
             mappedDatasets.addAll(getDatasetsMappedToDomainAxis(
                     new Integer(domainIndex)));
+            if (domainIndex == 0) {
+                // grab the plot's annotations
+                Iterator iterator = this.annotations.iterator();
+                while (iterator.hasNext()) {
+                    XYAnnotation annotation = (XYAnnotation) iterator.next();
+                    if (annotation instanceof XYAnnotationBoundsInfo) {
+                        includedAnnotations.add(annotation);
+                    }
+                }
+            }
         }
 
         // or is it a range axis?
@@ -4397,6 +4430,15 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
             isDomainAxis = false;
             mappedDatasets.addAll(getDatasetsMappedToRangeAxis(
                     new Integer(rangeIndex)));
+            if (rangeIndex == 0) {
+                Iterator iterator = this.annotations.iterator();
+                while (iterator.hasNext()) {
+                    XYAnnotation annotation = (XYAnnotation) iterator.next();
+                    if (annotation instanceof XYAnnotationBoundsInfo) {
+                        includedAnnotations.add(annotation);
+                    }
+                }
+            }
         }
 
         // iterate through the datasets that map to the axis and get the union
@@ -4424,8 +4466,35 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
                                 DatasetUtilities.findRangeBounds(d));
                     }
                 }
+                // FIXME: the XYItemRenderer interface doesn't specify the
+                // getAnnotations() method but it should
+                if (r instanceof AbstractXYItemRenderer) {
+                    AbstractXYItemRenderer rr = (AbstractXYItemRenderer) r;
+                    Collection c = rr.getAnnotations();
+                    Iterator i = c.iterator();
+                    while (i.hasNext()) {
+                        XYAnnotation a = (XYAnnotation) i.next();
+                        if (a instanceof XYAnnotationBoundsInfo) {
+                            includedAnnotations.add(a);
+                        }
+                    }
+                }
             }
         }
+
+        Iterator it = includedAnnotations.iterator();
+        while (it.hasNext()) {
+            XYAnnotationBoundsInfo xyabi = (XYAnnotationBoundsInfo) it.next();
+            if (xyabi.getIncludeInDataBounds()) {
+                if (isDomainAxis) {
+                    result = Range.combine(result, xyabi.getXRange());
+                }
+                else {
+                    result = Range.combine(result, xyabi.getYRange());
+                }
+            }
+        }
+
         return result;
 
     }
@@ -4456,6 +4525,12 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
      * @param event  the event.
      */
     public void rendererChanged(RendererChangeEvent event) {
+        // if the event was caused by a change to series visibility, then
+        // the axis ranges might need updating...
+        if (event.getSeriesVisibilityChanged()) {
+            configureDomainAxes();
+            configureRangeAxes();
+        }
         fireChangeEvent();
     }
 
@@ -4853,6 +4928,108 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
     }
 
     /**
+     * Returns <code>true</code> if panning is enabled for the domain axes,
+     * and <code>false</code> otherwise.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.13
+     */
+    public boolean isDomainPannable() {
+        return this.domainPannable;
+    }
+
+    /**
+     * Sets the flag that enables or disables panning of the plot along the
+     * domain axes.
+     *
+     * @param pannable  the new flag value.
+     *
+     * @since 1.0.13
+     */
+    public void setDomainPannable(boolean pannable) {
+        this.domainPannable = pannable;
+    }
+
+    /**
+     * Returns <code>true</code> if panning is enabled for the range axes,
+     * and <code>false</code> otherwise.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.13
+     */
+    public boolean isRangePannable() {
+        return this.rangePannable;
+    }
+
+    /**
+     * Sets the flag that enables or disables panning of the plot along
+     * the range axes.
+     *
+     * @param pannable  the new flag value.
+     *
+     * @since 1.0.13
+     */
+    public void setRangePannable(boolean pannable) {
+        this.rangePannable = pannable;
+    }
+
+    /**
+     * Pans the domain axes by the specified percentage.
+     *
+     * @param percent  the distance to pan (as a percentage of the axis length).
+     * @param info the plot info
+     * @param source the source point where the pan action started.
+     *
+     * @since 1.0.13
+     */
+    public void panDomainAxes(double percent, PlotRenderingInfo info,
+            Point2D source) {
+        if (!isDomainPannable()) {
+            return;
+        }
+        int domainAxisCount = getDomainAxisCount();
+        for (int i = 0; i < domainAxisCount; i++) {
+            ValueAxis axis = getDomainAxis(i);
+            if (axis == null) {
+                continue;
+            }
+            if (axis.isInverted()) {
+                percent = -percent;
+            }
+            axis.pan(percent);
+        }
+    }
+
+    /**
+     * Pans the range axes by the specified percentage.
+     *
+     * @param percent  the distance to pan (as a percentage of the axis length).
+     * @param info the plot info
+     * @param source the source point where the pan action started.
+     *
+     * @since 1.0.13
+     */
+    public void panRangeAxes(double percent, PlotRenderingInfo info,
+            Point2D source) {
+        if (!isRangePannable()) {
+            return;
+        }
+        int rangeAxisCount = getRangeAxisCount();
+        for (int i = 0; i < rangeAxisCount; i++) {
+            ValueAxis axis = getRangeAxis(i);
+            if (axis == null) {
+                continue;
+            }
+            if (axis.isInverted()) {
+                percent = -percent;
+            }
+            axis.pan(percent);
+        }
+    }
+
+    /**
      * Multiplies the range on the domain axis/axes by the specified factor.
      *
      * @param factor  the zoom factor.
@@ -4895,7 +5072,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
                     }
                     double anchorX = domainAxis.java2DToValue(sourceX,
                             info.getDataArea(), getDomainAxisEdge());
-                    domainAxis.resizeRange(factor, anchorX);
+                    domainAxis.resizeRange2(factor, anchorX);
                 }
                 else {
                     domainAxis.resizeRange(factor);
@@ -4972,7 +5149,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Zoomable,
                     }
                     double anchorY = rangeAxis.java2DToValue(sourceY,
                             info.getDataArea(), getRangeAxisEdge());
-                    rangeAxis.resizeRange(factor, anchorY);
+                    rangeAxis.resizeRange2(factor, anchorY);
                 }
                 else {
                     rangeAxis.resizeRange(factor);
