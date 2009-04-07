@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------
  * ImageMapPackageTests.java
  * -------------------------
- * (C) Copyright 2007, 2008, by Object Refinery Limited.
+ * (C) Copyright 2007-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,6 +35,9 @@
  * Changes:
  * --------
  * 05-Dec-2007 : Version 1 (DG);
+ * 25-Mar-2009 : Added DynamicDriveToolTipTagFragmentGeneratorTests,
+ *               ImageMapUtilitiesTests and
+ *               OverLIBToolTipTagFragmentGeneratorTests (DG);
  *
  */
 
@@ -58,6 +61,9 @@ public class ImageMapPackageTests extends TestCase {
      */
     public static Test suite() {
         TestSuite suite = new TestSuite("org.jfree.chart.imagemap");
+        suite.addTestSuite(DynamicDriveToolTipTagFragmentGeneratorTests.class);
+        suite.addTestSuite(ImageMapUtilitiesTests.class);
+        suite.addTestSuite(OverLIBToolTipTagFragmentGeneratorTests.class);
         suite.addTestSuite(StandardToolTipTagFragmentGeneratorTests.class);
         suite.addTestSuite(StandardURLTagFragmentGeneratorTests.class);
         return suite;

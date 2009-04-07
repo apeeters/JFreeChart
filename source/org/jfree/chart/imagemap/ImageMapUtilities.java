@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,10 +27,11 @@
  * ----------------------
  * ImageMapUtilities.java
  * ----------------------
- * (C) Copyright 2004-2008, by Richard Atkinson and Contributors.
+ * (C) Copyright 2004-2009, by Richard Atkinson and Contributors.
  *
  * Original Author:  Richard Atkinson;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
+ *                   Fawad Halim - bug 2690293;
  *
  * Changes
  * -------
@@ -43,6 +44,8 @@
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 04-Dec-2007 : Added htmlEscape() method, and escape 'name' in
  *               getImageMap() (DG);
+ * 19-Mar-2009 : Added javascriptEscape() method - see bug 2690293 by FH (DG);
+ * 25-Mar-2009 : Reimplemented javascriptEscape() (DG);
  *
  */
 
@@ -72,8 +75,7 @@ public class ImageMapUtilities {
      * @throws java.io.IOException if there are any I/O errors.
      */
     public static void writeImageMap(PrintWriter writer, String name,
-                                     ChartRenderingInfo info)
-        throws IOException {
+            ChartRenderingInfo info) throws IOException {
 
         // defer argument checking...
         ImageMapUtilities.writeImageMap(writer, name, info,
@@ -94,10 +96,8 @@ public class ImageMapUtilities {
      * @throws java.io.IOException if there are any I/O errors.
      */
     public static void writeImageMap(PrintWriter writer,
-                                     String name,
-                                     ChartRenderingInfo info,
-                                     boolean useOverLibForToolTips)
-        throws IOException {
+            String name, ChartRenderingInfo info,
+            boolean useOverLibForToolTips) throws IOException {
 
         ToolTipTagFragmentGenerator toolTipTagFragmentGenerator = null;
         if (useOverLibForToolTips) {
@@ -234,6 +234,40 @@ public class ImageMapUtilities {
             }
             else if (c == '\\') {
                 result.append("&#092;");
+            }
+            else {
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+
+    /**
+     * Returns a string that is equivalent to the input string, but with
+     * special characters converted to JavaScript escape sequences.
+     *
+     * @param input  the string to escape (<code>null</code> not permitted).
+     *
+     * @return A string with characters escaped.
+     *
+     * @since 1.0.13
+     */
+    public static String javascriptEscape(String input) {
+        if (input == null) {
+            throw new IllegalArgumentException("Null 'input' argument.");
+        }
+        StringBuffer result = new StringBuffer();
+        int length = input.length();
+        for (int i = 0; i < length; i++) {
+            char c = input.charAt(i);
+            if (c == '\"') {
+                result.append("\\\"");
+            }
+            else if (c == '\'') {
+                result.append("\\'");
+            }
+            else if (c == '\\') {
+                result.append("\\\\");
             }
             else {
                 result.append(c);
