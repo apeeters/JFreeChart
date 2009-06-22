@@ -72,9 +72,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.jfree.date.MonthConstants;
-import org.jfree.date.SerialDate;
-
 /**
  * Represents a single month.  This class is immutable, which is a requirement
  * for all {@link RegularTimePeriod} subclasses.
