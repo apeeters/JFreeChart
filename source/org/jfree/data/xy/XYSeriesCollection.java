@@ -57,6 +57,7 @@
  *               sorted in ascending order (DG);
  * 06-Mar-2009 : Implemented RangeInfo (DG);
  * 06-Mar-2009 : Fixed equals() implementation (DG);
+ * 10-Jun-2009 : Simplified code in getX() and getY() methods (DG);
  *
  */
 
@@ -317,9 +318,8 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      * @return The value.
      */
     public Number getX(int series, int item) {
-        XYSeries ts = (XYSeries) this.data.get(series);
-        XYDataItem xyItem = ts.getDataItem(item);
-        return xyItem.getX();
+        XYSeries s = (XYSeries) this.data.get(series);
+        return s.getX(item);
     }
 
     /**
@@ -355,9 +355,8 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      * @return The value (possibly <code>null</code>).
      */
     public Number getY(int series, int index) {
-        XYSeries ts = (XYSeries) this.data.get(series);
-        XYDataItem xyItem = ts.getDataItem(index);
-        return xyItem.getY();
+        XYSeries s = (XYSeries) this.data.get(series);
+        return s.getY(index);
     }
 
     /**
@@ -613,7 +612,7 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
             double minY = series.getMinY();
             if (!Double.isNaN(minY)) {
                 lower = Math.min(lower, minY);
-}
+            }
             double maxY = series.getMaxY();
             if (!Double.isNaN(maxY)) {
                 upper = Math.max(upper, maxY);
