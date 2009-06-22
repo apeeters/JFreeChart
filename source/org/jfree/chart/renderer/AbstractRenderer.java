@@ -90,6 +90,9 @@
  *               updated renderer events for series visibility changes (DG);
  * 01-Apr-2009 : Factored up the defaultEntityRadius field from the
  *               AbstractXYItemRenderer class (DG);
+ * 28-Apr-2009 : Added flag to allow a renderer to treat the legend shape as
+ *               a line (DG);
+ *
  */
 
 package org.jfree.chart.renderer;
@@ -317,7 +320,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      *
      * @since 1.0.11
      */
-    private ShapeList legendShape;
+    private ShapeList legendShapeList;
 
     /**
      * The base shape for legend items.  If this is <code>null</code>, the
@@ -326,6 +329,14 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     private transient Shape baseLegendShape;
+
+    /**
+     * A special flag that, if true, will cause the getLegendItem() method
+     * to configure the legend shape as if it were a line.
+     *
+     * @since 1.0.14
+     */
+    private boolean treatLegendShapeAsLine;
 
     /**
      * The per-series legend text font.
@@ -431,8 +442,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
         this.defaultEntityRadius = 3;
 
-        this.legendShape = new ShapeList();
+        this.legendShapeList = new ShapeList();
         this.baseLegendShape = null;
+
+        this.treatLegendShapeAsLine = false;
 
         this.legendTextFont = new ObjectList();
         this.baseLegendTextFont = null;
@@ -2424,7 +2437,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public Shape getLegendShape(int series) {
-        return this.legendShape.getShape(series);
+        return this.legendShapeList.getShape(series);
     }
 
     /**
@@ -2437,7 +2450,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setLegendShape(int series, Shape shape) {
-        this.legendShape.setShape(series, shape);
+        this.legendShapeList.setShape(series, shape);
         fireChangeEvent();
     }
 
@@ -2463,6 +2476,33 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setBaseLegendShape(Shape shape) {
         this.baseLegendShape = shape;
         fireChangeEvent();
+    }
+
+    /**
+     * Returns the flag that controls whether or not the legend shape is
+     * treated as a line when creating legend items.
+     *
+     * @return A boolean.
+     *
+     * @since 1.0.14
+     */
+    protected boolean getTreatLegendShapeAsLine() {
+        return this.treatLegendShapeAsLine;
+    }
+
+    /**
+     * Sets the flag that controls whether or not the legend shape is
+     * treated as a line when creating legend items.
+     *
+     * @param treatAsLine  the new flag value.
+     *
+     * @since 1.0.14
+     */
+    protected void setTreatLegendShapeAsLine(boolean treatAsLine) {
+        if (this.treatLegendShapeAsLine != treatAsLine) {
+            this.treatLegendShapeAsLine = treatAsLine;
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -2853,6 +2893,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                 != that.dataBoundsIncludesVisibleSeriesOnly) {
             return false;
         }
+        if (this.treatLegendShapeAsLine != that.treatLegendShapeAsLine) {
+            return false;
+        }
         if (this.defaultEntityRadius != that.defaultEntityRadius) {
             return false;
         }
@@ -2959,7 +3002,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         if (this.baseCreateEntities != that.baseCreateEntities) {
             return false;
         }
-        if (!ObjectUtilities.equal(this.legendShape, that.legendShape)) {
+        if (!ObjectUtilities.equal(this.legendShapeList,
+                that.legendShapeList)) {
             return false;
         }
         if (!ShapeUtilities.equal(this.baseLegendShape,
@@ -3119,8 +3163,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                     = (BooleanList) this.createEntitiesList.clone();
         }
 
-        if (this.legendShape != null) {
-            clone.legendShape = (ShapeList) this.legendShape.clone();
+        if (this.legendShapeList != null) {
+            clone.legendShapeList = (ShapeList) this.legendShapeList.clone();
         }
         if (this.legendTextFont != null) {
             clone.legendTextFont = (ObjectList) this.legendTextFont.clone();

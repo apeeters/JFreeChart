@@ -111,6 +111,8 @@
  * 27-Mar-2009 : Added new findDomainBounds() and findRangeBounds() methods to
  *               take account of hidden series (DG);
  * 01-Apr-2009 : Moved defaultEntityRadius up to superclass (DG);
+ * 28-Apr-2009 : Updated getLegendItem() method to observe new
+ *               'treatLegendShapeAsLine' flag (DG);
  *
  */
 
@@ -802,6 +804,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * specified dataset.
      *
      * @param dataset  the dataset (<code>null</code> permitted).
+     * @param includeInterval  include the interval (if any) for the dataset?
      *
      * @return The range (<code>null</code> if the dataset is <code>null</code>
      *         or empty).
@@ -849,6 +852,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * items from the specified dataset.
      *
      * @param dataset  the dataset (<code>null</code> permitted).
+     * @param includeInterval  include the interval (if any) for the dataset?
      *
      * @return The range (<code>null</code> if the dataset is <code>null</code>
      *         or empty).
@@ -932,42 +936,55 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @return A legend item for the series.
      */
     public LegendItem getLegendItem(int datasetIndex, int series) {
-        LegendItem result = null;
         XYPlot xyplot = getPlot();
-        if (xyplot != null) {
-            XYDataset dataset = xyplot.getDataset(datasetIndex);
-            if (dataset != null) {
-                String label = this.legendItemLabelGenerator.generateLabel(
-                        dataset, series);
-                String description = label;
-                String toolTipText = null;
-                if (getLegendItemToolTipGenerator() != null) {
-                    toolTipText = getLegendItemToolTipGenerator().generateLabel(
-                            dataset, series);
-                }
-                String urlText = null;
-                if (getLegendItemURLGenerator() != null) {
-                    urlText = getLegendItemURLGenerator().generateLabel(
-                            dataset, series);
-                }
-                Shape shape = lookupLegendShape(series);
-                Paint paint = lookupSeriesPaint(series);
-                Paint outlinePaint = lookupSeriesOutlinePaint(series);
-                Stroke outlineStroke = lookupSeriesOutlineStroke(series);
-                result = new LegendItem(label, description, toolTipText,
-                        urlText, shape, paint, outlineStroke, outlinePaint);
-                Paint labelPaint = lookupLegendTextPaint(series);
-                result.setLabelFont(lookupLegendTextFont(series));
-                if (labelPaint != null) {
-                    result.setLabelPaint(labelPaint);
-                }
-                result.setSeriesKey(dataset.getSeriesKey(series));
-                result.setSeriesIndex(series);
-                result.setDataset(dataset);
-                result.setDatasetIndex(datasetIndex);
-            }
+        if (xyplot == null) {
+            return null;
         }
-        return result;
+        XYDataset dataset = xyplot.getDataset(datasetIndex);
+        if (dataset == null) {
+            return null;
+        }
+        String label = this.legendItemLabelGenerator.generateLabel(dataset,
+                series);
+        String description = label;
+        String toolTipText = null;
+        if (getLegendItemToolTipGenerator() != null) {
+            toolTipText = getLegendItemToolTipGenerator().generateLabel(
+                    dataset, series);
+        }
+        String urlText = null;
+        if (getLegendItemURLGenerator() != null) {
+            urlText = getLegendItemURLGenerator().generateLabel(dataset,
+                    series);
+        }
+        Shape shape = lookupLegendShape(series);
+        Paint paint = lookupSeriesPaint(series);
+        LegendItem item = new LegendItem(label, paint);
+        item.setToolTipText(toolTipText);
+        item.setURLText(urlText);
+        item.setLabelFont(lookupLegendTextFont(series));
+        Paint labelPaint = lookupLegendTextPaint(series);
+        if (labelPaint != null) {
+            item.setLabelPaint(labelPaint);
+        }
+        item.setSeriesKey(dataset.getSeriesKey(series));
+        item.setSeriesIndex(series);
+        item.setDataset(dataset);
+        item.setDatasetIndex(datasetIndex);
+
+        if (getTreatLegendShapeAsLine()) {
+            item.setLineVisible(true);
+            item.setLine(shape);
+            item.setLinePaint(paint);
+            item.setShapeVisible(false);
+        }
+        else {
+            Paint outlinePaint = lookupSeriesOutlinePaint(series);
+            Stroke outlineStroke = lookupSeriesOutlineStroke(series);
+            item.setOutlinePaint(outlinePaint);
+            item.setOutlineStroke(outlineStroke);
+        }
+        return item;
     }
 
     /**
