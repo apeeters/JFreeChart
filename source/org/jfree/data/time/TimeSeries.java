@@ -79,6 +79,11 @@
  *               1864222) (DG);
  * 13-Jan-2009 : Fixed constructors so that timePeriodClass doesn't need to
  *               be specified in advance (DG);
+ * 26-May-2009 : Added cache for minY and maxY values (DG);
+ * 09-Jun-2009 : Ensure that TimeSeriesDataItem objects used in underlying
+ *               storage are cloned to keep series isolated from external
+ *               changes (DG);
+ * 10-Jun-2009 : Added addOrUpdate(TimeSeriesDataItem) method (DG);
  *
  */
 
@@ -90,6 +95,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -138,6 +144,20 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
     private long maximumItemAge;
 
     /**
+     * The minimum y-value in the series.
+     *
+     * @since 1.0.14
+     */
+    private double minY;
+
+    /**
+     * The maximum y-value in the series.
+     *
+     * @since 1.0.14
+     */
+    private double maxY;
+
+    /**
      * Creates a new (empty) time series.  By default, a daily time series is
      * created.  Use one of the other constructors if you require a different
      * time period.
@@ -169,6 +189,8 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         this.data = new java.util.ArrayList();
         this.maximumItemCount = Integer.MAX_VALUE;
         this.maximumItemAge = Long.MAX_VALUE;
+        this.minY = Double.NaN;
+        this.maxY = Double.NaN;
     }
 
     /**
@@ -238,6 +260,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @return The list of data items.
      */
     public List getItems() {
+        // FIXME: perhaps we should clone the data list
         return Collections.unmodifiableList(this.data);
     }
 
@@ -307,6 +330,36 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
     }
 
     /**
+     * Returns the smallest y-value in the series, ignoring any null and
+     * Double.NaN values.  This method returns Double.NaN if there is no
+     * smallest y-value (for example, when the series is empty).
+     *
+     * @return The smallest y-value.
+     *
+     * @see #getMaxY()
+     *
+     * @since 1.0.14
+     */
+    public double getMinY() {
+        return this.minY;
+    }
+
+    /**
+     * Returns the largest y-value in the series, ignoring any Double.NaN
+     * values.  This method returns Double.NaN if there is no largest y-value
+     * (for example, when the series is empty).
+     *
+     * @return The largest y-value.
+     *
+     * @see #getMinY()
+     *
+     * @since 1.0.14
+     */
+    public double getMaxY() {
+        return this.maxY;
+    }
+
+    /**
      * Returns the time period class for this series.
      * <p>
      * Only one time period class can be used within a single series (enforced).
@@ -321,20 +374,25 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
     }
 
     /**
-     * Returns a data item for the series.
+     * Returns a data item from the dataset.  Note that the returned object
+     * is a clone of the item in the series, so modifying it will have no
+     * effect on the data series.
      *
-     * @param index  the item index (zero-based).
+     * @param index  the item index.
      *
      * @return The data item.
      *
      * @see #getDataItem(RegularTimePeriod)
      */
     public TimeSeriesDataItem getDataItem(int index) {
-        return (TimeSeriesDataItem) this.data.get(index);
+        TimeSeriesDataItem item = (TimeSeriesDataItem) this.data.get(index);
+        return (TimeSeriesDataItem) item.clone();
     }
 
     /**
-     * Returns the data item for a specific period.
+     * Returns the data item for a specific period.  Note that the returned
+     * object is a clone of the item in the series, so modifying it will have
+     * no effect on the data series.
      *
      * @param period  the period of interest (<code>null</code> not allowed).
      *
@@ -344,6 +402,46 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @see #getDataItem(int)
      */
     public TimeSeriesDataItem getDataItem(RegularTimePeriod period) {
+        int index = getIndex(period);
+        if (index >= 0) {
+            return getDataItem(index);
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns a data item for the series.  This method returns the object
+     * that is used for the underlying storage - you should not modify the
+     * contents of the returned value unless you know what you are doing.
+     *
+     * @param index  the item index (zero-based).
+     *
+     * @return The data item.
+     *
+     * @see #getDataItem(int)
+     *
+     * @since 1.0.14
+     */
+    TimeSeriesDataItem getRawDataItem(int index) {
+        return (TimeSeriesDataItem) this.data.get(index);
+    }
+
+    /**
+     * Returns a data item for the series.  This method returns the object
+     * that is used for the underlying storage - you should not modify the
+     * contents of the returned value unless you know what you are doing.
+     *
+     * @param period  the item index (zero-based).
+     *
+     * @return The data item.
+     *
+     * @see #getDataItem(RegularTimePeriod)
+     *
+     * @since 1.0.14
+     */
+    TimeSeriesDataItem getRawDataItem(RegularTimePeriod period) {
         int index = getIndex(period);
         if (index >= 0) {
             return (TimeSeriesDataItem) this.data.get(index);
@@ -361,7 +459,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @return The time period.
      */
     public RegularTimePeriod getTimePeriod(int index) {
-        return getDataItem(index).getPeriod();
+        return getRawDataItem(index).getPeriod();
     }
 
     /**
@@ -433,7 +531,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @return The value (possibly <code>null</code>).
      */
     public Number getValue(int index) {
-        return getDataItem(index).getValue();
+        return getRawDataItem(index).getValue();
     }
 
     /**
@@ -477,6 +575,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         if (item == null) {
             throw new IllegalArgumentException("Null 'item' argument.");
         }
+        item = (TimeSeriesDataItem) item.clone();
         Class c = item.getPeriod().getClass();
         if (this.timePeriodClass == null) {
             this.timePeriodClass = c;
@@ -524,9 +623,11 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
             }
         }
         if (added) {
+            updateBoundsForAddedItem(item);
             // check if this addition will exceed the maximum item count...
             if (getItemCount() > this.maximumItemCount) {
-                this.data.remove(0);
+                TimeSeriesDataItem d = (TimeSeriesDataItem) this.data.remove(0);
+                updateBoundsForRemovedItem(d);
             }
 
             removeAgedItems(false);  // remove old items if necessary, but
@@ -602,16 +703,11 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
     public void update(RegularTimePeriod period, Number value) {
         TimeSeriesDataItem temp = new TimeSeriesDataItem(period, value);
         int index = Collections.binarySearch(this.data, temp);
-        if (index >= 0) {
-            TimeSeriesDataItem pair = (TimeSeriesDataItem) this.data.get(index);
-            pair.setValue(value);
-            fireSeriesChanged();
-        }
-        else {
+        if (index < 0) {
             throw new SeriesException("There is no existing value for the "
                     + "specified 'period'.");
         }
-
+        update(index, value);
     }
 
     /**
@@ -621,8 +717,24 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @param value  the new value (<code>null</code> permitted).
      */
     public void update(int index, Number value) {
-        TimeSeriesDataItem item = getDataItem(index);
+        TimeSeriesDataItem item = (TimeSeriesDataItem) this.data.get(index);
+        boolean iterate = false;
+        Number oldYN = item.getValue();
+        if (oldYN != null) {
+            double oldY = oldYN.doubleValue();
+            if (!Double.isNaN(oldY)) {
+                iterate = oldY <= this.minY || oldY >= this.maxY;
+            }
+        }
         item.setValue(value);
+        if (iterate) {
+            findBoundsByIteration();
+        }
+        else if (value != null) {
+            double yy = value.doubleValue();
+            this.minY = minIgnoreNaN(this.minY, yy);
+            this.maxY = maxIgnoreNaN(this.maxY, yy);
+        }
         fireSeriesChanged();
     }
 
@@ -638,7 +750,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         TimeSeries overwritten = new TimeSeries("Overwritten values from: "
                 + getKey());
         for (int i = 0; i < series.getItemCount(); i++) {
-            TimeSeriesDataItem item = series.getDataItem(i);
+            TimeSeriesDataItem item = series.getRawDataItem(i);
             TimeSeriesDataItem oldItem = addOrUpdate(item.getPeriod(),
                     item.getValue());
             if (oldItem != null) {
@@ -650,8 +762,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
 
     /**
      * Adds or updates an item in the times series and sends a
-     * {@link org.jfree.data.general.SeriesChangeEvent} to all registered
-     * listeners.
+     * {@link SeriesChangeEvent} to all registered listeners.
      *
      * @param period  the time period to add/update (<code>null</code> not
      *                permitted).
@@ -667,8 +778,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
 
     /**
      * Adds or updates an item in the times series and sends a
-     * {@link org.jfree.data.general.SeriesChangeEvent} to all registered
-     * listeners.
+     * {@link SeriesChangeEvent} to all registered listeners.
      *
      * @param period  the time period to add/update (<code>null</code> not
      *                permitted).
@@ -679,41 +789,75 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      */
     public TimeSeriesDataItem addOrUpdate(RegularTimePeriod period,
                                           Number value) {
+        return addOrUpdate(new TimeSeriesDataItem(period, value));
+    }
 
-        if (period == null) {
+    /**
+     * Adds or updates an item in the times series and sends a
+     * {@link SeriesChangeEvent} to all registered listeners.
+     *
+     * @param item  the data item (<code>null</code> not permitted).
+     *
+     * @return A copy of the overwritten data item, or <code>null</code> if no
+     *         item was overwritten.
+     *
+     * @since 1.0.14
+     */
+    public TimeSeriesDataItem addOrUpdate(TimeSeriesDataItem item) {
+
+        if (item == null) {
             throw new IllegalArgumentException("Null 'period' argument.");
         }
+        Class periodClass = item.getPeriod().getClass();
+        if (this.timePeriodClass == null) {
+            this.timePeriodClass = periodClass;
+        }
+        else if (!this.timePeriodClass.equals(periodClass)) {
+            String msg = "You are trying to add data where the time "
+                    + "period class is " + periodClass.getName()
+                    + ", but the TimeSeries is expecting an instance of "
+                    + this.timePeriodClass.getName() + ".";
+            throw new SeriesException(msg);
+        }
         TimeSeriesDataItem overwritten = null;
-
-        TimeSeriesDataItem key = new TimeSeriesDataItem(period, value);
-        int index = Collections.binarySearch(this.data, key);
+        int index = Collections.binarySearch(this.data, item);
         if (index >= 0) {
             TimeSeriesDataItem existing
                     = (TimeSeriesDataItem) this.data.get(index);
             overwritten = (TimeSeriesDataItem) existing.clone();
-            existing.setValue(value);
-            removeAgedItems(false);  // remove old items if necessary, but
-                                     // don't notify anyone, because that
-                                     // happens next anyway...
-            fireSeriesChanged();
+            // figure out if we need to iterate through all the y-values
+            // to find the revised minY / maxY
+            boolean iterate = false;
+            Number oldYN = existing.getValue();
+            double oldY = oldYN != null ? oldYN.doubleValue() : Double.NaN;
+            if (!Double.isNaN(oldY)) {
+                iterate = oldY <= this.minY || oldY >= this.maxY;
+            }
+            existing.setValue(item.getValue());
+            if (iterate) {
+                findBoundsByIteration();
+            }
+            else if (item.getValue() != null) {
+                double yy = item.getValue().doubleValue();
+                this.minY = minIgnoreNaN(this.minY, yy);
+                this.maxY = minIgnoreNaN(this.maxY, yy);
+            }
         }
         else {
-            this.data.add(-index - 1, new TimeSeriesDataItem(period, value));
-            this.timePeriodClass = period.getClass();
+            item = (TimeSeriesDataItem) item.clone();
+            this.data.add(-index - 1, item);
+            updateBoundsForAddedItem(item);
 
             // check if this addition will exceed the maximum item count...
             if (getItemCount() > this.maximumItemCount) {
-                this.data.remove(0);
-                if (this.data.isEmpty()) {
-                    this.timePeriodClass = null;
-                }
+                TimeSeriesDataItem d = (TimeSeriesDataItem) this.data.remove(0);
+                updateBoundsForRemovedItem(d);
             }
-
-            removeAgedItems(false);  // remove old items if necessary, but
-                                     // don't notify anyone, because that
-                                     // happens next anyway...
-            fireSeriesChanged();
         }
+        removeAgedItems(false);  // remove old items if necessary, but
+                                 // don't notify anyone, because that
+                                 // happens next anyway...
+        fireSeriesChanged();
         return overwritten;
 
     }
@@ -737,8 +881,11 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
                 this.data.remove(0);
                 removed = true;
             }
-            if (removed && notify) {
-                fireSeriesChanged();
+            if (removed) {
+                findBoundsByIteration();
+                if (notify) {
+                    fireSeriesChanged();
+                }
             }
         }
     }
@@ -786,8 +933,11 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
             this.data.remove(0);
             removed = true;
         }
-        if (removed && notify) {
-            fireSeriesChanged();
+        if (removed) {
+            findBoundsByIteration();
+            if (notify) {
+                fireSeriesChanged();
+            }
         }
     }
 
@@ -799,6 +949,8 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         if (this.data.size() > 0) {
             this.data.clear();
             this.timePeriodClass = null;
+            this.minY = Double.NaN;
+            this.maxY = Double.NaN;
             fireSeriesChanged();
         }
     }
@@ -814,7 +966,9 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
     public void delete(RegularTimePeriod period) {
         int index = getIndex(period);
         if (index >= 0) {
-            this.data.remove(index);
+            TimeSeriesDataItem item = (TimeSeriesDataItem) this.data.remove(
+                    index);
+            updateBoundsForRemovedItem(item);
             if (this.data.isEmpty()) {
                 this.timePeriodClass = null;
             }
@@ -829,16 +983,32 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @param end  the index of the last period to delete.
      */
     public void delete(int start, int end) {
+        delete(start, end, true);
+    }
+
+    /**
+     * Deletes data from start until end index (end inclusive).
+     *
+     * @param start  the index of the first period to delete.
+     * @param end  the index of the last period to delete.
+     * @param notify  notify listeners?
+     *
+     * @since 1.0.14
+     */
+    public void delete(int start, int end, boolean notify) {
         if (end < start) {
             throw new IllegalArgumentException("Requires start <= end.");
         }
         for (int i = 0; i <= (end - start); i++) {
             this.data.remove(start);
         }
+        findBoundsByIteration();
         if (this.data.isEmpty()) {
             this.timePeriodClass = null;
         }
-        fireSeriesChanged();
+        if (notify) {
+            fireSeriesChanged();
+        }
     }
 
     /**
@@ -875,7 +1045,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @throws CloneNotSupportedException if there is a cloning problem.
      */
     public TimeSeries createCopy(int start, int end)
-        throws CloneNotSupportedException {
+            throws CloneNotSupportedException {
 
         if (start < 0) {
             throw new IllegalArgumentException("Requires start >= 0.");
@@ -959,18 +1129,18 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
     /**
      * Tests the series for equality with an arbitrary object.
      *
-     * @param object  the object to test against (<code>null</code> permitted).
+     * @param obj  the object to test against (<code>null</code> permitted).
      *
      * @return A boolean.
      */
-    public boolean equals(Object object) {
-        if (object == this) {
+    public boolean equals(Object obj) {
+        if (obj == this) {
             return true;
         }
-        if (!(object instanceof TimeSeries)) {
+        if (!(obj instanceof TimeSeries)) {
             return false;
         }
-        TimeSeries that = (TimeSeries) object;
+        TimeSeries that = (TimeSeries) obj;
         if (!ObjectUtilities.equal(getDomainDescription(),
                 that.getDomainDescription())) {
             return false;
@@ -993,12 +1163,10 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         if (count != that.getItemCount()) {
             return false;
         }
-        for (int i = 0; i < count; i++) {
-            if (!getDataItem(i).equals(that.getDataItem(i))) {
-                return false;
-            }
+        if (!ObjectUtilities.equal(this.data, that.data)) {
+            return false;
         }
-        return super.equals(object);
+        return super.equals(obj);
     }
 
     /**
@@ -1017,15 +1185,15 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         // the first, middle and last items...
         int count = getItemCount();
         if (count > 0) {
-            TimeSeriesDataItem item = getDataItem(0);
+            TimeSeriesDataItem item = getRawDataItem(0);
             result = 29 * result + item.hashCode();
         }
         if (count > 1) {
-            TimeSeriesDataItem item = getDataItem(count - 1);
+            TimeSeriesDataItem item = getRawDataItem(count - 1);
             result = 29 * result + item.hashCode();
         }
         if (count > 2) {
-            TimeSeriesDataItem item = getDataItem(count / 2);
+            TimeSeriesDataItem item = getRawDataItem(count / 2);
             result = 29 * result + item.hashCode();
         }
         result = 29 * result + this.maximumItemCount;
@@ -1033,4 +1201,101 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         return result;
     }
 
+    /**
+     * Updates the cached values for the minimum and maximum data values.
+     *
+     * @param item  the item added (<code>null</code> not permitted).
+     *
+     * @since 1.0.14
+     */
+    private void updateBoundsForAddedItem(TimeSeriesDataItem item) {
+        Number yN = item.getValue();
+        if (item.getValue() != null) {
+            double y = yN.doubleValue();
+            this.minY = minIgnoreNaN(this.minY, y);
+            this.maxY = maxIgnoreNaN(this.maxY, y);
+        }
+    }
+
+    /**
+     * Updates the cached values for the minimum and maximum data values on
+     * the basis that the specified item has just been removed.
+     *
+     * @param item  the item added (<code>null</code> not permitted).
+     *
+     * @since 1.0.14
+     */
+    private void updateBoundsForRemovedItem(TimeSeriesDataItem item) {
+        Number yN = item.getValue();
+        if (yN != null) {
+            double y = yN.doubleValue();
+            if (!Double.isNaN(y)) {
+                if (y <= this.minY || y >= this.maxY) {
+                    findBoundsByIteration();
+                }
+            }
+        }
+    }
+
+    /**
+     * Finds the bounds of the x and y values for the series, by iterating
+     * through all the data items.
+     *
+     * @since 1.0.14
+     */
+    private void findBoundsByIteration() {
+        this.minY = Double.NaN;
+        this.maxY = Double.NaN;
+        Iterator iterator = this.data.iterator();
+        while (iterator.hasNext()) {
+            TimeSeriesDataItem item = (TimeSeriesDataItem) iterator.next();
+            updateBoundsForAddedItem(item);
+        }
+    }
+
+    /**
+     * A function to find the minimum of two values, but ignoring any
+     * Double.NaN values.
+     *
+     * @param a  the first value.
+     * @param b  the second value.
+     *
+     * @return The minimum of the two values.
+     */
+    private double minIgnoreNaN(double a, double b) {
+        if (Double.isNaN(a)) {
+            return b;
+        }
+        else {
+            if (Double.isNaN(b)) {
+                return a;
+            }
+            else {
+                return Math.min(a, b);
+            }
+        }
+    }
+
+    /**
+     * A function to find the maximum of two values, but ignoring any
+     * Double.NaN values.
+     *
+     * @param a  the first value.
+     * @param b  the second value.
+     *
+     * @return The maximum of the two values.
+     */
+    private double maxIgnoreNaN(double a, double b) {
+        if (Double.isNaN(a)) {
+            return b;
+        }
+        else {
+            if (Double.isNaN(b)) {
+                return a;
+            }
+            else {
+                return Math.max(a, b);
+            }
+        }
+    }
 }
