@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------
  * DefaultTableXYDataset.java
  * --------------------------
- * (C) Copyright 2003-2008, by Richard Atkinson and Contributors.
+ * (C) Copyright 2003-2009, by Richard Atkinson and Contributors.
  *
  * Original Author:  Richard Atkinson;
  * Contributor(s):   Jody Brownell;
@@ -57,6 +57,7 @@
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 22-Apr-2008 : Implemented PublicCloneable (DG);
+ * 10-Jun-2009 : Simplified getX() and getY() (DG);
  *
  */
 
@@ -278,8 +279,7 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
      */
     public Number getX(int series, int item) {
         XYSeries s = (XYSeries) this.data.get(series);
-        XYDataItem dataItem = s.getDataItem(item);
-        return dataItem.getX();
+        return s.getX(item);
     }
 
     /**
@@ -316,9 +316,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
      *         <code>null</code>).
      */
     public Number getY(int series, int index) {
-        XYSeries ts = (XYSeries) this.data.get(series);
-        XYDataItem dataItem = ts.getDataItem(index);
-        return dataItem.getY();
+        XYSeries s = (XYSeries) this.data.get(series);
+        return s.getY(index);
     }
 
     /**
