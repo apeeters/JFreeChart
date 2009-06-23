@@ -31,7 +31,7 @@
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   David Forslund;
- *                   Peter Kolb (patch 2497611);
+ *                   Peter Kolb (patches 2497611, 2791407);
  *
  * Changes
  * -------
@@ -39,6 +39,7 @@
  * 11-Oct-2007 : Renamed ScatterRenderer (DG);
  * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  * 14-Jan-2009 : Added support for seriesVisible flags (PK);
+ * 16-May-2009 : Patch 2791407 - findRangeBounds() override (PK);
  *
  */
 
@@ -66,6 +67,7 @@ import org.jfree.chart.util.BooleanList;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.ShapeUtilities;
+import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.statistics.MultiValueCategoryDataset;
 
@@ -353,6 +355,20 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
+     * Returns the range of values the renderer requires to display all the
+     * items from the specified dataset. This takes into account the range
+     * between the min/max values, possibly ignoring invisible series.
+     *
+     * @param dataset  the dataset (<code>null</code> permitted).
+     *
+     * @return The range (or <code>null</code> if the dataset is
+     *         <code>null</code> or empty).
+     */
+    public Range findRangeBounds(CategoryDataset dataset) {
+         return findRangeBounds(dataset, true);
+    }
+
+    /**
      * Draw a single data item.
      *
      * @param g2  the graphics device.
@@ -393,8 +409,8 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             // current data point...
             double x1;
             if (this.useSeriesOffset) {
-                x1 = domainAxis.getCategorySeriesMiddle(column,dataset.getColumnCount(),
-						visibleRow, visibleRowCount,
+                x1 = domainAxis.getCategorySeriesMiddle(column,
+                        dataset.getColumnCount(), visibleRow, visibleRowCount,
                         this.itemMargin, dataArea, plot.getDomainAxisEdge());
             }
             else {

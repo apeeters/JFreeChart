@@ -36,6 +36,7 @@
  *                   Andreas Schroeder;
  *                   Rafal Skalny (patch 1925366);
  *                   Jerome David (patch 2131001);
+ *                   Peter Kolb (patch 27914070;
  *
  * Changes (from 18-Sep-2001)
  * --------------------------
@@ -117,6 +118,8 @@
  *               account hidden series (DG);
  * 01-Apr-2009 : Handle a StatisticalCategoryDataset in
  *               iterateToFindRangeBounds() (DG);
+ * 16-May-2009 : Patch 2791407 - fix iterateToFindRangeBounds for
+ *               MultiValueCategoryDataset (PK);
  *
  */
 
@@ -137,7 +140,9 @@ import org.jfree.data.category.CategoryRangeInfo;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.category.IntervalCategoryDataset;
 import org.jfree.data.function.Function2D;
+import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
 import org.jfree.data.statistics.BoxAndWhiskerXYDataset;
+import org.jfree.data.statistics.MultiValueCategoryDataset;
 import org.jfree.data.statistics.StatisticalCategoryDataset;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.OHLCDataset;
@@ -1034,7 +1039,36 @@ public final class DatasetUtilities {
         double minimum = Double.POSITIVE_INFINITY;
         double maximum = Double.NEGATIVE_INFINITY;
         int columnCount = dataset.getColumnCount();
-        if (includeInterval && dataset instanceof IntervalCategoryDataset) {
+        if (includeInterval
+                && dataset instanceof BoxAndWhiskerCategoryDataset) {
+            // handle special case of BoxAndWhiskerDataset
+            BoxAndWhiskerCategoryDataset bx
+                    = (BoxAndWhiskerCategoryDataset) dataset;
+            Iterator iterator = visibleSeriesKeys.iterator();
+            while (iterator.hasNext()) {
+                Comparable seriesKey = (Comparable) iterator.next();
+                int series = dataset.getRowIndex(seriesKey);
+                int itemCount = dataset.getColumnCount();
+                for (int item = 0; item < itemCount; item++) {
+                    Number lvalue = bx.getMinRegularValue(series, item);
+                    if (lvalue == null) {
+                        lvalue = bx.getValue(series, item);
+                    }
+                    Number uvalue = bx.getMaxRegularValue(series, item);
+                    if (uvalue == null) {
+                        uvalue = bx.getValue(series, item);
+                    }
+                    if (lvalue != null) {
+                        minimum = Math.min(minimum, lvalue.doubleValue());
+                    }
+                    if (uvalue != null) {
+                        maximum = Math.max(maximum, uvalue.doubleValue());
+                    }
+                }
+            }
+        }
+        else if (includeInterval
+                && dataset instanceof IntervalCategoryDataset) {
             // handle the special case where the dataset has y-intervals that
             // we want to measure
             IntervalCategoryDataset icd = (IntervalCategoryDataset) dataset;
@@ -1053,6 +1087,32 @@ public final class DatasetUtilities {
                         maximum = Math.max(maximum, uvalue.doubleValue());
                     }
                 }
+            }
+        }
+        else if (includeInterval
+                && dataset instanceof MultiValueCategoryDataset) {
+            // handle the special case where the dataset has y-intervals that
+            // we want to measure
+            MultiValueCategoryDataset mvcd
+                    = (MultiValueCategoryDataset) dataset;
+            Iterator iterator = visibleSeriesKeys.iterator();
+            while (iterator.hasNext()) {
+                Comparable seriesKey = (Comparable) iterator.next();
+                int series = dataset.getRowIndex(seriesKey);
+                for (int column = 0; column < columnCount; column++) {
+                    List values = mvcd.getValues(series, column);
+                    Iterator valueIterator = values.iterator();
+                    while (valueIterator.hasNext()) {
+                    	Object o = valueIterator.next();
+						if (o instanceof Number){
+							double v = ((Number) o).doubleValue();
+							if (!Double.isNaN(v)){
+	                            minimum = Math.min(minimum, v);
+	                            maximum = Math.max(maximum, v);
+							}
+						}
+                    }
+               }
             }
         }
         else if (includeInterval
@@ -1565,7 +1625,7 @@ public final class DatasetUtilities {
                     Number value;
                     if (dataset instanceof IntervalCategoryDataset) {
                         IntervalCategoryDataset icd
-                            = (IntervalCategoryDataset) dataset;
+                                = (IntervalCategoryDataset) dataset;
                         value = icd.getStartValue(series, item);
                     }
                     else {
@@ -1622,7 +1682,7 @@ public final class DatasetUtilities {
                     double value;
                     if (dataset instanceof IntervalXYDataset) {
                         IntervalXYDataset intervalXYData
-                            = (IntervalXYDataset) dataset;
+                                = (IntervalXYDataset) dataset;
                         value = intervalXYData.getStartYValue(series, item);
                     }
                     else if (dataset instanceof OHLCDataset) {
