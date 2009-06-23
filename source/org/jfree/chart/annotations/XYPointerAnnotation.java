@@ -47,6 +47,7 @@
  *               Skunk (DG);
  * 12-Feb-2009 : Added support for rotated label, plus background and
  *               outline (DG);
+ * 18-May-2009 : Fixed typo in hashCode() method (DG);
  *
  */
 
@@ -385,14 +386,14 @@ public class XYPointerAnnotation extends XYTextAnnotation
         double arrowBaseY = endY + Math.sin(this.angle) * this.arrowLength;
 
         double arrowLeftX = arrowBaseX
-            + Math.cos(this.angle + Math.PI / 2.0) * this.arrowWidth;
+                + Math.cos(this.angle + Math.PI / 2.0) * this.arrowWidth;
         double arrowLeftY = arrowBaseY
-            + Math.sin(this.angle + Math.PI / 2.0) * this.arrowWidth;
+                + Math.sin(this.angle + Math.PI / 2.0) * this.arrowWidth;
 
         double arrowRightX = arrowBaseX
-            - Math.cos(this.angle + Math.PI / 2.0) * this.arrowWidth;
+                - Math.cos(this.angle + Math.PI / 2.0) * this.arrowWidth;
         double arrowRightY = arrowBaseY
-            - Math.sin(this.angle + Math.PI / 2.0) * this.arrowWidth;
+                - Math.sin(this.angle + Math.PI / 2.0) * this.arrowWidth;
 
         GeneralPath arrow = new GeneralPath();
         arrow.moveTo((float) endX, (float) endY);
@@ -402,7 +403,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
 
         g2.setStroke(this.arrowStroke);
         g2.setPaint(this.arrowPaint);
-        Line2D line = new Line2D.Double(startX, startY, endX, endY);
+        Line2D line = new Line2D.Double(startX, startY, arrowBaseX, arrowBaseY);
         g2.draw(line);
         g2.fill(arrow);
 
@@ -421,7 +422,8 @@ public class XYPointerAnnotation extends XYTextAnnotation
         }
         g2.setPaint(getPaint());
         TextUtilities.drawRotatedString(getText(), g2, (float) labelX,
-                (float) labelY, getTextAnchor(), getRotationAngle(), getRotationAnchor());
+                (float) labelY, getTextAnchor(), getRotationAngle(),
+                getRotationAnchor());
         if (isOutlineVisible()) {
             g2.setStroke(getOutlineStroke());
             g2.setPaint(getOutlinePaint());
@@ -499,7 +501,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
         result = result * 37 + this.arrowStroke.hashCode();
         temp = Double.doubleToLongBits(this.labelOffset);
         result = 37 * result + (int) (temp ^ (temp >>> 32));
-        return super.hashCode();
+        return result;
     }
 
     /**
