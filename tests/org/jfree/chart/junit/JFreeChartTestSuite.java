@@ -47,6 +47,7 @@
  * 26-Jan-2007 : Added tests for org.jfree.data.time.ohlc package (DG);
  * 24-Oct-2007 : Added tests for org.jfree.chart.plot.dial package (DG);
  * 25-Mar-2009 : Added missing test suite (org.jfree.data.general) (DG);
+ * 28-May-2009 : Added tests for org.jfree.data.function package (DG);
  *
  */
 
@@ -71,6 +72,7 @@ import org.jfree.chart.title.junit.TitlePackageTests;
 import org.jfree.chart.urls.junit.UrlsPackageTests;
 import org.jfree.chart.util.junit.UtilPackageTests;
 import org.jfree.data.category.junit.DataCategoryPackageTests;
+import org.jfree.data.function.junit.DataFunctionPackageTests;
 import org.jfree.data.gantt.junit.DataGanttPackageTests;
 import org.jfree.data.general.junit.DataGeneralPackageTests;
 import org.jfree.data.junit.DataPackageTests;
@@ -109,6 +111,7 @@ public class JFreeChartTestSuite extends TestCase {
         suite.addTest(UtilPackageTests.suite());
         suite.addTest(DataPackageTests.suite());
         suite.addTest(DataCategoryPackageTests.suite());
+        suite.addTest(DataFunctionPackageTests.suite());
         suite.addTest(DataGanttPackageTests.suite());
         suite.addTest(DataGeneralPackageTests.suite());
         suite.addTest(DataStatisticsPackageTests.suite());
