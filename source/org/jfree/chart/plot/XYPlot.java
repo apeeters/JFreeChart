@@ -223,6 +223,8 @@
  *               Voigt (DG);
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  * 30-Mar-2009 : Delegate panning to axes (DG);
+ * 10-May-2009 : Added check for fixedLegendItems in equals(), and code to
+ *               handle cloning (DG);
  *
  */
 
@@ -2119,8 +2121,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     }
 
     /**
-     * Returns the paint for the minor grid lines (if any) plotted against the range
-     * axis.
+     * Returns the paint for the minor grid lines (if any) plotted against the
+     * range axis.
      *
      * @return The paint (never <code>null</code>).
      *
@@ -3857,12 +3859,14 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             while (iterator.hasNext()) {
                 paintLine = false;
                 ValueTick tick = (ValueTick) iterator.next();
-                if ((tick.getTickType() == TickType.MINOR) && isDomainMinorGridlinesVisible()){
+                if ((tick.getTickType() == TickType.MINOR)
+                        && isDomainMinorGridlinesVisible()) {
                     gridStroke = getDomainMinorGridlineStroke();
                     gridPaint = getDomainMinorGridlinePaint();
                     paintLine = true;
                 }
-                else if ((tick.getTickType() == TickType.MAJOR) && isDomainGridlinesVisible()){
+                else if ((tick.getTickType() == TickType.MAJOR)
+                        && isDomainGridlinesVisible()) {
                     gridStroke = getDomainGridlineStroke();
                     gridPaint = getDomainGridlinePaint();
                     paintLine = true;
@@ -5466,6 +5470,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         if (!ObjectUtilities.equal(this.annotations, that.annotations)) {
             return false;
         }
+        if (!ObjectUtilities.equal(this.fixedLegendItems,
+                that.fixedLegendItems)) {
+            return false;
+        }
         if (!PaintUtilities.equal(this.domainTickBandPaint,
                 that.domainTickBandPaint)) {
             return false;
@@ -5562,7 +5570,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             clone.fixedRangeAxisSpace = (AxisSpace) ObjectUtilities.clone(
                     this.fixedRangeAxisSpace);
         }
-
+        if (this.fixedLegendItems != null) {
+            clone.fixedLegendItems
+                    = (LegendItemCollection) this.fixedLegendItems.clone();
+        }
         clone.quadrantOrigin = (Point2D) ObjectUtilities.clone(
                 this.quadrantOrigin);
         clone.quadrantPaint = (Paint[]) this.quadrantPaint.clone();
