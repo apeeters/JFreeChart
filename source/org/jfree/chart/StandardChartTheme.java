@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * StandardChartTheme.java
  * -----------------------
- * (C) Copyright 2008, by Object Refinery Limited.
+ * (C) Copyright 2008, 2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,6 +35,7 @@
  * Changes
  * -------
  * 14-Aug-2008 : Version 1 (DG);
+ * 10-Apr-2009 : Added getter/setter for smallFont (DG);
  *
  */
 
@@ -173,6 +174,13 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
     /** The range grid line paint. */
     private transient Paint rangeGridlinePaint;
 
+    /**
+     * The baseline paint (used for domain and range zero baselines)
+     *
+     * @since 1.0.13
+     */
+    private transient Paint baselinePaint;
+
     /** The crosshair paint. */
     private transient Paint crosshairPaint;
 
@@ -246,6 +254,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
         theme.chartBackgroundPaint = Color.black;
         theme.plotBackgroundPaint = Color.black;
         theme.plotOutlinePaint = Color.yellow;
+        theme.baselinePaint = Color.white;
         theme.crosshairPaint = Color.red;
         theme.labelLinkPaint = Color.lightGray;
         theme.tickLabelPaint = Color.white;
@@ -253,16 +262,16 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
         theme.shadowPaint = Color.darkGray;
         theme.itemLabelPaint = Color.white;
         theme.drawingSupplier = new DefaultDrawingSupplier(
-                new Paint[] { Color.decode("0xFFFF00"),
+                new Paint[] {Color.decode("0xFFFF00"),
                         Color.decode("0x0036CC"), Color.decode("0xFF0000"),
                         Color.decode("0xFFFF7F"), Color.decode("0x6681CC"),
                         Color.decode("0xFF7F7F"), Color.decode("0xFFFFBF"),
                         Color.decode("0x99A6CC"), Color.decode("0xFFBFBF"),
                         Color.decode("0xA9A938"), Color.decode("0x2D4587")},
-                new Paint[] { Color.decode("0xFFFF00"),
+                new Paint[] {Color.decode("0xFFFF00"),
                         Color.decode("0x0036CC")},
-                new Stroke[] { new BasicStroke(2.0f)},
-                new Stroke[] { new BasicStroke(0.5f)},
+                new Stroke[] {new BasicStroke(2.0f)},
+                new Stroke[] {new BasicStroke(0.5f)},
                 DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE);
         theme.wallPaint = Color.darkGray;
         theme.errorIndicatorPaint = Color.lightGray;
@@ -668,6 +677,31 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeGridlinePaint = paint;
+    }
+
+    /**
+     * Returns the baseline paint.
+     *
+     * @return The baseline paint.
+     *
+     * @since 1.0.13
+     */
+    public Paint getBaselinePaint() {
+        return this.baselinePaint;
+    }
+
+    /**
+     * Sets the baseline paint.
+     *
+     * @param paint  the paint (<code>null</code> not permitted).
+     *
+     * @since 1.0.13
+     */
+    public void setBaselinePaint(Paint paint) {
+        if (paint == null) {
+            throw new IllegalArgumentException("Null 'paint' argument.");
+        }
+        this.baselinePaint = paint;
     }
 
     /**
@@ -1250,11 +1284,12 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
         plot.setAxisOffset(this.axisOffset);
         plot.setDomainGridlinePaint(this.domainGridlinePaint);
         plot.setRangeGridlinePaint(this.rangeGridlinePaint);
+        plot.setRangeZeroBaselinePaint(this.baselinePaint);
 
         // process all domain axes
         int domainAxisCount = plot.getDomainAxisCount();
         for (int i = 0; i < domainAxisCount; i++) {
-            CategoryAxis axis = (CategoryAxis) plot.getDomainAxis(i);
+            CategoryAxis axis = plot.getDomainAxis(i);
             if (axis != null) {
                 applyToCategoryAxis(axis);
             }
@@ -1757,6 +1792,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
         SerialUtilities.writePaint(this.plotBackgroundPaint, stream);
         SerialUtilities.writePaint(this.plotOutlinePaint, stream);
         SerialUtilities.writePaint(this.labelLinkPaint, stream);
+        SerialUtilities.writePaint(this.baselinePaint, stream);
         SerialUtilities.writePaint(this.domainGridlinePaint, stream);
         SerialUtilities.writePaint(this.rangeGridlinePaint, stream);
         SerialUtilities.writePaint(this.crosshairPaint, stream);
@@ -1790,6 +1826,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
         this.plotBackgroundPaint = SerialUtilities.readPaint(stream);
         this.plotOutlinePaint = SerialUtilities.readPaint(stream);
         this.labelLinkPaint = SerialUtilities.readPaint(stream);
+        this.baselinePaint = SerialUtilities.readPaint(stream);
         this.domainGridlinePaint = SerialUtilities.readPaint(stream);
         this.rangeGridlinePaint = SerialUtilities.readPaint(stream);
         this.crosshairPaint = SerialUtilities.readPaint(stream);
