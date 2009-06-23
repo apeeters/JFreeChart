@@ -27,7 +27,7 @@
  * ---------------------------
  * XYLineAndShapeRenderer.java
  * ---------------------------
- * (C) Copyright 2004-2008, by Object Refinery Limited.
+ * (C) Copyright 2004-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -65,6 +65,7 @@
  * 02-Jun-2008 : Fixed tooltips at lower edges of data area (DG);
  * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  * 19-Sep-2008 : Fixed bug with drawSeriesLineAsPath - patch by Greg Darke (DG);
+ * 18-May-2009 : Clip lines in drawPrimaryLine() (DG);
  *
  */
 
@@ -91,6 +92,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.util.BooleanList;
+import org.jfree.chart.util.LineUtilities;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
@@ -861,14 +863,15 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         }
 
         PlotOrientation orientation = plot.getOrientation();
+        boolean visible = false;
         if (orientation == PlotOrientation.HORIZONTAL) {
             state.workingLine.setLine(transY0, transX0, transY1, transX1);
         }
         else if (orientation == PlotOrientation.VERTICAL) {
             state.workingLine.setLine(transX0, transY0, transX1, transY1);
         }
-
-        if (state.workingLine.intersects(dataArea)) {
+        visible = LineUtilities.clipLine(state.workingLine, dataArea);
+        if (visible) {
             drawFirstPassShape(g2, pass, series, item, state.workingLine);
         }
     }
