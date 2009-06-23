@@ -589,7 +589,7 @@ public class XYTextAnnotation extends AbstractXYAnnotation
         }
         if (this.outlineVisible != that.outlineVisible) {
             return false;
-    }
+        }
         if (!PaintUtilities.equal(this.backgroundPaint, that.backgroundPaint)) {
             return false;
         }
