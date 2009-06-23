@@ -42,6 +42,7 @@
  *                   Onno vd Akker;
  *                   Sergei Ivanov;
  *                   Ulrich Voigt - patch 2686040;
+ *                   Alessandro Borges - patch 1460845;
  *
  * Changes (from 28-Jun-2001)
  * --------------------------
@@ -154,8 +155,13 @@
  *               cursor for CTRL-mouse-click if panning is enabled (DG);
  * 01-Apr-2009 : Fixed panning, and added different mouse event mask for
  *               MacOSX (DG);
-
- *
+ * 08-Apr-2009 : Added copy to clipboard support, based on patch 1460845
+ *               by Alessandro Borges (DG);
+ * 09-Apr-2009 : Added overlay support (DG);
+ * 10-Apr-2009 : Set chartBuffer background to match ChartPanel (DG);
+ * 05-May-2009 : Match scaling (and insets) in doCopy() (DG);
+ * 01-Jun-2009 : Check for null chart in mousePressed() method (DG);
+ * 08-Jun-2009 : Fixed bug in setMouseWheelEnabled() (DG);
  */
 
 package org.jfree.chart;
@@ -171,7 +177,10 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Paint;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.Transparency;
+import java.awt.datatransfer.Clipboard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -195,6 +204,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.EventListener;
+import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.JFileChooser;
@@ -215,6 +226,9 @@ import org.jfree.chart.event.ChartChangeEvent;
 import org.jfree.chart.event.ChartChangeListener;
 import org.jfree.chart.event.ChartProgressEvent;
 import org.jfree.chart.event.ChartProgressListener;
+import org.jfree.chart.event.OverlayChangeEvent;
+import org.jfree.chart.event.OverlayChangeListener;
+import org.jfree.chart.panel.Overlay;
 import org.jfree.chart.plot.Pannable;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
@@ -233,12 +247,17 @@ import org.jfree.chart.util.SerialUtilities;
  */
 public class ChartPanel extends JPanel implements ChartChangeListener,
         ChartProgressListener, ActionListener, MouseListener,
-        MouseMotionListener, Printable, Serializable {
+        MouseMotionListener, OverlayChangeListener, Printable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 6046366297214274674L;
 
-    /** Default setting for buffer usage. */
+    /**
+     * Default setting for buffer usage.  The default has been changed to
+     * <code>true</code> from version 1.0.13 onwards, because of a severe
+     * performance problem with drawing the zoom rectangle using XOR (which
+     * now happens only when the buffer is NOT used).
+     */
     public static final boolean DEFAULT_BUFFER_USED = true;
 
     /** The default panel width. */
@@ -264,6 +283,13 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
 
     /** Properties action command. */
     public static final String PROPERTIES_COMMAND = "PROPERTIES";
+
+    /**
+     * Copy action command.
+     *
+     * @since 1.0.13
+     */
+    public static final String COPY_COMMAND = "COPY";
 
     /** Save action command. */
     public static final String SAVE_COMMAND = "SAVE";
@@ -501,6 +527,12 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      */
     private int panMask = InputEvent.CTRL_MASK;
 
+    /**
+     * A list of overlays for the panel.
+     *
+     * @since 1.0.13
+     */
+    private List overlays;
 
     /**
      * Constructs a panel that displays the specified chart.
@@ -540,24 +572,20 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      *
      * @param chart  the chart.
      * @param useBuffer  a flag controlling whether or not an off-screen buffer
-     *                   is used.
+     *                   is used (read the warning above before setting this
+     *                   to <code>false</code>).
      */
     public ChartPanel(JFreeChart chart, boolean useBuffer) {
 
-        this(chart,
-             DEFAULT_WIDTH,
-             DEFAULT_HEIGHT,
-             DEFAULT_MINIMUM_DRAW_WIDTH,
-             DEFAULT_MINIMUM_DRAW_HEIGHT,
-             DEFAULT_MAXIMUM_DRAW_WIDTH,
-             DEFAULT_MAXIMUM_DRAW_HEIGHT,
-             useBuffer,
-             true,  // properties
-             true,  // save
-             true,  // print
-             true,  // zoom
-             true   // tooltips
-             );
+        this(chart, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_MINIMUM_DRAW_WIDTH,
+                DEFAULT_MINIMUM_DRAW_HEIGHT, DEFAULT_MAXIMUM_DRAW_WIDTH,
+                DEFAULT_MAXIMUM_DRAW_HEIGHT, useBuffer,
+                true,  // properties
+                true,  // save
+                true,  // print
+                true,  // zoom
+                true   // tooltips
+                );
 
     }
 
@@ -624,19 +652,49 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      * @param tooltips  a flag indicating whether or not tooltips should be
      *                  enabled for the chart.
      */
-    public ChartPanel(JFreeChart chart,
-                      int width,
-                      int height,
-                      int minimumDrawWidth,
-                      int minimumDrawHeight,
-                      int maximumDrawWidth,
-                      int maximumDrawHeight,
-                      boolean useBuffer,
-                      boolean properties,
-                      boolean save,
-                      boolean print,
-                      boolean zoom,
-                      boolean tooltips) {
+    public ChartPanel(JFreeChart chart, int width, int height,
+            int minimumDrawWidth, int minimumDrawHeight, int maximumDrawWidth,
+            int maximumDrawHeight, boolean useBuffer, boolean properties,
+            boolean save, boolean print, boolean zoom, boolean tooltips) {
+
+        this(chart, width, height, minimumDrawWidth, minimumDrawHeight,
+                maximumDrawWidth, maximumDrawHeight, useBuffer, properties,
+                true, save, print, zoom, tooltips);
+    }
+
+    /**
+     * Constructs a JFreeChart panel.
+     *
+     * @param chart  the chart.
+     * @param width  the preferred width of the panel.
+     * @param height  the preferred height of the panel.
+     * @param minimumDrawWidth  the minimum drawing width.
+     * @param minimumDrawHeight  the minimum drawing height.
+     * @param maximumDrawWidth  the maximum drawing width.
+     * @param maximumDrawHeight  the maximum drawing height.
+     * @param useBuffer  a flag that indicates whether to use the off-screen
+     *                   buffer to improve performance (at the expense of
+     *                   memory).
+     * @param properties  a flag indicating whether or not the chart property
+     *                    editor should be available via the popup menu.
+     * @param copy  a flag indicating whether or not a copy option should be
+     *              available via the popup menu.
+     * @param save  a flag indicating whether or not save options should be
+     *              available via the popup menu.
+     * @param print  a flag indicating whether or not the print option
+     *               should be available via the popup menu.
+     * @param zoom  a flag indicating whether or not zoom options should be
+     *              added to the popup menu.
+     * @param tooltips  a flag indicating whether or not tooltips should be
+     *                  enabled for the chart.
+     *
+     * @since 1.0.13
+     */
+    public ChartPanel(JFreeChart chart, int width, int height,
+           int minimumDrawWidth, int minimumDrawHeight, int maximumDrawWidth,
+           int maximumDrawHeight, boolean useBuffer, boolean properties,
+           boolean copy, boolean save, boolean print, boolean zoom,
+           boolean tooltips) {
 
         setChart(chart);
         this.chartMouseListeners = new EventListenerList();
@@ -652,8 +710,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
 
         // set up popup menu...
         this.popup = null;
-        if (properties || save || print || zoom) {
-            this.popup = createPopupMenu(properties, save, print, zoom);
+        if (properties || copy || save || print || zoom) {
+            this.popup = createPopupMenu(properties, copy, save, print, zoom);
         }
 
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
@@ -683,6 +741,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         if (osName.startsWith("mac os x")) {
             this.panMask = InputEvent.ALT_MASK;
         }
+
+        this.overlays = new java.util.ArrayList();
     }
 
     /**
@@ -1299,38 +1359,80 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                 e.printStackTrace();
             }
         }
-        else {
-
-            if (this.mouseWheelHandler != null) {
-                // use reflection to deregister the mouseWheelHandler
-                try {
-                    Class mwl = Class.forName(
-                            "java.awt.event.MouseWheelListener");
-                    Class c2 = ChartPanel.class;
-                    Method m = c2.getMethod("removeMouseWheelListener",
-                            new Class[] {mwl});
-                    m.invoke(this, this.mouseWheelHandler);
-                }
-                catch (ClassNotFoundException e) {
-                    // must be running on JRE 1.3.1, so just ignore this
-                }
-                catch (SecurityException e) {
-                    e.printStackTrace();
-                }
-                catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-                catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                }
-                catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+        else if (!flag && this.mouseWheelHandler != null) {
+            // use reflection to deregister the mouseWheelHandler
+            try {
+                Class mwl = Class.forName("java.awt.event.MouseWheelListener");
+                Class c2 = ChartPanel.class;
+                Method m = c2.getMethod("removeMouseWheelListener",
+                        new Class[] {mwl});
+                m.invoke(this, new Object[] {this.mouseWheelHandler});
+                this.mouseWheelHandler = null;
+            }
+            catch (ClassNotFoundException e) {
+                // must be running on JRE 1.3.1, so just ignore this
+            }
+            catch (SecurityException e) {
+                e.printStackTrace();
+            }
+            catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+            catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Add an overlay to the panel.
+     *
+     * @param overlay  the overlay (<code>null</code> not permitted).
+     *
+     * @since 1.0.13
+     */
+    public void addOverlay(Overlay overlay) {
+        if (overlay == null) {
+            throw new IllegalArgumentException("Null 'overlay' argument.");
+        }
+        this.overlays.add(overlay);
+        overlay.addChangeListener(this);
+        repaint();
+    }
+
+    /**
+     * Removes an overlay from the panel.
+     *
+     * @param overlay  the overlay to remove (<code>null</code> not permitted).
+     *
+     * @since 1.0.13
+     */
+    public void removeOverlay(Overlay overlay) {
+        if (overlay == null) {
+            throw new IllegalArgumentException("Null 'overlay' argument.");
+        }
+        boolean removed = this.overlays.remove(overlay);
+        if (removed) {
+            overlay.removeChangeListener(this);
+            repaint();
+        }
+    }
+
+    /**
+     * Handles a change to an overlay by repainting the panel.
+     *
+     * @param event  the event.
+     *
+     * @since 1.0.13
+     */
+    public void overlayChanged(OverlayChangeEvent event) {
+        repaint();
     }
 
     /**
@@ -1525,10 +1627,6 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         // are we using the chart buffer?
         if (this.useBuffer) {
 
-            // if buffer is being refreshed, it needs clearing unless it is
-            // new - use the following flag to track this...
-            boolean clearBuffer = true;
-
             // do we need to resize the buffer?
             if ((this.chartBuffer == null)
                     || (this.chartBufferWidth != available.getWidth())
@@ -1540,7 +1638,6 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                         this.chartBufferWidth, this.chartBufferHeight,
                         Transparency.TRANSLUCENT);
                 this.refreshBuffer = true;
-                clearBuffer = false;  // buffer is new, no clearing required
             }
 
             // do we need to redraw the buffer?
@@ -1553,10 +1650,10 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
 
                 Graphics2D bufferG2 = (Graphics2D)
                         this.chartBuffer.getGraphics();
-                if (clearBuffer) {
-                    bufferG2.clearRect(0, 0, this.chartBufferWidth,
-                            this.chartBufferHeight);
-                }
+                Rectangle r = new Rectangle(0, 0, this.chartBufferWidth,
+                        this.chartBufferHeight);
+                bufferG2.setPaint(getBackground());
+                bufferG2.fill(r);
                 if (scale) {
                     AffineTransform saved = bufferG2.getTransform();
                     AffineTransform st = AffineTransform.getScaleInstance(
@@ -1591,6 +1688,12 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
             this.chart.draw(g2, chartArea, this.anchor, this.info);
             g2.setTransform(saved);
 
+        }
+
+        Iterator iterator = this.overlays.iterator();
+        while (iterator.hasNext()) {
+            Overlay overlay = (Overlay) iterator.next();
+            overlay.paintOverlay(g2, this);
         }
 
         // redraw the zoom rectangle (if present) - if useBuffer is false,
@@ -1651,6 +1754,9 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
 
         if (command.equals(PROPERTIES_COMMAND)) {
             doEditChartProperties();
+        }
+        else if (command.equals(COPY_COMMAND)) {
+            doCopy();
         }
         else if (command.equals(SAVE_COMMAND)) {
             try {
@@ -1744,6 +1850,9 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      * @param e  The mouse event.
      */
     public void mousePressed(MouseEvent e) {
+        if (this.chart == null) {
+            return;
+        }
         Plot plot = this.chart.getPlot();
         int mods = e.getModifiers();
         if ((mods & this.panMask) == this.panMask) {
@@ -1758,7 +1867,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                         this.panW = screenDataArea.getWidth();
                         this.panH = screenDataArea.getHeight();
                         this.panLast = e.getPoint();
-                        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+                        setCursor(Cursor.getPredefinedCursor(
+                                Cursor.MOVE_CURSOR));
                     }
                 }
                 // the actual panning occurs later in the mouseDragged()
@@ -2496,8 +2606,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     private void drawZoomRectangle(Graphics2D g2, boolean xor) {
         if (this.zoomRectangle != null) {
             if (xor) {
-        // Set XOR mode to draw the zoom rectangle
-        g2.setXORMode(Color.gray);
+                // Set XOR mode to draw the zoom rectangle
+                g2.setXORMode(Color.gray);
             }
             if (this.fillZoomRectangle) {
                 g2.setPaint(this.zoomFillPaint);
@@ -2508,9 +2618,9 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                 g2.draw(this.zoomRectangle);
             }
             if (xor) {
-        // Reset to the default 'overwrite' mode
-        g2.setPaintMode();
-    }
+                // Reset to the default 'overwrite' mode
+                g2.setPaintMode();
+            }
         }
     }
 
@@ -2591,6 +2701,23 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
             editor.updateChart(this.chart);
         }
 
+    }
+
+    /**
+     * Copies the current chart to the system clipboard.
+     *
+     * @since 1.0.13
+     */
+    public void doCopy() {
+        Clipboard systemClipboard
+                = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Insets insets = getInsets();
+        int w = getWidth() - insets.left - insets.right;
+        int h = getHeight() - insets.top - insets.bottom;
+        ChartTransferable selection = new ChartTransferable(this.chart, w, h,
+                getMinimumDrawWidth(), getMinimumDrawHeight(),
+                getMaximumDrawWidth(), getMaximumDrawHeight(), true);
+        systemClipboard.setContents(selection, null);
     }
 
     /**
@@ -2719,10 +2846,26 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      *
      * @return The popup menu.
      */
+    protected JPopupMenu createPopupMenu(boolean properties, boolean save,
+            boolean print, boolean zoom) {
+        return createPopupMenu(properties, false, save, print, zoom);
+    }
+
+    /**
+     * Creates a popup menu for the panel.
+     *
+     * @param properties  include a menu item for the chart property editor.
+     * @param copy include a menu item for copying to the clipboard.
+     * @param save  include a menu item for saving the chart.
+     * @param print  include a menu item for printing the chart.
+     * @param zoom  include menu items for zooming.
+     *
+     * @return The popup menu.
+     *
+     * @since 1.0.13
+     */
     protected JPopupMenu createPopupMenu(boolean properties,
-                                         boolean save,
-                                         boolean print,
-                                         boolean zoom) {
+            boolean copy, boolean save, boolean print, boolean zoom) {
 
         JPopupMenu result = new JPopupMenu("Chart:");
         boolean separator = false;
@@ -2734,6 +2877,19 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
             propertiesItem.addActionListener(this);
             result.add(propertiesItem);
             separator = true;
+        }
+
+        if (copy) {
+            if (separator) {
+                result.addSeparator();
+                separator = false;
+            }
+            JMenuItem copyItem = new JMenuItem(
+                    localizationResources.getString("Copy"));
+            copyItem.setActionCommand(COPY_COMMAND);
+            copyItem.addActionListener(this);
+            result.add(copyItem);
+            separator = !save;
         }
 
         if (save) {
