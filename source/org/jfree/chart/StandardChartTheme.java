@@ -322,6 +322,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
         this.axisOffset = new RectangleInsets(4, 4, 4, 4);
         this.domainGridlinePaint = Color.white;
         this.rangeGridlinePaint = Color.white;
+        this.baselinePaint = Color.black;
         this.crosshairPaint = Color.blue;
         this.axisLabelPaint = Color.darkGray;
         this.tickLabelPaint = Color.darkGray;
@@ -379,6 +380,9 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      * @see #getLargeFont()
      */
     public void setLargeFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("Null 'font' argument.");
+        }
         this.largeFont = font;
     }
 
@@ -401,7 +405,39 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      * @see #getRegularFont()
      */
     public void setRegularFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("Null 'font' argument.");
+        }
         this.regularFont = font;
+    }
+
+    /**
+     * Returns the small font.
+     *
+     * @return The small font (never <code>null</code>).
+     *
+     * @see #setSmallFont(Font)
+     *
+     * @since 1.0.13
+     */
+    public Font getSmallFont() {
+        return this.smallFont;
+    }
+
+    /**
+     * Sets the small font for this theme.
+     *
+     * @param font  the font (<code>null</code> not permitted).
+     *
+     * @see #getSmallFont()
+     *
+     * @since 1.0.13
+     */
+    public void setSmallFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("Null 'font' argument.");
+        }
+        this.smallFont = font;
     }
 
     /**
@@ -1342,6 +1378,8 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      */
     protected void applyToXYPlot(XYPlot plot) {
         plot.setAxisOffset(this.axisOffset);
+        plot.setDomainZeroBaselinePaint(this.baselinePaint);
+        plot.setRangeZeroBaselinePaint(this.baselinePaint);
         plot.setDomainGridlinePaint(this.domainGridlinePaint);
         plot.setRangeGridlinePaint(this.rangeGridlinePaint);
         plot.setDomainCrosshairPaint(this.crosshairPaint);
@@ -1349,7 +1387,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
         // process all domain axes
         int domainAxisCount = plot.getDomainAxisCount();
         for (int i = 0; i < domainAxisCount; i++) {
-            ValueAxis axis = (ValueAxis) plot.getDomainAxis(i);
+            ValueAxis axis = plot.getDomainAxis(i);
             if (axis != null) {
                 applyToValueAxis(axis);
             }
