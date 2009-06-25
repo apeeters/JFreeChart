@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------
  * QuarterTests.java
  * -----------------
- * (C) Copyright 2001-2008, by Object Refinery Limited.
+ * (C) Copyright 2001-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -137,8 +137,10 @@ public class QuarterTests extends TestCase {
 
         TimeZone zone = TimeZone.getTimeZone("GMT");
         Calendar c = new GregorianCalendar(zone);
-        Quarter q1 = new Quarter(new Date(1017619199999L), zone);
-        Quarter q2 = new Quarter(new Date(1017619200000L), zone);
+        Quarter q1 = new Quarter(new Date(1017619199999L), zone, 
+        		Locale.getDefault());
+        Quarter q2 = new Quarter(new Date(1017619200000L), zone, 
+        		Locale.getDefault());
 
         assertEquals(1, q1.getQuarter());
         assertEquals(1017619199999L, q1.getLastMillisecond(c));
@@ -156,8 +158,10 @@ public class QuarterTests extends TestCase {
 
         TimeZone zone = TimeZone.getTimeZone("Europe/Istanbul");
         Calendar c = new GregorianCalendar(zone);
-        Quarter q1 = new Quarter(new Date(1017608399999L), zone);
-        Quarter q2 = new Quarter(new Date(1017608400000L), zone);
+        Quarter q1 = new Quarter(new Date(1017608399999L), zone, 
+        		Locale.getDefault());
+        Quarter q2 = new Quarter(new Date(1017608400000L), zone, 
+        		Locale.getDefault());
 
         assertEquals(1, q1.getQuarter());
         assertEquals(1017608399999L, q1.getLastMillisecond(c));

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------
  * MonthTests.java
  * ---------------
- * (C) Copyright 2001-2008, by Object Refinery Limited.
+ * (C) Copyright 2001-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -143,8 +143,10 @@ public class MonthTests extends TestCase {
 
         TimeZone zone = TimeZone.getTimeZone("GMT");
         Calendar c = new GregorianCalendar(zone);
-        Month m1 = new Month(new Date(951868799999L), zone);
-        Month m2 = new Month(new Date(951868800000L), zone);
+        Month m1 = new Month(new Date(951868799999L), zone, 
+        		Locale.getDefault());
+        Month m2 = new Month(new Date(951868800000L), zone, 
+        		Locale.getDefault());
 
         assertEquals(MonthConstants.FEBRUARY, m1.getMonth());
         assertEquals(951868799999L, m1.getLastMillisecond(c));
@@ -162,8 +164,10 @@ public class MonthTests extends TestCase {
 
         TimeZone zone = TimeZone.getTimeZone("Pacific/Auckland");
         Calendar c = new GregorianCalendar(zone);
-        Month m1 = new Month(new Date(951821999999L), zone);
-        Month m2 = new Month(new Date(951822000000L), zone);
+        Month m1 = new Month(new Date(951821999999L), zone, 
+        		Locale.getDefault());
+        Month m2 = new Month(new Date(951822000000L), zone, 
+        		Locale.getDefault());
 
         assertEquals(MonthConstants.FEBRUARY, m1.getMonth());
         assertEquals(951821999999L, m1.getLastMillisecond(c));
