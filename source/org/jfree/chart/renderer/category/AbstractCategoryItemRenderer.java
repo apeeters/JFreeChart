@@ -443,8 +443,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
 
     /**
      * Sets the tool tip generator for a series and sends a
-     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered
-     * listeners.
+     * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param series  the series index (zero-based).
      * @param generator  the generator (<code>null</code> permitted).
@@ -767,11 +766,11 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         CategoryItemRendererState state = createState(info);
         int[] visibleSeriesTemp = new int[this.rowCount];
         int visibleSeriesCount = 0;
-        for (int row = 0; row < this.rowCount; row++){
-        	if (isSeriesVisible(row)) {
-        		visibleSeriesTemp[visibleSeriesCount] = row;
-        		visibleSeriesCount++;
-        	}
+        for (int row = 0; row < this.rowCount; row++) {
+            if (isSeriesVisible(row)) {
+                visibleSeriesTemp[visibleSeriesCount] = row;
+                visibleSeriesCount++;
+            }
         }
         int[] visibleSeries = new int[visibleSeriesCount];
         System.arraycopy(visibleSeriesTemp, 0, visibleSeries, 0,
@@ -798,6 +797,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * items from the specified dataset.
      *
      * @param dataset  the dataset (<code>null</code> permitted).
+     * @param includeInterval  include the y-interval if the dataset has one.
      *
      * @return The range (<code>null</code> if the dataset is <code>null</code>
      *         or empty).
@@ -1494,8 +1494,8 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             CategoryDataset dataset, int row, int column,
             double x, double y, boolean negative) {
 
-        CategoryItemLabelGenerator generator
-            = getItemLabelGenerator(row, column);
+        CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
+                column);
         if (generator != null) {
             Font labelFont = getItemLabelFont(row, column);
             Paint paint = getItemLabelPaint(row, column);
@@ -1853,7 +1853,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             url = urlster.generateURL(dataset, row, column);
         }
         CategoryItemEntity entity = new CategoryItemEntity(s, tip, url,
-                dataset, row, column);
+                dataset, dataset.getRowKey(row), dataset.getColumnKey(column));
         entities.add(entity);
     }
 
