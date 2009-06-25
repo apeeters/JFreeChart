@@ -38,7 +38,7 @@
  *
  */
 
-package org.jfree.experimental.chart.util;
+package org.jfree.chart.util;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -130,3 +130,4 @@ public final class XYCoordinateType implements Serializable {
     }
 
 }
+
