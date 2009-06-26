@@ -3876,14 +3876,14 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
                             for (int row = 0; row < rowCount; row++) {
                                 renderer.drawItem(g2, state, dataArea, this,
                                         domainAxis, rangeAxis, currentDataset,
-                                        row, column, pass);
+                                        row, column, false, pass);
                             }
                         }
                         else {
                             for (int row = rowCount - 1; row >= 0; row--) {
                                 renderer.drawItem(g2, state, dataArea, this,
                                         domainAxis, rangeAxis, currentDataset,
-                                        row, column, pass);
+                                        row, column, false, pass);
                             }
                         }
                     }
@@ -3894,14 +3894,14 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
                             for (int row = 0; row < rowCount; row++) {
                                 renderer.drawItem(g2, state, dataArea, this,
                                         domainAxis, rangeAxis, currentDataset,
-                                        row, column, pass);
+                                        row, column, false, pass);
                             }
                         }
                         else {
                             for (int row = rowCount - 1; row >= 0; row--) {
                                 renderer.drawItem(g2, state, dataArea, this,
                                         domainAxis, rangeAxis, currentDataset,
-                                        row, column, pass);
+                                        row, column, false, pass);
                             }
                         }
                     }

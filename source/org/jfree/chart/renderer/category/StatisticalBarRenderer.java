@@ -210,41 +210,37 @@ public class StatisticalBarRenderer extends BarRenderer
      * @param plot  the plot.
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
-     * @param data  the data.
+     * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset data,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         int visibleRow = state.getVisibleSeriesIndex(row);
         if (visibleRow < 0) {
             return;
         }
         // defensive check
-        if (!(data instanceof StatisticalCategoryDataset)) {
+        if (!(dataset instanceof StatisticalCategoryDataset)) {
             throw new IllegalArgumentException(
                 "Requires StatisticalCategoryDataset.");
         }
-        StatisticalCategoryDataset statData = (StatisticalCategoryDataset) data;
+        StatisticalCategoryDataset statDataset
+                = (StatisticalCategoryDataset) dataset;
 
         PlotOrientation orientation = plot.getOrientation();
         if (orientation == PlotOrientation.HORIZONTAL) {
             drawHorizontalItem(g2, state, dataArea, plot, domainAxis,
-                    rangeAxis, statData, visibleRow, row, column);
+                    rangeAxis, statDataset, visibleRow, row, column, selected);
         }
         else if (orientation == PlotOrientation.VERTICAL) {
             drawVerticalItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
-                    statData, visibleRow, row, column);
+                    statDataset, visibleRow, row, column, selected);
         }
     }
 
@@ -261,17 +257,15 @@ public class StatisticalBarRenderer extends BarRenderer
      * @param visibleRow  the visible row index.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
+     *
+     * @since 1.2.0
      */
-    protected void drawHorizontalItem(Graphics2D g2,
-                                      CategoryItemRendererState state,
-                                      Rectangle2D dataArea,
-                                      CategoryPlot plot,
-                                      CategoryAxis domainAxis,
-                                      ValueAxis rangeAxis,
-                                      StatisticalCategoryDataset dataset,
-                                      int visibleRow,
-                                      int row,
-                                      int column) {
+    protected void drawHorizontalItem(Graphics2D g2, 
+            CategoryItemRendererState state, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            StatisticalCategoryDataset dataset, int visibleRow,
+            int row, int column, boolean selected) {
 
         RectangleEdge xAxisLocation = plot.getDomainAxisEdge();
 
@@ -341,7 +335,7 @@ public class StatisticalBarRenderer extends BarRenderer
 
         Rectangle2D bar = new Rectangle2D.Double(rectX, rectY, rectWidth,
                 rectHeight);
-        Paint itemPaint = getItemPaint(row, column);
+        Paint itemPaint = getItemPaint(row, column, selected);
         GradientPaintTransformer t = getGradientPaintTransformer();
         if (t != null && itemPaint instanceof GradientPaint) {
             itemPaint = t.transform((GradientPaint) itemPaint, bar);
@@ -352,8 +346,8 @@ public class StatisticalBarRenderer extends BarRenderer
         // draw the outline...
         if (isDrawBarOutline()
                 && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-            Stroke stroke = getItemOutlineStroke(row, column);
-            Paint paint = getItemOutlinePaint(row, column);
+            Stroke stroke = getItemOutlineStroke(row, column, selected);
+            Paint paint = getItemOutlinePaint(row, column, selected);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
@@ -374,13 +368,13 @@ public class StatisticalBarRenderer extends BarRenderer
                 g2.setPaint(this.errorIndicatorPaint);
             }
             else {
-                g2.setPaint(getItemOutlinePaint(row, column));
+                g2.setPaint(getItemOutlinePaint(row, column, selected));
             }
             if (this.errorIndicatorStroke != null) {
                 g2.setStroke(this.errorIndicatorStroke);
             }
             else {
-                g2.setStroke(getItemOutlineStroke(row, column));
+                g2.setStroke(getItemOutlineStroke(row, column, selected));
             }
             Line2D line = null;
             line = new Line2D.Double(lowVal, rectY + rectHeight / 2.0d,
@@ -395,16 +389,16 @@ public class StatisticalBarRenderer extends BarRenderer
         }
 
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
-                column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                    (value < 0.0));
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                    generator, bar, (value < 0.0));
         }
 
         // add an item entity, if this information is being collected
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, bar);
+            addEntity(entities, bar, dataset, row, column, selected);
         }
 
     }
@@ -422,17 +416,15 @@ public class StatisticalBarRenderer extends BarRenderer
      * @param visibleRow  the visible row index.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
+     *
+     * @since 1.2.0
      */
-    protected void drawVerticalItem(Graphics2D g2,
-                                    CategoryItemRendererState state,
-                                    Rectangle2D dataArea,
-                                    CategoryPlot plot,
-                                    CategoryAxis domainAxis,
-                                    ValueAxis rangeAxis,
-                                    StatisticalCategoryDataset dataset,
-                                    int visibleRow,
-                                    int row,
-                                    int column) {
+    protected void drawVerticalItem(Graphics2D g2, 
+            CategoryItemRendererState state, Rectangle2D dataArea,
+            CategoryPlot plot,CategoryAxis domainAxis,ValueAxis rangeAxis,
+            StatisticalCategoryDataset dataset, int visibleRow,
+            int row, int column, boolean selected) {
 
         RectangleEdge xAxisLocation = plot.getDomainAxisEdge();
 
@@ -503,7 +495,7 @@ public class StatisticalBarRenderer extends BarRenderer
 
         Rectangle2D bar = new Rectangle2D.Double(rectX, rectY, rectWidth,
                 rectHeight);
-        Paint itemPaint = getItemPaint(row, column);
+        Paint itemPaint = getItemPaint(row, column, selected);
         GradientPaintTransformer t = getGradientPaintTransformer();
         if (t != null && itemPaint instanceof GradientPaint) {
             itemPaint = t.transform((GradientPaint) itemPaint, bar);
@@ -513,8 +505,8 @@ public class StatisticalBarRenderer extends BarRenderer
         // draw the outline...
         if (isDrawBarOutline()
                 && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-            Stroke stroke = getItemOutlineStroke(row, column);
-            Paint paint = getItemOutlinePaint(row, column);
+            Stroke stroke = getItemOutlineStroke(row, column, selected);
+            Paint paint = getItemOutlinePaint(row, column, selected);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
@@ -535,13 +527,13 @@ public class StatisticalBarRenderer extends BarRenderer
                 g2.setPaint(this.errorIndicatorPaint);
             }
             else {
-                g2.setPaint(getItemOutlinePaint(row, column));
+                g2.setPaint(getItemOutlinePaint(row, column, selected));
             }
             if (this.errorIndicatorStroke != null) {
                 g2.setStroke(this.errorIndicatorStroke);
             }
             else {
-                g2.setStroke(getItemOutlineStroke(row, column));
+                g2.setStroke(getItemOutlineStroke(row, column, selected));
             }
 
             Line2D line = null;
@@ -557,16 +549,16 @@ public class StatisticalBarRenderer extends BarRenderer
         }
 
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
-                column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                    (value < 0.0));
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                    generator, bar, (value < 0.0));
         }
 
         // add an item entity, if this information is being collected
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, bar);
+            addEntity(entities, bar, dataset, row, column, selected);
         }
     }
 

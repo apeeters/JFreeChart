@@ -214,12 +214,15 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
+     *
+     * @since 1.2.0
      */
     public void drawItem(Graphics2D g2, CategoryItemRendererState state,
             Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
             ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
-            int pass) {
+            boolean selected, int pass) {
 
         // do nothing if item is not visible or null
         if (!getItemVisible(row, column)) {
@@ -283,8 +286,8 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
         float yz = (float) rangeAxis.valueToJava2D(0.0, dataArea, edge);
         double labelXX = x1;
         double labelYY = y1;
-        g2.setPaint(getItemPaint(row, column));
-        g2.setStroke(getItemStroke(row, column));
+        g2.setPaint(getItemPaint(row, column, selected));
+        g2.setStroke(getItemStroke(row, column, selected));
 
         GeneralPath area = new GeneralPath();
 
@@ -307,13 +310,13 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
         }
         area.closePath();
 
-        g2.setPaint(getItemPaint(row, column));
+        g2.setPaint(getItemPaint(row, column, selected));
         g2.fill(area);
 
         // draw the item labels if there are any...
-        if (isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, orientation, dataset, row, column, labelXX,
-                    labelYY, (value.doubleValue() < 0.0));
+        if (isItemLabelVisible(row, column, selected)) {
+            drawItemLabel(g2, orientation, dataset, row, column, selected, 
+                    labelXX, labelYY, (value.doubleValue() < 0.0));
         }
 
         // submit the current data point as a crosshair candidate
@@ -325,7 +328,7 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
         // add an item entity, if this information is being collected
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, area);
+            addEntity(entities, area, dataset, row, column, selected);
         }
 
     }

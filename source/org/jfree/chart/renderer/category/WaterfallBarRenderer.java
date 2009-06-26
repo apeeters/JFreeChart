@@ -323,18 +323,13 @@ public class WaterfallBarRenderer extends BarRenderer {
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         double previous = state.getSeriesRunningTotal();
         if (column == dataset.getColumnCount() - 1) {
@@ -427,8 +422,8 @@ public class WaterfallBarRenderer extends BarRenderer {
         // draw the outline...
         if (isDrawBarOutline()
                 && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-            Stroke stroke = getItemOutlineStroke(row, column);
-            Paint paint = getItemOutlinePaint(row, column);
+            Stroke stroke = getItemOutlineStroke(row, column, selected);
+            Paint paint = getItemOutlinePaint(row, column, selected);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
@@ -436,17 +431,17 @@ public class WaterfallBarRenderer extends BarRenderer {
             }
         }
 
-        CategoryItemLabelGenerator generator
-            = getItemLabelGenerator(row, column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                    (valDiff < 0.0));
+        CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                    generator, bar, (valDiff < 0.0));
         }
 
         // add an item entity, if this information is being collected
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, bar);
+            addEntity(entities, bar, dataset, row, column, selected);
         }
 
     }

@@ -97,14 +97,18 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
      * @param renderer  the renderer.
      * @param row  the row index.
      * @param column  the column index.
+     * @param selected  is the data item selected?
      * @param bar  the bar
      * @param base  indicates which side of the rectangle is the base of the
      *              bar.
+     *
+     * @since 1.2.0
      */
     public void paintBar(Graphics2D g2, XYBarRenderer renderer, int row,
-            int column, RectangularShape bar, RectangleEdge base) {
+            int column, boolean selected, RectangularShape bar,
+            RectangleEdge base) {
 
-        Paint itemPaint = renderer.getItemPaint(row, column);
+        Paint itemPaint = renderer.getItemPaint(row, column, selected);
 
         Color c0, c1;
         if (itemPaint instanceof Color) {
@@ -178,8 +182,9 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
 
         // draw the outline...
         if (renderer.isDrawBarOutline()) {
-            Stroke stroke = renderer.getItemOutlineStroke(row, column);
-            Paint paint = renderer.getItemOutlinePaint(row, column);
+            Stroke stroke = renderer.getItemOutlineStroke(row, column,
+                    selected);
+            Paint paint = renderer.getItemOutlinePaint(row, column, selected);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
@@ -196,18 +201,21 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
      * @param renderer  the renderer.
      * @param row  the row index.
      * @param column  the column index.
+     * @param selected  is the data item selected?
      * @param bar  the bar
      * @param base  indicates which side of the rectangle is the base of the
      *              bar.
      * @param pegShadow  peg the shadow to the base of the bar?
+     *
+     * @since 1.2.0
      */
     public void paintBarShadow(Graphics2D g2, XYBarRenderer renderer, int row,
-            int column, RectangularShape bar, RectangleEdge base,
-            boolean pegShadow) {
+            int column, boolean selected, RectangularShape bar,
+            RectangleEdge base, boolean pegShadow) {
 
         // handle a special case - if the bar colour has alpha == 0, it is
         // invisible so we shouldn't draw any shadow
-        Paint itemPaint = renderer.getItemPaint(row, column);
+        Paint itemPaint = renderer.getItemPaint(row, column, selected);
         if (itemPaint instanceof Color) {
             Color c = (Color) itemPaint;
             if (c.getAlpha() == 0) {

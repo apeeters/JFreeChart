@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------
  * BarPainter.java
  * ---------------
- * (C) Copyright 2008, by Object Refinery Limited.
+ * (C) Copyright 2008, 2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -35,6 +35,7 @@
  * Changes:
  * --------
  * 19-Jun-2008 : Version 1 (DG);
+ * 25-Jun-2009 : Interface changed for 1.2.0 (DG);
  *
  */
 
@@ -58,7 +59,7 @@ import org.jfree.chart.util.RectangleEdge;
  *     serialization will not be supported.</li>
  * </ul>
  *
- * @since 1.0.11
+ * @since 1.2.0
  */
 public interface BarPainter {
 
@@ -69,11 +70,13 @@ public interface BarPainter {
      * @param renderer  the renderer.
      * @param row  the row index for the item.
      * @param column  the column index for the item.
+     * @param selected  is the item selected?
      * @param bar  the bounds for the bar.
      * @param base  the base of the bar.
      */
     public void paintBar(Graphics2D g2, BarRenderer renderer,
-            int row, int column, RectangularShape bar, RectangleEdge base);
+            int row, int column, boolean selected,
+            RectangularShape bar, RectangleEdge base);
 
     /**
      * Paints the shadow for a single bar on behalf of a renderer.
@@ -82,12 +85,13 @@ public interface BarPainter {
      * @param renderer  the renderer.
      * @param row  the row index for the item.
      * @param column  the column index for the item.
+     * @param selected  is the item selected?
      * @param bar  the bounds for the bar.
      * @param base  the base of the bar.
      * @param pegShadow  peg the shadow to the base of the bar?
      */
     public void paintBarShadow(Graphics2D g2, BarRenderer renderer,
-            int row, int column, RectangularShape bar, RectangleEdge base,
-            boolean pegShadow);
+            int row, int column, boolean selected, 
+            RectangularShape bar, RectangleEdge base, boolean pegShadow);
 
 }

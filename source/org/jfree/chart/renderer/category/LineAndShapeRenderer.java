@@ -665,10 +665,10 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             Shape shape = lookupLegendShape(series);
             Paint paint = lookupSeriesPaint(series);
             Paint fillPaint = (this.useFillPaint
-                    ? getItemFillPaint(series, 0) : paint);
+                    ? getItemFillPaint(series, 0, false) : paint);
             boolean shapeOutlineVisible = this.drawOutlines;
             Paint outlinePaint = (this.useOutlinePaint
-                    ? getItemOutlinePaint(series, 0) : paint);
+                    ? getItemOutlinePaint(series, 0, false) : paint);
             Stroke outlineStroke = lookupSeriesOutlineStroke(series);
             boolean lineVisible = getItemLineVisible(series, 0);
             boolean shapeVisible = getItemShapeVisible(series, 0);
@@ -676,7 +676,8 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                     urlText, shapeVisible, shape, getItemShapeFilled(series, 0),
                     fillPaint, shapeOutlineVisible, outlinePaint, outlineStroke,
                     lineVisible, new Line2D.Double(-7.0, 0.0, 7.0, 0.0),
-                    getItemStroke(series, 0), getItemPaint(series, 0));
+                    getItemStroke(series, 0, false), getItemPaint(series, 0,
+                    false));
             result.setLabelFont(lookupLegendTextFont(series));
             Paint labelPaint = lookupLegendTextPaint(series);
             if (labelPaint != null) {
@@ -713,12 +714,13 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
      */
     public void drawItem(Graphics2D g2, CategoryItemRendererState state,
             Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
             ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
-            int pass) {
+            boolean selected, int pass) {
 
         // do nothing if item is not visible
         if (!getItemVisible(row, column)) {
@@ -789,15 +791,15 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                     else if (orientation == PlotOrientation.VERTICAL) {
                         line = new Line2D.Double(x0, y0, x1, y1);
                     }
-                    g2.setPaint(getItemPaint(row, column));
-                    g2.setStroke(getItemStroke(row, column));
+                    g2.setPaint(getItemPaint(row, column, selected));
+                    g2.setStroke(getItemStroke(row, column, selected));
                     g2.draw(line);
                 }
             }
         }
 
         if (pass == 1) {
-            Shape shape = getItemShape(row, column);
+            Shape shape = getItemShape(row, column, selected);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtilities.createTranslatedShape(shape, y1, x1);
             }
@@ -808,34 +810,35 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             if (getItemShapeVisible(row, column)) {
                 if (getItemShapeFilled(row, column)) {
                     if (this.useFillPaint) {
-                        g2.setPaint(getItemFillPaint(row, column));
+                        g2.setPaint(getItemFillPaint(row, column, selected));
                     }
                     else {
-                        g2.setPaint(getItemPaint(row, column));
+                        g2.setPaint(getItemPaint(row, column, selected));
                     }
                     g2.fill(shape);
                 }
                 if (this.drawOutlines) {
                     if (this.useOutlinePaint) {
-                        g2.setPaint(getItemOutlinePaint(row, column));
+                        g2.setPaint(getItemOutlinePaint(row, column,
+                                selected));
                     }
                     else {
-                        g2.setPaint(getItemPaint(row, column));
+                        g2.setPaint(getItemPaint(row, column, selected));
                     }
-                    g2.setStroke(getItemOutlineStroke(row, column));
+                    g2.setStroke(getItemOutlineStroke(row, column, selected));
                     g2.draw(shape);
                 }
             }
 
             // draw the item label if there is one...
-            if (isItemLabelVisible(row, column)) {
+            if (isItemLabelVisible(row, column, selected)) {
                 if (orientation == PlotOrientation.HORIZONTAL) {
-                    drawItemLabel(g2, orientation, dataset, row, column, y1,
-                            x1, (value < 0.0));
+                    drawItemLabel(g2, orientation, dataset, row, column, 
+                            selected, y1, x1, (value < 0.0));
                 }
                 else if (orientation == PlotOrientation.VERTICAL) {
-                    drawItemLabel(g2, orientation, dataset, row, column, x1,
-                            y1, (value < 0.0));
+                    drawItemLabel(g2, orientation, dataset, row, column, 
+                            selected, x1, y1, (value < 0.0));
                 }
             }
 
@@ -848,7 +851,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                addItemEntity(entities, dataset, row, column, shape);
+                addEntity(entities, shape, dataset, row, column, selected);
             }
         }
 

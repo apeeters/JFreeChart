@@ -107,6 +107,7 @@
  * 27-Mar-2009 : Added new findRangeBounds() method to account for hidden
  *               series (DG);
  * 01-Apr-2009 : Added new addEntity() method (DG);
+ * 26-Jun-2009 : Updated to support selections (DG);
  *
  */
 
@@ -299,13 +300,16 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *
      * @param row  the row index (zero based).
      * @param column  the column index (zero based).
+     * @param selected  is the item selected?
      *
      * @return The generator (possibly <code>null</code>).
+     *
+     * @since 1.2.0
      */
     public CategoryItemLabelGenerator getItemLabelGenerator(int row,
-            int column) {
+            int column, boolean selected) {
         CategoryItemLabelGenerator generator = (CategoryItemLabelGenerator)
-        this.itemLabelGeneratorList.get(row);
+                this.itemLabelGeneratorList.get(row);
         if (generator == null) {
             generator = this.baseItemLabelGenerator;
         }
@@ -407,17 +411,19 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
 
     /**
      * Returns the tool tip generator that should be used for the specified
-     * item.  This method looks up the generator using the "three-layer"
-     * approach outlined in the general description of this interface.  You
-     * can override this method if you want to return a different generator per
-     * item.
+     * item.  You can override this method if you want to return a different
+     * generator per item.
      *
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The generator (possibly <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public CategoryToolTipGenerator getToolTipGenerator(int row, int column) {
+    public CategoryToolTipGenerator getToolTipGenerator(int row, int column,
+            boolean selected) {
 
         CategoryToolTipGenerator result = null;
         result = getSeriesToolTipGenerator(row);
@@ -525,10 +531,14 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *
      * @param row  the row index (zero based).
      * @param column  the column index (zero based).
+     * @param selected  is the item selected?
      *
      * @return The URL generator.
+     *
+     * @since 1.2.0
      */
-    public CategoryURLGenerator getURLGenerator(int row, int column) {
+    public CategoryURLGenerator getURLGenerator(int row, int column, boolean
+            selected) {
         CategoryURLGenerator generator
                 = (CategoryURLGenerator) this.urlGeneratorList.get(row);
         if (generator == null) {
@@ -694,6 +704,84 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         this.foregroundAnnotations.clear();
         this.backgroundAnnotations.clear();
         notifyListeners(new RendererChangeEvent(this));
+    }
+
+    /**
+     * Returns the legend item label generator.
+     *
+     * @return The label generator (never <code>null</code>).
+     *
+     * @see #setLegendItemLabelGenerator(CategorySeriesLabelGenerator)
+     */
+    public CategorySeriesLabelGenerator getLegendItemLabelGenerator() {
+        return this.legendItemLabelGenerator;
+    }
+
+    /**
+     * Sets the legend item label generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> not permitted).
+     *
+     * @see #getLegendItemLabelGenerator()
+     */
+    public void setLegendItemLabelGenerator(
+            CategorySeriesLabelGenerator generator) {
+        if (generator == null) {
+            throw new IllegalArgumentException("Null 'generator' argument.");
+        }
+        this.legendItemLabelGenerator = generator;
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns the legend item tool tip generator.
+     *
+     * @return The tool tip generator (possibly <code>null</code>).
+     *
+     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
+     */
+    public CategorySeriesLabelGenerator getLegendItemToolTipGenerator() {
+        return this.legendItemToolTipGenerator;
+    }
+
+    /**
+     * Sets the legend item tool tip generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     *
+     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
+     */
+    public void setLegendItemToolTipGenerator(
+            CategorySeriesLabelGenerator generator) {
+        this.legendItemToolTipGenerator = generator;
+        fireChangeEvent();
+    }
+
+    /**
+     * Returns the legend item URL generator.
+     *
+     * @return The URL generator (possibly <code>null</code>).
+     *
+     * @see #setLegendItemURLGenerator(CategorySeriesLabelGenerator)
+     */
+    public CategorySeriesLabelGenerator getLegendItemURLGenerator() {
+        return this.legendItemURLGenerator;
+    }
+
+    /**
+     * Sets the legend item URL generator and sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     *
+     * @param generator  the generator (<code>null</code> permitted).
+     *
+     * @see #getLegendItemURLGenerator()
+     */
+    public void setLegendItemURLGenerator(
+            CategorySeriesLabelGenerator generator) {
+        this.legendItemURLGenerator = generator;
+        fireChangeEvent();
     }
 
     /**
@@ -1485,29 +1573,32 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param dataset  the dataset.
      * @param row  the row.
      * @param column  the column.
+     * @param selected  is the item selected?
      * @param x  the x coordinate (in Java2D space).
      * @param y  the y coordinate (in Java2D space).
      * @param negative  indicates a negative value (which affects the item
      *                  label position).
+     *
+     * @since 1.2.0
      */
     protected void drawItemLabel(Graphics2D g2, PlotOrientation orientation,
-            CategoryDataset dataset, int row, int column,
+            CategoryDataset dataset, int row, int column, boolean selected,
             double x, double y, boolean negative) {
 
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
-                column);
+                column, selected);
         if (generator != null) {
-            Font labelFont = getItemLabelFont(row, column);
-            Paint paint = getItemLabelPaint(row, column);
+            Font labelFont = getItemLabelFont(row, column, selected);
+            Paint paint = getItemLabelPaint(row, column, selected);
             g2.setFont(labelFont);
             g2.setPaint(paint);
             String label = generator.generateLabel(dataset, row, column);
             ItemLabelPosition position = null;
             if (!negative) {
-                position = getPositiveItemLabelPosition(row, column);
+                position = getPositiveItemLabelPosition(row, column, selected);
             }
             else {
-                position = getNegativeItemLabelPosition(row, column);
+                position = getNegativeItemLabelPosition(row, column, selected);
             }
             Point2D anchorPoint = calculateLabelAnchorPoint(
                     position.getItemLabelAnchor(), x, y, orientation);
@@ -1699,114 +1790,24 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     }
 
     /**
-     * Returns the legend item label generator.
-     *
-     * @return The label generator (never <code>null</code>).
-     *
-     * @see #setLegendItemLabelGenerator(CategorySeriesLabelGenerator)
-     */
-    public CategorySeriesLabelGenerator getLegendItemLabelGenerator() {
-        return this.legendItemLabelGenerator;
-    }
-
-    /**
-     * Sets the legend item label generator and sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param generator  the generator (<code>null</code> not permitted).
-     *
-     * @see #getLegendItemLabelGenerator()
-     */
-    public void setLegendItemLabelGenerator(
-            CategorySeriesLabelGenerator generator) {
-        if (generator == null) {
-            throw new IllegalArgumentException("Null 'generator' argument.");
-        }
-        this.legendItemLabelGenerator = generator;
-        fireChangeEvent();
-    }
-
-    /**
-     * Returns the legend item tool tip generator.
-     *
-     * @return The tool tip generator (possibly <code>null</code>).
-     *
-     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
-     */
-    public CategorySeriesLabelGenerator getLegendItemToolTipGenerator() {
-        return this.legendItemToolTipGenerator;
-    }
-
-    /**
-     * Sets the legend item tool tip generator and sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param generator  the generator (<code>null</code> permitted).
-     *
-     * @see #setLegendItemToolTipGenerator(CategorySeriesLabelGenerator)
-     */
-    public void setLegendItemToolTipGenerator(
-            CategorySeriesLabelGenerator generator) {
-        this.legendItemToolTipGenerator = generator;
-        fireChangeEvent();
-    }
-
-    /**
-     * Returns the legend item URL generator.
-     *
-     * @return The URL generator (possibly <code>null</code>).
-     *
-     * @see #setLegendItemURLGenerator(CategorySeriesLabelGenerator)
-     */
-    public CategorySeriesLabelGenerator getLegendItemURLGenerator() {
-        return this.legendItemURLGenerator;
-    }
-
-    /**
-     * Sets the legend item URL generator and sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param generator  the generator (<code>null</code> permitted).
-     *
-     * @see #getLegendItemURLGenerator()
-     */
-    public void setLegendItemURLGenerator(
-            CategorySeriesLabelGenerator generator) {
-        this.legendItemURLGenerator = generator;
-        fireChangeEvent();
-    }
-
-    /**
      * Adds an entity with the specified hotspot.
      *
      * @param entities  the entity collection.
+     * @param hotspot  the hotspot (<code>null</code> not permitted).
      * @param dataset  the dataset.
      * @param row  the row index.
      * @param column  the column index.
-     * @param hotspot  the hotspot (<code>null</code> not permitted).
+     * @param selected  is the item selected?
+     *
+     * @since 1.2.0
      */
-    protected void addItemEntity(EntityCollection entities,
-                                 CategoryDataset dataset, int row, int column,
-                                 Shape hotspot) {
+    protected void addEntity(EntityCollection entities, Shape hotspot,
+            CategoryDataset dataset, int row, int column, boolean selected) {
+
         if (hotspot == null) {
             throw new IllegalArgumentException("Null 'hotspot' argument.");
         }
-        if (!getItemCreateEntity(row, column)) {
-            return;
-        }
-        String tip = null;
-        CategoryToolTipGenerator tipster = getToolTipGenerator(row, column);
-        if (tipster != null) {
-            tip = tipster.generateToolTip(dataset, row, column);
-        }
-        String url = null;
-        CategoryURLGenerator urlster = getURLGenerator(row, column);
-        if (urlster != null) {
-            url = urlster.generateURL(dataset, row, column);
-        }
-        CategoryItemEntity entity = new CategoryItemEntity(hotspot, tip, url,
-                dataset, dataset.getRowKey(row), dataset.getColumnKey(column));
-        entities.add(entity);
+        addEntity(entities, hotspot, dataset, row, column, selected, 0.0, 0.0);
     }
 
     /**
@@ -1818,17 +1819,18 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param dataset  the dataset.
      * @param row  the series.
      * @param column  the item.
+     * @param selected  is the item selected?
      * @param entityX  the entity's center x-coordinate in user space (only
      *                 used if <code>area</code> is <code>null</code>).
      * @param entityY  the entity's center y-coordinate in user space (only
      *                 used if <code>area</code> is <code>null</code>).
      *
-     * @since 1.0.13
+     * @since 1.2.0
      */
     protected void addEntity(EntityCollection entities, Shape hotspot,
-                             CategoryDataset dataset, int row, int column,
-                             double entityX, double entityY) {
-        if (!getItemCreateEntity(row, column)) {
+            CategoryDataset dataset, int row, int column, boolean selected,
+            double entityX, double entityY) {
+        if (!getItemCreateEntity(row, column, selected)) {
             return;
         }
         Shape s = hotspot;
@@ -1843,12 +1845,13 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             }
         }
         String tip = null;
-        CategoryToolTipGenerator generator = getToolTipGenerator(row, column);
+        CategoryToolTipGenerator generator = getToolTipGenerator(row, column,
+                selected);
         if (generator != null) {
             tip = generator.generateToolTip(dataset, row, column);
         }
         String url = null;
-        CategoryURLGenerator urlster = getURLGenerator(row, column);
+        CategoryURLGenerator urlster = getURLGenerator(row, column, selected);
         if (urlster != null) {
             url = urlster.generateURL(dataset, row, column);
         }

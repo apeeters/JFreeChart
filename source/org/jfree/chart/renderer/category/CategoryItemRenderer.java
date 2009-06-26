@@ -387,10 +387,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row (or series) index (zero-based).
      * @param column  the column (or category) index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The paint (never <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public Paint getItemPaint(int row, int column);
+    public Paint getItemPaint(int row, int column, boolean selected);
 
     /**
      * Returns the paint used to fill an item drawn by the renderer.
@@ -464,12 +467,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row (or series) index (zero-based).
      * @param column  the column (or category) index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The paint (never <code>null</code>).
      *
      * @since 1.2.0
      */
-    public Paint getItemFillPaint(int row, int column);
+    public Paint getItemFillPaint(int row, int column, boolean selected);
 
     /**
      * Returns the paint used to fill an item drawn by the renderer.
@@ -555,10 +559,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row (or series) index (zero-based).
      * @param column  the column (or category) index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The paint (never <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public Paint getItemOutlinePaint(int row, int column);
+    public Paint getItemOutlinePaint(int row, int column, boolean selected);
 
     /**
      * Returns the paint used to outline an item drawn by the renderer.
@@ -636,10 +643,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row (or series) index (zero-based).
      * @param column  the column (or category) index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The stroke (never <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public Stroke getItemStroke(int row, int column);
+    public Stroke getItemStroke(int row, int column, boolean selected);
 
     /**
      * Returns the stroke used to draw the items in a series.
@@ -721,10 +731,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row (or series) index (zero-based).
      * @param column  the column (or category) index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The stroke (never <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public Stroke getItemOutlineStroke(int row, int column);
+    public Stroke getItemOutlineStroke(int row, int column, boolean selected);
 
     /**
      * Returns the stroke used to outline the items in a series.
@@ -803,10 +816,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row (or series) index (zero-based).
      * @param column  the column (or category) index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The shape (never <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public Shape getItemShape(int row, int column);
+    public Shape getItemShape(int row, int column, boolean selected);
 
     /**
      * Returns a shape used to represent the items in a series.
@@ -973,10 +989,14 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The generator (possibly <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public CategoryToolTipGenerator getToolTipGenerator(int row, int column);
+    public CategoryToolTipGenerator getToolTipGenerator(int row, int column,
+            boolean selected);
 
     /**
      * Returns the tool tip generator for the specified series (a "layer 1"
@@ -1060,10 +1080,14 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The item URL generator.
+     *
+     * @since 1.2.0
      */
-    public CategoryURLGenerator getURLGenerator(int series, int item);
+    public CategoryURLGenerator getURLGenerator(int series, int item, boolean
+            selected);
 
     /**
      * Returns the URL generator for a series.
@@ -1141,10 +1165,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return A boolean.
+     *
+     * @since 1.2.0
      */
-    public boolean isItemLabelVisible(int row, int column);
+    public boolean isItemLabelVisible(int row, int column, boolean selected);
 
     /**
      * Returns <code>true</code> if the item labels for a series are visible,
@@ -1244,11 +1271,14 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The generator (possibly <code>null</code>).
+     *
+     * @since 1.2.0
      */
     public CategoryItemLabelGenerator getItemLabelGenerator(int series,
-            int item);
+            int item, boolean selected);
 
     /**
      * Returns the item label generator for a series.
@@ -1327,10 +1357,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The font (never <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public Font getItemLabelFont(int row, int column);
+    public Font getItemLabelFont(int row, int column, boolean selected);
 
     /**
      * Returns the font for all the item labels in a series.
@@ -1409,10 +1442,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row index (zero based).
      * @param column  the column index (zero based).
+     * @param selected  is the item selected?
      *
      * @return The paint (never <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public Paint getItemLabelPaint(int row, int column);
+    public Paint getItemLabelPaint(int row, int column, boolean selected);
 
     /**
      * Returns the paint used to draw the item labels for a series.
@@ -1491,10 +1527,14 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The item label position (never <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public ItemLabelPosition getPositiveItemLabelPosition(int row, int column);
+    public ItemLabelPosition getPositiveItemLabelPosition(int row, int column,
+            boolean selected);
 
     /**
      * Returns the item label position for all positive values in a series.
@@ -1573,10 +1613,14 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param row  the row index (zero-based).
      * @param column  the column (zero-based).
+     * @param selected  is the item selected?
      *
      * @return The item label position.
+     *
+     * @since 1.2.0
      */
-    public ItemLabelPosition getNegativeItemLabelPosition(int row, int column);
+    public ItemLabelPosition getNegativeItemLabelPosition(int row, int column,
+            boolean selected);
 
     /**
      * Returns the item label position for all negative values in a series.
@@ -1656,12 +1700,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      *
      * @param series  the series index.
      * @param item  the item index.
+     * @param selected  is the item selected?
      *
      * @return A boolean.
      *
      * @since 1.2.0
      */
-    public boolean getItemCreateEntity(int series, int item);
+    public boolean getItemCreateEntity(int series, int item, boolean selected);
 
     /**
      * Returns a flag that controls whether or not chart entities are
@@ -1849,12 +1894,13 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param dataset  the data.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
      */
     public void drawItem(Graphics2D g2, CategoryItemRendererState state,
             Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
             ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
-            int pass);
+            boolean selected, int pass);
 
     /**
      * Draws a line perpendicular to the specified domain axis.

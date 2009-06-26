@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------
  * VectorRenderer.java
  * -------------------
- * (C) Copyright 2007, 2008, by Object Refinery Limited.
+ * (C) Copyright 2007-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -208,20 +208,18 @@ public class VectorRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the state.
      * @param dataArea  the data area.
-     * @param info  the plot rendering info.
      * @param plot  the plot.
      * @param domainAxis  the x-axis.
      * @param rangeAxis  the y-axis.
      * @param dataset  the dataset.
      * @param series  the series index.
      * @param item  the item index.
-     * @param crosshairState  the crosshair state.
      * @param pass  the pass index.
      */
     public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         double x = dataset.getXValue(series, item);
         double y = dataset.getYValue(series, item);
@@ -247,8 +245,8 @@ public class VectorRenderer extends AbstractXYItemRenderer
         else {
             line = new Line2D.Double(xx0, yy0, xx1, yy1);
         }
-        g2.setPaint(getItemPaint(series, item));
-        g2.setStroke(getItemStroke(series, item));
+        g2.setPaint(getItemPaint(series, item, selected));
+        g2.setStroke(getItemStroke(series, item, selected));
         g2.draw(line);
 
         // calculate the arrow head and draw it...
@@ -290,11 +288,11 @@ public class VectorRenderer extends AbstractXYItemRenderer
 
         // setup for collecting optional entity info...
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+        if (state.getInfo() != null) {
+            entities = state.getInfo().getOwner().getEntityCollection();
             if (entities != null) {
                 addEntity(entities, line.getBounds(), dataset, series, item,
-                        0.0, 0.0);
+                        selected, 0.0, 0.0);
             }
         }
 

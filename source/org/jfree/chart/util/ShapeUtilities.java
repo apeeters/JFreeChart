@@ -597,6 +597,23 @@ public class ShapeUtilities {
     }
 
     /**
+     * Returns <code>true</code> if the specified point (x, y) falls within or
+     * on the boundary of the specified rectangle.
+     *
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * @param rect  the rectangle (<code>null</code> not permitted).
+     *
+     * @return A boolean.
+     *
+     * @since 1.2.0
+     */
+    public static boolean isPointInRect(double x, double y, Rectangle2D rect) {
+        return (x >= rect.getMinX() && x <= rect.getMaxX()
+                && y >= rect.getMinY() && y <= rect.getMaxY());
+    }
+
+    /**
      * Clips the specified line to the given rectangle.
      *
      * @param line  the line (<code>null</code> not permitted).

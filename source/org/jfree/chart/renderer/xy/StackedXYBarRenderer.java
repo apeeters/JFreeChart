@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------
  * StackedXYBarRenderer.java
  * -------------------------
- * (C) Copyright 2004-2008, by Andreas Schroeder and Contributors.
+ * (C) Copyright 2004-2009, by Andreas Schroeder and Contributors.
  *
  * Original Author:  Andreas Schroeder;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -220,7 +220,6 @@ public class StackedXYBarRenderer extends XYBarRenderer {
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the plot is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color information
      *              etc).
      * @param domainAxis  the domain axis.
@@ -228,22 +227,12 @@ public class StackedXYBarRenderer extends XYBarRenderer {
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         if (!(dataset instanceof IntervalXYDataset
                 && dataset instanceof TableXYDataset)) {
@@ -375,19 +364,20 @@ public class StackedXYBarRenderer extends XYBarRenderer {
 
         if (pass == 0) {
             if (getShadowsVisible()) {
-                getBarPainter().paintBarShadow(g2, this, series, item, bar,
-                        barBase, false);
+                getBarPainter().paintBarShadow(g2, this, series, item, 
+                        selected, bar, barBase, false);
             }
         }
         else if (pass == 1) {
-            getBarPainter().paintBar(g2, this, series, item, bar, barBase);
+            getBarPainter().paintBar(g2, this, series, item, selected, bar,
+                    barBase);
 
             // add an entity for the item...
-            if (info != null) {
-                EntityCollection entities = info.getOwner()
+            if (state.getInfo() != null) {
+                EntityCollection entities = state.getInfo().getOwner()
                         .getEntityCollection();
                 if (entities != null) {
-                    addEntity(entities, bar, dataset, series, item,
+                    addEntity(entities, bar, dataset, series, item, selected,
                             bar.getCenterX(), bar.getCenterY());
                 }
             }
@@ -395,11 +385,11 @@ public class StackedXYBarRenderer extends XYBarRenderer {
         else if (pass == 2) {
             // handle item label drawing, now that we know all the bars have
             // been drawn...
-            if (isItemLabelVisible(series, item)) {
+            if (isItemLabelVisible(series, item, selected)) {
                 XYItemLabelGenerator generator = getItemLabelGenerator(series,
-                        item);
-                drawItemLabel(g2, dataset, series, item, plot, generator, bar,
-                        value < 0.0);
+                        item, selected);
+                drawItemLabelForBar(g2, plot, dataset, series, item, selected,
+                        generator, bar, value < 0.0);
             }
         }
 

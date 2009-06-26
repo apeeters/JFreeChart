@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------
  * LineRenderer3D.java
  * -------------------
- * (C) Copyright 2004-2008, by Tobias Selb and Contributors.
+ * (C) Copyright 2004-2009, by Tobias Selb and Contributors.
  *
  * Original Author:  Tobias Selb (http://www.uepselon.com);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -505,18 +505,15 @@ public class LineRenderer3D extends LineAndShapeRenderer
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
+     *
+     *  @since 1.2.0
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         if (!getItemVisible(row, column)) {
             return;
@@ -542,7 +539,7 @@ public class LineRenderer3D extends LineAndShapeRenderer
         double y1 = rangeAxis.valueToJava2D(value, adjusted,
                 plot.getRangeAxisEdge());
 
-        Shape shape = getItemShape(row, column);
+        Shape shape = getItemShape(row, column, selected);
         if (orientation == PlotOrientation.HORIZONTAL) {
             shape = ShapeUtilities.createTranslatedShape(shape, y1, x1);
         }
@@ -588,25 +585,25 @@ public class LineRenderer3D extends LineAndShapeRenderer
                         clip.closePath();
                     }
 
-                    g2.setPaint(getItemPaint(row, column));
+                    g2.setPaint(getItemPaint(row, column, selected));
                     g2.fill(clip);
-                    g2.setStroke(getItemOutlineStroke(row, column));
-                    g2.setPaint(getItemOutlinePaint(row, column));
+                    g2.setStroke(getItemOutlineStroke(row, column, selected));
+                    g2.setPaint(getItemOutlinePaint(row, column, selected));
                     g2.draw(clip);
                 }
             }
         }
 
         // draw the item label if there is one...
-        if (isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, orientation, dataset, row, column, x1, y1,
-                    (value < 0.0));
+        if (isItemLabelVisible(row, column, selected)) {
+            drawItemLabel(g2, orientation, dataset, row, column, selected, x1,
+                    y1, (value < 0.0));
         }
 
         // add an item entity, if this information is being collected
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, shape);
+            addEntity(entities, shape, dataset, row, column, selected);
         }
 
     }

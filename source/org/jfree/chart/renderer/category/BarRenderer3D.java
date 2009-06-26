@@ -652,18 +652,15 @@ public class BarRenderer3D extends BarRenderer
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
+     *
+     * @since 1.2.0
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         // check the value we are plotting...
         Number dataValue = dataset.getValue(row, column);
@@ -703,7 +700,7 @@ public class BarRenderer3D extends BarRenderer
             bar = new Rectangle2D.Double(barW0, barL0, state.getBarWidth(),
                     barLength);
         }
-        Paint itemPaint = getItemPaint(row, column);
+        Paint itemPaint = getItemPaint(row, column, selected);
         g2.setPaint(itemPaint);
         g2.fill(bar);
 
@@ -743,8 +740,8 @@ public class BarRenderer3D extends BarRenderer
 
         if (isDrawBarOutline()
                 && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-            g2.setStroke(getItemOutlineStroke(row, column));
-            g2.setPaint(getItemOutlinePaint(row, column));
+            g2.setStroke(getItemOutlineStroke(row, column, selected));
+            g2.setPaint(getItemOutlinePaint(row, column, selected));
             g2.draw(bar);
             if (bar3dRight != null) {
                 g2.draw(bar3dRight);
@@ -754,11 +751,11 @@ public class BarRenderer3D extends BarRenderer
             }
         }
 
-        CategoryItemLabelGenerator generator
-            = getItemLabelGenerator(row, column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                    (value < 0.0));
+        CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                    generator, bar, (value < 0.0));
         }
 
         // add an item entity, if this information is being collected
@@ -772,7 +769,7 @@ public class BarRenderer3D extends BarRenderer
             barOutline.lineTo((float) x3, (float) y2);
             barOutline.lineTo((float) x2, (float) y3);
             barOutline.closePath();
-            addItemEntity(entities, dataset, row, column, barOutline);
+            addEntity(entities, barOutline, dataset, row, column, selected);
         }
 
     }

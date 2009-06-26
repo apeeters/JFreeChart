@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -28,7 +28,7 @@
  * CategoryStepRenderer.java
  * -------------------------
  *
- * (C) Copyright 2004-2008, by Brian Cole and Contributors.
+ * (C) Copyright 2004-2009, by Brian Cole and Contributors.
  *
  * Original Author:  Brian Cole;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -269,16 +269,10 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
      * @param column  the column index (zero-based).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         // do nothing if item is not visible
         if (!getItemVisible(row, column)) {
@@ -299,8 +293,8 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
         double x1e = 2 * x1 - x1s; // or: x1s + 2*(x1-x1s)
         double y1 = rangeAxis.valueToJava2D(value.doubleValue(), dataArea,
                 plot.getRangeAxisEdge());
-        g2.setPaint(getItemPaint(row, column));
-        g2.setStroke(getItemStroke(row, column));
+        g2.setPaint(getItemPaint(row, column, selected));
+        g2.setStroke(getItemStroke(row, column, selected));
 
         if (column != 0) {
             Number previousValue = dataset.getValue(row, column - 1);
@@ -332,9 +326,9 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
        // x1's flat bar
 
        // draw the item labels if there are any...
-       if (isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, orientation, dataset, row, column, x1, y1,
-                    (value.doubleValue() < 0.0));
+       if (isItemLabelVisible(row, column, selected)) {
+            drawItemLabel(g2, orientation, dataset, row, column, 
+                    selected, x1, y1, (value.doubleValue() < 0.0));
        }
 
        // add an item entity, if this information is being collected
@@ -347,7 +341,7 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
            else {
                hotspot.setRect(y1 - 2.0, x1s, 4.0, x1e - x1s);
            }
-           addItemEntity(entities, dataset, row, column, hotspot);
+           addEntity(entities, hotspot, dataset, row, column, selected);
        }
 
     }

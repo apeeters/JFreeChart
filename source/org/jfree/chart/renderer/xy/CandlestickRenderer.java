@@ -635,7 +635,6 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the plot is being drawn.
-     * @param info  collects info about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -643,22 +642,15 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
+     *
+     * @since 1.2.0
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         boolean horiz;
         PlotOrientation orientation = plot.getOrientation();
@@ -674,8 +666,8 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
 
         // setup for collecting optional entity info...
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+        if (state.getInfo() != null) {
+            entities = state.getInfo().getOwner().getEntityCollection();
         }
 
         OHLCDataset highLowData = (OHLCDataset) dataset;
@@ -755,12 +747,12 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
             stickWidth = Math.max(Math.min(3, this.maxCandleWidth), xxWidth);
         }
 
-        Paint p = getItemPaint(series, item);
+        Paint p = getItemPaint(series, item, selected);
         Paint outlinePaint = null;
         if (this.useOutlinePaint) {
-            outlinePaint = getItemOutlinePaint(series, item);
+            outlinePaint = getItemOutlinePaint(series, item, selected);
         }
-        Stroke s = getItemStroke(series, item);
+        Stroke s = getItemStroke(series, item, selected);
 
         g2.setStroke(s);
 
@@ -874,7 +866,8 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
 
         // add an entity for the item...
         if (entities != null) {
-            addEntity(entities, hotspot, dataset, series, item, 0.0, 0.0);
+            addEntity(entities, hotspot, dataset, series, item, selected,
+                    0.0, 0.0);
         }
 
     }

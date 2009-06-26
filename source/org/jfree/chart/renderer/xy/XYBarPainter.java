@@ -35,6 +35,7 @@
  * Changes:
  * --------
  * 19-Jun-2008 : Version 1 (DG);
+ * 26-Jun-2009 : Updated API for version 1.2.0 (DG);
  *
  */
 
@@ -58,7 +59,7 @@ import org.jfree.chart.util.RectangleEdge;
  *     serialization will not be supported.</li>
  * </ul>
  *
- * @since 1.0.11
+ * @since 1.2.0
  */
 public interface XYBarPainter {
 
@@ -69,11 +70,13 @@ public interface XYBarPainter {
      * @param renderer  the renderer.
      * @param row  the row index for the item.
      * @param column  the column index for the item.
+     * @param selected  is the data item selected?
      * @param bar  the bounds for the bar.
      * @param base  the base of the bar.
      */
     public void paintBar(Graphics2D g2, XYBarRenderer renderer,
-            int row, int column, RectangularShape bar, RectangleEdge base);
+            int row, int column, boolean selected, RectangularShape bar,
+            RectangleEdge base);
 
     /**
      * Paints the shadow for a single bar on behalf of a renderer.
@@ -82,12 +85,13 @@ public interface XYBarPainter {
      * @param renderer  the renderer.
      * @param row  the row index for the item.
      * @param column  the column index for the item.
+     * @param selected  is the data item selected?
      * @param bar  the bounds for the bar.
      * @param base  the base of the bar.
      * @param pegShadow  peg the shadow to the base of the bar?
      */
     public void paintBarShadow(Graphics2D g2, XYBarRenderer renderer,
-            int row, int column, RectangularShape bar, RectangleEdge base,
-            boolean pegShadow);
+            int row, int column, boolean selected, RectangularShape bar,
+            RectangleEdge base, boolean pegShadow);
 
 }

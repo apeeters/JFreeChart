@@ -212,7 +212,6 @@ public class SamplingXYLineRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -220,22 +219,12 @@ public class SamplingXYLineRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected,int pass) {
 
         // do nothing if item is not visible
         if (!getItemVisible(series, item)) {
@@ -301,8 +290,8 @@ public class SamplingXYLineRenderer extends AbstractXYItemRenderer
                 count++;
                 pi.next();
             }
-            g2.setStroke(getItemStroke(series, item));
-            g2.setPaint(getItemPaint(series, item));
+            g2.setStroke(getItemStroke(series, item, selected));
+            g2.setPaint(getItemPaint(series, item, selected));
             g2.draw(s.seriesPath);
             g2.draw(s.intervalPath);
         }

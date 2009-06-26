@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * HighLowRenderer.java
  * --------------------
- * (C) Copyright 2001-2008, by Object Refinery Limited.
+ * (C) Copyright 2001-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard Atkinson;
@@ -304,7 +304,6 @@ public class HighLowRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the plot is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -312,22 +311,12 @@ public class HighLowRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         double x = dataset.getXValue(series, item);
         if (!domainAxis.getRange().contains(x)) {
@@ -339,15 +328,15 @@ public class HighLowRenderer extends AbstractXYItemRenderer
         // setup for collecting optional entity info...
         Shape entityArea = null;
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+        if (state.getInfo() != null) {
+            entities = state.getInfo().getOwner().getEntityCollection();
         }
 
         PlotOrientation orientation = plot.getOrientation();
         RectangleEdge location = plot.getRangeAxisEdge();
 
-        Paint itemPaint = getItemPaint(series, item);
-        Stroke itemStroke = getItemStroke(series, item);
+        Paint itemPaint = getItemPaint(series, item, selected);
+        Stroke itemStroke = getItemStroke(series, item, selected);
         g2.setPaint(itemPaint);
         g2.setStroke(itemStroke);
 
@@ -447,7 +436,8 @@ public class HighLowRenderer extends AbstractXYItemRenderer
         }
 
         if (entities != null) {
-            addEntity(entities, entityArea, dataset, series, item, 0.0, 0.0);
+            addEntity(entities, entityArea, dataset, series, item, selected,
+                    0.0, 0.0);
         }
 
     }

@@ -298,20 +298,18 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @param g2  the graphics output target.
      * @param state  the renderer state.
      * @param dataArea  the data area.
-     * @param info  the plot rendering info.
      * @param plot  the plot.
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
      * @param dataset  the dataset.
      * @param series  the series index.
      * @param item  the item index.
-     * @param crosshairState  the crosshair state.
      * @param pass  the pass index.
      */
     public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         if (pass == 0 && dataset instanceof IntervalXYDataset
                 && getItemVisible(series, item)) {
@@ -345,13 +343,13 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
                     g2.setPaint(this.errorPaint);
                 }
                 else {
-                    g2.setPaint(getItemPaint(series, item));
+                    g2.setPaint(getItemPaint(series, item, selected));
                 }
                 if (this.errorStroke != null) {
                     g2.setStroke(this.errorStroke);
                 }
                 else {
-                    g2.setStroke(getItemStroke(series, item));
+                    g2.setStroke(getItemStroke(series, item, selected));
                 }
                 g2.draw(line);
                 g2.draw(cap1);
@@ -385,21 +383,21 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
                     g2.setPaint(this.errorPaint);
                 }
                 else {
-                    g2.setPaint(getItemPaint(series, item));
+                    g2.setPaint(getItemPaint(series, item, selected));
                 }
                 if (this.errorStroke != null) {
                     g2.setStroke(this.errorStroke);
                 }
                 else {
-                    g2.setStroke(getItemStroke(series, item));
+                    g2.setStroke(getItemStroke(series, item, selected));
                 }
                 g2.draw(line);
                 g2.draw(cap1);
                 g2.draw(cap2);
             }
         }
-        super.drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis,
-                dataset, series, item, crosshairState, pass);
+        super.drawItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
+                dataset, series, item, selected, pass);
     }
 
     /**

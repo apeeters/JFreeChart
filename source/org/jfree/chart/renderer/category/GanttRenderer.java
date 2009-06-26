@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------
  * GanttRenderer.java
  * ------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited.
+ * (C) Copyright 2003-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -242,25 +242,19 @@ public class GanttRenderer extends IntervalBarRenderer
      * @param column  the column index (zero-based).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
          if (dataset instanceof GanttCategoryDataset) {
              GanttCategoryDataset gcd = (GanttCategoryDataset) dataset;
              drawTasks(g2, state, dataArea, plot, domainAxis, rangeAxis, gcd,
-                     row, column);
+                     row, column, selected);
          }
          else {  // let the superclass handle it...
              super.drawItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
-                     dataset, row, column, pass);
+                     dataset, row, column, selected, pass);
          }
 
      }
@@ -277,21 +271,17 @@ public class GanttRenderer extends IntervalBarRenderer
      * @param dataset  the data.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      */
-    protected void drawTasks(Graphics2D g2,
-                             CategoryItemRendererState state,
-                             Rectangle2D dataArea,
-                             CategoryPlot plot,
-                             CategoryAxis domainAxis,
-                             ValueAxis rangeAxis,
-                             GanttCategoryDataset dataset,
-                             int row,
-                             int column) {
+    protected void drawTasks(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, GanttCategoryDataset dataset, int row,
+            int column, boolean selected) {
 
         int count = dataset.getSubIntervalCount(row, column);
         if (count == 0) {
             drawTask(g2, state, dataArea, plot, domainAxis, rangeAxis,
-                    dataset, row, column);
+                    dataset, row, column, selected);
         }
 
         PlotOrientation orientation = plot.getOrientation();
@@ -369,10 +359,11 @@ public class GanttRenderer extends IntervalBarRenderer
             }
 
             if (getShadowsVisible()) {
-                getBarPainter().paintBarShadow(g2, this, row, column, bar,
-                        barBase, true);
+                getBarPainter().paintBarShadow(g2, this, row, column, selected, 
+                        bar, barBase, true);
             }
-            getBarPainter().paintBar(g2, this, row, column, bar, barBase);
+            getBarPainter().paintBar(g2, this, row, column, selected, bar,
+                    barBase);
 
             if (completeBar != null) {
                 g2.setPaint(getCompletePaint());
@@ -384,8 +375,8 @@ public class GanttRenderer extends IntervalBarRenderer
             }
             if (isDrawBarOutline()
                     && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-                g2.setStroke(getItemStroke(row, column));
-                g2.setPaint(getItemOutlinePaint(row, column));
+                g2.setStroke(getItemStroke(row, column, selected));
+                g2.setPaint(getItemOutlinePaint(row, column, selected));
                 g2.draw(bar);
             }
 
@@ -407,7 +398,7 @@ public class GanttRenderer extends IntervalBarRenderer
             if (state.getInfo() != null) {
                 EntityCollection entities = state.getEntityCollection();
                 if (entities != null) {
-                    addItemEntity(entities, dataset, row, column, bar);
+                    addEntity(entities, bar, dataset, row, column, selected);
                 }
             }
         }
@@ -425,16 +416,14 @@ public class GanttRenderer extends IntervalBarRenderer
      * @param dataset  the data.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
+     *
+     * @since 1.2.0
      */
-    protected void drawTask(Graphics2D g2,
-                            CategoryItemRendererState state,
-                            Rectangle2D dataArea,
-                            CategoryPlot plot,
-                            CategoryAxis domainAxis,
-                            ValueAxis rangeAxis,
-                            GanttCategoryDataset dataset,
-                            int row,
-                            int column) {
+    protected void drawTask(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, GanttCategoryDataset dataset, int row,
+            int column, boolean selected) {
 
         PlotOrientation orientation = plot.getOrientation();
         RectangleEdge rangeAxisLocation = plot.getRangeAxisEdge();
@@ -509,10 +498,10 @@ public class GanttRenderer extends IntervalBarRenderer
         }
 
         if (getShadowsVisible()) {
-            getBarPainter().paintBarShadow(g2, this, row, column, bar,
-                    barBase, true);
+            getBarPainter().paintBarShadow(g2, this, row, column, selected, 
+                    bar, barBase, true);
         }
-        getBarPainter().paintBar(g2, this, row, column, bar, barBase);
+        getBarPainter().paintBar(g2, this, row, column, selected, bar, barBase);
 
         if (completeBar != null) {
             g2.setPaint(getCompletePaint());
@@ -526,8 +515,8 @@ public class GanttRenderer extends IntervalBarRenderer
         // draw the outline...
         if (isDrawBarOutline()
                 && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-            Stroke stroke = getItemOutlineStroke(row, column);
-            Paint paint = getItemOutlinePaint(row, column);
+            Stroke stroke = getItemOutlineStroke(row, column, selected);
+            Paint paint = getItemOutlinePaint(row, column, selected);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
@@ -536,10 +525,10 @@ public class GanttRenderer extends IntervalBarRenderer
         }
 
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
-                column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                    false);
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                    generator, bar, false);
         }
 
         // submit the current data point as a crosshair candidate
@@ -556,7 +545,7 @@ public class GanttRenderer extends IntervalBarRenderer
         // collect entity and tool tip information...
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, bar);
+            addEntity(entities, bar, dataset, row, column, selected);
         }
     }
 

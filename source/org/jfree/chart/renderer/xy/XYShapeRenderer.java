@@ -392,25 +392,26 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the state.
      * @param dataArea  the data area.
-     * @param info  the plot rendering info.
      * @param plot  the plot.
      * @param domainAxis  the x-axis.
      * @param rangeAxis  the y-axis.
      * @param dataset  the dataset.
      * @param series  the series index.
      * @param item  the item index.
-     * @param crosshairState  the crosshair state.
+     * @param selected  is the data item selected?
      * @param pass  the pass index.
+     *
+     * @since 1.2.0
      */
     public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         Shape hotspot = null;
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+        if (state.getInfo() != null) {
+            entities = state.getInfo().getOwner().getEntityCollection();
         }
 
         double x = dataset.getXValue(series, item);
@@ -445,7 +446,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
             }
         }
         else if (pass == 1) {
-            Shape shape = getItemShape(series, item);
+            Shape shape = getItemShape(series, item, selected);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtilities.createTranslatedShape(shape, transY,
                         transX);
@@ -457,25 +458,26 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
             hotspot = shape;
             if (shape.intersects(dataArea)) {
                 //if (getItemShapeFilled(series, item)) {
-                    g2.setPaint(getPaint(dataset, series, item));
+                    g2.setPaint(getPaint(dataset, series, item, selected));
                     g2.fill(shape);
                //}
                 if (this.drawOutlines) {
                     if (getUseOutlinePaint()) {
-                        g2.setPaint(getItemOutlinePaint(series, item));
+                        g2.setPaint(getItemOutlinePaint(series, item,
+                                selected));
                     }
                     else {
-                        g2.setPaint(getItemPaint(series, item));
+                        g2.setPaint(getItemPaint(series, item, selected));
                     }
-                    g2.setStroke(getItemOutlineStroke(series, item));
+                    g2.setStroke(getItemOutlineStroke(series, item, selected));
                     g2.draw(shape);
                 }
             }
 
             // add an entity for the item...
             if (entities != null) {
-                addEntity(entities, hotspot, dataset, series, item, transX,
-                        transY);
+                addEntity(entities, hotspot, dataset, series, item, selected, 
+                        transX, transY);
             }
         }
     }
@@ -486,10 +488,14 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset..
      * @param series  the series index.
      * @param item  the item index.
+     * @param selected  is the data item selected?
      *
      * @return The paint.
+     *
+     * @since 1.2.0
      */
-    protected Paint getPaint(XYDataset dataset, int series, int item) {
+    protected Paint getPaint(XYDataset dataset, int series, int item,
+            boolean selected) {
         Paint p = null;
         if (dataset instanceof XYZDataset) {
             double z = ((XYZDataset) dataset).getZValue(series, item);
@@ -497,10 +503,10 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
         }
         else {
             if (this.useFillPaint) {
-                p = getItemFillPaint(series, item);
+                p = getItemFillPaint(series, item, selected);
             }
             else {
-                p = getItemPaint(series, item);
+                p = getItemPaint(series, item, selected);
             }
         }
         return p;

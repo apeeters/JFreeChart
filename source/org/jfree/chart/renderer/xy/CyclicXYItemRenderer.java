@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------
  * CyclicXYItemRenderer.java
  * ---------------------------
- * (C) Copyright 2003-2008, by Nicolas Brodu and Contributors.
+ * (C) Copyright 2003-2009, by Nicolas Brodu and Contributors.
  *
  * Original Author:  Nicolas Brodu;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -129,34 +129,23 @@ public class CyclicXYItemRenderer extends StandardXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the data area.
-     * @param info  the plot rendering info.
      * @param plot  the plot.
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
      * @param dataset  the dataset.
      * @param series  the series index.
      * @param item  the item index.
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the current pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         if ((!getPlotLines()) || ((!(domainAxis instanceof CyclicNumberAxis))
                 && (!(rangeAxis instanceof CyclicNumberAxis))) || (item <= 0)) {
-            super.drawItem(g2, state, dataArea, info, plot, domainAxis,
-                    rangeAxis, dataset, series, item, crosshairState, pass);
+            super.drawItem(g2, state, dataArea, plot, domainAxis,
+                    rangeAxis, dataset, series, item, selected, pass);
             return;
         }
 
@@ -165,8 +154,8 @@ public class CyclicXYItemRenderer extends StandardXYItemRenderer
         double yn = dataset.getYValue(series, item - 1);
         // If null, don't draw line => then delegate to parent
         if (Double.isNaN(yn)) {
-            super.drawItem(g2, state, dataArea, info, plot, domainAxis,
-                    rangeAxis, dataset, series, item, crosshairState, pass);
+            super.drawItem(g2, state, dataArea, plot, domainAxis,
+                    rangeAxis, dataset, series, item, selected, pass);
             return;
         }
         double[] x = new double[2];
@@ -248,8 +237,8 @@ public class CyclicXYItemRenderer extends StandardXYItemRenderer
 
         // If the line is not wrapping, then parent is OK
         if (x.length == 2) {
-            super.drawItem(g2, state, dataArea, info, plot, domainAxis,
-                    rangeAxis, dataset, series, item, crosshairState, pass);
+            super.drawItem(g2, state, dataArea, plot, domainAxis,
+                    rangeAxis, dataset, series, item, selected, pass);
             return;
         }
 
@@ -271,10 +260,8 @@ public class CyclicXYItemRenderer extends StandardXYItemRenderer
                 cnay.setBoundMappedToLastCycle(y[0] <= ycycleBound);
             }
         }
-        super.drawItem(
-            g2, state, dataArea, info, plot, domainAxis, rangeAxis,
-            newset, series, 1, crosshairState, pass
-        );
+        super.drawItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
+                newset, series, 1, selected, pass);
 
         if (cnax != null) {
             if (xcycleBound == x[1]) {
@@ -292,8 +279,8 @@ public class CyclicXYItemRenderer extends StandardXYItemRenderer
                 cnay.setBoundMappedToLastCycle(y[1] <= ycycleBound);
             }
         }
-        super.drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis,
-                newset, series, 2, crosshairState, pass);
+        super.drawItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
+                newset, series, 2, selected, pass);
 
         if (x.length == 4) {
             if (cnax != null) {
@@ -312,8 +299,8 @@ public class CyclicXYItemRenderer extends StandardXYItemRenderer
                     cnay.setBoundMappedToLastCycle(y[2] <= ycycleBound);
                 }
             }
-            super.drawItem(g2, state, dataArea, info, plot, domainAxis,
-                    rangeAxis, newset, series, 3, crosshairState, pass);
+            super.drawItem(g2, state, dataArea, plot, domainAxis,
+                    rangeAxis, newset, series, 3, selected, pass);
         }
 
         if (cnax != null) {

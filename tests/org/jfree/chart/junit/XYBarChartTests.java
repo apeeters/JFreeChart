@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * XYBarChartTests.java
  * --------------------
- * (C) Copyright 2005-2008, by Object Refinery Limited.
+ * (C) Copyright 2005-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -158,7 +158,7 @@ public class XYBarChartTests extends TestCase {
         XYItemRenderer renderer = plot.getRenderer();
         StandardXYToolTipGenerator tt = new StandardXYToolTipGenerator();
         renderer.setSeriesToolTipGenerator(0, tt);
-        XYToolTipGenerator tt2 = renderer.getToolTipGenerator(0, 0);
+        XYToolTipGenerator tt2 = renderer.getToolTipGenerator(0, 0, false);
         assertTrue(tt2 == tt);
     }
 

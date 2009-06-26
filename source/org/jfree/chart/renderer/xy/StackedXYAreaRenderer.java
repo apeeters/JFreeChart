@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------------
  * StackedXYAreaRenderer.java
  * --------------------------
- * (C) Copyright 2003-2008, by Richard Atkinson and Contributors.
+ * (C) Copyright 2003-2009, by Richard Atkinson and Contributors.
  *
  * Original Author:  Richard Atkinson;
  * Contributor(s):   Christian W. Zuckschwerdt;
@@ -88,9 +88,9 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.XYCrosshairState;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.chart.util.ObjectUtilities;
@@ -378,7 +378,6 @@ public class StackedXYAreaRenderer extends XYAreaRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color information
      *              etc).
      * @param domainAxis  the domain axis.
@@ -386,25 +385,16 @@ public class StackedXYAreaRenderer extends XYAreaRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  information about crosshairs on a plot.
      * @param pass  the pass index.
      *
      * @throws ClassCastException if <code>state</code> is not an instance of
      *         <code>StackedXYAreaRendererState</code> or <code>dataset</code>
      *         is not an instance of {@link TableXYDataset}.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         PlotOrientation orientation = plot.getOrientation();
         StackedXYAreaRendererState areaState
@@ -430,9 +420,8 @@ public class StackedXYAreaRenderer extends XYAreaRenderer
         double transY1 = rangeAxis.valueToJava2D(y1 + ph1, dataArea,
                 plot.getRangeAxisEdge());
 
-        //  Get series Paint and Stroke
-        Paint seriesPaint = getItemPaint(series, item);
-        Stroke seriesStroke = getItemStroke(series, item);
+        Paint seriesPaint = getItemPaint(series, item, selected);
+        Stroke seriesStroke = getItemStroke(series, item, selected);
 
         if (pass == 0) {
             //  On first pass render the areas, line and outlines
@@ -538,8 +527,10 @@ public class StackedXYAreaRenderer extends XYAreaRenderer
 
             int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
             int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);
-            updateCrosshairValues(crosshairState, x1, ph1 + y1, domainAxisIndex,
-                    rangeAxisIndex, transX1, transY1, orientation);
+            XYCrosshairState crosshairState = state.getCrosshairState();
+            updateCrosshairValues(crosshairState, x1, ph1 + y1, 
+                    domainAxisIndex, rangeAxisIndex, transX1, transY1,
+                    orientation);
 
         }
         else if (pass == 1) {
@@ -548,7 +539,7 @@ public class StackedXYAreaRenderer extends XYAreaRenderer
 
             Shape shape = null;
             if (getPlotShapes()) {
-                shape = getItemShape(series, item);
+                shape = getItemShape(series, item, selected);
                 if (plot.getOrientation() == PlotOrientation.VERTICAL) {
                     shape = ShapeUtilities.createTranslatedShape(shape,
                             transX1, transY1);
@@ -585,7 +576,8 @@ public class StackedXYAreaRenderer extends XYAreaRenderer
             }
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                addEntity(entities, shape, dataset, series, item, 0.0, 0.0);
+                addEntity(entities, shape, dataset, series, item, selected,
+                        0.0, 0.0);
             }
         }
     }

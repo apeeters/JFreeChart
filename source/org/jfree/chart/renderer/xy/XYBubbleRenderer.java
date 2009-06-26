@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------
  * XYBubbleRenderer.java
  * ---------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited.
+ * (C) Copyright 2003-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Christian W. Zuckschwerdt;
@@ -74,9 +74,8 @@ import java.awt.geom.Rectangle2D;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
-import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.XYCrosshairState;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
@@ -159,7 +158,6 @@ public class XYBubbleRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain (horizontal) axis.
@@ -167,14 +165,12 @@ public class XYBubbleRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset (an {@link XYZDataset} is expected).
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
     public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         // return straight away if the item is not visible
         if (!getItemVisible(series, item)) {
@@ -239,35 +235,37 @@ public class XYBubbleRenderer extends AbstractXYItemRenderer
                 circle = new Ellipse2D.Double(transY - transRange / 2.0,
                         transX - transDomain / 2.0, transRange, transDomain);
             }
-            g2.setPaint(getItemPaint(series, item));
+            g2.setPaint(getItemPaint(series, item, selected));
             g2.fill(circle);
-            g2.setStroke(getItemOutlineStroke(series, item));
-            g2.setPaint(getItemOutlinePaint(series, item));
+            g2.setStroke(getItemOutlineStroke(series, item, selected));
+            g2.setPaint(getItemOutlinePaint(series, item, selected));
             g2.draw(circle);
 
-            if (isItemLabelVisible(series, item)) {
+            if (isItemLabelVisible(series, item, selected)) {
                 if (orientation == PlotOrientation.VERTICAL) {
                     drawItemLabel(g2, orientation, dataset, series, item,
-                            transX, transY, false);
+                            selected, transX, transY, false);
                 }
                 else if (orientation == PlotOrientation.HORIZONTAL) {
                     drawItemLabel(g2, orientation, dataset, series, item,
-                            transY, transX, false);
+                            selected, transY, transX, false);
                 }
             }
 
             // add an entity if this info is being collected
             EntityCollection entities = null;
-            if (info != null) {
-                entities = info.getOwner().getEntityCollection();
+            if (state.getInfo() != null) {
+                entities = state.getInfo().getOwner().getEntityCollection();
                 if (entities != null && circle.intersects(dataArea)) {
                     addEntity(entities, circle, dataset, series, item,
-                            circle.getCenterX(), circle.getCenterY());
+                            selected, circle.getCenterX(),
+                            circle.getCenterY());
                 }
             }
 
             int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
             int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);
+            XYCrosshairState crosshairState = state.getCrosshairState();
             updateCrosshairValues(crosshairState, x, y, domainAxisIndex,
                     rangeAxisIndex, transX, transY, orientation);
         }

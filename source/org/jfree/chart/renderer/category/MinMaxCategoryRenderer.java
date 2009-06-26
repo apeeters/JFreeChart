@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------
  * MinMaxCategoryRenderer.java
  * ---------------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited.
+ * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  Tomer Peretz;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -333,7 +333,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     public void drawItem(Graphics2D g2, CategoryItemRendererState state,
             Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
             ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
-            int pass) {
+            boolean selected, int pass) {
 
         // first check the number we are plotting...
         Number value = dataset.getValue(row, column);
@@ -343,8 +343,8 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
                     dataArea, plot.getDomainAxisEdge());
             double y1 = rangeAxis.valueToJava2D(value.doubleValue(), dataArea,
                     plot.getRangeAxisEdge());
-            g2.setPaint(getItemPaint(row, column));
-            g2.setStroke(getItemStroke(row, column));
+            g2.setPaint(getItemPaint(row, column, selected));
+            g2.setStroke(getItemStroke(row, column, selected));
             Shape shape = null;
             shape = new Rectangle2D.Double(x1 - 4, y1 - 4, 8.0, 8.0);
 
@@ -403,8 +403,8 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
                                 plot.getDomainAxisEdge());
                         double y0 = rangeAxis.valueToJava2D(previous, dataArea,
                                 plot.getRangeAxisEdge());
-                        g2.setPaint(getItemPaint(row, column));
-                        g2.setStroke(getItemStroke(row, column));
+                        g2.setPaint(getItemPaint(row, column, selected));
+                        g2.setStroke(getItemStroke(row, column, selected));
                         Line2D line;
                         if (orient == PlotOrientation.VERTICAL) {
                             line = new Line2D.Double(x0, y0, x1, y1);
@@ -420,7 +420,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();
             if (entities != null && shape != null) {
-                addItemEntity(entities, dataset, row, column, shape);
+                addEntity(entities, shape, dataset, row, column, selected);
             }
         }
     }

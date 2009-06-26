@@ -380,12 +380,13 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
      */
     public void drawItem(Graphics2D g2, CategoryItemRendererState state,
             Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
             ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
-            int pass) {
+            boolean selected, int pass) {
 
         // do nothing if item is not visible
         if (!getItemVisible(row, column)) {
@@ -422,7 +423,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             double y1 = rangeAxis.valueToJava2D(value, dataArea,
                     plot.getRangeAxisEdge());
 
-            Shape shape = getItemShape(row, column);
+            Shape shape = getItemShape(row, column, selected);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtilities.createTranslatedShape(shape, y1, x1);
             }
@@ -431,21 +432,21 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             }
             if (getItemShapeFilled(row, column)) {
                 if (this.useFillPaint) {
-                    g2.setPaint(getItemFillPaint(row, column));
+                    g2.setPaint(getItemFillPaint(row, column, selected));
                 }
                 else {
-                    g2.setPaint(getItemPaint(row, column));
+                    g2.setPaint(getItemPaint(row, column, selected));
                 }
                 g2.fill(shape);
             }
             if (this.drawOutlines) {
                 if (this.useOutlinePaint) {
-                    g2.setPaint(getItemOutlinePaint(row, column));
+                    g2.setPaint(getItemOutlinePaint(row, column, selected));
                 }
                 else {
-                    g2.setPaint(getItemPaint(row, column));
+                    g2.setPaint(getItemPaint(row, column, selected));
                 }
-                g2.setStroke(getItemOutlineStroke(row, column));
+                g2.setStroke(getItemOutlineStroke(row, column, selected));
                 g2.draw(shape);
             }
         }
@@ -485,16 +486,17 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             Shape shape = lookupLegendShape(series);
             Paint paint = lookupSeriesPaint(series);
             Paint fillPaint = (this.useFillPaint
-                    ? getItemFillPaint(series, 0) : paint);
+                    ? getItemFillPaint(series, 0, false) : paint);
             boolean shapeOutlineVisible = this.drawOutlines;
             Paint outlinePaint = (this.useOutlinePaint
-                    ? getItemOutlinePaint(series, 0) : paint);
+                    ? getItemOutlinePaint(series, 0, false) : paint);
             Stroke outlineStroke = lookupSeriesOutlineStroke(series);
             LegendItem result = new LegendItem(label, description, toolTipText,
                     urlText, true, shape, getItemShapeFilled(series, 0),
                     fillPaint, shapeOutlineVisible, outlinePaint, outlineStroke,
                     false, new Line2D.Double(-7.0, 0.0, 7.0, 0.0),
-                    getItemStroke(series, 0), getItemPaint(series, 0));
+                    getItemStroke(series, 0, false), getItemPaint(series, 0,
+                    false));
             result.setLabelFont(lookupLegendTextFont(series));
             Paint labelPaint = lookupLegendTextPaint(series);
             if (labelPaint != null) {

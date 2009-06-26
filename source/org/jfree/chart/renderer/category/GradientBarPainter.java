@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * GradientBarPainter.java
  * -----------------------
- * (C) Copyright 2008, by Object Refinery Limited.
+ * (C) Copyright 2008, 2009 by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -36,6 +36,7 @@
  * --------
  * 19-Jun-2008 : Version 1 (DG);
  * 15-Aug-2008 : Use outline paint and shadow paint (DG);
+ * 25-Jun-2009 : Updated interface for 1.2.0 (DG);
  *
  */
 
@@ -57,7 +58,7 @@ import org.jfree.chart.util.RectangleEdge;
  * An implementation of the {@link BarPainter} interface that uses several
  * gradient fills to enrich the appearance of the bars.
  *
- * @since 1.0.11
+ * @since 1.2.0
  */
 public class GradientBarPainter implements BarPainter, Serializable {
 
@@ -97,14 +98,16 @@ public class GradientBarPainter implements BarPainter, Serializable {
      * @param renderer  the renderer.
      * @param row  the row index.
      * @param column  the column index.
+     * @param selected  is the item selected?
      * @param bar  the bar
      * @param base  indicates which side of the rectangle is the base of the
      *              bar.
      */
     public void paintBar(Graphics2D g2, BarRenderer renderer, int row,
-            int column, RectangularShape bar, RectangleEdge base) {
+            int column, boolean selected, RectangularShape bar,
+            RectangleEdge base) {
 
-        Paint itemPaint = renderer.getItemPaint(row, column);
+        Paint itemPaint = renderer.getItemPaint(row, column, selected);
 
         Color c0, c1;
         if (itemPaint instanceof Color) {
@@ -179,8 +182,9 @@ public class GradientBarPainter implements BarPainter, Serializable {
         // draw the outline...
         if (renderer.isDrawBarOutline()
             /*&& state.getBarWidth() > renderer.BAR_OUTLINE_WIDTH_THRESHOLD*/) {
-            Stroke stroke = renderer.getItemOutlineStroke(row, column);
-            Paint paint = renderer.getItemOutlinePaint(row, column);
+            Stroke stroke = renderer.getItemOutlineStroke(row, column,
+                    selected);
+            Paint paint = renderer.getItemOutlinePaint(row, column, selected);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
@@ -203,12 +207,12 @@ public class GradientBarPainter implements BarPainter, Serializable {
      * @param pegShadow  peg the shadow to the base of the bar?
      */
     public void paintBarShadow(Graphics2D g2, BarRenderer renderer, int row,
-            int column, RectangularShape bar, RectangleEdge base,
-            boolean pegShadow) {
+            int column, boolean selected, RectangularShape bar,
+            RectangleEdge base, boolean pegShadow) {
 
         // handle a special case - if the bar colour has alpha == 0, it is
         // invisible so we shouldn't draw any shadow
-        Paint itemPaint = renderer.getItemPaint(row, column);
+        Paint itemPaint = renderer.getItemPaint(row, column, selected);
         if (itemPaint instanceof Color) {
             Color c = (Color) itemPaint;
             if (c.getAlpha() == 0) {

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------
  * StackedAreaRenderer.java
  * ------------------------
- * (C) Copyright 2002-2008, by Dan Rivett (d.rivett@ukonline.co.uk) and
+ * (C) Copyright 2002-2009, by Dan Rivett (d.rivett@ukonline.co.uk) and
  *                          Contributors.
  *
  * Original Author:  Dan Rivett (adapted from AreaCategoryItemRenderer);
@@ -187,16 +187,10 @@ public class StackedAreaRenderer extends AreaRenderer
      * @param column  the column index (zero-based).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         // setup for collecting optional entity info...
         Shape entityArea = null;
@@ -350,11 +344,11 @@ public class StackedAreaRenderer extends AreaRenderer
             }
         }
 
-        g2.setPaint(getItemPaint(row, column));
-        g2.setStroke(getItemStroke(row, column));
+        g2.setPaint(getItemPaint(row, column, selected));
+        g2.setStroke(getItemStroke(row, column, selected));
 
         //  Get series Paint and Stroke
-        Paint itemPaint = getItemPaint(row, column);
+        Paint itemPaint = getItemPaint(row, column, selected);
         if (pass == 0) {
             g2.setPaint(itemPaint);
             g2.fill(left);
@@ -366,7 +360,7 @@ public class StackedAreaRenderer extends AreaRenderer
             GeneralPath gp = new GeneralPath(left);
             gp.append(right, false);
             entityArea = gp;
-            addItemEntity(entities, dataset, row, column, entityArea);
+            addEntity(entities, entityArea, dataset, row, column, selected);
         }
 
     }

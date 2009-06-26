@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------
  * XYDifferenceRenderer.java
  * -------------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard West, Advanced Micro Devices, Inc. (major rewrite
@@ -99,9 +99,9 @@ import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.XYCrosshairState;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.chart.util.PaintUtilities;
@@ -363,7 +363,6 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain (horizontal) axis.
@@ -371,30 +370,20 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         if (pass == 0) {
-            drawItemPass0(g2, dataArea, info, plot, domainAxis, rangeAxis,
-                    dataset, series, item, crosshairState);
+            drawItemPass0(g2, state, dataArea, plot, domainAxis, rangeAxis,
+                    dataset, series, item, selected);
         }
         else if (pass == 1) {
-            drawItemPass1(g2, dataArea, info, plot, domainAxis, rangeAxis,
-                    dataset, series, item, crosshairState);
+            drawItemPass1(g2, state, dataArea, plot, domainAxis, rangeAxis,
+                    dataset, series, item, selected);
         }
 
     }
@@ -403,8 +392,8 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      * Draws the visual representation of a single data item, first pass.
      *
      * @param x_graphics  the graphics device.
+     * @param state  the rendering state.
      * @param x_dataArea  the area within which the data is being drawn.
-     * @param x_info  collects information about the drawing.
      * @param x_plot  the plot (can be used to obtain standard color
      *                information etc).
      * @param x_domainAxis  the domain (horizontal) axis.
@@ -412,19 +401,14 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      * @param x_dataset  the dataset.
      * @param x_series  the series index (zero-based).
      * @param x_item  the item index (zero-based).
-     * @param x_crosshairState  crosshair information for the plot
-     *                          (<code>null</code> permitted).
+     * @param selected  is the data item selected?
+     *
+     * @since 1.2.0
      */
-    protected void drawItemPass0(Graphics2D x_graphics,
-                                 Rectangle2D x_dataArea,
-                                 PlotRenderingInfo x_info,
-                                 XYPlot x_plot,
-                                 ValueAxis x_domainAxis,
-                                 ValueAxis x_rangeAxis,
-                                 XYDataset x_dataset,
-                                 int x_series,
-                                 int x_item,
-                                 CrosshairState x_crosshairState) {
+    protected void drawItemPass0(Graphics2D x_graphics, 
+            XYItemRendererState state, Rectangle2D x_dataArea,
+            XYPlot x_plot, ValueAxis x_domainAxis, ValueAxis x_rangeAxis,
+            XYDataset x_dataset, int x_series, int x_item, boolean selected) {
 
         if (!((0 == x_series) && (0 == x_item))) {
             return;
@@ -848,8 +832,8 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      * individual points in the two series.
      *
      * @param x_graphics  the graphics device.
+     * @param state  the rendering state.
      * @param x_dataArea  the area within which the data is being drawn.
-     * @param x_info  collects information about the drawing.
      * @param x_plot  the plot (can be used to obtain standard color
      *         information etc).
      * @param x_domainAxis  the domain (horizontal) axis.
@@ -857,28 +841,23 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      * @param x_dataset  the dataset.
      * @param x_series  the series index (zero-based).
      * @param x_item  the item index (zero-based).
-     * @param x_crosshairState  crosshair information for the plot
-     *                          (<code>null</code> permitted).
+     * @param selected  is the data item selected?
+     *
+     * @since 1.2.0
      */
-    protected void drawItemPass1(Graphics2D x_graphics,
-                                 Rectangle2D x_dataArea,
-                                 PlotRenderingInfo x_info,
-                                 XYPlot x_plot,
-                                 ValueAxis x_domainAxis,
-                                 ValueAxis x_rangeAxis,
-                                 XYDataset x_dataset,
-                                 int x_series,
-                                 int x_item,
-                                 CrosshairState x_crosshairState) {
+    protected void drawItemPass1(Graphics2D x_graphics, 
+            XYItemRendererState state, Rectangle2D x_dataArea, XYPlot x_plot,
+            ValueAxis x_domainAxis, ValueAxis x_rangeAxis, XYDataset x_dataset,
+            int x_series, int x_item, boolean selected) {
 
         Shape l_entityArea = null;
         EntityCollection l_entities = null;
-        if (null != x_info) {
-            l_entities = x_info.getOwner().getEntityCollection();
+        if (state.getInfo() != null) {
+            l_entities = state.getInfo().getOwner().getEntityCollection();
         }
 
-        Paint l_seriesPaint   = getItemPaint(x_series, x_item);
-        Stroke l_seriesStroke = getItemStroke(x_series, x_item);
+        Paint l_seriesPaint   = getItemPaint(x_series, x_item, selected);
+        Stroke l_seriesStroke = getItemStroke(x_series, x_item, selected);
         x_graphics.setPaint(l_seriesPaint);
         x_graphics.setStroke(l_seriesStroke);
 
@@ -894,7 +873,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
                 l_rangeAxisLocation);
 
         if (getShapesVisible()) {
-            Shape l_shape = getItemShape(x_series, x_item);
+            Shape l_shape = getItemShape(x_series, x_item, selected);
             if (l_orientation == PlotOrientation.HORIZONTAL) {
                 l_shape = ShapeUtilities.createTranslatedShape(l_shape,
                         l_y1, l_x1);
@@ -904,7 +883,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
                         l_x1, l_y1);
             }
             if (l_shape.intersects(x_dataArea)) {
-                x_graphics.setPaint(getItemPaint(x_series, x_item));
+                x_graphics.setPaint(getItemPaint(x_series, x_item, selected));
                 x_graphics.fill(l_shape);
             }
             l_entityArea = l_shape;
@@ -918,13 +897,14 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
             }
             String l_tip = null;
             XYToolTipGenerator l_tipGenerator = getToolTipGenerator(x_series,
-                    x_item);
+                    x_item, selected);
             if (null != l_tipGenerator) {
                 l_tip = l_tipGenerator.generateToolTip(x_dataset, x_series,
                         x_item);
             }
             String l_url = null;
-            XYURLGenerator l_urlGenerator = getURLGenerator(x_series, x_item);
+            XYURLGenerator l_urlGenerator = getURLGenerator(x_series, x_item,
+                    selected);
             if (null != l_urlGenerator) {
                 l_url = l_urlGenerator.generateURL(x_dataset, x_series,
                         x_item);
@@ -935,14 +915,15 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
         }
 
         // draw the item label if there is one...
-        if (isItemLabelVisible(x_series, x_item)) {
+        if (isItemLabelVisible(x_series, x_item, selected)) {
             drawItemLabel(x_graphics, l_orientation, x_dataset, x_series,
-                          x_item, l_x1, l_y1, (l_y1 < 0.0));
+                          x_item, selected, l_x1, l_y1, (l_y1 < 0.0));
         }
 
         int l_domainAxisIndex = x_plot.getDomainAxisIndex(x_domainAxis);
         int l_rangeAxisIndex  = x_plot.getRangeAxisIndex(x_rangeAxis);
-        updateCrosshairValues(x_crosshairState, l_x0, l_y0, l_domainAxisIndex,
+        XYCrosshairState crosshairState = state.getCrosshairState();
+        updateCrosshairValues(crosshairState, l_x0, l_y0, l_domainAxisIndex,
                               l_rangeAxisIndex, l_x1, l_y1, l_orientation);
 
         if (0 == x_item) {
@@ -963,8 +944,8 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
         }
 
         if ((null != l_line) && l_line.intersects(x_dataArea)) {
-            x_graphics.setPaint(getItemPaint(x_series, x_item));
-            x_graphics.setStroke(getItemStroke(x_series, x_item));
+            x_graphics.setPaint(getItemPaint(x_series, x_item, selected));
+            x_graphics.setStroke(getItemStroke(x_series, x_item, selected));
             x_graphics.draw(l_line);
         }
     }

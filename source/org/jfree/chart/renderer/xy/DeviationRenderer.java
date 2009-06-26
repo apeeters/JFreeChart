@@ -247,7 +247,6 @@ public class DeviationRenderer extends XYLineAndShapeRenderer {
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -255,22 +254,12 @@ public class DeviationRenderer extends XYLineAndShapeRenderer {
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         // do nothing if item is not visible
         if (!getItemVisible(series, item)) {
@@ -311,7 +300,7 @@ public class DeviationRenderer extends XYLineAndShapeRenderer {
                 Composite originalComposite = g2.getComposite();
                 g2.setComposite(AlphaComposite.getInstance(
                         AlphaComposite.SRC_OVER, this.alpha));
-                g2.setPaint(getItemFillPaint(series, item));
+                g2.setPaint(getItemFillPaint(series, item, selected));
                 GeneralPath area = new GeneralPath();
                 double[] coords = (double[]) drState.lowerCoordinates.get(0);
                 area.moveTo((float) coords[0], (float) coords[1]);
@@ -346,7 +335,8 @@ public class DeviationRenderer extends XYLineAndShapeRenderer {
 
             if (getItemLineVisible(series, item)) {
                 drawPrimaryLineAsPath(state, g2, plot, dataset, pass,
-                        series, item, domainAxis, rangeAxis, dataArea);
+                        series, item, selected, domainAxis, rangeAxis,
+                        dataArea);
             }
         }
 
@@ -355,12 +345,12 @@ public class DeviationRenderer extends XYLineAndShapeRenderer {
 
             // setup for collecting optional entity info...
             EntityCollection entities = null;
-            if (info != null) {
-                entities = info.getOwner().getEntityCollection();
+            if (state.getInfo() != null) {
+                entities = state.getInfo().getOwner().getEntityCollection();
             }
 
-            drawSecondaryPass(g2, plot, dataset, pass, series, item,
-                    domainAxis, dataArea, rangeAxis, crosshairState, entities);
+            drawShape2(g2, dataArea, plot, dataset, pass, series, item,
+                    selected, domainAxis, rangeAxis, null, entities);
         }
     }
 

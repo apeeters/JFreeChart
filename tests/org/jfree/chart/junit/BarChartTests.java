@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------
  * BarChartTests.java
  * ------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited.
+ * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -165,7 +165,8 @@ public class BarChartTests extends TestCase {
         StandardCategoryToolTipGenerator tt
                 = new StandardCategoryToolTipGenerator();
         renderer.setSeriesToolTipGenerator(0, tt);
-        CategoryToolTipGenerator tt2 = renderer.getToolTipGenerator(0, 0);
+        CategoryToolTipGenerator tt2 = renderer.getToolTipGenerator(0, 0,
+                false);
         assertTrue(tt2 == tt);
     }
 
@@ -179,7 +180,7 @@ public class BarChartTests extends TestCase {
         StandardCategoryURLGenerator url1
                 = new StandardCategoryURLGenerator();
         renderer.setSeriesURLGenerator(0, url1);
-        CategoryURLGenerator url2 = renderer.getURLGenerator(0, 0);
+        CategoryURLGenerator url2 = renderer.getURLGenerator(0, 0, false);
         assertTrue(url2 == url1);
     }
 

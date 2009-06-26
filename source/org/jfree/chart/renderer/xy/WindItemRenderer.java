@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------
  * WindItemRenderer.java
  * ---------------------
- * (C) Copyright 2001-2008, by Achilleus Mantzios and Contributors.
+ * (C) Copyright 2001-2009, by Achilleus Mantzios and Contributors.
  *
  * Original Author:  Achilleus Mantzios;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -103,7 +103,6 @@ public class WindItemRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param plotArea  the area within which the plot is being drawn.
-     * @param info  optional information collection.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the horizontal axis.
@@ -111,27 +110,17 @@ public class WindItemRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D plotArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D plotArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         WindDataset windData = (WindDataset) dataset;
 
-        Paint seriesPaint = getItemPaint(series, item);
-        Stroke seriesStroke = getItemStroke(series, item);
+        Paint seriesPaint = getItemPaint(series, item, selected);
+        Stroke seriesStroke = getItemStroke(series, item, selected);
         g2.setPaint(seriesPaint);
         g2.setStroke(seriesStroke);
 

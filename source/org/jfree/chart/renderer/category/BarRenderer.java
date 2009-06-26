@@ -132,7 +132,6 @@ import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.StandardGradientPaintTransformer;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.DatasetUtilities;
 
 /**
  * A {@link CategoryItemRenderer} that draws individual data items as bars.
@@ -986,18 +985,13 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         // nothing is drawn if the row index is not included in the list with
         // the indices of the visible rows...
@@ -1071,16 +1065,17 @@ public class BarRenderer extends AbstractCategoryItemRenderer
                     state.getBarWidth(), barLength + barLengthAdj);
         }
         if (getShadowsVisible()) {
-            this.barPainter.paintBarShadow(g2, this, row, column, bar, barBase,
-                true);
+            this.barPainter.paintBarShadow(g2, this, row, column, selected, 
+                    bar, barBase, true);
         }
-        this.barPainter.paintBar(g2, this, row, column, bar, barBase);
+        this.barPainter.paintBar(g2, this, row, column, selected, bar,
+                barBase);
 
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
-                column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                    (value < 0.0));
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                    generator, bar, (value < 0.0));
         }
 
         // submit the current data point as a crosshair candidate
@@ -1092,7 +1087,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         // add an item entity, if this information is being collected
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, bar);
+            addEntity(entities, bar, dataset, row, column, selected);
         }
 
     }
@@ -1118,44 +1113,44 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Draws an item label.  This method is overridden so that the bar can be
-     * used to calculate the label anchor point.
+     * Draws an item label.  This method is used for bars instead of
+     * {@link #drawItemLabel()} so that the bar can be used to calculate the
+     * label anchor point.
      *
      * @param g2  the graphics device.
-     * @param data  the dataset.
+     * @param dataset  the dataset.
      * @param row  the row.
      * @param column  the column.
+     * @param selected  is the item selected?
      * @param plot  the plot.
      * @param generator  the label generator.
      * @param bar  the bar.
      * @param negative  a flag indicating a negative value.
+     *
+     * @since 1.2.0
      */
-    protected void drawItemLabel(Graphics2D g2,
-                                 CategoryDataset data,
-                                 int row,
-                                 int column,
-                                 CategoryPlot plot,
-                                 CategoryItemLabelGenerator generator,
-                                 Rectangle2D bar,
-                                 boolean negative) {
+    protected void drawItemLabelForBar(Graphics2D g2, CategoryPlot plot,
+            CategoryDataset dataset, int row, int column, boolean selected,
+            CategoryItemLabelGenerator generator, Rectangle2D bar,
+            boolean negative) {
 
-        String label = generator.generateLabel(data, row, column);
+        String label = generator.generateLabel(dataset, row, column);
         if (label == null) {
             return;  // nothing to do
         }
 
-        Font labelFont = getItemLabelFont(row, column);
+        Font labelFont = getItemLabelFont(row, column, selected);
         g2.setFont(labelFont);
-        Paint paint = getItemLabelPaint(row, column);
+        Paint paint = getItemLabelPaint(row, column, selected);
         g2.setPaint(paint);
 
         // find out where to place the label...
         ItemLabelPosition position = null;
         if (!negative) {
-            position = getPositiveItemLabelPosition(row, column);
+            position = getPositiveItemLabelPosition(row, column, selected);
         }
         else {
-            position = getNegativeItemLabelPosition(row, column);
+            position = getNegativeItemLabelPosition(row, column, selected);
         }
 
         // work out the label anchor point...

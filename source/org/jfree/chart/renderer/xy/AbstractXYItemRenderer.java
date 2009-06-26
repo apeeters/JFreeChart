@@ -307,12 +307,16 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      *
      * @param series  the series index (zero based).
      * @param item  the item index (zero based).
+     * @param selected  is the item selected?
      *
      * @return The generator (possibly <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public XYItemLabelGenerator getItemLabelGenerator(int series, int item) {
-        XYItemLabelGenerator generator
-                = (XYItemLabelGenerator) this.itemLabelGeneratorList.get(series);
+    public XYItemLabelGenerator getItemLabelGenerator(int series, int item,
+            boolean selected) {
+        XYItemLabelGenerator generator = (XYItemLabelGenerator)
+                this.itemLabelGeneratorList.get(series);
         if (generator == null) {
             generator = this.baseItemLabelGenerator;
         }
@@ -415,10 +419,14 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      *
      * @param series  the series index (zero based).
      * @param item  the item index (zero based).
+     * @param selected  is the item selected?
      *
      * @return The generator (possibly <code>null</code>).
+     *
+     * @since 1.2.0
      */
-    public XYToolTipGenerator getToolTipGenerator(int series, int item) {
+    public XYToolTipGenerator getToolTipGenerator(int series, int item,
+            boolean selected) {
         XYToolTipGenerator generator
                 = (XYToolTipGenerator) this.toolTipGeneratorList.get(series);
         if (generator == null) {
@@ -519,12 +527,14 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      *
      * @param series  the series index.
      * @param item  the item index.
+     * @param selected  is the item selected?
      *
      * @return The generator (possibly <code>null</code>).
      *
      * @since 1.2.0
      */
-    public XYURLGenerator getURLGenerator(int series, int item) {
+    public XYURLGenerator getURLGenerator(int series, int item,
+            boolean selected) {
         XYURLGenerator generator
                 = (XYURLGenerator) this.urlGeneratorList.get(series);
         if (generator == null) {
@@ -1771,19 +1781,23 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param selected  is the item selected?
      * @param x  the x coordinate (in Java2D space).
      * @param y  the y coordinate (in Java2D space).
      * @param negative  indicates a negative value (which affects the item
      *                  label position).
+     *
+     * @since 1.2.0
      */
     protected void drawItemLabel(Graphics2D g2, PlotOrientation orientation,
-            XYDataset dataset, int series, int item, double x, double y,
-            boolean negative) {
+            XYDataset dataset, int series, int item, boolean selected,
+            double x, double y, boolean negative) {
 
-        XYItemLabelGenerator generator = getItemLabelGenerator(series, item);
+        XYItemLabelGenerator generator = getItemLabelGenerator(series, item,
+                selected);
         if (generator != null) {
-            Font labelFont = getItemLabelFont(series, item);
-            Paint paint = getItemLabelPaint(series, item);
+            Font labelFont = getItemLabelFont(series, item, selected);
+            Paint paint = getItemLabelPaint(series, item, selected);
             g2.setFont(labelFont);
             g2.setPaint(paint);
             String label = generator.generateLabel(dataset, series, item);
@@ -1791,10 +1805,12 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             // get the label position..
             ItemLabelPosition position = null;
             if (!negative) {
-                position = getPositiveItemLabelPosition(series, item);
+                position = getPositiveItemLabelPosition(series, item,
+                        selected);
             }
             else {
-                position = getNegativeItemLabelPosition(series, item);
+                position = getNegativeItemLabelPosition(series, item,
+                        selected);
             }
 
             // work out the label anchor point...
@@ -1853,15 +1869,19 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param dataset  the dataset.
      * @param series  the series.
      * @param item  the item.
+     * @param selected  is the item selected?
      * @param entityX  the entity's center x-coordinate in user space (only
      *                 used if <code>area</code> is <code>null</code>).
      * @param entityY  the entity's center y-coordinate in user space (only
      *                 used if <code>area</code> is <code>null</code>).
+     *
+     * @since 1.2.0
      */
     protected void addEntity(EntityCollection entities, Shape area,
-                             XYDataset dataset, int series, int item,
-                             double entityX, double entityY) {
-        if (!getItemCreateEntity(series, item)) {
+            XYDataset dataset, int series, int item, boolean selected,
+            double entityX, double entityY) {
+        
+        if (!getItemCreateEntity(series, item, selected)) {
             return;
         }
         Shape hotspot = area;
@@ -1876,37 +1896,19 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             }
         }
         String tip = null;
-        XYToolTipGenerator generator = getToolTipGenerator(series, item);
+        XYToolTipGenerator generator = getToolTipGenerator(series, item,
+                selected);
         if (generator != null) {
             tip = generator.generateToolTip(dataset, series, item);
         }
         String url = null;
-        XYURLGenerator urlster = getURLGenerator(series, item);
+        XYURLGenerator urlster = getURLGenerator(series, item, selected);
         if (urlster != null) {
             url = urlster.generateURL(dataset, series, item);
         }
         XYItemEntity entity = new XYItemEntity(hotspot, dataset, series, item,
                 tip, url);
         entities.add(entity);
-    }
-
-    /**
-     * Returns <code>true</code> if the specified point (x, y) falls within or
-     * on the boundary of the specified rectangle.
-     *
-     * @param rect  the rectangle (<code>null</code> not permitted).
-     * @param x  the x-coordinate.
-     * @param y  the y-coordinate.
-     *
-     * @return A boolean.
-     *
-     * @since 1.0.10
-     */
-    public static boolean isPointInRect(Rectangle2D rect, double x, double y) {
-        // TODO: For JFreeChart 1.2.0, this method should go in the
-        //       ShapeUtilities class
-        return (x >= rect.getMinX() && x <= rect.getMaxX()
-                && y >= rect.getMinY() && y <= rect.getMaxY());
     }
 
 }

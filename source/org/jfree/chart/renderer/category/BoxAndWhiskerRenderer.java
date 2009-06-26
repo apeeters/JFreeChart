@@ -470,16 +470,10 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
      * @param column  the column index (zero-based).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         // do nothing if item is not visible
         if (!getItemVisible(row, column)) {
@@ -496,11 +490,11 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
 
         if (orientation == PlotOrientation.HORIZONTAL) {
             drawHorizontalItem(g2, state, dataArea, plot, domainAxis,
-                    rangeAxis, dataset, row, column);
+                    rangeAxis, dataset, row, column, selected, pass);
         }
         else if (orientation == PlotOrientation.VERTICAL) {
             drawVerticalItem(g2, state, dataArea, plot, domainAxis,
-                    rangeAxis, dataset, row, column);
+                    rangeAxis, dataset, row, column, selected, pass);
         }
 
     }
@@ -520,16 +514,16 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
      *                 {@link BoxAndWhiskerCategoryDataset}).
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
+     * @param pass  the number of the current pass.
+     *
+     * @since 1.2.0
      */
-    public void drawHorizontalItem(Graphics2D g2,
-                                   CategoryItemRendererState state,
-                                   Rectangle2D dataArea,
-                                   CategoryPlot plot,
-                                   CategoryAxis domainAxis,
-                                   ValueAxis rangeAxis,
-                                   CategoryDataset dataset,
-                                   int row,
-                                   int column) {
+    protected void drawHorizontalItem(Graphics2D g2,
+            CategoryItemRendererState state, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            CategoryDataset dataset, int row, int column, boolean selected,
+            int pass) {
 
         BoxAndWhiskerCategoryDataset bawDataset
                 = (BoxAndWhiskerCategoryDataset) dataset;
@@ -561,8 +555,8 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             yy = yy + offset;
         }
 
-        g2.setPaint(getItemPaint(row, column));
-        Stroke s = getItemStroke(row, column);
+        g2.setPaint(getItemPaint(row, column, selected));
+        Stroke s = getItemStroke(row, column, selected);
         g2.setStroke(s);
 
         RectangleEdge location = plot.getRangeAxisEdge();
@@ -601,8 +595,8 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             if (this.fillBox) {
                 g2.fill(box);
             }
-            g2.setStroke(getItemOutlineStroke(row, column));
-            g2.setPaint(getItemOutlinePaint(row, column));
+            g2.setStroke(getItemOutlineStroke(row, column, selected));
+            g2.setPaint(getItemOutlinePaint(row, column, selected));
             g2.draw(box);
         }
 
@@ -642,7 +636,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
         if (state.getInfo() != null && box != null) {
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                addItemEntity(entities, dataset, row, column, box);
+                addEntity(entities, box, dataset, row, column, selected);
             }
         }
 
@@ -663,16 +657,16 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
      *                 {@link BoxAndWhiskerCategoryDataset}).
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
+     * @param pass  the number of the current pass.
+     *
+     * @since 1.2.0
      */
-    public void drawVerticalItem(Graphics2D g2,
-                                 CategoryItemRendererState state,
-                                 Rectangle2D dataArea,
-                                 CategoryPlot plot,
-                                 CategoryAxis domainAxis,
-                                 ValueAxis rangeAxis,
-                                 CategoryDataset dataset,
-                                 int row,
-                                 int column) {
+    protected void drawVerticalItem(Graphics2D g2,
+            CategoryItemRendererState state, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            CategoryDataset dataset, int row, int column, boolean selected,
+            int pass) {
 
         BoxAndWhiskerCategoryDataset bawDataset
                 = (BoxAndWhiskerCategoryDataset) dataset;
@@ -707,9 +701,9 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
         double yyAverage = 0.0;
         double yyOutlier;
 
-        Paint itemPaint = getItemPaint(row, column);
+        Paint itemPaint = getItemPaint(row, column, selected);
         g2.setPaint(itemPaint);
-        Stroke s = getItemStroke(row, column);
+        Stroke s = getItemStroke(row, column, selected);
         g2.setStroke(s);
 
         double aRadius = 0;                 // average radius
@@ -749,8 +743,8 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             if (this.fillBox) {
                 g2.fill(box);
             }
-            g2.setStroke(getItemOutlineStroke(row, column));
-            g2.setPaint(getItemOutlinePaint(row, column));
+            g2.setStroke(getItemOutlineStroke(row, column, selected));
+            g2.setPaint(getItemOutlinePaint(row, column, selected));
             g2.draw(box);
         }
 
@@ -870,7 +864,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
         if (state.getInfo() != null && box != null) {
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                addItemEntity(entities, dataset, row, column, box);
+                addEntity(entities, box, dataset, row, column, selected);
             }
         }
 

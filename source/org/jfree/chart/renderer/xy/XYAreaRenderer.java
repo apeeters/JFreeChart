@@ -105,9 +105,9 @@ import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.XYSeriesLabelGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.XYCrosshairState;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.chart.util.GradientPaintTransformer;
@@ -477,7 +477,6 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color information
      *              etc).
      * @param domainAxis  the domain axis.
@@ -485,14 +484,12 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
     public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset,
+            int series, int item, boolean selected, int pass) {
 
         if (!getItemVisible(series, item)) {
             return;
@@ -585,14 +582,14 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
         }
 
         PlotOrientation orientation = plot.getOrientation();
-        Paint paint = getItemPaint(series, item);
-        Stroke stroke = getItemStroke(series, item);
+        Paint paint = getItemPaint(series, item, selected);
+        Stroke stroke = getItemStroke(series, item, selected);
         g2.setPaint(paint);
         g2.setStroke(stroke);
 
         Shape shape = null;
         if (getPlotShapes()) {
-            shape = getItemShape(series, item);
+            shape = getItemShape(series, item, selected);
             if (orientation == PlotOrientation.VERTICAL) {
                 shape = ShapeUtilities.createTranslatedShape(shape, transX1,
                         transY1);
@@ -674,13 +671,15 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
 
         int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
         int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);
+        XYCrosshairState crosshairState = state.getCrosshairState();
         updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,
                 rangeAxisIndex, transX1, transY1, orientation);
 
         // collect entity and tool tip information...
         EntityCollection entities = state.getEntityCollection();
         if (entities != null && hotspot != null) {
-            addEntity(entities, hotspot, dataset, series, item, 0.0, 0.0);
+            addEntity(entities, hotspot, dataset, series, item, selected,
+                    0.0, 0.0);
         }
 
     }

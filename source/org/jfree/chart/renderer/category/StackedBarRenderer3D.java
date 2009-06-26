@@ -389,16 +389,10 @@ public class StackedBarRenderer3D extends BarRenderer3D
      * @param column  the column index (zero-based).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         // wait till we are at the last item for the row then draw the
         // whole stack at once
@@ -489,7 +483,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
 
             Shape[] faces = createHorizontalBlock(barX0, barW, vv0, vv1,
                     inverted);
-            Paint fillPaint = getItemPaint(series, column);
+            Paint fillPaint = getItemPaint(series, column, false);
             Paint fillPaintDark = fillPaint;
             if (fillPaintDark instanceof Color) {
                 fillPaintDark = ((Color) fillPaint).darker();
@@ -497,8 +491,8 @@ public class StackedBarRenderer3D extends BarRenderer3D
             boolean drawOutlines = isDrawBarOutline();
             Paint outlinePaint = fillPaint;
             if (drawOutlines) {
-                outlinePaint = getItemOutlinePaint(series, column);
-                g2.setStroke(getItemOutlineStroke(series, column));
+                outlinePaint = getItemOutlinePaint(series, column, false);
+                g2.setStroke(getItemOutlineStroke(series, column, false));
             }
             for (int f = 0; f < 6; f++) {
                 if (f == 5) {
@@ -521,7 +515,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                addItemEntity(entities, dataset, series, column, faces[5]);
+                addEntity(entities, faces[5], dataset, series, column, false);
             }
 
         }
@@ -531,11 +525,12 @@ public class StackedBarRenderer3D extends BarRenderer3D
             int series = ((Integer) record[0]).intValue();
             Rectangle2D bar = (Rectangle2D) record[1];
             boolean neg = ((Boolean) record[2]).booleanValue();
-            CategoryItemLabelGenerator generator
-                    = getItemLabelGenerator(series, column);
-            if (generator != null && isItemLabelVisible(series, column)) {
-                drawItemLabel(g2, dataset, series, column, plot, generator,
-                        bar, neg);
+            CategoryItemLabelGenerator generator = getItemLabelGenerator(
+                    series, column, false);
+            if (generator != null && isItemLabelVisible(series, column,
+                    false)) {
+                drawItemLabelForBar(g2, plot, dataset, series, column, false,
+                        generator, bar, neg);
             }
 
         }
@@ -648,6 +643,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
             CategoryAxis domainAxis, ValueAxis rangeAxis,
             CategoryDataset dataset) {
 
+        // FIXME: how to handle selections?
         int column = dataset.getColumnIndex(category);
         double barX0 = domainAxis.getCategoryMiddle(column,
                 dataset.getColumnCount(), dataArea, plot.getDomainAxisEdge())
@@ -685,7 +681,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
 
             Shape[] faces = createVerticalBlock(barX0, barW, vv0, vv1,
                     inverted);
-            Paint fillPaint = getItemPaint(series, column);
+            Paint fillPaint = getItemPaint(series, column, false);
             Paint fillPaintDark = fillPaint;
             if (fillPaintDark instanceof Color) {
                 fillPaintDark = ((Color) fillPaint).darker();
@@ -693,8 +689,8 @@ public class StackedBarRenderer3D extends BarRenderer3D
             boolean drawOutlines = isDrawBarOutline();
             Paint outlinePaint = fillPaint;
             if (drawOutlines) {
-                outlinePaint = getItemOutlinePaint(series, column);
-                g2.setStroke(getItemOutlineStroke(series, column));
+                outlinePaint = getItemOutlinePaint(series, column, false);
+                g2.setStroke(getItemOutlineStroke(series, column, false));
             }
 
             for (int f = 0; f < 6; f++) {
@@ -718,7 +714,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                addItemEntity(entities, dataset, series, column, faces[5]);
+                addEntity(entities, faces[5], dataset, series, column, false);
             }
 
         }
@@ -728,11 +724,12 @@ public class StackedBarRenderer3D extends BarRenderer3D
             int series = ((Integer) record[0]).intValue();
             Rectangle2D bar = (Rectangle2D) record[1];
             boolean neg = ((Boolean) record[2]).booleanValue();
-            CategoryItemLabelGenerator generator
-                    = getItemLabelGenerator(series, column);
-            if (generator != null && isItemLabelVisible(series, column)) {
-                drawItemLabel(g2, dataset, series, column, plot, generator,
-                        bar, neg);
+            CategoryItemLabelGenerator generator = getItemLabelGenerator(
+                    series, column, false);
+            if (generator != null && isItemLabelVisible(series, column,
+                    false)) {
+                drawItemLabelForBar(g2, plot, dataset, series, column, false,
+                        generator, bar, neg);
             }
 
         }

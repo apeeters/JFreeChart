@@ -50,7 +50,9 @@ package org.jfree.chart.renderer.xy;
 
 import java.awt.geom.Line2D;
 
+import org.jfree.chart.plot.CategoryCrosshairState;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.XYCrosshairState;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.RendererState;
 import org.jfree.data.xy.XYDataset;
@@ -89,6 +91,13 @@ public class XYItemRendererState extends RendererState {
     private boolean processVisibleItemsOnly;
 
     /**
+     * The crosshair state (possibly <code>null</code>).
+     * 
+     * @since 1.2.0
+     */
+    private XYCrosshairState crosshairState;
+
+    /**
      * Creates a new state.
      *
      * @param info  the plot rendering info.
@@ -97,6 +106,7 @@ public class XYItemRendererState extends RendererState {
         super(info);
         this.workingLine = new Line2D.Double();
         this.processVisibleItemsOnly = true;
+        this.crosshairState = null;
     }
 
     /**
@@ -148,6 +158,32 @@ public class XYItemRendererState extends RendererState {
      */
     public int getLastItemIndex() {
         return this.lastItemIndex;
+    }
+
+    /**
+     * Returns the crosshair state, if any.
+     *
+     * @return The crosshair state (possibly <code>null</code>).
+     *
+     * @since 1.2.0
+     *
+     * @see #setCrosshairState(XYCrosshairState)
+     */
+    public XYCrosshairState getCrosshairState() {
+        return this.crosshairState;
+    }
+
+    /**
+     * Sets the crosshair state.
+     *
+     * @param state  the new state (<code>null</code> permitted).
+     *
+     * @since 1.2.0
+     *
+     * @see #getCrosshairState()
+     */
+    public void setCrosshairState(XYCrosshairState state) {
+        this.crosshairState = state;
     }
 
     /**

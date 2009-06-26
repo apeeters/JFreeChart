@@ -134,25 +134,19 @@ public class IntervalBarRenderer extends BarRenderer {
      * @param column  the column index (zero-based).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
          if (dataset instanceof IntervalCategoryDataset) {
              IntervalCategoryDataset d = (IntervalCategoryDataset) dataset;
              drawInterval(g2, state, dataArea, plot, domainAxis, rangeAxis,
-                     d, row, column);
+                     d, row, column, selected);
          }
          else {
              super.drawItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
-                     dataset, row, column, pass);
+                     dataset, row, column, selected, pass);
          }
 
      }
@@ -169,16 +163,15 @@ public class IntervalBarRenderer extends BarRenderer {
       * @param dataset  the data.
       * @param row  the row index (zero-based).
       * @param column  the column index (zero-based).
+      * @param selected  is the item selected?
+      *
+      * @since 1.2.0
       */
-     protected void drawInterval(Graphics2D g2,
-                                 CategoryItemRendererState state,
-                                 Rectangle2D dataArea,
-                                 CategoryPlot plot,
-                                 CategoryAxis domainAxis,
-                                 ValueAxis rangeAxis,
-                                 IntervalCategoryDataset dataset,
-                                 int row,
-                                 int column) {
+     protected void drawInterval(Graphics2D g2, 
+             CategoryItemRendererState state, Rectangle2D dataArea,
+             CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+             IntervalCategoryDataset dataset, int row, int column,
+             boolean selected) {
 
         int visibleRow = state.getVisibleSeriesIndex(row);
         if (visibleRow < 0) {
@@ -266,21 +259,22 @@ public class IntervalBarRenderer extends BarRenderer {
                 rectHeight);
         BarPainter painter = getBarPainter();
         if (getShadowsVisible()) {
-            painter.paintBarShadow(g2, this, row, column, bar, barBase, false);
+            painter.paintBarShadow(g2, this, row, column, selected, bar,
+                    barBase, false);
         }
-        getBarPainter().paintBar(g2, this, row, column, bar, barBase);
+        getBarPainter().paintBar(g2, this, row, column, selected, bar, barBase);
 
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
-                column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                    false);
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                    generator, bar, false);
         }
 
         // add an item entity, if this information is being collected
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, bar);
+            addEntity(entities, bar, dataset, row, column, selected);
         }
 
     }

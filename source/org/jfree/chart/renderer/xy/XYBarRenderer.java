@@ -121,9 +121,9 @@ import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.labels.XYSeriesLabelGenerator;
-import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.XYCrosshairState;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.text.TextUtilities;
 import org.jfree.chart.util.GradientPaintTransformer;
@@ -786,7 +786,6 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the plot is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -794,22 +793,12 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         if (!getItemVisible(series, item)) {
             return;
@@ -927,16 +916,17 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             }
         }
         if (getShadowsVisible()) {
-            this.barPainter.paintBarShadow(g2, this, series, item, bar, barBase,
-                !this.useYInterval);
+            this.barPainter.paintBarShadow(g2, this, series, item, selected, 
+                    bar, barBase, !this.useYInterval);
         }
-        this.barPainter.paintBar(g2, this, series, item, bar, barBase);
+        this.barPainter.paintBar(g2, this, series, item, selected, bar,
+                barBase);
 
-        if (isItemLabelVisible(series, item)) {
+        if (isItemLabelVisible(series, item, selected)) {
             XYItemLabelGenerator generator = getItemLabelGenerator(series,
-                    item);
-            drawItemLabel(g2, dataset, series, item, plot, generator, bar,
-                    value1 < 0.0);
+                    item, selected);
+            drawItemLabelForBar(g2, plot, dataset, series, item, selected,
+                    generator, bar, value1 < 0.0);
         }
 
         // update the crosshair point
@@ -947,12 +937,14 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                 plot.getRangeAxisEdge());
         int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
         int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);
+        XYCrosshairState crosshairState = state.getCrosshairState();
         updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,
                 rangeAxisIndex, transX1, transY1, plot.getOrientation());
 
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addEntity(entities, bar, dataset, series, item, 0.0, 0.0);
+            addEntity(entities, bar, dataset, series, item, selected, 0.0,
+                    0.0);
         }
 
     }
@@ -967,15 +959,19 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index.
      * @param item  the item index.
+     * @param selected  is the data item selected?
      * @param plot  the plot.
      * @param generator  the label generator (<code>null</code> permitted, in
      *         which case the method does nothing, just returns).
      * @param bar  the bar.
      * @param negative  a flag indicating a negative value.
+     *
+     * @since 1.2.0
      */
-    protected void drawItemLabel(Graphics2D g2, XYDataset dataset,
-            int series, int item, XYPlot plot, XYItemLabelGenerator generator,
-            Rectangle2D bar, boolean negative) {
+    protected void drawItemLabelForBar(Graphics2D g2, XYPlot plot,
+            XYDataset dataset, int series, int item, boolean selected,
+            XYItemLabelGenerator generator, Rectangle2D bar,
+            boolean negative) {
 
         if (generator == null) {
             return;  // nothing to do
@@ -985,18 +981,18 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             return;  // nothing to do
         }
 
-        Font labelFont = getItemLabelFont(series, item);
+        Font labelFont = getItemLabelFont(series, item, selected);
         g2.setFont(labelFont);
-        Paint paint = getItemLabelPaint(series, item);
+        Paint paint = getItemLabelPaint(series, item, selected);
         g2.setPaint(paint);
 
         // find out where to place the label...
         ItemLabelPosition position = null;
         if (!negative) {
-            position = getPositiveItemLabelPosition(series, item);
+            position = getPositiveItemLabelPosition(series, item, selected);
         }
         else {
-            position = getNegativeItemLabelPosition(series, item);
+            position = getNegativeItemLabelPosition(series, item, selected);
         }
 
         // work out the label anchor point...

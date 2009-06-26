@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * XYStepAreaRenderer.java
  * -----------------------
- * (C) Copyright 2003-2008, by Matthias Rose and Contributors.
+ * (C) Copyright 2003-2009, by Matthias Rose and Contributors.
  *
  * Original Author:  Matthias Rose (based on XYAreaRenderer.java);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -67,9 +67,9 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.XYCrosshairState;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.chart.util.PublicCloneable;
@@ -336,7 +336,6 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color information
      *              etc).
      * @param domainAxis  the domain axis.
@@ -344,22 +343,12 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         PlotOrientation orientation = plot.getOrientation();
 
@@ -367,8 +356,8 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
         // end of the series.
         int itemCount = dataset.getItemCount(series);
 
-        Paint paint = getItemPaint(series, item);
-        Stroke seriesStroke = getItemStroke(series, item);
+        Paint paint = getItemPaint(series, item, selected);
+        Stroke seriesStroke = getItemStroke(series, item, selected);
         g2.setPaint(paint);
         g2.setStroke(seriesStroke);
 
@@ -455,7 +444,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
             }
 
             if (getShapesVisible()) {
-                shape = getItemShape(series, item);
+                shape = getItemShape(series, item, selected);
                 if (orientation == PlotOrientation.VERTICAL) {
                     shape = ShapeUtilities.createTranslatedShape(shape,
                             transX1, transY1);
@@ -522,6 +511,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
         if (!Double.isNaN(y1)) {
             int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
             int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);
+            XYCrosshairState crosshairState = state.getCrosshairState();
             updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,
                     rangeAxisIndex, transX1, transY1, orientation);
         }
@@ -529,7 +519,8 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
         // collect entity and tool tip information...
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addEntity(entities, shape, dataset, series, item, transX1, transY1);
+            addEntity(entities, shape, dataset, series, item, selected,
+                    transX1, transY1);
         }
     }
 

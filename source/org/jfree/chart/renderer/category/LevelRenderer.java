@@ -303,12 +303,13 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
      * @param pass  the pass index.
      */
     public void drawItem(Graphics2D g2, CategoryItemRendererState state,
             Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
             ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
-            int pass) {
+            boolean selected, int pass) {
 
         // nothing is drawn if the row index is not included in the list with
         // the indices of the visible rows...
@@ -347,17 +348,17 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
             line = new Line2D.Double(barW0, barL, barW0 + state.getBarWidth(),
                     barL);
         }
-        Stroke itemStroke = getItemStroke(row, column);
-        Paint itemPaint = getItemPaint(row, column);
+        Stroke itemStroke = getItemStroke(row, column, selected);
+        Paint itemPaint = getItemPaint(row, column, selected);
         g2.setStroke(itemStroke);
         g2.setPaint(itemPaint);
         g2.draw(line);
 
         CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
-                column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, orientation, dataset, row, column, x, y,
-                    (value < 0.0));
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabel(g2, orientation, dataset, row, column, selected, x,
+                    y, (value < 0.0));
         }
 
         // submit the current data point as a crosshair candidate
@@ -369,7 +370,8 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
         // collect entity and tool tip information...
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, line.getBounds());
+            addEntity(entities, line.getBounds(),dataset, row, column,
+                    selected);
         }
 
     }

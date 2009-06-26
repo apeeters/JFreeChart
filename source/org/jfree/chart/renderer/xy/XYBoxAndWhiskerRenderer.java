@@ -310,7 +310,7 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
         else {
             // TODO: could change this to itemFillPaint().  For backwards
             // compatibility, it might require a useFillPaint flag.
-            return getItemPaint(series, item);
+            return getItemPaint(series, item, false);
         }
     }
 
@@ -320,7 +320,6 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the plot is being drawn.
-     * @param info  collects info about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -329,32 +328,22 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      *                 {@link BoxAndWhiskerXYDataset}).
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         PlotOrientation orientation = plot.getOrientation();
 
         if (orientation == PlotOrientation.HORIZONTAL) {
-            drawHorizontalItem(g2, dataArea, info, plot, domainAxis, rangeAxis,
-                    dataset, series, item, crosshairState, pass);
+            drawHorizontalItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
+                    dataset, series, item, selected, pass);
         }
         else if (orientation == PlotOrientation.VERTICAL) {
-            drawVerticalItem(g2, dataArea, info, plot, domainAxis, rangeAxis,
-                    dataset, series, item, crosshairState, pass);
+            drawVerticalItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
+                    dataset, series, item, selected, pass);
         }
 
     }
@@ -363,8 +352,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      * Draws the visual representation of a single data item.
      *
      * @param g2  the graphics device.
+     * @param state  the rendering state.
      * @param dataArea  the area within which the plot is being drawn.
-     * @param info  collects info about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -373,26 +362,20 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      *                 {@link BoxAndWhiskerXYDataset}).
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
+     * @param selected  is the data item selected?
      * @param pass  the pass index.
+     *
+     * @since 1.2.0
      */
-    public void drawHorizontalItem(Graphics2D g2,
-                                   Rectangle2D dataArea,
-                                   PlotRenderingInfo info,
-                                   XYPlot plot,
-                                   ValueAxis domainAxis,
-                                   ValueAxis rangeAxis,
-                                   XYDataset dataset,
-                                   int series,
-                                   int item,
-                                   CrosshairState crosshairState,
-                                   int pass) {
+    protected void drawHorizontalItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         // setup for collecting optional entity info...
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+        if (state.getInfo() != null) {
+            entities = state.getInfo().getOwner().getEntityCollection();
         }
 
         BoxAndWhiskerXYDataset boxAndWhiskerData
@@ -445,8 +428,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
             }
         }
 
-        g2.setPaint(getItemPaint(series, item));
-        Stroke s = getItemStroke(series, item);
+        g2.setPaint(getItemPaint(series, item, selected));
+        Stroke s = getItemStroke(series, item, selected);
         g2.setStroke(s);
 
         // draw the upper shadow
@@ -473,8 +456,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
             g2.setPaint(lookupBoxPaint(series, item));
             g2.fill(box);
         }
-        g2.setStroke(getItemOutlineStroke(series, item));
-        g2.setPaint(getItemOutlinePaint(series, item));
+        g2.setStroke(getItemOutlineStroke(series, item, selected));
+        g2.setPaint(getItemOutlinePaint(series, item, selected));
         g2.draw(box);
 
         // draw median
@@ -501,7 +484,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
 
         // add an entity for the item...
         if (entities != null && box.intersects(dataArea)) {
-            addEntity(entities, box, dataset, series, item, yyAverage, xx);
+            addEntity(entities, box, dataset, series, item, selected,
+                    yyAverage, xx);
         }
 
     }
@@ -510,8 +494,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      * Draws the visual representation of a single data item.
      *
      * @param g2  the graphics device.
+     * @param state  the rendering state.
      * @param dataArea  the area within which the plot is being drawn.
-     * @param info  collects info about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -520,26 +504,18 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      *                 {@link BoxAndWhiskerXYDataset}).
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
+     * @param selected  is the data item selected?
      * @param pass  the pass index.
      */
-    public void drawVerticalItem(Graphics2D g2,
-                                 Rectangle2D dataArea,
-                                 PlotRenderingInfo info,
-                                 XYPlot plot,
-                                 ValueAxis domainAxis,
-                                 ValueAxis rangeAxis,
-                                 XYDataset dataset,
-                                 int series,
-                                 int item,
-                                 CrosshairState crosshairState,
-                                 int pass) {
+    protected void drawVerticalItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         // setup for collecting optional entity info...
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+        if (state.getInfo() != null) {
+            entities = state.getInfo().getOwner().getEntityCollection();
         }
 
         BoxAndWhiskerXYDataset boxAndWhiskerData
@@ -595,8 +571,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
             }
         }
 
-        g2.setPaint(getItemPaint(series, item));
-        Stroke s = getItemStroke(series, item);
+        g2.setPaint(getItemPaint(series, item, selected));
+        Stroke s = getItemStroke(series, item, selected);
         g2.setStroke(s);
 
         // draw the upper shadow
@@ -623,8 +599,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
             g2.setPaint(lookupBoxPaint(series, item));
             g2.fill(box);
         }
-        g2.setStroke(getItemOutlineStroke(series, item));
-        g2.setPaint(getItemOutlinePaint(series, item));
+        g2.setStroke(getItemOutlineStroke(series, item, selected));
+        g2.setPaint(getItemOutlinePaint(series, item, selected));
         g2.draw(box);
 
         // draw median
@@ -722,7 +698,8 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
 
         // add an entity for the item...
         if (entities != null && box.intersects(dataArea)) {
-            addEntity(entities, box, dataset, series, item, xx, yyAverage);
+            addEntity(entities, box, dataset, series, item, selected, xx,
+                    yyAverage);
         }
 
     }

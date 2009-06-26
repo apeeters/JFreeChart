@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * XYAreaRenderer2.java
  * --------------------
- * (C) Copyright 2004-2008, by Hari and Contributors.
+ * (C) Copyright 2004-2009, by Hari and Contributors.
  *
  * Original Author:  Hari (ourhari@hotmail.com);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -100,9 +100,8 @@ import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.XYSeriesLabelGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.XYCrosshairState;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.chart.util.PublicCloneable;
@@ -267,7 +266,6 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -275,22 +273,12 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series,
+            int item, boolean selected, int pass) {
 
         if (!getItemVisible(series, item)) {
             return;
@@ -361,8 +349,8 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
         }
 
         PlotOrientation orientation = plot.getOrientation();
-        Paint paint = getItemPaint(series, item);
-        Stroke stroke = getItemStroke(series, item);
+        Paint paint = getItemPaint(series, item, selected);
+        Stroke stroke = getItemStroke(series, item, selected);
         g2.setPaint(paint);
         g2.setStroke(stroke);
 
@@ -378,12 +366,14 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
         }
         int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
         int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);
+        XYCrosshairState crosshairState = state.getCrosshairState();
         updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,
                 rangeAxisIndex, transX1, transY1, orientation);
 
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addEntity(entities, hotspot, dataset, series, item, 0.0, 0.0);
+            addEntity(entities, hotspot, dataset, series, item, selected,
+                    0.0, 0.0);
         }
 
     }

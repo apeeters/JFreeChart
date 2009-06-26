@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------
  * StandardXYBarPainter.java
  * -------------------------
- * (C) Copyright 2008, by Object Refinery Limited.
+ * (C) Copyright 2008, 2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -76,14 +76,18 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
      * @param renderer  the renderer.
      * @param row  the row index.
      * @param column  the column index.
+     * @param selected  is the data item selected?
      * @param bar  the bar
      * @param base  indicates which side of the rectangle is the base of the
      *              bar.
+     *
+     * @since 1.2.0
      */
     public void paintBar(Graphics2D g2, XYBarRenderer renderer, int row,
-            int column, RectangularShape bar, RectangleEdge base) {
+            int column, boolean selected, RectangularShape bar,
+            RectangleEdge base) {
 
-        Paint itemPaint = renderer.getItemPaint(row, column);
+        Paint itemPaint = renderer.getItemPaint(row, column, selected);
         GradientPaintTransformer t = renderer.getGradientPaintTransformer();
         if (t != null && itemPaint instanceof GradientPaint) {
             itemPaint = t.transform((GradientPaint) itemPaint, bar);
@@ -94,8 +98,9 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
         // draw the outline...
         if (renderer.isDrawBarOutline()) {
                // && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-            Stroke stroke = renderer.getItemOutlineStroke(row, column);
-            Paint paint = renderer.getItemOutlinePaint(row, column);
+            Stroke stroke = renderer.getItemOutlineStroke(row, column,
+                    selected);
+            Paint paint = renderer.getItemOutlinePaint(row, column, selected);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
@@ -112,18 +117,21 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
      * @param renderer  the renderer.
      * @param row  the row index.
      * @param column  the column index.
-     * @param bar  the bar
+     * @param selected  is the data item selected?
+     * @param bar  the bar.
      * @param base  indicates which side of the rectangle is the base of the
      *              bar.
      * @param pegShadow  peg the shadow to the base of the bar?
+     *
+     * @since 1.2.0
      */
     public void paintBarShadow(Graphics2D g2, XYBarRenderer renderer, int row,
-            int column, RectangularShape bar, RectangleEdge base,
-            boolean pegShadow) {
+            int column, boolean selected, RectangularShape bar,
+            RectangleEdge base, boolean pegShadow) {
 
         // handle a special case - if the bar colour has alpha == 0, it is
         // invisible so we shouldn't draw any shadow
-        Paint itemPaint = renderer.getItemPaint(row, column);
+        Paint itemPaint = renderer.getItemPaint(row, column, selected);
         if (itemPaint instanceof Color) {
             Color c = (Color) itemPaint;
             if (c.getAlpha() == 0) {

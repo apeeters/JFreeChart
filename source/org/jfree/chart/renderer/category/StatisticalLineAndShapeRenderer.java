@@ -219,16 +219,10 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
      * @param column  the column index (zero-based).
      * @param pass  the pass.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         // do nothing if item is not visible
         if (!getItemVisible(row, column)) {
@@ -239,7 +233,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
         // to the superclass (LineAndShapeRenderer) behaviour...
         if (!(dataset instanceof StatisticalCategoryDataset)) {
             super.drawItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
-                    dataset, row, column, pass);
+                    dataset, row, column, selected, pass);
             return;
         }
 
@@ -307,13 +301,13 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
                 g2.setPaint(this.errorIndicatorPaint);
             }
             else {
-                g2.setPaint(getItemPaint(row, column));
+                g2.setPaint(getItemPaint(row, column, selected));
             }
             if (this.errorIndicatorStroke != null) {
                 g2.setStroke(this.errorIndicatorStroke);
             }
             else {
-                g2.setStroke(getItemOutlineStroke(row, column));
+                g2.setStroke(getItemOutlineStroke(row, column, selected));
             }
             Line2D line = new Line2D.Double();
             if (orientation == PlotOrientation.HORIZONTAL) {
@@ -337,7 +331,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
 
         Shape hotspot = null;
         if (pass == 1 && getItemShapeVisible(row, column)) {
-            Shape shape = getItemShape(row, column);
+            Shape shape = getItemShape(row, column, selected);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtilities.createTranslatedShape(shape, y1, x1);
             }
@@ -348,32 +342,32 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
 
             if (getItemShapeFilled(row, column)) {
                 if (getUseFillPaint()) {
-                    g2.setPaint(getItemFillPaint(row, column));
+                    g2.setPaint(getItemFillPaint(row, column, selected));
                 }
                 else {
-                    g2.setPaint(getItemPaint(row, column));
+                    g2.setPaint(getItemPaint(row, column, selected));
                 }
                 g2.fill(shape);
             }
             if (getDrawOutlines()) {
                 if (getUseOutlinePaint()) {
-                    g2.setPaint(getItemOutlinePaint(row, column));
+                    g2.setPaint(getItemOutlinePaint(row, column, selected));
                 }
                 else {
-                    g2.setPaint(getItemPaint(row, column));
+                    g2.setPaint(getItemPaint(row, column, selected));
                 }
-                g2.setStroke(getItemOutlineStroke(row, column));
+                g2.setStroke(getItemOutlineStroke(row, column, selected));
                 g2.draw(shape);
             }
             // draw the item label if there is one...
-            if (isItemLabelVisible(row, column)) {
+            if (isItemLabelVisible(row, column, selected)) {
                 if (orientation == PlotOrientation.HORIZONTAL) {
                     drawItemLabel(g2, orientation, dataset, row, column,
-                            y1, x1, (meanValue.doubleValue() < 0.0));
+                            selected, y1, x1, (meanValue.doubleValue() < 0.0));
                 }
                 else if (orientation == PlotOrientation.VERTICAL) {
                     drawItemLabel(g2, orientation, dataset, row, column,
-                            x1, y1, (meanValue.doubleValue() < 0.0));
+                            selected, x1, y1, (meanValue.doubleValue() < 0.0));
                 }
             }
         }
@@ -409,8 +403,8 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
                     else if (orientation == PlotOrientation.VERTICAL) {
                         line = new Line2D.Double(x0, y0, x1, y1);
                     }
-                    g2.setPaint(getItemPaint(row, column));
-                    g2.setStroke(getItemStroke(row, column));
+                    g2.setPaint(getItemPaint(row, column, selected));
+                    g2.setStroke(getItemStroke(row, column, selected));
                     g2.draw(line);
                 }
             }
@@ -420,7 +414,8 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                addEntity(entities, hotspot, dataset, row, column, x1, y1);
+                addEntity(entities, hotspot, dataset, row, column, selected,
+                        x1, y1);
             }
         }
 

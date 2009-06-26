@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -723,7 +723,6 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -731,22 +730,15 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
+     * @param selected  is the data item selected?
      * @param pass  the pass index.
+     *
+     * @since 1.2.0
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         // do nothing if item is not visible
         if (!getItemVisible(series, item)) {
@@ -758,11 +750,12 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
             if (getItemLineVisible(series, item)) {
                 if (this.drawSeriesLineAsPath) {
                     drawPrimaryLineAsPath(state, g2, plot, dataset, pass,
-                            series, item, domainAxis, rangeAxis, dataArea);
+                            series, item, selected, domainAxis, rangeAxis,
+                            dataArea);
                 }
                 else {
                     drawPrimaryLine(state, g2, plot, dataset, pass, series,
-                            item, domainAxis, rangeAxis, dataArea);
+                            item, selected, domainAxis, rangeAxis, dataArea);
                 }
             }
         }
@@ -771,12 +764,12 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
 
             // setup for collecting optional entity info...
             EntityCollection entities = null;
-            if (info != null) {
-                entities = info.getOwner().getEntityCollection();
+            if (state.getInfo() != null) {
+                entities = state.getInfo().getOwner().getEntityCollection();
             }
 
-            drawSecondaryPass(g2, plot, dataset, pass, series, item,
-                    domainAxis, dataArea, rangeAxis, crosshairState, entities);
+            drawShape2(g2, dataArea, plot, dataset, pass, series, item,
+                    selected, domainAxis, rangeAxis, null, entities);
         }
     }
 
@@ -810,26 +803,24 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      *
      * @param g2  the graphics device.
      * @param state  the renderer state.
-     * @param dataArea  the area within which the data is being drawn.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
-     * @param domainAxis  the domain axis.
-     * @param rangeAxis  the range axis.
      * @param dataset  the dataset.
      * @param pass  the pass.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param selected  is the data item selected?
+     * @param dataArea  the area within which the data is being drawn.
+     * @param domainAxis  the domain axis.
+     * @param rangeAxis  the range axis.
+     *
+     * @since 1.2.0
      */
-    protected void drawPrimaryLine(XYItemRendererState state,
-                                   Graphics2D g2,
-                                   XYPlot plot,
-                                   XYDataset dataset,
-                                   int pass,
-                                   int series,
-                                   int item,
-                                   ValueAxis domainAxis,
-                                   ValueAxis rangeAxis,
-                                   Rectangle2D dataArea) {
+    protected void drawPrimaryLine(XYItemRendererState state, Graphics2D g2,
+            XYPlot plot, XYDataset dataset, int pass, int series, int item,
+            boolean selected, ValueAxis domainAxis, ValueAxis rangeAxis,
+            Rectangle2D dataArea) {
+        
         if (item == 0) {
             return;
         }
@@ -872,23 +863,26 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         }
         visible = LineUtilities.clipLine(state.workingLine, dataArea);
         if (visible) {
-            drawFirstPassShape(g2, pass, series, item, state.workingLine);
+            drawShape1(g2, pass, series, item, selected, state.workingLine);
         }
     }
 
     /**
-     * Draws the first pass shape.
+     * Draws a shape (first pass).
      *
      * @param g2  the graphics device.
      * @param pass  the pass.
      * @param series  the series index.
      * @param item  the item index.
+     * @param selected  is the data item selected?
      * @param shape  the shape.
+     *
+     * @since 1.2.0
      */
-    protected void drawFirstPassShape(Graphics2D g2, int pass, int series,
-                                      int item, Shape shape) {
-        g2.setStroke(getItemStroke(series, item));
-        g2.setPaint(getItemPaint(series, item));
+    protected void drawShape1(Graphics2D g2, int pass, int series,
+            int item, boolean selected, Shape shape) {
+        g2.setStroke(getItemStroke(series, item, selected));
+        g2.setPaint(getItemPaint(series, item, selected));
         g2.draw(shape);
     }
 
@@ -907,19 +901,17 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      * @param pass  the pass.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param selected  is the data item selected?
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
      * @param dataArea  the area within which the data is being drawn.
+     *
+     * @since 1.2.0
      */
     protected void drawPrimaryLineAsPath(XYItemRendererState state,
-                                         Graphics2D g2, XYPlot plot,
-                                         XYDataset dataset,
-                                         int pass,
-                                         int series,
-                                         int item,
-                                         ValueAxis domainAxis,
-                                         ValueAxis rangeAxis,
-                                         Rectangle2D dataArea) {
+            Graphics2D g2, XYPlot plot, XYDataset dataset, int pass,
+            int series, int item, boolean selected, ValueAxis domainAxis,
+            ValueAxis rangeAxis, Rectangle2D dataArea) {
 
 
         RectangleEdge xAxisLocation = plot.getDomainAxisEdge();
@@ -955,7 +947,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         // if this is the last item, draw the path ...
         if (item == s.getLastItemIndex()) {
             // draw path
-            drawFirstPassShape(g2, pass, series, item, s.seriesPath);
+            drawShape1(g2, pass, series, item, selected, s.seriesPath);
         }
     }
 
@@ -975,17 +967,14 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      * @param pass  the pass.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param selected  is the data item selected?
      * @param crosshairState  the crosshair state.
      * @param entities the entity collection.
      */
-    protected void drawSecondaryPass(Graphics2D g2, XYPlot plot,
-                                     XYDataset dataset,
-                                     int pass, int series, int item,
-                                     ValueAxis domainAxis,
-                                     Rectangle2D dataArea,
-                                     ValueAxis rangeAxis,
-                                     CrosshairState crosshairState,
-                                     EntityCollection entities) {
+    protected void drawShape2(Graphics2D g2, Rectangle2D dataArea,
+            XYPlot plot, XYDataset dataset, int pass, int series, int item,
+            boolean selected, ValueAxis domainAxis, ValueAxis rangeAxis,
+            CrosshairState crosshairState, EntityCollection entities) {
 
         Shape entityArea = null;
 
@@ -1003,7 +992,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         double transY1 = rangeAxis.valueToJava2D(y1, dataArea, yAxisLocation);
 
         if (getItemShapeVisible(series, item)) {
-            Shape shape = getItemShape(series, item);
+            Shape shape = getItemShape(series, item, selected);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtilities.createTranslatedShape(shape, transY1,
                         transX1);
@@ -1016,21 +1005,22 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
             if (shape.intersects(dataArea)) {
                 if (getItemShapeFilled(series, item)) {
                     if (this.useFillPaint) {
-                        g2.setPaint(getItemFillPaint(series, item));
+                        g2.setPaint(getItemFillPaint(series, item, selected));
                     }
                     else {
-                        g2.setPaint(getItemPaint(series, item));
+                        g2.setPaint(getItemPaint(series, item, selected));
                     }
                     g2.fill(shape);
                 }
                 if (this.drawOutlines) {
                     if (getUseOutlinePaint()) {
-                        g2.setPaint(getItemOutlinePaint(series, item));
+                        g2.setPaint(getItemOutlinePaint(series, item,
+                                selected));
                     }
                     else {
-                        g2.setPaint(getItemPaint(series, item));
+                        g2.setPaint(getItemPaint(series, item, selected));
                     }
-                    g2.setStroke(getItemOutlineStroke(series, item));
+                    g2.setStroke(getItemOutlineStroke(series, item, selected));
                     g2.draw(shape);
                 }
             }
@@ -1044,9 +1034,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         }
 
         // draw the item label if there is one...
-        if (isItemLabelVisible(series, item)) {
-            drawItemLabel(g2, orientation, dataset, series, item, xx, yy,
-                    (y1 < 0.0));
+        if (isItemLabelVisible(series, item, selected)) {
+            drawItemLabel(g2, orientation, dataset, series, item, selected, 
+                    xx, yy, (y1 < 0.0));
         }
 
         int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
@@ -1056,8 +1046,10 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
 
         // add an entity for the item, but only if it falls within the data
         // area...
-        if (entities != null && isPointInRect(dataArea, xx, yy)) {
-            addEntity(entities, entityArea, dataset, series, item, xx, yy);
+        if (entities != null 
+                && ShapeUtilities.isPointInRect(xx, yy, dataArea)) {
+            addEntity(entities, entityArea, dataset, series, item, selected,
+                    xx, yy);
         }
     }
 

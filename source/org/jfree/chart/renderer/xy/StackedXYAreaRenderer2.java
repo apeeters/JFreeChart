@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------
  * StackedXYAreaRenderer2.java
  * ---------------------------
- * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited), based on
  *                   the StackedXYAreaRenderer class by Richard Atkinson;
@@ -199,7 +199,6 @@ public class StackedXYAreaRenderer2 extends XYAreaRenderer2
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the data is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color information
      *              etc).
      * @param domainAxis  the domain axis.
@@ -207,27 +206,18 @@ public class StackedXYAreaRenderer2 extends XYAreaRenderer2
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  information about crosshairs on a plot.
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         // setup for collecting optional entity info...
         Shape entityArea = null;
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+        if (state.getInfo() != null) {
+            entities = state.getInfo().getOwner().getEntityCollection();
         }
 
         TableXYDataset tdataset = (TableXYDataset) dataset;
@@ -442,7 +432,7 @@ public class StackedXYAreaRenderer2 extends XYAreaRenderer2
         }
 
         //  Get series Paint and Stroke
-        Paint itemPaint = getItemPaint(series, item);
+        Paint itemPaint = getItemPaint(series, item, selected);
         if (pass == 0) {
             g2.setPaint(itemPaint);
             g2.fill(left);
@@ -454,7 +444,7 @@ public class StackedXYAreaRenderer2 extends XYAreaRenderer2
             GeneralPath gp = new GeneralPath(left);
             gp.append(right, false);
             entityArea = gp;
-            addEntity(entities, entityArea, dataset, series, item,
+            addEntity(entities, entityArea, dataset, series, item, selected,
                     transX1, transY1);
         }
 

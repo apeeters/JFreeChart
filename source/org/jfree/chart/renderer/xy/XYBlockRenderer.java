@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * XYBlockRenderer.java
  * --------------------
- * (C) Copyright 2006-2008, by Object Refinery Limited.
+ * (C) Copyright 2006-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -339,20 +339,18 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the state.
      * @param dataArea  the data area.
-     * @param info  the plot rendering info.
      * @param plot  the plot.
      * @param domainAxis  the x-axis.
      * @param rangeAxis  the y-axis.
      * @param dataset  the dataset.
      * @param series  the series index.
      * @param item  the item index.
-     * @param crosshairState  the crosshair state.
      * @param pass  the pass index.
      */
     public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         double x = dataset.getXValue(series, item);
         double y = dataset.getYValue(series, item);
@@ -388,7 +386,8 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
 
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addEntity(entities, block, dataset, series, item, 0.0, 0.0);
+            addEntity(entities, block, dataset, series, item, selected, 0.0,
+                    0.0);
         }
 
     }

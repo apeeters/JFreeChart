@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------
  * XYSplineRenderer.java
  * ---------------------
- * (C) Copyright 2007, 2008, by Klaus Rheinwald and Contributors.
+ * (C) Copyright 2007-2009, by Klaus Rheinwald and Contributors.
  *
  * Original Author:  Klaus Rheinwald;
  * Contributor(s):   Tobias von Petersdorff (tvp@math.umd.edu,
@@ -169,14 +169,15 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
      * @param pass  the pass.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param selected  is the item selected?
      * @param domainAxis  the domain axis.
      * @param rangeAxis  the range axis.
      * @param dataArea  the area within which the data is being drawn.
      */
     protected void drawPrimaryLineAsPath(XYItemRendererState state,
             Graphics2D g2, XYPlot plot, XYDataset dataset, int pass,
-            int series, int item, ValueAxis domainAxis, ValueAxis rangeAxis,
-            Rectangle2D dataArea) {
+            int series, int item, boolean selected, ValueAxis domainAxis,
+            ValueAxis rangeAxis, Rectangle2D dataArea) {
 
         RectangleEdge xAxisLocation = plot.getDomainAxisEdge();
         RectangleEdge yAxisLocation = plot.getRangeAxisEdge();
@@ -269,7 +270,7 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
                     }
                 }
                 // draw path
-                drawFirstPassShape(g2, pass, series, item, s.seriesPath);
+                drawShape1(g2, pass, series, item, selected, s.seriesPath);
             }
 
             // reset points vector

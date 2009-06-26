@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------
  * ClusteredXYBarRenderer.java
  * ---------------------------
- * (C) Copyright 2003-2008, by Paolo Cova and Contributors.
+ * (C) Copyright 2003-2009, by Paolo Cova and Contributors.
  *
  * Original Author:  Paolo Cova;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -208,7 +208,6 @@ public class ClusteredXYBarRenderer extends XYBarRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the plot is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -216,20 +215,12 @@ public class ClusteredXYBarRenderer extends XYBarRenderer
      * @param dataset  the dataset.
      * @param series  the series index.
      * @param item  the item index.
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset, int series, int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         IntervalXYDataset intervalDataset = (IntervalXYDataset) dataset;
 
@@ -317,25 +308,26 @@ public class ClusteredXYBarRenderer extends XYBarRenderer
             }
         }
         if (pass == 0 && getShadowsVisible()) {
-            getBarPainter().paintBarShadow(g2, this, series, item, bar, barBase,
-                !getUseYInterval());
+            getBarPainter().paintBarShadow(g2, this, series, item, selected, 
+                    bar, barBase, !getUseYInterval());
         }
         if (pass == 1) {
-            getBarPainter().paintBar(g2, this, series, item, bar, barBase);
+            getBarPainter().paintBar(g2, this, series, item, selected, bar,
+                    barBase);
 
-            if (isItemLabelVisible(series, item)) {
+            if (isItemLabelVisible(series, item, selected)) {
                 XYItemLabelGenerator generator = getItemLabelGenerator(series,
-                        item);
-                drawItemLabel(g2, dataset, series, item, plot, generator, bar,
-                        y1 < 0.0);
+                        item, selected);
+                drawItemLabelForBar(g2, plot, dataset, series, item, selected,
+                        generator, bar, y1 < 0.0);
             }
 
             // add an entity for the item...
-            if (info != null) {
+            if (state.getInfo() != null) {
                 EntityCollection entities
-                        = info.getOwner().getEntityCollection();
+                        = state.getInfo().getOwner().getEntityCollection();
                 if (entities != null) {
-                    addEntity(entities, bar, dataset, series, item,
+                    addEntity(entities, bar, dataset, series, item, selected,
                             bar.getCenterX(), bar.getCenterY());
                 }
             }

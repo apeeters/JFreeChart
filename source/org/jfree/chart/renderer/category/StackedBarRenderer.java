@@ -282,16 +282,10 @@ public class StackedBarRenderer extends BarRenderer
      * @param column  the column index (zero-based).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset dataset,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         if (!isSeriesVisible(row)) {
             return;
@@ -387,25 +381,27 @@ public class StackedBarRenderer extends BarRenderer
             if (getShadowsVisible()) {
                 boolean pegToBase = (positive && (positiveBase == getBase()))
                         || (!positive && (negativeBase == getBase()));
-                getBarPainter().paintBarShadow(g2, this, row, column, bar,
-                        barBase, pegToBase);
+                getBarPainter().paintBarShadow(g2, this, row, column, selected, 
+                        bar, barBase, pegToBase);
             }
         }
         else if (pass == 1) {
-            getBarPainter().paintBar(g2, this, row, column, bar, barBase);
+            getBarPainter().paintBar(g2, this, row, column, selected, bar,
+                    barBase);
 
             // add an item entity, if this information is being collected
             EntityCollection entities = state.getEntityCollection();
             if (entities != null) {
-                addItemEntity(entities, dataset, row, column, bar);
+                addEntity(entities, bar, dataset, row, column, selected);
             }
         }
         else if (pass == 2) {
             CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
-                    column);
-            if (generator != null && isItemLabelVisible(row, column)) {
-                drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                        (value < 0.0));
+                    column, selected);
+            if (generator != null && isItemLabelVisible(row, column,
+                    selected)) {
+                drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                        generator, bar, (value < 0.0));
             }
         }
     }

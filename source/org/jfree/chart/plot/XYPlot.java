@@ -3740,9 +3740,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
                         state.startSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);
                         for (int item = firstItem; item <= lastItem; item++) {
-                            renderer.drawItem(g2, state, dataArea, info,
+                            renderer.drawItem(g2, state, dataArea,
                                     this, xAxis, yAxis, dataset, series, item,
-                                    crosshairState, pass);
+                                    false, pass);
                         }
                         state.endSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);
@@ -3766,9 +3766,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
                         state.startSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);
                         for (int item = firstItem; item <= lastItem; item++) {
-                            renderer.drawItem(g2, state, dataArea, info,
+                            renderer.drawItem(g2, state, dataArea,
                                     this, xAxis, yAxis, dataset, series, item,
-                                    crosshairState, pass);
+                                    false, pass);
                         }
                         state.endSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);

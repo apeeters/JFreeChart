@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * LayeredBarRenderer.java
  * -----------------------
- * (C) Copyright 2003-2008, by Arnaud Lelievre and Contributors.
+ * (C) Copyright 2003-2009, by Arnaud Lelievre and Contributors.
  *
  * Original Author:  Arnaud Lelievre (for Garden);
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -181,30 +181,24 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
      * @param plot  the plot.
      * @param domainAxis  the domain (category) axis.
      * @param rangeAxis  the range (value) axis.
-     * @param data  the data.
+     * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
      * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2,
-                         CategoryItemRendererState state,
-                         Rectangle2D dataArea,
-                         CategoryPlot plot,
-                         CategoryAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         CategoryDataset data,
-                         int row,
-                         int column,
-                         int pass) {
+    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, int pass) {
 
         PlotOrientation orientation = plot.getOrientation();
         if (orientation == PlotOrientation.HORIZONTAL) {
             drawHorizontalItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
-                    data, row, column);
+                    dataset, row, column, selected);
         }
         else if (orientation == PlotOrientation.VERTICAL) {
             drawVerticalItem(g2, state, dataArea, plot, domainAxis, rangeAxis,
-                    data, row, column);
+                    dataset, row, column, selected);
         }
 
     }
@@ -221,16 +215,14 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
+     *
+     * @since 1.2.0
      */
-    protected void drawHorizontalItem(Graphics2D g2,
-                                      CategoryItemRendererState state,
-                                      Rectangle2D dataArea,
-                                      CategoryPlot plot,
-                                      CategoryAxis domainAxis,
-                                      ValueAxis rangeAxis,
-                                      CategoryDataset dataset,
-                                      int row,
-                                      int column) {
+    protected void drawHorizontalItem(Graphics2D g2, 
+            CategoryItemRendererState state, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            CategoryDataset dataset, int row, int column, boolean selected) {
 
         // nothing is drawn for null values...
         Number dataValue = dataset.getValue(row, column);
@@ -302,7 +294,7 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
                 (rectY + ((seriesCount - 1 - row) * shift)), rectWidth,
                 (rectHeight - (seriesCount - 1 - row) * shift * 2));
 
-        Paint itemPaint = getItemPaint(row, column);
+        Paint itemPaint = getItemPaint(row, column, selected);
         GradientPaintTransformer t = getGradientPaintTransformer();
         if (t != null && itemPaint instanceof GradientPaint) {
             itemPaint = t.transform((GradientPaint) itemPaint, bar);
@@ -313,8 +305,8 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
         // draw the outline...
         if (isDrawBarOutline()
                 && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-            Stroke stroke = getItemOutlineStroke(row, column);
-            Paint paint = getItemOutlinePaint(row, column);
+            Stroke stroke = getItemOutlineStroke(row, column, selected);
+            Paint paint = getItemOutlinePaint(row, column, selected);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
@@ -322,17 +314,17 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
             }
         }
 
-        CategoryItemLabelGenerator generator
-            = getItemLabelGenerator(row, column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                    (transX1 > transX2));
+        CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                    generator, bar, (transX1 > transX2));
         }
 
         // collect entity and tool tip information...
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, bar);
+            addEntity(entities, bar, dataset, row, column, selected);
         }
     }
 
@@ -348,16 +340,14 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
      * @param dataset  the dataset.
      * @param row  the row index (zero-based).
      * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
+     *
+     * @since 1.2.0
      */
-    protected void drawVerticalItem(Graphics2D g2,
-                                    CategoryItemRendererState state,
-                                    Rectangle2D dataArea,
-                                    CategoryPlot plot,
-                                    CategoryAxis domainAxis,
-                                    ValueAxis rangeAxis,
-                                    CategoryDataset dataset,
-                                    int row,
-                                    int column) {
+    protected void drawVerticalItem(Graphics2D g2, 
+            CategoryItemRendererState state, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            CategoryDataset dataset, int row, int column, boolean selected) {
 
         // nothing is drawn for null values...
         Number dataValue = dataset.getValue(row, column);
@@ -432,7 +422,7 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
         Rectangle2D bar = new Rectangle2D.Double(
             (rectX + ((seriesCount - 1 - row) * shift)), rectY,
             (rectWidth - (seriesCount - 1 - row) * shift * 2), rectHeight);
-        Paint itemPaint = getItemPaint(row, column);
+        Paint itemPaint = getItemPaint(row, column, selected);
         GradientPaintTransformer t = getGradientPaintTransformer();
         if (t != null && itemPaint instanceof GradientPaint) {
             itemPaint = t.transform((GradientPaint) itemPaint, bar);
@@ -443,8 +433,8 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
         // draw the outline...
         if (isDrawBarOutline()
                 && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
-            Stroke stroke = getItemOutlineStroke(row, column);
-            Paint paint = getItemOutlinePaint(row, column);
+            Stroke stroke = getItemOutlineStroke(row, column, selected);
+            Paint paint = getItemOutlinePaint(row, column, selected);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
@@ -456,17 +446,17 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
         double transX1 = rangeAxis.valueToJava2D(base, dataArea, edge);
         double transX2 = rangeAxis.valueToJava2D(value, dataArea, edge);
 
-        CategoryItemLabelGenerator generator
-            = getItemLabelGenerator(row, column);
-        if (generator != null && isItemLabelVisible(row, column)) {
-            drawItemLabel(g2, dataset, row, column, plot, generator, bar,
-                    (transX1 > transX2));
+        CategoryItemLabelGenerator generator = getItemLabelGenerator(row,
+                column, selected);
+        if (generator != null && isItemLabelVisible(row, column, selected)) {
+            drawItemLabelForBar(g2, plot, dataset, row, column, selected,
+                    generator, bar, (transX1 > transX2));
         }
 
         // collect entity and tool tip information...
         EntityCollection entities = state.getEntityCollection();
         if (entities != null) {
-            addItemEntity(entities, dataset, row, column, bar);
+            addEntity(entities, bar, dataset, row, column, selected);
         }
     }
 

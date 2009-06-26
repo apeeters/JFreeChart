@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------
  * XYLine3DRenderer.java
  * ---------------------
- * (C) Copyright 2005-2008, by Object Refinery Limited.
+ * (C) Copyright 2005-2009, by Object Refinery Limited.
  *
  * Original Author:  Thomas Morgner;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -205,16 +205,14 @@ public class XYLine3DRenderer extends XYLineAndShapeRenderer
      * @param pass  the pass.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param selected  is the data item selected?
      * @param shape  the shape.
      */
-    protected void drawFirstPassShape(Graphics2D g2,
-                                      int pass,
-                                      int series,
-                                      int item,
-                                      Shape shape) {
+    protected void drawShape1(Graphics2D g2, int pass, int series,
+            int item, boolean selected, Shape shape) {
         if (isShadowPass(pass)) {
             if (getWallPaint() != null) {
-                g2.setStroke(getItemStroke(series, item));
+                g2.setStroke(getItemStroke(series, item, selected));
                 g2.setPaint(getWallPaint());
                 g2.translate(getXOffset(), getYOffset());
                 g2.draw(shape);
@@ -223,7 +221,7 @@ public class XYLine3DRenderer extends XYLineAndShapeRenderer
         }
         else {
             // now draw the real shape
-            super.drawFirstPassShape(g2, pass, series, item, shape);
+            super.drawShape1(g2, pass, series, item, selected, shape);
         }
     }
 

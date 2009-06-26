@@ -164,7 +164,6 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param state  the renderer state.
      * @param dataArea  the area within which the plot is being drawn.
-     * @param info  collects information about the drawing.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
      * @param domainAxis  the domain axis.
@@ -172,27 +171,20 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
-     * @param crosshairState  crosshair information for the plot
-     *                        (<code>null</code> permitted).
+     * @param selected  is the item selected?
      * @param pass  the pass index (ignored here).
+     *
+     * @since 1.2.0
      */
-    public void drawItem(Graphics2D g2,
-                         XYItemRendererState state,
-                         Rectangle2D dataArea,
-                         PlotRenderingInfo info,
-                         XYPlot plot,
-                         ValueAxis domainAxis,
-                         ValueAxis rangeAxis,
-                         XYDataset dataset,
-                         int series,
-                         int item,
-                         CrosshairState crosshairState,
-                         int pass) {
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
 
         // setup for collecting optional entity info...
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+        if (state.getInfo() != null) {
+            entities = state.getInfo().getOwner().getEntityCollection();
         }
 
         IntervalXYDataset intervalDataset = (IntervalXYDataset) dataset;
@@ -208,11 +200,11 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
         double yyLow = rangeAxis.valueToJava2D(yLow, dataArea, yAxisLocation);
         double yyHigh = rangeAxis.valueToJava2D(yHigh, dataArea, yAxisLocation);
 
-        Paint p = getItemPaint(series, item);
-        Stroke s = getItemStroke(series, item);
+        Paint p = getItemPaint(series, item, selected);
+        Stroke s = getItemStroke(series, item, selected);
 
         Line2D line = null;
-        Shape shape = getItemShape(series, item);
+        Shape shape = getItemShape(series, item, selected);
         Shape top = null;
         Shape bottom = null;
         PlotOrientation orientation = plot.getOrientation();
@@ -237,17 +229,17 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
         // possibility to draw (a) the regular item label near to just the
         // upper y-value, or (b) the regular item label near the upper y-value
         // PLUS an additional item label near the lower y-value.
-        if (isItemLabelVisible(series, item)) {
-            drawItemLabel(g2, orientation, dataset, series, item, xx, yyHigh,
-                    false);
+        if (isItemLabelVisible(series, item, selected)) {
+            drawItemLabel(g2, orientation, dataset, series, item, selected, 
+                    xx, yyHigh, false);
             drawAdditionalItemLabel(g2, orientation, dataset, series, item,
                     xx, yyLow);
         }
 
         // add an entity for the item...
         if (entities != null) {
-            addEntity(entities, line.getBounds(), dataset, series, item, 0.0,
-                    0.0);
+            addEntity(entities, line.getBounds(), dataset, series, item, 
+                    selected, 0.0, 0.0);
         }
 
     }
@@ -273,14 +265,15 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
             return;
         }
 
-        Font labelFont = getItemLabelFont(series, item);
-        Paint paint = getItemLabelPaint(series, item);
+        Font labelFont = getItemLabelFont(series, item, false);
+        Paint paint = getItemLabelPaint(series, item, false);
         g2.setFont(labelFont);
         g2.setPaint(paint);
         String label = this.additionalItemLabelGenerator.generateLabel(dataset,
                 series, item);
 
-        ItemLabelPosition position = getNegativeItemLabelPosition(series, item);
+        ItemLabelPosition position = getNegativeItemLabelPosition(series, item,
+                false);
         Point2D anchorPoint = calculateLabelAnchorPoint(
                 position.getItemLabelAnchor(), x, y, orientation);
         TextUtilities.drawRotatedString(label, g2,
