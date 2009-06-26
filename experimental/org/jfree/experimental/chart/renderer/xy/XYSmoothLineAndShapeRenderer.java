@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------------
  * XYSmoothLineAndShapeRenderer.java
  * ---------------------------------
- * (C) Copyright 2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2007, 2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  -;
  * Contributor(s):   -;
@@ -70,19 +70,23 @@ public class XYSmoothLineAndShapeRenderer extends XYLineAndShapeRenderer {
      *
      * @param g2  the graphics device.
      * @param state  the renderer state.
-     * @param dataArea  the area within which the data is being drawn.
      * @param plot  the plot (can be used to obtain standard color
      *              information etc).
-     * @param domainAxis  the domain axis.
-     * @param rangeAxis  the range axis.
      * @param dataset  the dataset.
      * @param pass  the pass.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param selected  is the data item selected?
+     * @param dataArea  the area within which the data is being drawn.
+     * @param domainAxis  the domain axis.
+     * @param rangeAxis  the range axis.
+     *
+     * @since 1.2.0
      */
     protected void drawPrimaryLine(XYItemRendererState state, Graphics2D g2,
             XYPlot plot, XYDataset dataset, int pass, int series, int item,
-            ValueAxis domainAxis, ValueAxis rangeAxis, Rectangle2D dataArea) {
+            boolean selected, ValueAxis domainAxis, ValueAxis rangeAxis,
+            Rectangle2D dataArea) {
 
         if (item == 0) {
             return;
@@ -168,7 +172,8 @@ public class XYSmoothLineAndShapeRenderer extends XYLineAndShapeRenderer {
             }
 
             if (state.workingLine.intersects(dataArea)) {
-                drawFirstPassShape(g2, pass, series, item, state.workingLine);
+                drawShape1(g2, pass, series, item, selected,
+                        state.workingLine);
             }
         }
     }
