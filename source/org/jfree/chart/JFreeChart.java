@@ -149,6 +149,8 @@
  * 18-Dec-2008 : Use ResourceBundleWrapper - see patch 1607918 by
  *               Jess Thrysoee (DG);
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
+ * 19-May-2009 : Fixed FindBugs warnings, patch by Michal Wozniak (DG);
+ * 29-Jun-2009 : Check visibility flag in main title (DG);
  *
  */
 
@@ -1155,7 +1157,7 @@ public class JFreeChart implements Drawable,
             entities = info.getEntityCollection();
         }
         if (entities != null) {
-        	entities.add(new JFreeChartEntity((Rectangle2D) chartArea.clone(),
+            entities.add(new JFreeChartEntity((Rectangle2D) chartArea.clone(),
                     this));
         }
 
@@ -1204,7 +1206,7 @@ public class JFreeChart implements Drawable,
         nonTitleArea.setRect(chartArea);
         this.padding.trim(nonTitleArea);
 
-        if (this.title != null) {
+        if (this.title != null && this.title.isVisible()) {
             EntityCollection e = drawTitle(this.title, g2, nonTitleArea,
                     (entities != null));
             if (e != null) {
@@ -1300,7 +1302,7 @@ public class JFreeChart implements Drawable,
         if (area == null) {
             throw new IllegalArgumentException("Null 'area' argument.");
         }
-        Rectangle2D titleArea = new Rectangle2D.Double();
+        Rectangle2D titleArea;
         RectangleEdge position = t.getPosition();
         double ww = area.getWidth();
         if (ww <= 0.0) {
