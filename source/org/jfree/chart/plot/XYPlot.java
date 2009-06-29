@@ -4490,12 +4490,14 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
                     }
                 }
                 
-                Collection c = r.getAnnotations();
-                Iterator i = c.iterator();
-                while (i.hasNext()) {
-                    XYAnnotation a = (XYAnnotation) i.next();
-                    if (a instanceof XYAnnotationBoundsInfo) {
-                        includedAnnotations.add(a);
+                if (r != null) {
+                    Collection c = r.getAnnotations();
+                    Iterator i = c.iterator();
+                    while (i.hasNext()) {
+                        XYAnnotation a = (XYAnnotation) i.next();
+                        if (a instanceof XYAnnotationBoundsInfo) {
+                            includedAnnotations.add(a);
+                        }
                     }
                 }
             }
