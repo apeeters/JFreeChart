@@ -96,6 +96,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 
+import java.util.Collection;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemSource;
 import org.jfree.chart.annotations.XYAnnotation;
@@ -106,7 +107,6 @@ import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.labels.XYSeriesLabelGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
@@ -1725,6 +1725,17 @@ public interface XYItemRenderer extends LegendItemSource {
 
 
     //// ANNOTATIONS //////////////////////////////////////////////////////////
+
+    /**
+     * Returns a collection of the annotations that are assigned to the
+     * renderer.
+     *
+     * @return A collection of annotations (possibly empty but never
+     *     <code>null</code>).
+     *
+     * @since 1.2.0
+     */
+    public Collection getAnnotations();
 
     /**
      * Adds an annotation and sends a {@link RendererChangeEvent} to all

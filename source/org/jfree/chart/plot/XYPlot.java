@@ -4489,17 +4489,13 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
                                 DatasetUtilities.findRangeBounds(d));
                     }
                 }
-                // FIXME: the XYItemRenderer interface doesn't specify the
-                // getAnnotations() method but it should
-                if (r instanceof AbstractXYItemRenderer) {
-                    AbstractXYItemRenderer rr = (AbstractXYItemRenderer) r;
-                    Collection c = rr.getAnnotations();
-                    Iterator i = c.iterator();
-                    while (i.hasNext()) {
-                        XYAnnotation a = (XYAnnotation) i.next();
-                        if (a instanceof XYAnnotationBoundsInfo) {
-                            includedAnnotations.add(a);
-                        }
+                
+                Collection c = r.getAnnotations();
+                Iterator i = c.iterator();
+                while (i.hasNext()) {
+                    XYAnnotation a = (XYAnnotation) i.next();
+                    if (a instanceof XYAnnotationBoundsInfo) {
+                        includedAnnotations.add(a);
                     }
                 }
             }
