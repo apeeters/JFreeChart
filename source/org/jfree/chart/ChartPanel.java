@@ -205,9 +205,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.EventListener;
 import java.util.Iterator;
 import java.util.List;
@@ -1272,11 +1269,9 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     }
 
     /**
-     * The mouse wheel handler.  This will be an instance of MouseWheelHandler
-     * but we can't reference that class directly because it depends on JRE 1.4
-     * and we still want to support JRE 1.3.1.
+     * The mouse wheel handler.
      */
-    private Object mouseWheelHandler;
+    private MouseWheelHandler mouseWheelHandler;
 
     /**
      * Returns <code>true</code> if the mouse wheel handler is enabled, and
@@ -1302,70 +1297,12 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      */
     public void setMouseWheelEnabled(boolean flag) {
         if (flag && this.mouseWheelHandler == null) {
-            // use reflection to instantiate a mouseWheelHandler because to
-            // continue supporting JRE 1.3.1 we cannot depend on the
-            // MouseWheelListener interface directly
-            try {
-                Class c = Class.forName("org.jfree.chart.MouseWheelHandler");
-                Constructor cc = c.getConstructor(new Class[] {
-                        ChartPanel.class});
-                Object mwh = cc.newInstance(new Object[] {this});
-                this.mouseWheelHandler = mwh;
-            }
-            catch (ClassNotFoundException e) {
-                // the class isn't there, so we must have compiled JFreeChart
-                // with JDK 1.3.1 - thus, we can't have mouse wheel support
-            }
-            catch (SecurityException e) {
-                e.printStackTrace();
-            }
-            catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-            catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-            catch (InstantiationException e) {
-                e.printStackTrace();
-            }
-            catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
+            this.mouseWheelHandler = new MouseWheelHandler(this);
         }
         else {
-
             if (this.mouseWheelHandler != null) {
-                // use reflection to deregister the mouseWheelHandler
-                try {
-                    Class mwl = Class.forName(
-                            "java.awt.event.MouseWheelListener");
-                    Class c2 = ChartPanel.class;
-                    Method m = c2.getMethod("removeMouseWheelListener",
-                            new Class[] {mwl});
-                    m.invoke(this, new Object[] {this.mouseWheelHandler});
-                    this.mouseWheelHandler = null;
-                }
-                catch (ClassNotFoundException e) {
-                    // must be running on JRE 1.3.1, so just ignore this
-                }
-                catch (SecurityException e) {
-                    e.printStackTrace();
-                }
-                catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-                catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                }
-                catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+                removeMouseWheelListener(this.mouseWheelHandler);
+                this.mouseWheelHandler = null;
             }
         }
     }
