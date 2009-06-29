@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------
  * PiePlot.java
  * ------------
- * (C) Copyright 2000-2008, by Andrzej Porebski and Contributors.
+ * (C) Copyright 2000-2009, by Andrzej Porebski and Contributors.
  *
  * Original Author:  Andrzej Porebski;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
@@ -162,6 +162,7 @@
  *               generation (DG);
  * 23-Sep-2008 : Added getLabelLinkDepth() method - see bug 2121818 reported
  *               by Christoph Beck (DG);
+ * 29-Jun-2009 : Moved PaintMap and StrokeMap to org.jfree.chart.util.* (DG);
  *
  */
 
@@ -196,8 +197,8 @@ import java.util.TreeMap;
 
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
-import org.jfree.chart.PaintMap;
-import org.jfree.chart.StrokeMap;
+import org.jfree.chart.util.PaintMap;
+import org.jfree.chart.util.StrokeMap;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.entity.PieSectionEntity;
 import org.jfree.chart.event.PlotChangeEvent;

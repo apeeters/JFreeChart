@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------
  * UtilPackageTests.java
  * ---------------------
- * (C) Copyright 2006-2008, by Object Refinery Limited.
+ * (C) Copyright 2006-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -40,6 +40,7 @@
  * 08-Apr-2008 : Added LogFormatTests (DG);
  * 02-Jun-2008 : Added ShapeUtilitiesTests and SerialUtilitiesTests (DG);
  * 17-Jun-2008 : Added ShapeListTests (DG);
+ * 29-Jun-2009 : Moved PaintMap and StrokeMap to org.jfree.chart.util.* (DG);
  *
  */
 
@@ -68,11 +69,13 @@ public class UtilPackageTests extends TestCase {
         suite.addTestSuite(LineUtilitiesTests.class);
         suite.addTestSuite(LogFormatTests.class);
         suite.addTestSuite(PaintListTests.class);
+        suite.addTestSuite(PaintMapTests.class);
         suite.addTestSuite(RelativeDateFormatTests.class);
         suite.addTestSuite(SerialUtilitiesTests.class);
         suite.addTestSuite(ShapeListTests.class);
         suite.addTestSuite(ShapeUtilitiesTests.class);
         suite.addTestSuite(StrokeListTests.class);
+        suite.addTestSuite(StrokeMapTests.class);
         return suite;
     }
 

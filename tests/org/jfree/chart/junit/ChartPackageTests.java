@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------
  * ChartPackageTests.java
  * ----------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited.
+ * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -40,6 +40,7 @@
  * 02-Mar-2007 : Added missing tests (DG);
  * 06-Mar-2007 : Added HashUtilitiesTests (DG);
  * 14-Aug-2008 : Added StandardChartThemeTests (DG);
+ * 29-Jun-2009 : Moved StrokeMap and PaintMap to org.jfree.chart.util.* (DG);
  *
  */
 
@@ -75,7 +76,6 @@ public class ChartPackageTests extends TestCase {
         suite.addTestSuite(LineChartTests.class);
         suite.addTestSuite(LineChart3DTests.class);
         suite.addTestSuite(MeterChartTests.class);
-        suite.addTestSuite(PaintMapTests.class);
         suite.addTestSuite(PieChartTests.class);
         suite.addTestSuite(PieChart3DTests.class);
         suite.addTestSuite(ScatterPlotTests.class);
@@ -83,7 +83,6 @@ public class ChartPackageTests extends TestCase {
         suite.addTestSuite(StackedBarChartTests.class);
         suite.addTestSuite(StackedBarChart3DTests.class);
         suite.addTestSuite(StandardChartThemeTests.class);
-        suite.addTestSuite(StrokeMapTests.class);
         suite.addTestSuite(TimeSeriesChartTests.class);
         suite.addTestSuite(WaterfallChartTests.class);
         suite.addTestSuite(XYAreaChartTests.class);

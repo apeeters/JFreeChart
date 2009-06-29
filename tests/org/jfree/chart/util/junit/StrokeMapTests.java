@@ -38,7 +38,7 @@
  *
  */
 
-package org.jfree.chart.junit;
+package org.jfree.chart.util.junit;
 
 import java.awt.BasicStroke;
 import java.io.ByteArrayInputStream;
@@ -52,7 +52,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jfree.chart.StrokeMap;
+import org.jfree.chart.util.StrokeMap;
 
 /**
  * Some tests for the {@link StrokeMap} class.

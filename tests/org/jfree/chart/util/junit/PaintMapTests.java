@@ -39,7 +39,7 @@
  *
  */
 
-package org.jfree.chart.junit;
+package org.jfree.chart.util.junit;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -54,7 +54,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jfree.chart.PaintMap;
+import org.jfree.chart.util.PaintMap;
 
 /**
  * Some tests for the {@link PaintMap} class.

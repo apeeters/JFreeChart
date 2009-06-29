@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------
  * PaintMap.java
  * -------------
- * (C) Copyright 2006-2008, by Object Refinery Limited.
+ * (C) Copyright 2006-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,10 +38,11 @@
  * 17-Jan-2007 : Changed TreeMap to HashMap, so that different classes that
  *               implement Comparable can be used as keys (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 29-Jun-2009 : Moved from org.jfree.chart.* to org.jfree.chart.util.* (DG);
  *
  */
 
-package org.jfree.chart;
+package org.jfree.chart.util;
 
 import java.awt.Paint;
 import java.io.IOException;
@@ -53,9 +54,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.jfree.chart.util.PaintUtilities;
-import org.jfree.chart.util.SerialUtilities;
-
 /**
  * A storage structure that maps <code>Comparable</code> instances with
  * <code>Paint</code> instances.
@@ -64,7 +62,7 @@ import org.jfree.chart.util.SerialUtilities;
  * cloneable and serializable.  Special handling for the <code>Paint</code>
  * instances is included in this class.
  *
- * @since 1.0.3
+ * @since 1.2.0
  */
 public class PaintMap implements Cloneable, Serializable {
 
