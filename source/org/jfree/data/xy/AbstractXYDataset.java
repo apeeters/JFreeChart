@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------
  * AbstractXYDataset.java
  * ----------------------
- * (C) Copyright 2004-2008, by Object Refinery Limited.
+ * (C) Copyright 2004-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited).
  * Contributor(s):   -;
@@ -38,6 +38,7 @@
  * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
  *               getYValue() (DG);
  * 18-Aug-2004 : Moved from org.jfree.data --> org.jfree.data.xy (DG);
+ * 16-Jun-2009 : Added get/setSelectionState() methods (DG);
  *
  */
 
@@ -94,6 +95,37 @@ public abstract class AbstractXYDataset extends AbstractSeriesDataset
             result = y.doubleValue();
         }
         return result;
+    }
+
+    /**
+     * The dataset selection state (possibly <code>null</code>).
+     *
+     * @since 1.2.0
+     */
+    private XYDatasetSelectionState selectionState;
+
+    /**
+     * Returns the selection state for this dataset, if any.  The default
+     * value is <code>null</code>.
+     *
+     * @return The selection state (possibly <code>null</code>).
+     *
+     * @since 1.2.0
+     */
+    public XYDatasetSelectionState getSelectionState() {
+        return this.selectionState;
+    }
+
+    /**
+     * Sets the selection state for this dataset.
+     *
+     * @param state  the selection state (<code>null</code> permitted).
+     *
+     * @since 1.2.0
+     */
+    public void setSelectionState(XYDatasetSelectionState state) {
+        this.selectionState = state;
+        fireDatasetChanged();
     }
 
 }

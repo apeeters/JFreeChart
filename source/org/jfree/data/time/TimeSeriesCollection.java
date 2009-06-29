@@ -83,6 +83,7 @@
  * 26-May-2009 : Implemented XYRangeInfo (DG);
  * 09-Jun-2009 : Apply some short-cuts to series value lookups (DG);
  * 26-Jun-2009 : Fixed clone() (DG);
+ * 29-Jun-2009 : Added selection state (DG);
  * 
  */
 
@@ -103,7 +104,9 @@ import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractIntervalXYDataset;
 import org.jfree.data.xy.IntervalXYDataset;
+import org.jfree.data.xy.SelectableXYDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYDatasetSelectionState;
 import org.jfree.data.xy.XYDomainInfo;
 import org.jfree.data.xy.XYRangeInfo;
 
@@ -115,7 +118,8 @@ import org.jfree.data.xy.XYRangeInfo;
  */
 public class TimeSeriesCollection extends AbstractIntervalXYDataset
         implements XYDataset, IntervalXYDataset, DomainInfo, XYDomainInfo,
-        XYRangeInfo, Serializable {
+        XYRangeInfo, XYDatasetSelectionState, SelectableXYDataset,
+        Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 834149929022371137L;
@@ -171,6 +175,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
      *              <code>TimeZone.getDefault()</code> in that case).
      */
     public TimeSeriesCollection(TimeSeries series, TimeZone zone) {
+        super();
         // FIXME:  need a locale as well as a timezone
         if (zone == null) {
             zone = TimeZone.getDefault();
@@ -182,7 +187,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
             series.addChangeListener(this);
         }
         this.xPosition = TimePeriodAnchor.START;
-
+        setSelectionState(this);
     }
 
     /**
@@ -491,6 +496,72 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         return getY(series, item);
     }
 
+    /**
+     * Returns the selection state for the specified data item.
+     *
+     * @param series  the series index.
+     * @param item  the item index.
+     *
+     * @return <code>true</code> if the item is selected, and
+     *     <code>false</code> otherwise.
+     *
+     * @since 1.2.0
+     */
+    public boolean isSelected(int series, int item) {
+        TimeSeries s = getSeries(series);
+        TimeSeriesDataItem i = s.getRawDataItem(item);
+        return i.isSelected();
+    }
+
+    /**
+     * Sets the selection state for the specified data item and
+     * sends a {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index.
+     * @param item  the item index.
+     * @param selected  the selection state.
+     *
+     * @since 1.2.0
+     */
+    public void setSelected(int series, int item, boolean selected) {
+        setSelected(series, item, selected, true);
+    }
+
+    /**
+     * Sets the selection state for the specified data item and, if requested,
+     * sends a {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index.
+     * @param item  the item index.
+     * @param selected  the selection state.
+     * @param notify  notify listeners?
+     *
+     * @since 1.2.0
+     */
+    public void setSelected(int series, int item, boolean selected,
+            boolean notify) {
+        TimeSeries s = getSeries(series);
+        TimeSeriesDataItem i = s.getRawDataItem(item);
+        i.setSelected(selected);
+        if (notify) {
+            fireDatasetChanged();
+        }
+    }
+
+    /**
+     * Clears the selection state for all data items.
+     *
+     * @since 1.2.0
+     */
+    public void clearSelection() {
+        int seriesCount = getSeriesCount();
+        for (int s = 0; s < seriesCount; s++) {
+            int itemCount = getItemCount(s);
+            for (int i = 0; i < itemCount; i++) {
+                setSelected(s, i, false, false);
+            }
+        }
+    }
 
     /**
      * Returns the indices of the two data items surrounding a particular

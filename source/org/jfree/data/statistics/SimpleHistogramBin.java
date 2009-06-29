@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * SimpleHistogramBin.java
  * -----------------------
- * (C) Copyright 2005-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2005-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -36,6 +36,7 @@
  * -------
  * 10-Jan-2005 : Version 1 (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 19-Jun-2009 : Added selection state (DG);
  *
  */
 
@@ -76,6 +77,13 @@ public class SimpleHistogramBin implements Comparable,
     private int itemCount;
 
     /**
+     * A flag that indicates whether or not the bin is selected.
+     *
+     * @since 1.2.0
+     */
+    private boolean selected;
+
+    /**
      * Creates a new bin.
      *
      * @param lowerBound  the lower bound (inclusive).
@@ -97,19 +105,23 @@ public class SimpleHistogramBin implements Comparable,
                               boolean includeLowerBound,
                               boolean includeUpperBound) {
         if (lowerBound >= upperBound) {
-            throw new IllegalArgumentException("Invalid bounds");
+            throw new IllegalArgumentException("Invalid bounds; " + lowerBound
+                    + " to " + upperBound);
         }
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
         this.includeLowerBound = includeLowerBound;
         this.includeUpperBound = includeUpperBound;
         this.itemCount = 0;
+        this.selected = false;
     }
 
     /**
      * Returns the lower bound.
      *
      * @return The lower bound.
+     *
+     * @see #getUpperBound()
      */
     public double getLowerBound() {
         return this.lowerBound;
@@ -119,6 +131,8 @@ public class SimpleHistogramBin implements Comparable,
      * Return the upper bound.
      *
      * @return The upper bound.
+     *
+     * @see #getLowerBound()
      */
     public double getUpperBound() {
         return this.upperBound;
@@ -128,18 +142,52 @@ public class SimpleHistogramBin implements Comparable,
      * Returns the item count.
      *
      * @return The item count.
+     *
+     * @see #setItemCount(int)
      */
     public int getItemCount() {
         return this.itemCount;
     }
 
     /**
-     * Sets the item count.
+     * Sets the item count.  No event notification occurs when calling this
+     * method - if the bin is contained within a
+     * {@link SimpleHistogramDataset}, you should not be calling this method
+     * directly.  Instead, update the bin using methods such as
+     * {@link SimpleHistogramDataset#addObservations(double[])}.
      *
      * @param count  the item count.
+     *
+     * @see #getItemCount()
      */
     public void setItemCount(int count) {
         this.itemCount = count;
+    }
+
+    /**
+     * Returns a flag indicating whether or not the bin is selected.
+     *
+     * @return A boolean.
+     *
+     * @see #setSelected(boolean)
+     *
+     * @since 1.2.0
+     */
+    public boolean isSelected() {
+        return this.selected;
+    }
+
+    /**
+     * Sets the flag that indicates whether or not the bin is selected.
+     *
+     * @param selected  the new flag value.
+     *
+     * @see #isSelected()
+     *
+     * @since 1.2.0
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     /**
@@ -248,6 +296,9 @@ public class SimpleHistogramBin implements Comparable,
             return false;
         }
         if (this.itemCount != that.itemCount) {
+            return false;
+        }
+        if (this.selected != that.selected) {
             return false;
         }
         return true;

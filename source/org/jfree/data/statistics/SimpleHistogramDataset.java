@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------
  * SimpleHistogramDataset.java
  * ---------------------------
- * (C) Copyright 2005-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2005-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Sergei Ivanov;
@@ -38,6 +38,8 @@
  * 21-May-2007 : Added clearObservations() and removeAllBins() (SI);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 10-Jul-2007 : Added null argument check to constructor (DG);
+ * 29-Jun-2009 : Implemented XYDatasetSelectionState and
+ *               SelectableXYDataset (DG);
  *
  */
 
@@ -55,6 +57,8 @@ import org.jfree.data.DomainOrder;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractIntervalXYDataset;
 import org.jfree.data.xy.IntervalXYDataset;
+import org.jfree.data.xy.SelectableXYDataset;
+import org.jfree.data.xy.XYDatasetSelectionState;
 
 /**
  * A dataset used for creating simple histograms with custom defined bins.
@@ -62,7 +66,8 @@ import org.jfree.data.xy.IntervalXYDataset;
  * @see HistogramDataset
  */
 public class SimpleHistogramDataset extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, Cloneable, PublicCloneable,
+        implements IntervalXYDataset, XYDatasetSelectionState,
+            SelectableXYDataset, Cloneable, PublicCloneable,
             Serializable {
 
     /** For serialization. */
@@ -93,6 +98,7 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
         this.key = key;
         this.bins = new ArrayList();
         this.adjustForBinSize = true;
+        setSelectionState(this);
     }
 
     /**
@@ -428,6 +434,72 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      */
     public double getEndYValue(int series, int item) {
         return getYValue(series, item);
+    }
+
+    /**
+     * Returns <code>true</code> if the specified item is selected, and
+     * <code>false</code> otherwise.
+     *
+     * @param series  the series index.
+     * @param item  the item index.
+     *
+     * @since 1.2.0
+     */
+    public boolean isSelected(int series, int item) {
+        SimpleHistogramBin bin = (SimpleHistogramBin) this.bins.get(item);
+        return bin.isSelected();
+    }
+
+    /**
+     * Sets the selection state of the specified item and sends a
+     * {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @since 1.2.0
+     */
+    public void setSelected(int series, int item, boolean selected) {
+        setSelected(series, item, selected, true);
+    }
+
+    /**
+     * Sets the selection state of the specified item and, if requested, sends
+     * a {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index.
+     * @param item  the item index.
+     * @param selected  the selection state.
+     * @param notify  notify listeners?
+     *
+     * @since 1.2.0
+     */
+    public void setSelected(int series, int item, boolean selected,
+            boolean notify) {
+        // series is ignored, because this dataset contains just one series
+        SimpleHistogramBin bin = (SimpleHistogramBin) this.bins.get(item);
+        bin.setSelected(selected);
+        if (notify) {
+            fireDatasetChanged();
+        }
+    }
+
+    /**
+     * Clears the selection state of all items in the dataset and sends a
+     * {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @since 1.2.0
+     */
+    public void clearSelection() {
+        Iterator iterator = this.bins.iterator();
+        boolean changed = false;
+        while (iterator.hasNext()) {
+            SimpleHistogramBin bin = (SimpleHistogramBin) iterator.next();
+            if (bin.isSelected()) {
+                bin.setSelected(false);
+                changed = true;
+            }
+        }
+        if (changed) {
+            fireDatasetChanged();
+        }
     }
 
     /**

@@ -58,6 +58,8 @@
  * 06-Mar-2009 : Implemented RangeInfo (DG);
  * 06-Mar-2009 : Fixed equals() implementation (DG);
  * 10-Jun-2009 : Simplified code in getX() and getY() methods (DG);
+ * 29-Jun-2009 : Implemented XYDatasetSelectionState and
+ *               SelectableXYDataset (DG);
  *
  */
 
@@ -83,8 +85,9 @@ import org.jfree.data.general.DatasetChangeEvent;
  * dataset.
  */
 public class XYSeriesCollection extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, DomainInfo, RangeInfo, PublicCloneable,
-                   Serializable {
+        implements IntervalXYDataset, DomainInfo, RangeInfo,
+        XYDatasetSelectionState, SelectableXYDataset, PublicCloneable,
+        Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -7590013825931496766L;
@@ -115,6 +118,7 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
             this.data.add(series);
             series.addChangeListener(this);
         }
+        setSelectionState(this);
     }
 
     /**
@@ -381,6 +385,73 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      */
     public Number getEndY(int series, int item) {
         return getY(series, item);
+    }
+
+    /**
+     * Returns the selection state for the specified data item.
+     *
+     * @param series  the series index.
+     * @param item  the item index.
+     *
+     * @return <code>true</code> if the item is selected, and
+     *     <code>false</code> otherwise.
+     *
+     * @since 1.2.0
+     */
+    public boolean isSelected(int series, int item) {
+        XYSeries s = getSeries(series);
+        XYDataItem i = s.getRawDataItem(item);
+        return i.isSelected();
+    }
+
+    /**
+     * Sets the selection state for the specified data item and
+     * sends a {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index.
+     * @param item  the item index.
+     * @param selected  the selection state.
+     *
+     * @since 1.2.0
+     */
+    public void setSelected(int series, int item, boolean selected) {
+        setSelected(series, item, selected, true);
+    }
+
+    /**
+     * Sets the selection state for the specified data item and, if requested,
+     * sends a {@link DatasetChangeEvent} to all registered listeners.
+     *
+     * @param series  the series index.
+     * @param item  the item index.
+     * @param selected  the selection state.
+     * @param notify  notify listeners?
+     *
+     * @since 1.2.0
+     */
+    public void setSelected(int series, int item, boolean selected,
+            boolean notify) {
+        XYSeries s = getSeries(series);
+        XYDataItem i = s.getRawDataItem(item);
+        i.setSelected(selected);
+        if (notify) {
+            fireDatasetChanged();
+        }
+    }
+
+    /**
+     * Clears the selection state for all data items.
+     *
+     * @since 1.2.0
+     */
+    public void clearSelection() {
+        int seriesCount = getSeriesCount();
+        for (int s = 0; s < seriesCount; s++) {
+            int itemCount = getItemCount(s);
+            for (int i = 0; i < itemCount; i++) {
+                setSelected(s, i, false, false);
+            }
+        }
     }
 
     /**

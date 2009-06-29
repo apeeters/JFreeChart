@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------------
  * XYItemRendererState.java
  * ------------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Ulrich Voigt;
@@ -43,6 +43,7 @@
  *               Ulrich Voigt (DG);
  * 19-Sep-2008 : Added first and last item indices, based on patch by Greg
  *               Darke (DG);
+ * 29-Jun-2009 : Added selection state (DG);
  *
  */
 
@@ -50,12 +51,12 @@ package org.jfree.chart.renderer.xy;
 
 import java.awt.geom.Line2D;
 
-import org.jfree.chart.plot.CategoryCrosshairState;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYCrosshairState;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.RendererState;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYDatasetSelectionState;
 
 /**
  * The state for an {@link XYItemRenderer}.
@@ -96,6 +97,13 @@ public class XYItemRendererState extends RendererState {
      * @since 1.2.0
      */
     private XYCrosshairState crosshairState;
+
+    /**
+     * The selection state for the dataset, or <code>null</code>.
+     *
+     * @since 1.0.14
+     */
+    private XYDatasetSelectionState selectionState;
 
     /**
      * Creates a new state.
@@ -186,6 +194,27 @@ public class XYItemRendererState extends RendererState {
         this.crosshairState = state;
     }
 
+    /**
+     * Returns the selection state.
+     *
+     * @return The selection state (possibly <code>null</code>).
+     *
+     * @since 1.2.0
+     */
+    public XYDatasetSelectionState getSelectionState() {
+        return this.selectionState;
+    }
+
+    /**
+     * Sets the selection state.
+     *
+     * @param state  the selection state (<code>null</code> permitted).
+     *
+     * @since 1.2.0
+     */
+    public void setSelectionState(XYDatasetSelectionState state) {
+        this.selectionState = state;
+    }
     /**
      * This method is called by the {@link XYPlot} when it starts a pass
      * through the (visible) items in a series.  The default implementation

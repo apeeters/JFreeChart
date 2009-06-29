@@ -225,6 +225,7 @@
  * 30-Mar-2009 : Delegate panning to axes (DG);
  * 10-May-2009 : Added check for fixedLegendItems in equals(), and code to
  *               handle cloning (DG);
+ * 29-Jun-2009 : Implemented Selectable (DG);
  *
  */
 
@@ -238,7 +239,9 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -259,6 +262,7 @@ import java.util.TreeMap;
 
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.RenderingSource;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYAnnotationBoundsInfo;
 import org.jfree.chart.axis.Axis;
@@ -290,7 +294,10 @@ import org.jfree.data.Range;
 import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
+import org.jfree.data.xy.AbstractXYDataset;
+import org.jfree.data.xy.SelectableXYDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYDatasetSelectionState;
 
 /**
  * A general class for plotting data in the form of (x, y) pairs.  This plot can
@@ -303,8 +310,9 @@ import org.jfree.data.xy.XYDataset;
  * The {@link org.jfree.chart.ChartFactory} class contains static methods for
  * creating pre-configured charts.
  */
-public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
-        RendererChangeListener, Cloneable, PublicCloneable, Serializable {
+public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
+        Selectable, Zoomable, RendererChangeListener, Cloneable,
+        PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 7044148245716569264L;
@@ -3717,6 +3725,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
 
             XYItemRendererState state = renderer.initialise(g2, dataArea, this,
                     dataset, info);
+            XYDatasetSelectionState selectionState = state.getSelectionState();
             int passCount = renderer.getPassCount();
 
             SeriesRenderingOrder seriesOrder = getSeriesRenderingOrder();
@@ -3740,9 +3749,14 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
                         state.startSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);
                         for (int item = firstItem; item <= lastItem; item++) {
-                            renderer.drawItem(g2, state, dataArea,
-                                    this, xAxis, yAxis, dataset, series, item,
-                                    false, pass);
+                            boolean selected = false;
+                            if (selectionState != null) {
+                                selected = selectionState.isSelected(series,
+                                        item);
+                            }
+                            renderer.drawItem(g2, state, dataArea, this,
+                                    xAxis, yAxis, dataset, series, item,
+                                    selected, pass);
                         }
                         state.endSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);
@@ -3766,9 +3780,14 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
                         state.startSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);
                         for (int item = firstItem; item <= lastItem; item++) {
-                            renderer.drawItem(g2, state, dataArea,
-                                    this, xAxis, yAxis, dataset, series, item,
-                                    false, pass);
+                            boolean selected = false;
+                            if (selectionState != null) {
+                                selected = selectionState.isSelected(series,
+                                        item);
+                            }
+                            renderer.drawItem(g2, state, dataArea, this, 
+                                    xAxis, yAxis, dataset, series, item,
+                                    selected, pass);
                         }
                         state.endSeriesPass(dataset, series, firstItem,
                                 lastItem, pass, passCount);
@@ -5684,6 +5703,166 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             }
         }
 
+    }
+
+    /**
+     * Returns <code>false</code> to indicate that this plot does not support
+     * selection of data items at a point (only because it hasn't been
+     * implemented yet).
+     *
+     * @return A boolean.
+     *
+     * @since 1.2.0
+     */
+    public boolean canSelectByPoint() {
+        return false;  // TODO: make this true later
+}
+
+    /**
+     * Returns <code>true</code> to indicate that this plot supports selection
+     * of data items by region.
+     *
+     * @return A boolean.
+     *
+     * @since 1.2.0
+     */
+    public boolean canSelectByRegion() {
+        return true;
+    }
+
+    /**
+     * Selects a single point - NOT YET IMPLEMENTED.
+     *
+     * @since 1.2.0
+     */
+    public void select(double x, double y, Rectangle2D dataArea,
+            RenderingSource source) {
+        // TODO: implement
+    }
+
+    /**
+     * Selects the data items within the specified region.
+     *
+     * @param region  the region (in Java2D coordinates).
+     * @param dataArea  the data area.
+     * @param source  the rendering source.
+     *
+     * @since 1.2.0
+     */
+    public void select(GeneralPath region, Rectangle2D dataArea,
+            RenderingSource source) {
+        // cycle through the datasets and change the selection state for the
+        // items that fall within the specified region
+        int datasetCount = this.datasets.size();
+        for (int d = 0; d < datasetCount; d++) {
+            XYDataset dataset = (XYDataset) this.datasets.get(d);
+            if (dataset == null) {
+                continue;
+            }
+            XYDatasetSelectionState state = findSelectionStateForDataset(
+                    dataset, source);
+            if (state == null) {
+                continue;
+            }
+            GeneralPath path = convertToDataSpace(region, dataArea, dataset);
+            // now we have to iterate over all the dataset values and
+            // convert each point to Java2D space and then check if it should
+            // be selected.
+            int seriesCount = dataset.getSeriesCount();
+            for (int s = 0; s < seriesCount; s++) {
+                int itemCount = dataset.getItemCount(s);
+                for (int i = 0; i < itemCount; i++) {
+                    double x = dataset.getXValue(s, i);
+                    double y = dataset.getYValue(s, i);
+                    if (path.contains(x, y)) {
+                        state.setSelected(s, i, true);
+                        // FIXME:  we should fire just one dataset change event
+                        // for the whole selection
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the selection state for the specified dataset.  This could be
+     * <code>null</code> if the dataset hasn't been set up to support
+     * selections.
+     *
+     * @param dataset  the dataset.
+     * @param source  the selection source.
+     *
+     * @return The selection state (possibly <code>null</code>).
+     */
+    private XYDatasetSelectionState findSelectionStateForDataset(
+            XYDataset dataset, Object source) {
+        if (dataset instanceof SelectableXYDataset) {
+            SelectableXYDataset sd = (SelectableXYDataset) dataset;
+            XYDatasetSelectionState s = sd.getSelectionState();
+            return s;
+        }
+        throw new RuntimeException();
+        //return null;  // TODO: implement
+    }
+
+    /**
+     * Converts a path from Java2D space to data space.
+     *
+     * @param path  the path (<code>null</code> not permitted).
+     * @param dataArea  the data area.
+     * @param dataset  the dataset which can be used to find the appropriate
+     *         axes.
+     *
+     * @return A path in data space.
+     */
+    private GeneralPath convertToDataSpace(GeneralPath path,
+            Rectangle2D dataArea, XYDataset dataset) {
+        GeneralPath result = new GeneralPath(path.getWindingRule());
+        int datasetIndex = indexOf(dataset);
+        ValueAxis xAxis = getDomainAxisForDataset(datasetIndex);
+        ValueAxis yAxis = getRangeAxisForDataset(datasetIndex);
+        RectangleEdge xAxisEdge = getDomainAxisEdge();
+        RectangleEdge yAxisEdge = getRangeAxisEdge();
+        double[] coords = new double[6];
+        PathIterator iterator = path.getPathIterator(null);
+        while (!iterator.isDone()) {
+            int segType = iterator.currentSegment(coords);
+            double xx = xAxis.java2DToValue(coords[0], dataArea, xAxisEdge);
+            double yy = yAxis.java2DToValue(coords[1], dataArea, yAxisEdge);
+            if (segType == PathIterator.SEG_MOVETO) {
+                result.moveTo(xx, yy);
+            }
+            else if (segType == PathIterator.SEG_LINETO) {
+                result.lineTo(xx, yy);
+            }
+            else if (segType == PathIterator.SEG_CLOSE) {
+                result.closePath();
+            }
+            iterator.next();
+        }
+        return result;
+    }
+
+    /**
+     * Clears the selection.
+     *
+     * @since 1.2.0
+     */
+    public void clearSelection() {
+        // cycle through the datasets and clear the selection state
+        int datasetCount = this.datasets.size();
+        for (int d = 0; d < datasetCount; d++) {
+            XYDataset dataset = (XYDataset) this.datasets.get(d);
+            if (dataset instanceof AbstractXYDataset) {
+                // TODO: we could add an interface that *any* dataset could
+                // implement if it provides a selection state
+                AbstractXYDataset axyd = (AbstractXYDataset) dataset;
+                if (axyd.getSelectionState() != null) {
+                    XYDatasetSelectionState selState = axyd.getSelectionState();
+                    selState.clearSelection();
+                }
+            }
+        }
     }
 
 }

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * ChartRenderingInfo.java
  * -----------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited.
+ * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -45,6 +45,7 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 01-Dec-2006 : Fixed equals() and clone() (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 18-Jun-2009 : Added RenderingSource (DG);
  *
  */
 
@@ -94,6 +95,18 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
      * information being collected.
      */
     private EntityCollection entities;
+
+    /**
+     * The rendering source.  This is the object that calls the draw(...)
+     * method in the {@link JFreeChart} class, or <code>null</code> if the
+     * rendering source chooses to remain anonymous.  Our initial use for
+     * this is to identify the {@link ChartPanel} that is drawing a chart, so
+     * that selection state info can be retrieved from the panel in some
+     * cases.
+     *
+     * @since 1.2.0
+     */
+    private RenderingSource renderingSource;
 
     /**
      * Constructs a new ChartRenderingInfo structure that can be used to
@@ -162,7 +175,34 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Clears the information recorded by this object.
+     * Returns the rendering source, or <code>null</code>.
+     *
+     * @return The rendering source (possibly <code>null</code>).
+     *
+     * @see #setRenderingSource(org.jfree.chart.RenderingSource)
+     *
+     * @since 1.2.0
+     */
+    public RenderingSource getRenderingSource() {
+        return this.renderingSource;
+    }
+
+    /**
+     * Sets the rendering source.
+     *
+     * @param source  the source (<code>null</code> permitted).
+     *
+     * @see #getRenderingSource()
+     *
+     * @since 1.2.0
+     */
+    public void setRenderingSource(RenderingSource source) {
+        this.renderingSource = source;
+    }
+
+    /**
+     * Clears the information recorded by this object, but not the
+     * rendering source.
      */
     public void clear() {
         this.chartArea.setRect(0.0, 0.0, 0.0, 0.0);

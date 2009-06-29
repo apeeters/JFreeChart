@@ -41,6 +41,7 @@
  * 30-Nov-2007 : Implemented getXValue() and getYValue(), plus toString() for
  *               debugging use (DG);
  * 10-Jun-2009 : Reimplemented cloning (DG);
+ * 29-Jun-2009 : Added 'selected' attribute (DG);
  *
  */
 
@@ -48,6 +49,7 @@ package org.jfree.data.xy;
 
 import java.io.Serializable;
 
+import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.ObjectUtilities;
 
 /**
@@ -66,6 +68,13 @@ public class XYDataItem implements Cloneable, Comparable, Serializable {
     private Number y;
 
     /**
+     * A flag that indicates whether or not the item is "selected".
+     *
+     * @since 1.2.0
+     */
+    private boolean selected;
+
+    /**
      * Constructs a new data item.
      *
      * @param x  the x-value (<code>null</code> NOT permitted).
@@ -77,6 +86,7 @@ public class XYDataItem implements Cloneable, Comparable, Serializable {
         }
         this.x = x;
         this.y = y;
+        this.selected = false;
     }
 
     /**
@@ -158,6 +168,33 @@ public class XYDataItem implements Cloneable, Comparable, Serializable {
      */
     public void setY(Number y) {
         this.y = y;
+    }
+
+    /**
+     * Returns <code>true</code> if the data item is selected, and
+     * <code>false</code> otherwise.
+     *
+     * @return A boolean.
+     *
+     * @see #setSelected(boolean)
+     *
+     * @since 1.2.0
+     */
+    public boolean isSelected() {
+        return this.selected;
+    }
+
+    /**
+     * Sets the selection state for this item.
+     *
+     * @param selected  the new selection state.
+     *
+     * @see #isSelected()
+     *
+     * @since 1.2.0
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     /**
@@ -244,6 +281,9 @@ public class XYDataItem implements Cloneable, Comparable, Serializable {
         if (!ObjectUtilities.equal(this.y, that.y)) {
             return false;
         }
+        if (this.selected != that.selected) {
+            return false;
+        }
         return true;
     }
 
@@ -256,6 +296,7 @@ public class XYDataItem implements Cloneable, Comparable, Serializable {
         int result;
         result = this.x.hashCode();
         result = 29 * result + (this.y != null ? this.y.hashCode() : 0);
+        result = HashUtilities.hashCode(result, this.selected);
         return result;
     }
 

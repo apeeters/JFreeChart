@@ -43,11 +43,14 @@
  *               com.jrefinery.data.time package, implemented Serializable (DG)
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 09-Jun-2009 : Tidied up equals() (DG);
+ * 29-Jun-2009 : Added 'selected' attribute (DG);
+ *
  */
 
 package org.jfree.data.time;
 
 import java.io.Serializable;
+import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.ObjectUtilities;
 
 /**
@@ -87,6 +90,13 @@ public class TimeSeriesDataItem implements Cloneable, Comparable, Serializable {
     private Number value;
 
     /**
+     * A flag that indicates whether or not the item is "selected".
+     *
+     * @since 1.2.0
+     */
+    private boolean selected;
+
+    /**
      * Constructs a new data item that associates a value with a time period.
      *
      * @param period  the time period (<code>null</code> not permitted).
@@ -98,6 +108,7 @@ public class TimeSeriesDataItem implements Cloneable, Comparable, Serializable {
         }
         this.period = period;
         this.value = value;
+        this.selected = false;
     }
 
     /**
@@ -131,7 +142,10 @@ public class TimeSeriesDataItem implements Cloneable, Comparable, Serializable {
     }
 
     /**
-     * Sets the value for this data item.
+     * Sets the value for this data item.  This method provides no notification
+     * of the value change - if this item belongs to a {@link TimeSeries} you
+     * should use the {@link TimeSeries#update(int, java.lang.Number)} method
+     * to change the value, because this will trigger a change event.
      *
      * @param value  the value (<code>null</code> permitted).
      *
@@ -139,6 +153,33 @@ public class TimeSeriesDataItem implements Cloneable, Comparable, Serializable {
      */
     public void setValue(Number value) {
         this.value = value;
+    }
+
+    /**
+     * Returns <code>true</code> if the data item is selected, and
+     * <code>false</code> otherwise.
+     *
+     * @return A boolean.
+     *
+     * @see #setSelected(boolean)
+     *
+     * @since 1.2.0
+     */
+    public boolean isSelected() {
+        return this.selected;
+    }
+
+    /**
+     * Sets the selection state for this item.
+     *
+     * @param selected  the new selection state.
+     *
+     * @see #isSelected()
+     *
+     * @since 1.2.0
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     /**
@@ -156,10 +197,13 @@ public class TimeSeriesDataItem implements Cloneable, Comparable, Serializable {
             return false;
         }
         TimeSeriesDataItem that = (TimeSeriesDataItem) obj;
-        if (!ObjectUtilities.equal(this.period, that.period)) {
+        if (!this.period.equals(that.period)) {
             return false;
         }
         if (!ObjectUtilities.equal(this.value, that.value)) {
+            return false;
+        }
+        if (this.selected != that.selected) {
             return false;
         }
         return true;
@@ -174,6 +218,7 @@ public class TimeSeriesDataItem implements Cloneable, Comparable, Serializable {
         int result;
         result = (this.period != null ? this.period.hashCode() : 0);
         result = 29 * result + (this.value != null ? this.value.hashCode() : 0);
+        result = HashUtilities.hashCode(result, this.selected);
         return result;
     }
 
@@ -213,7 +258,7 @@ public class TimeSeriesDataItem implements Cloneable, Comparable, Serializable {
 
     /**
      * Clones the data item.  Note: there is no need to clone the period or
-     * value since they are immutable classes.
+     * value since they are immutable instances.
      *
      * @return A clone of the data item.
      */
