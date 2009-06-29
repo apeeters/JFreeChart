@@ -5830,10 +5830,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
             double xx = xAxis.java2DToValue(coords[0], dataArea, xAxisEdge);
             double yy = yAxis.java2DToValue(coords[1], dataArea, yAxisEdge);
             if (segType == PathIterator.SEG_MOVETO) {
-                result.moveTo(xx, yy);
+                result.moveTo((float) xx, (float) yy);
             }
             else if (segType == PathIterator.SEG_LINETO) {
-                result.lineTo(xx, yy);
+                result.lineTo((float) xx, (float) yy);
             }
             else if (segType == PathIterator.SEG_CLOSE) {
                 result.closePath();

@@ -186,7 +186,7 @@ public class RegionSelectionHandler extends AbstractMouseHandler {
                     chart.setNotify(true);
                 }
                 Point pt = e.getPoint();
-                this.selection.moveTo(pt.getX(), pt.getY());
+                this.selection.moveTo((float) pt.getX(), (float) pt.getY());
                 this.lastPoint = new Point(pt);
             }
         }
@@ -206,7 +206,7 @@ public class RegionSelectionHandler extends AbstractMouseHandler {
         Point2D pt2 = ShapeUtilities.getPointInRectangle(pt.x, pt.y,
                 panel.getScreenDataArea());
         if (pt2.distance(this.lastPoint) > 5) {
-            this.selection.lineTo(pt2.getX(), pt2.getY());
+            this.selection.lineTo((float) pt2.getX(), (float) pt2.getY());
             this.lastPoint = pt2;
         }
         panel.setSelectionShape(selection);
