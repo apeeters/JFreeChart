@@ -1,8 +1,8 @@
-************************************
-*  JFREECHART: Version 1.2.0-pre1  *
-************************************
+***********************************
+*  JFREECHART: Version 1.2.0-ea1  *
+***********************************
 
-19 January 2009
+30 June 2009
 
 (C)opyright 2000-2009, by Object Refinery Limited and Contributors.
 
@@ -11,7 +11,7 @@
 -----------------
 
 *** PLEASE NOTE : THIS IS A PREVIEW RELEASE OF JFREECHART 1.2.0.  THE 
-*** LATEST STABLE VERSION OF JFREECHART IS 1.0.12.  YOU SHOULD USE THE
+*** LATEST STABLE VERSION OF JFREECHART IS 1.0.13.  YOU SHOULD USE THE
 *** STABLE VERSION FOR PRODUCTION SYSTEMS.  THE PREVIEW RELEASES WILL BE 
 *** SUBJECT TO API CHANGES UNTIL THE OFFICIAL 1.2.0 RELEASE IS MADE LATER IN 
 *** 2009.
@@ -104,7 +104,7 @@ A demo application that shows a selection of the charts that can be
 generated is included in the JFreeChart distribution.   To run the
 demo (using JDK 1.4.2 or later), use the following command:
 
-    java -jar jfreechart-1.2.0-pre1-demo.jar
+    java -jar jfreechart-1.2.0-ea1-demo.jar
 
 The complete source code for the demo application is available for
 download when you purchase the JFreeChart Developer Guide.
