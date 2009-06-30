@@ -724,21 +724,21 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * {@link #lookupSeriesPaint(int)}  method. You can override this method
      * if you require different behaviour.
      *
-     * @param row  the row (or series) index (zero-based).
-     * @param column  the column (or category) index (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
      * @param selected  is the item selected?
      *
      * @return The paint (never <code>null</code>).
      *
      * @since 1.2.0
      */
-    public Paint getItemPaint(int row, int column, boolean selected) {
+    public Paint getItemPaint(int series, int item, boolean selected) {
         Paint result = null;
         if (selected) {
-            result = this.selectedItemAttributes.getItemPaint(row, column);
+            result = this.selectedItemAttributes.getItemPaint(series, item);
         }
         if (result == null) {
-            result = lookupSeriesPaint(row);
+            result = lookupSeriesPaint(series);
         }
         return result;
     }
@@ -904,21 +904,21 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * {@link #lookupSeriesFillPaint(int)} method - you can override this
      * method if you require different behaviour.
      *
-     * @param row  the row (or series) index (zero-based).
-     * @param column  the column (or category) index (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
      * @param selected  is the item selected?
      *
      * @return The paint (never <code>null</code>).
      *
      * @since 1.2.0
      */
-    public Paint getItemFillPaint(int row, int column, boolean selected) {
+    public Paint getItemFillPaint(int series, int item, boolean selected) {
         Paint result = null;
         if (selected) {
-            result = this.selectedItemAttributes.getItemFillPaint(row, column);
+            result = this.selectedItemAttributes.getItemFillPaint(series, item);
         }
         if (result == null) {
-            result = lookupSeriesFillPaint(row);
+            result = lookupSeriesFillPaint(series);
         }
         return result;
     }
@@ -1244,16 +1244,16 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * passes control to the {@link #lookupSeriesStroke(int)} method.
      * You can override this method if you require different behaviour.
      *
-     * @param row  the row (or series) index (zero-based).
-     * @param column  the column (or category) index (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
      * @param selected  is the item selected?
      *
      * @return The stroke (never <code>null</code>).
      *
      * @since 1.2.0
      */
-    public Stroke getItemStroke(int row, int column, boolean selected) {
-        return lookupSeriesStroke(row);
+    public Stroke getItemStroke(int series, int item, boolean selected) {
+        return lookupSeriesStroke(series);
     }
 
     /**
@@ -1420,16 +1420,16 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * {@link #lookupSeriesOutlineStroke(int)} method. You can override this
      * method if you require different behaviour.
      *
-     * @param row  the row (or series) index (zero-based).
-     * @param column  the column (or category) index (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
      * @param selected  is the item selected?
      *
      * @return The stroke (never <code>null</code>).
      *
      * @since 1.2.0
      */
-    public Stroke getItemOutlineStroke(int row, int column, boolean selected) {
-        return lookupSeriesOutlineStroke(row);
+    public Stroke getItemOutlineStroke(int series, int item, boolean selected) {
+        return lookupSeriesOutlineStroke(series);
     }
 
     /**
@@ -1750,16 +1750,16 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * Returns <code>true</code> if an item label is visible, and
      * <code>false</code> otherwise.
      *
-     * @param row  the row index (zero-based).
-     * @param column  the column index (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
      * @param selected  is the item selected?
      *
      * @return A boolean.
      *
      * @since 1.2.0
      */
-    public boolean isItemLabelVisible(int row, int column, boolean selected) {
-        return isSeriesItemLabelsVisible(row);
+    public boolean isItemLabelVisible(int series, int item, boolean selected) {
+        return isSeriesItemLabelsVisible(series);
     }
 
     /**
@@ -1878,16 +1878,16 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /**
      * Returns the font for an item label.
      *
-     * @param row  the row index (zero-based).
-     * @param column  the column index (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
      * @param selected  is the item selected?
      *
      * @return The font (never <code>null</code>).
      *
      * @since 1.2.0
      */
-    public Font getItemLabelFont(int row, int column, boolean selected) {
-        Font result = getSeriesItemLabelFont(row);
+    public Font getItemLabelFont(int series, int item, boolean selected) {
+        Font result = getSeriesItemLabelFont(series);
         if (result == null) {
             result = this.baseItemLabelFont;
         }
@@ -1987,16 +1987,16 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /**
      * Returns the paint used to draw an item label.
      *
-     * @param row  the row index (zero based).
-     * @param column  the column index (zero based).
+     * @param series  the series index (zero based).
+     * @param item  the item index (zero based).
      * @param selected  is the item selected?
      *
      * @return The paint (never <code>null</code>).
      *
      * @since 1.2.0
      */
-    public Paint getItemLabelPaint(int row, int column, boolean selected) {
-        Paint result = getSeriesItemLabelPaint(row);
+    public Paint getItemLabelPaint(int series, int item, boolean selected) {
+        Paint result = getSeriesItemLabelPaint(series);
         if (result == null) {
             result = this.baseItemLabelPaint;
         }
@@ -2097,17 +2097,17 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /**
      * Returns the item label position for positive values.
      *
-     * @param row  the row index (zero-based).
-     * @param column  the column index (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
      * @param selected  is the item selected?
      *
      * @return The item label position (never <code>null</code>).
      *
      * @see #getNegativeItemLabelPosition(int, int)
      */
-    public ItemLabelPosition getPositiveItemLabelPosition(int row, int column,
+    public ItemLabelPosition getPositiveItemLabelPosition(int series, int item,
             boolean selected) {
-        return getSeriesPositiveItemLabelPosition(row);
+        return getSeriesPositiveItemLabelPosition(series);
     }
 
     /**
@@ -2217,8 +2217,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * overridden to provide customisation of the item label position for
      * individual data items.
      *
-     * @param row  the row index (zero-based).
-     * @param column  the column (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item (zero-based).
      * @param selected  is the item selected?
      *
      * @return The item label position (never <code>null</code>).
@@ -2227,9 +2227,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      *
      * @since 1.2.0
      */
-    public ItemLabelPosition getNegativeItemLabelPosition(int row, int column,
+    public ItemLabelPosition getNegativeItemLabelPosition(int series, int item,
             boolean selected) {
-        return getSeriesNegativeItemLabelPosition(row);
+        return getSeriesNegativeItemLabelPosition(series);
     }
 
     /**
