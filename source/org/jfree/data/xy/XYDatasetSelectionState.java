@@ -98,6 +98,11 @@ public interface XYDatasetSelectionState extends DatasetSelectionState {
     /**
      * Sets the selection state for the specified item and, if requested,
      * fires a change event.
+     *
+     * @param series  the series index.
+     * @param item  the item index.
+     * @param selected  the selection state.
+     * @param notify  notify listeners?
      */
     public void setSelected(int series, int item, boolean selected,
             boolean notify);
