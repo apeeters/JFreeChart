@@ -564,6 +564,16 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
     }
 
     /**
+     * Sends an event to all registered listeners to indicate that the
+     * selection has changed.
+     *
+     * @since 1.2.0
+     */
+    public void fireSelectionEvent() {
+        fireDatasetChanged();
+    }
+
+    /**
      * Returns the indices of the two data items surrounding a particular
      * millisecond value.
      *

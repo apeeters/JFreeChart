@@ -503,6 +503,16 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
     }
 
     /**
+     * Sends an event to all registered listeners to indicate that the
+     * selection has changed.
+     *
+     * @since 1.2.0
+     */
+    public void fireSelectionEvent() {
+        fireDatasetChanged();
+    }
+    
+    /**
      * Compares the dataset for equality with an arbitrary object.
      *
      * @param obj  the object (<code>null</code> permitted).

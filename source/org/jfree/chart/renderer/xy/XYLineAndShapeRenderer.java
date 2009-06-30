@@ -66,6 +66,7 @@
  * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
  * 19-Sep-2008 : Fixed bug with drawSeriesLineAsPath - patch by Greg Darke (DG);
  * 18-May-2009 : Clip lines in drawPrimaryLine() (DG);
+ * 29-Jun-2009 : Updated for item selection support (DG);
  *
  */
 
@@ -83,7 +84,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.LegendItem;
+import org.jfree.chart.RenderingSource;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.RendererChangeEvent;
@@ -98,7 +101,9 @@ import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.ShapeUtilities;
+import org.jfree.data.xy.SelectableXYDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYDatasetSelectionState;
 
 /**
  * A renderer that connects data points with lines and/or draws shapes at each
@@ -699,20 +704,36 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      * @param g2  the graphics device.
      * @param dataArea  the area inside the axes.
      * @param plot  the plot.
-     * @param data  the data.
+     * @param dataset  the dataset.
      * @param info  an optional info collection object to return data back to
      *              the caller.
      *
      * @return The renderer state.
      */
-    public XYItemRendererState initialise(Graphics2D g2,
-                                          Rectangle2D dataArea,
-                                          XYPlot plot,
-                                          XYDataset data,
-                                          PlotRenderingInfo info) {
+    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
+            XYPlot plot, XYDataset dataset, PlotRenderingInfo info) {
 
         State state = new State(info);
         state.seriesPath = new GeneralPath();
+        // determine if there is any selection state for the dataset
+        XYDatasetSelectionState selectionState = null;
+        if (dataset instanceof SelectableXYDataset) {
+            SelectableXYDataset sxyd = (SelectableXYDataset) dataset;
+            selectionState = sxyd.getSelectionState();
+        }
+        // if the selection state is still null, go to the selection source
+        // and ask if it has state...
+        if (selectionState == null && info != null) {
+            ChartRenderingInfo cri = info.getOwner();
+            if (cri != null) {
+                RenderingSource rs = cri.getRenderingSource();
+                if (rs != null) {
+                    selectionState = (XYDatasetSelectionState)
+                            rs.getSelectionState(dataset);
+                }
+            }
+        }
+        state.setSelectionState(selectionState);
         return state;
 
     }

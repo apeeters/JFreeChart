@@ -92,7 +92,8 @@
  *               AbstractXYItemRenderer class (DG);
  * 28-Apr-2009 : Added flag to allow a renderer to treat the legend shape as
  *               a line (DG);
- *
+ * 30-Jun-2009 : Added selected item attributes (DG);
+ * 
  */
 
 package org.jfree.chart.renderer;
@@ -382,8 +383,12 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /** Storage for registered change listeners. */
     private transient EventListenerList listenerList;
 
-    /** An event for re-use. */
-    private transient RendererChangeEvent event;
+    /**
+     * Attributes for selected items.
+     *
+     * @since 1.2.0
+     */
+    private RenderAttributes selectedItemAttributes;
 
     /**
      * Default constructor.
@@ -455,6 +460,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
         this.listenerList = new EventListenerList();
 
+        this.selectedItemAttributes = new RenderAttributes();
+        this.selectedItemAttributes.setDefaultFillPaint(Color.WHITE);
     }
 
     /**
@@ -463,6 +470,18 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @return The drawing supplier.
      */
     public abstract DrawingSupplier getDrawingSupplier();
+
+    /**
+     * Returns the set of attributes that will override the standard
+     * attributes for selected items.
+     *
+     * @return The attributes.
+     *
+     * @since 1.2.0
+     */
+    public RenderAttributes getSelectedItemAttributes() {
+        return this.selectedItemAttributes;
+    }
 
     // SERIES VISIBLE (not yet respected by all renderers)
 
@@ -714,7 +733,14 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.2.0
      */
     public Paint getItemPaint(int row, int column, boolean selected) {
-        return lookupSeriesPaint(row);
+        Paint result = null;
+        if (selected) {
+            result = this.selectedItemAttributes.getItemPaint(row, column);
+        }
+        if (result == null) {
+            result = lookupSeriesPaint(row);
+        }
+        return result;
     }
 
     /**
@@ -887,7 +913,14 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.2.0
      */
     public Paint getItemFillPaint(int row, int column, boolean selected) {
-        return lookupSeriesFillPaint(row);
+        Paint result = null;
+        if (selected) {
+            result = this.selectedItemAttributes.getItemFillPaint(row, column);
+        }
+        if (result == null) {
+            result = lookupSeriesFillPaint(row);
+        }
+        return result;
     }
 
     /**
@@ -1041,16 +1074,24 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * {@link #lookupSeriesOutlinePaint(int)} method.  You can override this
      * method if you require different behaviour.
      *
-     * @param row  the row (or series) index (zero-based).
-     * @param column  the column (or category) index (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
      * @param selected  is the item selected?
      *
      * @return The paint (never <code>null</code>).
      *
      * @since 1.2.0
      */
-    public Paint getItemOutlinePaint(int row, int column, boolean selected) {
-        return lookupSeriesOutlinePaint(row);
+    public Paint getItemOutlinePaint(int series, int item, boolean selected) {
+        Paint result = null;
+        if (selected) {
+            result = this.selectedItemAttributes.getItemOutlinePaint(series,
+                    item);
+        }
+        if (result == null) {
+            result = lookupSeriesOutlinePaint(series);
+        }
+        return result;
     }
 
     /**
@@ -1543,16 +1584,23 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * method.  You can override this method if you require different
      * behaviour.
      *
-     * @param row  the row (or series) index (zero-based).
-     * @param column  the column (or category) index (zero-based).
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
      * @param selected  is the item selected?
      *
      * @return The shape (never <code>null</code>).
      *
      * @since 1.2.0
      */
-    public Shape getItemShape(int row, int column, boolean selected) {
-        return lookupSeriesShape(row);
+    public Shape getItemShape(int series, int item, boolean selected) {
+        Shape result = null;
+        if (selected) {
+            result = this.selectedItemAttributes.getItemShape(series, item);
+        }
+        if (result == null) {
+            result = lookupSeriesShape(series);
+        }
+        return result;
     }
 
     /**
@@ -3208,7 +3256,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             clone.legendTextPaint = (PaintList) this.legendTextPaint.clone();
         }
         clone.listenerList = new EventListenerList();
-        clone.event = null;
+
         return clone;
     }
 

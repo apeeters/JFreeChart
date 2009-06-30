@@ -113,6 +113,7 @@
  * 01-Apr-2009 : Moved defaultEntityRadius up to superclass (DG);
  * 28-Apr-2009 : Updated getLegendItem() method to observe new
  *               'treatLegendShapeAsLine' flag (DG);
+ * 29-Jun-2009 : Added attributes for selection (DG);
  *
  */
 
@@ -136,8 +137,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.RenderingSource;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
@@ -170,7 +173,9 @@ import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetUtilities;
+import org.jfree.data.xy.SelectableXYDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYDatasetSelectionState;
 
 /**
  * A base class that can be used to create new {@link XYItemRenderer}
@@ -270,6 +275,20 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     }
 
     /**
+     * Creates the renderer state.  This is called by the {@link #initialise()}
+     * method.
+     *
+     * @param info  the plot rendering info.
+     *
+     * @return A new state instance.
+     *
+     * @since 1.2.0
+     */
+    protected XYItemRendererState createState(PlotRenderingInfo info) {
+        return new XYItemRendererState(info);
+    }
+
+    /**
      * Initialises the renderer and returns a state object that should be
      * passed to all subsequent calls to the drawItem() method.
      * <P>
@@ -280,21 +299,36 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * @param g2  the graphics device.
      * @param dataArea  the area inside the axes.
      * @param plot  the plot.
-     * @param data  the data.
+     * @param dataset  the dataset.
      * @param info  an optional info collection object to return data back to
      *              the caller.
      *
      * @return The renderer state (never <code>null</code>).
      */
-    public XYItemRendererState initialise(Graphics2D g2,
-                                          Rectangle2D dataArea,
-                                          XYPlot plot,
-                                          XYDataset data,
-                                          PlotRenderingInfo info) {
+    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
+            XYPlot plot, XYDataset dataset, PlotRenderingInfo info) {
 
-        XYItemRendererState state = new XYItemRendererState(info);
+        XYItemRendererState state = createState(info);
+
+        // determine if there is any selection state for the dataset
+        XYDatasetSelectionState selectionState = null;
+        if (dataset instanceof SelectableXYDataset) {
+            SelectableXYDataset sxyd = (SelectableXYDataset) dataset;
+            selectionState = sxyd.getSelectionState();
+    }
+        // if the selection state is still null, go to the selection source
+        // and ask if it has state...
+        if (selectionState == null && info != null) {
+            ChartRenderingInfo cri = info.getOwner();
+            if (cri != null) {
+                RenderingSource rs = cri.getRenderingSource();
+                selectionState = (XYDatasetSelectionState)
+                        rs.getSelectionState(dataset);
+            }
+        }
+        state.setSelectionState(selectionState);
+
         return state;
-
     }
 
     // ITEM LABEL GENERATOR

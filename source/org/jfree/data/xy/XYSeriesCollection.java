@@ -455,6 +455,16 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
     }
 
     /**
+     * Fires an event to signal that the selection changed.
+     *
+     * @since 1.2.0
+     */
+    public void fireSelectionEvent() {
+        // TODO: should this be a separate event type.
+        fireDatasetChanged();
+    }
+
+    /**
      * Tests this collection for equality with an arbitrary object.
      *
      * @param obj  the object (<code>null</code> permitted).

@@ -55,7 +55,7 @@ import org.jfree.data.general.DatasetSelectionState;
  * be maintained in parallel with a dataset implementation that doesn't
  * directly support selection state.
  *
- * @since 1.0.14
+ * @since 1.2.0
  */
 public interface XYDatasetSelectionState extends DatasetSelectionState {
 
@@ -95,6 +95,19 @@ public interface XYDatasetSelectionState extends DatasetSelectionState {
      */
     public void setSelected(int series, int item, boolean selected);
 
+    /**
+     * Sets the selection state for the specified item and, if requested,
+     * fires a change event.
+     */
+    public void setSelected(int series, int item, boolean selected,
+            boolean notify);
+
+    /**
+     * Send an event to registered listeners to indicate that the selection
+     * has changed.
+     */
+    public void fireSelectionEvent();
+    
     /**
      * Clears all selected items.
      */

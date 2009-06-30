@@ -96,6 +96,9 @@
  * 19-Jun-2008 : Added findRangeBounds() method override to fix bug in default
  *               axis range (DG);
  * 24-Jun-2008 : Added new barPainter mechanism (DG);
+ * 03-Feb-2009 : Added defaultShadowsVisible flag (DG);
+ * 05-Feb-2009 : Added barAlignmentFactor (DG);
+ * 30-Jun-2009 : Updated for item selection support (DG);
  *
  */
 
@@ -695,6 +698,20 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     }
 
     /**
+     * Creates the renderer state.  This is called by the {@link #initialise()}
+     * method.
+     *
+     * @param info  the plot rendering info.
+     *
+     * @return A new state instance.
+     *
+     * @since 1.2.0
+     */
+    protected XYItemRendererState createState(PlotRenderingInfo info) {
+        return new XYBarRendererState(info);
+    }
+
+    /**
      * Initialises the renderer and returns a state object that should be
      * passed to all subsequent calls to the drawItem() method.  Here we
      * calculate the Java2D y-coordinate for zero, since all the bars have
@@ -712,7 +729,8 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
             XYPlot plot, XYDataset dataset, PlotRenderingInfo info) {
 
-        XYBarRendererState state = new XYBarRendererState(info);
+        XYBarRendererState state = (XYBarRendererState) super.initialise(g2,
+                dataArea, plot, dataset, info);
         ValueAxis rangeAxis = plot.getRangeAxisForDataset(plot.indexOf(
                 dataset));
         state.setG2Base(rangeAxis.valueToJava2D(this.base, dataArea,

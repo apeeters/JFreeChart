@@ -5773,12 +5773,12 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
                     double x = dataset.getXValue(s, i);
                     double y = dataset.getYValue(s, i);
                     if (path.contains(x, y)) {
-                        state.setSelected(s, i, true);
-                        // FIXME:  we should fire just one dataset change event
-                        // for the whole selection
+                        state.setSelected(s, i, true, false);
                     }
                 }
             }
+            state.fireSelectionEvent();
+
         }
     }
 
