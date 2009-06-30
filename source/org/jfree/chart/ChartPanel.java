@@ -1965,7 +1965,6 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      * @param e  information about the event.
      */
     public void mouseReleased(MouseEvent e) {
-
         if (e.isPopupTrigger()) {
             if (this.popup != null) {
                 displayPopupMenu(e.getX(), e.getY());
@@ -1980,48 +1979,58 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         // now process the auxiliary handlers
         Iterator iterator = this.auxiliaryMouseHandlers.iterator();
         while (iterator.hasNext()) {
-            AbstractMouseHandler handler = (AbstractMouseHandler) iterator.next();
-            handler.mouseReleased(e);
+            AbstractMouseHandler mh = (AbstractMouseHandler) iterator.next();
+            mh.mouseReleased(e);
         }
 
     }
 
     /**
-     * Receives notification of mouse clicks on the panel. These are
+     * Receives notification of mouse clicks on the panel.  These are
      * translated and passed on to any registered {@link ChartMouseListener}s.
      *
      * @param event  Information about the mouse event.
      */
     public void mouseClicked(MouseEvent event) {
-
-        Insets insets = getInsets();
-        int x = (int) ((event.getX() - insets.left) / this.scaleX);
-        int y = (int) ((event.getY() - insets.top) / this.scaleY);
-
-        this.anchor = new Point2D.Double(x, y);
-        if (this.chart == null) {
-            return;
-        }
-        this.chart.setNotify(true);  // force a redraw
-        // new entity code...
-        Object[] listeners = this.chartMouseListeners.getListeners(
-                ChartMouseListener.class);
-        if (listeners.length == 0) {
-            return;
+        if (this.liveMouseHandler != null) {
+            this.liveMouseHandler.mouseClicked(event);
         }
 
-        ChartEntity entity = null;
-        if (this.info != null) {
-            EntityCollection entities = this.info.getEntityCollection();
-            if (entities != null) {
-                entity = entities.getEntity(x, y);
-            }
+        // now process the auxiliary handlers
+        Iterator iterator = this.auxiliaryMouseHandlers.iterator();
+        while (iterator.hasNext()) {
+            AbstractMouseHandler mh = (AbstractMouseHandler) iterator.next();
+            mh.mouseClicked(event);
         }
-        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), event,
-                entity);
-        for (int i = listeners.length - 1; i >= 0; i -= 1) {
-            ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
-        }
+
+//        Insets insets = getInsets();
+//        int x = (int) ((event.getX() - insets.left) / this.scaleX);
+//        int y = (int) ((event.getY() - insets.top) / this.scaleY);
+//
+//        this.anchor = new Point2D.Double(x, y);
+//        if (this.chart == null) {
+//            return;
+//        }
+//        this.chart.setNotify(true);  // force a redraw
+//        // new entity code...
+//        Object[] listeners = this.chartMouseListeners.getListeners(
+//                ChartMouseListener.class);
+//        if (listeners.length == 0) {
+//            return;
+//        }
+//
+//        ChartEntity entity = null;
+//        if (this.info != null) {
+//            EntityCollection entities = this.info.getEntityCollection();
+//            if (entities != null) {
+//                entity = entities.getEntity(x, y);
+//            }
+//        }
+//        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), event,
+//                entity);
+//        for (int i = listeners.length - 1; i >= 0; i -= 1) {
+//            ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
+//        }
 
     }
 

@@ -799,51 +799,40 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     }
 
     /**
-     * Draws the visual representation of a single data item.
+     * Creates a rectangle representing the bar for a data item
      *
-     * @param g2  the graphics device.
-     * @param state  the renderer state.
-     * @param dataArea  the area within which the plot is being drawn.
-     * @param plot  the plot (can be used to obtain standard color
-     *              information etc).
-     * @param domainAxis  the domain axis.
-     * @param rangeAxis  the range axis.
-     * @param dataset  the dataset.
-     * @param series  the series index (zero-based).
-     * @param item  the item index (zero-based).
-     * @param pass  the pass index.
      */
-    public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
-            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
-            boolean selected, int pass) {
+    protected Rectangle2D createBar(Graphics2D g2, Rectangle2D dataArea, 
+            XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis,
+            XYDataset dataset, int series, int item, boolean selected) {
 
         if (!getItemVisible(series, item)) {
-            return;
+            return null;
         }
-        IntervalXYDataset intervalDataset = (IntervalXYDataset) dataset;
+
+        IntervalXYDataset ixyd = (IntervalXYDataset) dataset;
 
         double value0;
         double value1;
         if (this.useYInterval) {
-            value0 = intervalDataset.getStartYValue(series, item);
-            value1 = intervalDataset.getEndYValue(series, item);
+            value0 = ixyd.getStartYValue(series, item);
+            value1 = ixyd.getEndYValue(series, item);
         }
         else {
             value0 = this.base;
-            value1 = intervalDataset.getYValue(series, item);
+            value1 = ixyd.getYValue(series, item);
         }
         if (Double.isNaN(value0) || Double.isNaN(value1)) {
-            return;
+            return null;
         }
         if (value0 <= value1) {
             if (!rangeAxis.getRange().intersects(value0, value1)) {
-                return;
+                return null;
             }
         }
         else {
             if (!rangeAxis.getRange().intersects(value1, value0)) {
-                return;
+                return null;
             }
         }
 
@@ -854,28 +843,28 @@ public class XYBarRenderer extends AbstractXYItemRenderer
         double bottom = Math.min(translatedValue0, translatedValue1);
         double top = Math.max(translatedValue0, translatedValue1);
 
-        double startX = intervalDataset.getStartXValue(series, item);
+        double startX = ixyd.getStartXValue(series, item);
         if (Double.isNaN(startX)) {
-            return;
+            return null;
         }
-        double endX = intervalDataset.getEndXValue(series, item);
+        double endX = ixyd.getEndXValue(series, item);
         if (Double.isNaN(endX)) {
-            return;
+            return null;
         }
         if (startX <= endX) {
             if (!domainAxis.getRange().intersects(startX, endX)) {
-                return;
+                return null;
             }
         }
         else {
             if (!domainAxis.getRange().intersects(endX, startX)) {
-                return;
+                return null;
             }
         }
 
         // is there an alignment adjustment to be made?
         if (this.barAlignmentFactor >= 0.0 && this.barAlignmentFactor <= 1.0) {
-            double x = intervalDataset.getXValue(series, item);
+            double x = ixyd.getXValue(series, item);
             double interval = endX - startX;
             startX = x - interval * this.barAlignmentFactor;
             endX = startX + interval;
@@ -913,11 +902,46 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             bar = new Rectangle2D.Double(left, bottom, translatedWidth,
                     top - bottom);
         }
+        return bar;
+    }
 
-        boolean positive = (value1 > 0.0);
+    /**
+     * Draws the visual representation of a single data item.
+     *
+     * @param g2  the graphics device.
+     * @param state  the renderer state.
+     * @param dataArea  the area within which the plot is being drawn.
+     * @param plot  the plot (can be used to obtain standard color
+     *              information etc).
+     * @param domainAxis  the domain axis.
+     * @param rangeAxis  the range axis.
+     * @param dataset  the dataset.
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
+     * @param pass  the pass index.
+     */
+    public void drawItem(Graphics2D g2, XYItemRendererState state,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected, int pass) {
+
+        Rectangle2D bar = createBar(g2, dataArea, plot, domainAxis,
+                rangeAxis, dataset, series, item, selected);
+        if (bar == null) {
+            return;
+        }
+
+        boolean positive = true;
+        if (this.useYInterval) {
+            positive = dataset.getYValue(series, item) >= 0.0;
+            // FIXME:  the above line should look at the endYValue
+        }
+        else {
+            positive = dataset.getYValue(series, item) >= 0.0;
+        }
         boolean inverted = rangeAxis.isInverted();
         RectangleEdge barBase;
-        if (orientation == PlotOrientation.HORIZONTAL) {
+        if (plot.getOrientation() == PlotOrientation.HORIZONTAL) {
             if (positive && inverted || !positive && !inverted) {
                 barBase = RectangleEdge.RIGHT;
             }
@@ -944,13 +968,14 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             XYItemLabelGenerator generator = getItemLabelGenerator(series,
                     item, selected);
             drawItemLabelForBar(g2, plot, dataset, series, item, selected,
-                    generator, bar, value1 < 0.0);
+                    generator, bar, !positive);
         }
 
         // update the crosshair point
-        double x1 = (startX + endX) / 2.0;
+        double x1 = dataset.getXValue(series, item);
         double y1 = dataset.getYValue(series, item);
-        double transX1 = domainAxis.valueToJava2D(x1, dataArea, location);
+        double transX1 = domainAxis.valueToJava2D(x1, dataArea, 
+                plot.getDomainAxisEdge());
         double transY1 = rangeAxis.valueToJava2D(y1, dataArea,
                 plot.getRangeAxisEdge());
         int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
@@ -1180,6 +1205,14 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                || anchor == ItemLabelAnchor.INSIDE10
                || anchor == ItemLabelAnchor.INSIDE11
                || anchor == ItemLabelAnchor.INSIDE12;
+    }
+
+    public Rectangle2D createHotSpotBounds(Graphics2D g2, Rectangle2D dataArea,
+            XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis,
+            XYDataset dataset, int series, int item, boolean selected,
+            Rectangle2D result) {
+        return createBar(g2, dataArea, plot, domainAxis, rangeAxis,
+                dataset, series, item, selected);
     }
 
     /**

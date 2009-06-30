@@ -125,6 +125,7 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
@@ -170,6 +171,7 @@ import org.jfree.chart.util.ObjectList;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
+import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetUtilities;
@@ -1029,6 +1031,68 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             item.setOutlineStroke(outlineStroke);
         }
         return item;
+    }
+
+    public Rectangle2D createHotSpotBounds(Graphics2D g2, Rectangle2D dataArea,
+            XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis,
+            XYDataset dataset, int series, int item, boolean selected,
+            Rectangle2D result) {
+        if (result == null) {
+            result = new Rectangle();
+        }
+        double x = dataset.getXValue(series, item);
+        double y = dataset.getYValue(series, item);
+        double xx = domainAxis.valueToJava2D(x, dataArea,
+                plot.getDomainAxisEdge());
+        double yy = rangeAxis.valueToJava2D(y, dataArea,
+                plot.getRangeAxisEdge());
+        result.setRect(xx - 2, yy - 2, 4, 4);
+        return result;
+    }
+
+    public Shape createHotSpotShape(Graphics2D g2, Rectangle2D dataArea,
+            XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis,
+            XYDataset dataset, int series, int item, boolean selected) {
+        // FIXME : the actual shape will depend on what the renderer draws
+        return createHotSpotBounds(g2, dataArea, plot, domainAxis, rangeAxis,
+                dataset, series, item, selected, null);
+    }
+
+    /**
+     * Returns <code>true</code> if the specified point (xx, yy) in Java2D
+     * space falls within the "hot spot" for the specified data item, and
+     * <code>false</code> otherwise.
+     *
+     * @param xx
+     * @param yy
+     * @param g2
+     * @param dataArea
+     * @param plot
+     * @param domainAxis
+     * @param rangeAxis
+     * @param dataset
+     * @param series
+     * @param item
+     * @param selected
+     *
+     * @return
+     *
+     * @since 1.2.0
+     */
+    public boolean hitTest(double xx, double yy, Graphics2D g2,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected) {
+
+        Rectangle2D bounds = createHotSpotBounds(g2, dataArea, plot, 
+                domainAxis, rangeAxis, dataset, series, item, selected, 
+                null);
+        if (bounds == null) {
+            return false;
+        }
+        // FIXME:  if the following test passes, we should then do the more
+        // expensive test against the hotSpotShape
+        return bounds.contains(xx, yy);
     }
 
     /**

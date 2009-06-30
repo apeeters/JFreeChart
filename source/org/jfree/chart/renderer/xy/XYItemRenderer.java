@@ -1838,38 +1838,76 @@ public interface XYItemRenderer extends LegendItemSource {
             int item, boolean selected, int pass);
 
     /**
-     * Fills a band between two values on the axis.  This can be used to color
-     * bands between the grid lines.
+     * Called for each item to be plotted.
+     * <p>
+     * The {@link XYPlot} can make multiple passes through the dataset,
+     * depending on the value returned by the renderer's initialise() method.
      *
      * @param g2  the graphics device.
-     * @param plot  the plot.
-     * @param axis  the domain axis.
-     * @param dataArea  the data area.
-     * @param start  the start value.
-     * @param end  the end value.
+     * @param dataArea  the area within which the data is being rendered.
+     * @param plot  the plot (can be used to obtain standard color
+     *              information etc).
+     * @param domainAxis  the domain axis.
+     * @param rangeAxis  the range axis.
+     * @param dataset  the dataset.
+     * @param series  the series index (zero-based).
+     * @param item  the item index (zero-based).
+     * @param selected  is the item selected?
+     * 
+     * @return A shape equal to the hot spot for a data item.
      */
-    public void fillDomainGridBand(Graphics2D g2,
-                                   XYPlot plot,
-                                   ValueAxis axis,
-                                   Rectangle2D dataArea,
-                                   double start, double end);
+    public Shape createHotSpotShape(Graphics2D g2, Rectangle2D dataArea, 
+            XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis, 
+            XYDataset dataset, int series, int item, boolean selected);
 
     /**
-     * Fills a band between two values on the range axis.  This can be used to
-     * color bands between the grid lines.
-     *
-     * @param g2  the graphics device.
-     * @param plot  the plot.
-     * @param axis  the range axis.
-     * @param dataArea  the data area.
-     * @param start  the start value.
-     * @param end  the end value.
+     * Returns the rectangular bounds for the hot spot for an item drawn by
+     * this renderer.  This is intended to provide a quick test for
+     * eliminating data points before more accurate testing against the
+     * shape returned by createHotSpotShape().
+     * 
+     * @param g2
+     * @param dataArea
+     * @param plot
+     * @param domainAxis
+     * @param rangeAxis
+     * @param dataset
+     * @param series
+     * @param item
+     * @param selected
+     * @param result
+     * @return
      */
-    public void fillRangeGridBand(Graphics2D g2,
-                                  XYPlot plot,
-                                  ValueAxis axis,
-                                  Rectangle2D dataArea,
-                                  double start, double end);
+    public Rectangle2D createHotSpotBounds(Graphics2D g2, Rectangle2D dataArea, 
+            XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis, 
+            XYDataset dataset, int series, int item, boolean selected,
+            Rectangle2D result);
+    
+    /**
+     * Returns <code>true</code> if the specified point (xx, yy) in Java2D
+     * space falls within the "hot spot" for the specified data item, and
+     * <code>false</code> otherwise.
+     * 
+     * @param xx
+     * @param yy
+     * @param g2
+     * @param dataArea
+     * @param plot
+     * @param domainAxis
+     * @param rangeAxis
+     * @param dataset
+     * @param series
+     * @param item
+     * @param selected
+     * 
+     * @return
+     * 
+     * @since 1.2.0
+     */
+    public boolean hitTest(double xx, double yy, Graphics2D g2,
+            Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
+            ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+            boolean selected);
 
     /**
      * Draws a line perpendicular to the domain axis.
@@ -1924,5 +1962,33 @@ public interface XYItemRenderer extends LegendItemSource {
      */
     public void drawRangeMarker(Graphics2D g2, XYPlot plot, ValueAxis axis,
             Marker marker, Rectangle2D dataArea);
+
+    /**
+     * Fills a band between two values on the axis.  This can be used to color
+     * bands between the grid lines.
+     *
+     * @param g2  the graphics device.
+     * @param plot  the plot.
+     * @param axis  the domain axis.
+     * @param dataArea  the data area.
+     * @param start  the start value.
+     * @param end  the end value.
+     */
+    public void fillDomainGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
+            Rectangle2D dataArea, double start, double end);
+
+    /**
+     * Fills a band between two values on the range axis.  This can be used to
+     * color bands between the grid lines.
+     *
+     * @param g2  the graphics device.
+     * @param plot  the plot.
+     * @param axis  the range axis.
+     * @param dataArea  the data area.
+     * @param start  the start value.
+     * @param end  the end value.
+     */
+    public void fillRangeGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
+            Rectangle2D dataArea, double start, double end);
 
 }

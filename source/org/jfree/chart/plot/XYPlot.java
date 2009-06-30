@@ -5713,7 +5713,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
      * @since 1.2.0
      */
     public boolean canSelectByPoint() {
-        return false;  // TODO: make this true later
+        return true;
 }
 
     /**
@@ -5729,13 +5729,40 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
     }
 
     /**
-     * Selects a single point - NOT YET IMPLEMENTED.
+     * Selects a single point.
      *
+     * @param xx
+     * @param yy
      * @since 1.2.0
      */
-    public void select(double x, double y, Rectangle2D dataArea,
+    public void select(double xx, double yy, Rectangle2D dataArea,
             RenderingSource source) {
-        // TODO: implement
+        int datasetCount = this.datasets.size();
+        for (int d = 0; d < datasetCount; d++) {
+            XYDataset dataset = (XYDataset) this.datasets.get(d);
+            if (dataset == null) {
+                continue;
+            }
+            XYDatasetSelectionState state = findSelectionStateForDataset(
+                    dataset, source);
+            if (state == null) {
+                continue;
+            }
+            XYItemRenderer renderer = getRendererForDataset(dataset);
+            int seriesCount = dataset.getSeriesCount();
+            for (int s = 0; s < seriesCount; s++) {
+                int itemCount = dataset.getItemCount(s);
+                for (int i = 0; i < itemCount; i++) {
+                    // TODO:  we should probably ask the renderer to specify
+                    // whether or not the item is contained in the path
+                    if (renderer.hitTest(xx, yy, null, dataArea, this,
+                            getDomainAxisForDataset(d),
+                            getRangeAxisForDataset(d), dataset, s, i, false)) {
+                        state.setSelected(s, i, !state.isSelected(s, i));
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -5749,6 +5776,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void select(GeneralPath region, Rectangle2D dataArea,
             RenderingSource source) {
+
         // cycle through the datasets and change the selection state for the
         // items that fall within the specified region
         int datasetCount = this.datasets.size();
@@ -5772,13 +5800,14 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
                 for (int i = 0; i < itemCount; i++) {
                     double x = dataset.getXValue(s, i);
                     double y = dataset.getYValue(s, i);
+                    // TODO:  we should probably ask the renderer to specify
+                    // whether or not the item is contained in the path
                     if (path.contains(x, y)) {
                         state.setSelected(s, i, true, false);
                     }
                 }
             }
             state.fireSelectionEvent();
-
         }
     }
 

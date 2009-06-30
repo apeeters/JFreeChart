@@ -125,7 +125,7 @@ public class RegionSelectionHandler extends AbstractMouseHandler {
     /**
      * Sets the fill paint.
      *
-     * @param fillPaint  the fill paint (<code>null</code> permitted).
+     * @param paint  the fill paint (<code>null</code> permitted).
      *
      * @see #getFillPaint()
      */
@@ -241,7 +241,28 @@ public class RegionSelectionHandler extends AbstractMouseHandler {
         this.selection.reset();
         this.lastPoint = null;
         panel.repaint();
-        panel.clearLiveMouseHandler();
+        //panel.clearLiveMouseHandler();
+    }
+
+    /**
+     * Handle a mouse click - if the plot supports it, a single data item
+     * can be selected (or added to the selection).
+     *
+     * @param e  the event.
+     */
+    public void mouseClicked(MouseEvent e) {
+        ChartPanel panel = (ChartPanel) e.getSource();
+        Rectangle2D dataArea = panel.getScreenDataArea();
+        if (dataArea.contains(e.getPoint())) {
+            JFreeChart chart = panel.getChart();
+            if (chart.getPlot() instanceof Selectable) {
+                Selectable s = (Selectable) chart.getPlot();
+                if (s.canSelectByPoint()) {
+                    Point pt = e.getPoint();
+                    s.select(pt.getX(), pt.getY(), dataArea, panel);
+                }
+            }
+        }
     }
 
 }
