@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------------
  * DefaultKeyedValuesTests.java
  * ----------------------------
- * (C) Copyright 2003-2007, by Object Refinery Limited.
+ * (C) Copyright 2003-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -307,7 +307,7 @@ public class DefaultKeyedValuesTests extends TestCase {
             v2 = (DefaultKeyedValues) v1.clone();
         }
         catch (CloneNotSupportedException e) {
-            System.err.println("Failed to clone.");
+            e.printStackTrace();
         }
         assertTrue(v1 != v2);
         assertTrue(v1.getClass() == v2.getClass());
@@ -322,7 +322,6 @@ public class DefaultKeyedValuesTests extends TestCase {
      * Check that inserting and retrieving values works as expected.
      */
     public void testInsertAndRetrieve() {
-
         DefaultKeyedValues data = new DefaultKeyedValues();
         data.addValue("A", new Double(1.0));
         data.addValue("B", new Double(2.0));
@@ -346,7 +345,6 @@ public class DefaultKeyedValuesTests extends TestCase {
         assertEquals(data.getValue(1), new Double(2.0));
         assertEquals(data.getValue(2), new Double(3.0));
         assertEquals(data.getValue(3), null);
-
     }
 
     /**
@@ -376,7 +374,6 @@ public class DefaultKeyedValuesTests extends TestCase {
      * Tests sorting of data by key (ascending).
      */
     public void testSortByKeyAscending() {
-
         DefaultKeyedValues data = new DefaultKeyedValues();
         data.addValue("C", new Double(1.0));
         data.addValue("B", null);
@@ -402,14 +399,12 @@ public class DefaultKeyedValuesTests extends TestCase {
         assertEquals(data.getValue(1), null);
         assertEquals(data.getValue(2), new Double(1.0));
         assertEquals(data.getValue(3), new Double(3.0));
-
     }
 
     /**
      * Tests sorting of data by key (descending).
      */
     public void testSortByKeyDescending() {
-
         DefaultKeyedValues data = new DefaultKeyedValues();
         data.addValue("C", new Double(1.0));
         data.addValue("B", null);
@@ -435,14 +430,12 @@ public class DefaultKeyedValuesTests extends TestCase {
         assertEquals(data.getValue(1), new Double(1.0));
         assertEquals(data.getValue(2), null);
         assertEquals(data.getValue(3), new Double(2.0));
-
     }
 
     /**
      * Tests sorting of data by value (ascending).
      */
     public void testSortByValueAscending() {
-
         DefaultKeyedValues data = new DefaultKeyedValues();
         data.addValue("C", new Double(1.0));
         data.addValue("B", null);
@@ -468,14 +461,12 @@ public class DefaultKeyedValuesTests extends TestCase {
         assertEquals(data.getValue(1), new Double(2.0));
         assertEquals(data.getValue(2), new Double(3.0));
         assertEquals(data.getValue(3), null);
-
     }
 
     /**
      * Tests sorting of data by key (descending).
      */
     public void testSortByValueDescending() {
-
         DefaultKeyedValues data = new DefaultKeyedValues();
         data.addValue("C", new Double(1.0));
         data.addValue("B", null);
@@ -501,21 +492,17 @@ public class DefaultKeyedValuesTests extends TestCase {
         assertEquals(data.getValue(1), new Double(2.0));
         assertEquals(data.getValue(2), new Double(1.0));
         assertEquals(data.getValue(3), null);
-
     }
 
     /**
      * Serialize an instance, restore it, and check for equality.
      */
     public void testSerialization() {
-
         DefaultKeyedValues v1 = new DefaultKeyedValues();
         v1.addValue("Key 1", new Double(23));
         v1.addValue("Key 2", null);
         v1.addValue("Key 3", new Double(42));
-
         DefaultKeyedValues v2 = null;
-
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(buffer);
@@ -523,16 +510,14 @@ public class DefaultKeyedValuesTests extends TestCase {
             out.close();
 
             ObjectInput in = new ObjectInputStream(
-                new ByteArrayInputStream(buffer.toByteArray())
-            );
+                    new ByteArrayInputStream(buffer.toByteArray()));
             v2 = (DefaultKeyedValues) in.readObject();
             in.close();
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         assertEquals(v1, v2);
-
     }
 
 }
