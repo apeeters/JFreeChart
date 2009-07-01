@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------
  * AxisTests.java
  * --------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -203,9 +203,9 @@ public class AxisTests extends TestCase {
         assertTrue(a1.equals(a2));
 
         // tick marks visible flag...
-        a1.setTickMarksVisible(true);
+        a1.setTickMarksVisible(!a1.isTickMarksVisible());
         assertFalse(a1.equals(a2));
-        a2.setTickMarksVisible(true);
+        a2.setTickMarksVisible(a1.isTickMarksVisible());
         assertTrue(a1.equals(a2));
 
         // tick mark inside length...
