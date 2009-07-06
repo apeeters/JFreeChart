@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------
  * DefaultPieDataset.java
  * ----------------------
- * (C) Copyright 2001-2008, by Object Refinery Limited.
+ * (C) Copyright 2001-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Sam (oldman);
@@ -52,38 +52,44 @@
  * 28-Sep-2006 : Added sortByKeys() and sortByValues() methods (DG);
  * 30-Apr-2007 : Added new insertValues() methods (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
+ * 01-Jul-2009 : Now extends AbstractPieDataset (DG);
  *
  */
 
-package org.jfree.data.general;
+package org.jfree.data.pie;
 
+import org.jfree.data.SelectableValue;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.SortOrder;
-import org.jfree.data.DefaultKeyedValues;
+import org.jfree.data.KeyedObjects;
 import org.jfree.data.KeyedValues;
 import org.jfree.data.UnknownKeyException;
+import org.jfree.data.general.DatasetChangeEvent;
 
 /**
  * A default implementation of the {@link PieDataset} interface.
  */
-public class DefaultPieDataset extends AbstractDataset
-        implements PieDataset, Cloneable, PublicCloneable, Serializable {
+public class DefaultPieDataset extends AbstractPieDataset
+        implements PieDataset, PieDatasetSelectionState, Cloneable,
+        PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 2904745139106540618L;
 
     /** Storage for the data. */
-    private DefaultKeyedValues data;
+    private KeyedObjects data;
 
     /**
      * Constructs a new dataset, initially empty.
      */
     public DefaultPieDataset() {
-        this.data = new DefaultKeyedValues();
+        this.data = new KeyedObjects();
+        setSelectionState(this);
     }
 
     /**
@@ -96,9 +102,10 @@ public class DefaultPieDataset extends AbstractDataset
         if (data == null) {
             throw new IllegalArgumentException("Null 'data' argument.");
         }
-        this.data = new DefaultKeyedValues();
+        this.data = new KeyedObjects();
         for (int i = 0; i < data.getItemCount(); i++) {
-            this.data.addValue(data.getKey(i), data.getValue(i));
+            SelectableValue dataItem = new SelectableValue(data.getValue(i));
+            this.data.addObject(data.getKey(i), dataItem);
         }
     }
 
@@ -118,6 +125,7 @@ public class DefaultPieDataset extends AbstractDataset
      * @return The categories in the dataset.
      */
     public List getKeys() {
+        // FIXME:  perhaps we should clone the list?
         return Collections.unmodifiableList(this.data.getKeys());
     }
 
@@ -158,13 +166,12 @@ public class DefaultPieDataset extends AbstractDataset
      * @return The value (possibly <code>null</code>).
      */
     public Number getValue(int item) {
-
         Number result = null;
         if (getItemCount() > item) {
-            result = this.data.getValue(item);
+            SelectableValue dataItem = (SelectableValue) this.data.getObject(item);
+            result = dataItem.getValue();
         }
         return result;
-
     }
 
     /**
@@ -180,7 +187,8 @@ public class DefaultPieDataset extends AbstractDataset
         if (key == null) {
             throw new IllegalArgumentException("Null 'key' argument.");
         }
-        return this.data.getValue(key);
+        SelectableValue dataItem = (SelectableValue) this.data.getObject(key);
+        return dataItem.getValue();
     }
 
     /**
@@ -194,8 +202,15 @@ public class DefaultPieDataset extends AbstractDataset
      *     <code>null</code>.
      */
     public void setValue(Comparable key, Number value) {
-        this.data.setValue(key, value);
-        fireDatasetChanged();
+        int index = this.data.getIndex(key);
+        PieDatasetChangeType ct = PieDatasetChangeType.ADD;
+        if (index >= 0) {
+            ct = PieDatasetChangeType.UPDATE;
+        }
+
+        this.data.setObject(key, new SelectableValue(value));
+        PieDatasetChangeInfo info = new PieDatasetChangeInfo(ct, index, index);
+        fireDatasetChanged(info);
     }
 
     /**
@@ -233,7 +248,7 @@ public class DefaultPieDataset extends AbstractDataset
      * Inserts a new value at the specified position in the dataset or, if
      * there is an existing item with the specified key, updates the value
      * for that item and moves it to the specified position.  After the change
-     * is made, this methods sends a {@link DatasetChangeEvent} to all
+     * is made, this method sends a {@link DatasetChangeEvent} to all
      * registered listeners.
      *
      * @param position  the position (in the range 0 to getItemCount()).
@@ -244,7 +259,9 @@ public class DefaultPieDataset extends AbstractDataset
      */
     public void insertValue(int position, Comparable key, Number value) {
         this.data.insertValue(position, key, value);
-        fireDatasetChanged();
+        PieDatasetChangeType ct = PieDatasetChangeType.ADD;
+        // TODO: unit tests for inserts where key already exists.
+        fireDatasetChanged(new PieDatasetChangeInfo(ct, position, position));
     }
 
     /**
@@ -257,8 +274,10 @@ public class DefaultPieDataset extends AbstractDataset
      *     <code>null</code>.
      */
     public void remove(Comparable key) {
+        int i = getIndex(key);
         this.data.removeValue(key);
-        fireDatasetChanged();
+        PieDatasetChangeType ct = PieDatasetChangeType.REMOVE;
+        fireDatasetChanged(new PieDatasetChangeInfo(ct, i, i));
     }
 
     /**
@@ -270,7 +289,8 @@ public class DefaultPieDataset extends AbstractDataset
     public void clear() {
         if (getItemCount() > 0) {
             this.data.clear();
-            fireDatasetChanged();
+            PieDatasetChangeType ct = PieDatasetChangeType.CLEAR;
+            fireDatasetChanged(new PieDatasetChangeInfo(ct, -1, -1));
         }
     }
 
@@ -284,7 +304,9 @@ public class DefaultPieDataset extends AbstractDataset
      */
     public void sortByKeys(SortOrder order) {
         this.data.sortByKeys(order);
-        fireDatasetChanged();
+        PieDatasetChangeType ct = PieDatasetChangeType.UPDATE;
+        fireDatasetChanged(new PieDatasetChangeInfo(ct, 0,
+                getItemCount() - 1));
     }
 
     /**
@@ -296,8 +318,10 @@ public class DefaultPieDataset extends AbstractDataset
      * @since 1.0.3
      */
     public void sortByValues(SortOrder order) {
-        this.data.sortByValues(order);
-        fireDatasetChanged();
+        this.data.sortByObjects(order);
+        PieDatasetChangeType ct = PieDatasetChangeType.UPDATE;
+        fireDatasetChanged(new PieDatasetChangeInfo(ct, 0,
+                getItemCount() - 1));
     }
 
     /**
@@ -364,8 +388,38 @@ public class DefaultPieDataset extends AbstractDataset
      */
     public Object clone() throws CloneNotSupportedException {
         DefaultPieDataset clone = (DefaultPieDataset) super.clone();
-        clone.data = (DefaultKeyedValues) this.data.clone();
+        clone.data = (KeyedObjects) this.data.clone();
         return clone;
+    }
+
+    public boolean isSelected(Comparable key) {
+        SelectableValue item = (SelectableValue) this.data.getObject(key);
+        return item.isSelected();
+    }
+
+    public void setSelected(Comparable key, boolean selected) {
+        setSelected(key, selected, true);
+    }
+
+    public void setSelected(Comparable key, boolean selected, boolean notify) {
+        SelectableValue item = (SelectableValue) this.data.getObject(key);
+        item.setSelected(selected);
+        if (notify) {
+            fireSelectionEvent();
+        }
+    }
+
+    public void clearSelection() {
+        int itemCount = getItemCount();
+        for (int i = 0; i < itemCount; i++) {
+            SelectableValue item = (SelectableValue) this.data.getObject(i);
+            item.setSelected(false);
+        }
+        fireSelectionEvent();
+    }
+
+    public void fireSelectionEvent() {
+        this.fireDatasetChanged(new DatasetChangeInfo());
     }
 
 }

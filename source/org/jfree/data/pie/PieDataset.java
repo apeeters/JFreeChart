@@ -41,20 +41,31 @@
  * 23-Oct-2002 : Reorganised the code: PieDataset now extends KeyedValues
  *               interface (DG);
  * 04-Mar-2003 : Now just replicates the KeyedValuesDataset interface (DG);
+ * 01-Jul-2009 : Added optional selection state that can be associated with
+ *               the dataset (DG);
  *
  */
 
-package org.jfree.data.general;
+package org.jfree.data.pie;
 
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.KeyedValues;
+import org.jfree.data.general.Dataset;
 
 /**
  * A general purpose dataset where values are associated with keys.  As the
  * name suggests, you can use this dataset to supply data for pie charts (refer
- * to the {@link org.jfree.chart.plot.PiePlot} class).
+ * to the {@link PiePlot} class).
  */
 public interface PieDataset extends KeyedValues, Dataset {
 
-    // no new methods added.
+    /**
+     * Returns the selection state for this dataset, if any.
+     *
+     * @return The selection state (possibly <code>null</code>).
+     *
+     * @since 1.2.0
+     */
+    public PieDatasetSelectionState getSelectionState();
 
 }
