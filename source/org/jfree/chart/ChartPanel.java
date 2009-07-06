@@ -3102,4 +3102,8 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         this.selectionStates.add(new DatasetAndSelection(dataset, state));
     }
 
+    public Graphics2D createGraphics2D() {
+        return (Graphics2D) getGraphics().create();
+    }
+
 }

@@ -50,8 +50,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.util.ApplicationFrame;
 import org.jfree.chart.util.RefineryUtilities;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A simple demonstration application showing how to create a pie chart using
