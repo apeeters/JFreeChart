@@ -54,7 +54,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jfree.data.KeyedObject;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
 
 /**
  * Tests for the {@link KeyedObject} class.

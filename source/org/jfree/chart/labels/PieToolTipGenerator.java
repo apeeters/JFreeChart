@@ -40,7 +40,7 @@
 
 package org.jfree.chart.labels;
 
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A tool tip generator that is used by the

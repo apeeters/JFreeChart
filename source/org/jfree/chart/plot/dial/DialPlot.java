@@ -56,7 +56,7 @@ import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jfree.chart.JFreeChart;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotRenderingInfo;
@@ -503,7 +503,9 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         }
 
         // send a dataset change event to self...
-        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset);
+        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset,
+                new DatasetChangeInfo());
+        // TODO: fill in real change details
         datasetChanged(event);
 
     }

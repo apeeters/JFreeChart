@@ -47,7 +47,7 @@
 
 package org.jfree.chart.urls;
 
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * Interface for a URL generator for plots that use data from a

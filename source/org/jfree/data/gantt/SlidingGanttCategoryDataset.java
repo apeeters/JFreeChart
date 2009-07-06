@@ -43,6 +43,7 @@ package org.jfree.data.gantt;
 import java.util.Collections;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.general.AbstractDataset;
@@ -118,7 +119,8 @@ public class SlidingGanttCategoryDataset extends AbstractDataset
             throw new IllegalArgumentException("Invalid index.");
         }
         this.firstCategoryIndex = first;
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -145,7 +147,8 @@ public class SlidingGanttCategoryDataset extends AbstractDataset
             throw new IllegalArgumentException("Requires 'max' >= 0.");
         }
         this.maximumCategoryCount = max;
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

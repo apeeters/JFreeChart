@@ -61,6 +61,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DefaultKeyedValues2D;
 import org.jfree.data.DomainInfo;
@@ -174,7 +175,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      */
     public void setDomainIsPointsInTime(boolean flag) {
         this.domainIsPointsInTime = flag;
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -202,7 +204,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
             throw new IllegalArgumentException("Null 'anchor' argument.");
         }
         this.xPosition = anchor;
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -243,7 +246,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
         }
         this.values.addValue(y, period, seriesName);
         if (notify) {
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 
@@ -276,7 +280,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
     public void remove(TimePeriod period, String seriesName, boolean notify) {
         this.values.removeValue(period, seriesName);
         if (notify) {
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 
@@ -289,7 +294,8 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
     public void clear() {
         if (this.values.getRowCount() > 0) {
             this.values.clear();
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 

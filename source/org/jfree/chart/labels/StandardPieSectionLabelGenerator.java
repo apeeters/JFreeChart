@@ -57,7 +57,7 @@ import java.util.Locale;
 
 import org.jfree.chart.util.ObjectList;
 import org.jfree.chart.util.PublicCloneable;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A standard item label generator for plots that use data from a

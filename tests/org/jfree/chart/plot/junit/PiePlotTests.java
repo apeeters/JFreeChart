@@ -78,8 +78,8 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.urls.CustomPieURLGenerator;
 import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.chart.util.Rotation;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * Some tests for the {@link PiePlot} class.

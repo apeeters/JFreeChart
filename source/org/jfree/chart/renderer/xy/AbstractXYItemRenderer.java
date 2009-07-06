@@ -171,7 +171,6 @@ import org.jfree.chart.util.ObjectList;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
-import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetUtilities;
@@ -317,7 +316,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         if (dataset instanceof SelectableXYDataset) {
             SelectableXYDataset sxyd = (SelectableXYDataset) dataset;
             selectionState = sxyd.getSelectionState();
-    }
+        }
         // if the selection state is still null, go to the selection source
         // and ask if it has state...
         if (selectionState == null && info != null) {
@@ -1036,7 +1035,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public Rectangle2D createHotSpotBounds(Graphics2D g2, Rectangle2D dataArea,
             XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis,
             XYDataset dataset, int series, int item, boolean selected,
-            Rectangle2D result) {
+            XYItemRendererState state, Rectangle2D result) {
         if (result == null) {
             result = new Rectangle();
         }
@@ -1052,10 +1051,11 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
 
     public Shape createHotSpotShape(Graphics2D g2, Rectangle2D dataArea,
             XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis,
-            XYDataset dataset, int series, int item, boolean selected) {
+            XYDataset dataset, int series, int item, XYItemRendererState state,
+            boolean selected) {
         // FIXME : the actual shape will depend on what the renderer draws
         return createHotSpotBounds(g2, dataArea, plot, domainAxis, rangeAxis,
-                dataset, series, item, selected, null);
+                dataset, series, item, selected, state, null);
     }
 
     /**
@@ -1082,11 +1082,11 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public boolean hitTest(double xx, double yy, Graphics2D g2,
             Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
             ValueAxis rangeAxis, XYDataset dataset, int series, int item,
-            boolean selected) {
+            XYItemRendererState state, boolean selected) {
 
         Rectangle2D bounds = createHotSpotBounds(g2, dataArea, plot, 
                 domainAxis, rangeAxis, dataset, series, item, selected, 
-                null);
+                state, null);
         if (bounds == null) {
             return false;
         }

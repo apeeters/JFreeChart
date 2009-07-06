@@ -50,6 +50,7 @@
 
 package org.jfree.data.xy;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
@@ -114,7 +115,8 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     public void setBarWidth(double barWidth) {
         this.barWidth = barWidth;
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

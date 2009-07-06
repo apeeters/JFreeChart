@@ -44,6 +44,7 @@
 
 package org.jfree.data.xy;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.data.DomainOrder;
 import org.jfree.data.general.AbstractSeriesDataset;
 
@@ -125,7 +126,8 @@ public abstract class AbstractXYDataset extends AbstractSeriesDataset
      */
     public void setSelectionState(XYDatasetSelectionState state) {
         this.selectionState = state;
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in change details
     }
 
 }

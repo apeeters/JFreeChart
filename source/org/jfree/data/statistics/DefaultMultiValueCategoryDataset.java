@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.KeyedObjects2D;
 import org.jfree.data.Range;
@@ -154,7 +155,8 @@ public class DefaultMultiValueCategoryDataset extends AbstractDataset
                     this.maximumRangeValue.doubleValue());
         }
 
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

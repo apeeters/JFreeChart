@@ -962,4 +962,12 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         this.volumePaint = SerialUtilities.readPaint(stream);
     }
 
+    public Rectangle2D createHotSpotBounds(Graphics2D g2, Rectangle2D dataArea,
+            XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis,
+            XYDataset dataset, int series, int item, boolean selected,
+            XYItemRendererState state, Rectangle2D result) {
+        return super.createHotSpotBounds(g2, dataArea, plot, domainAxis,
+                rangeAxis, dataset, series, item, selected, state, result);
+    }
+
 }

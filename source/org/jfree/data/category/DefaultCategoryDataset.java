@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------
  * DefaultCategoryDataset.java
  * ---------------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited.
+ * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -43,6 +43,7 @@
  * 26-Feb-2007 : Updated API docs (DG);
  * 08-Mar-2007 : Implemented clone() (DG);
  * 09-May-2008 : Implemented PublicCloneable (DG);
+ * 03-Jul-2009 : Added selection state (DG);
  *
  */
 
@@ -51,29 +52,35 @@ package org.jfree.data.category;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
-import org.jfree.data.DefaultKeyedValues2D;
+import org.jfree.data.KeyedObjects2D;
+import org.jfree.data.SelectableValue;
 import org.jfree.data.UnknownKeyException;
-import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.DatasetChangeEvent;
 
 /**
  * A default implementation of the {@link CategoryDataset} interface.
  */
-public class DefaultCategoryDataset extends AbstractDataset
-        implements CategoryDataset, PublicCloneable, Serializable {
+public class DefaultCategoryDataset extends AbstractCategoryDataset
+        implements CategoryDataset, SelectableCategoryDataset, 
+        CategoryDatasetSelectionState, PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -8168173757291644622L;
 
-    /** A storage structure for the data. */
-    private DefaultKeyedValues2D data;
+    /** 
+     * A storage structure for the data.
+     */
+    private KeyedObjects2D data;
 
     /**
      * Creates a new (empty) dataset.
      */
     public DefaultCategoryDataset() {
-        this.data = new DefaultKeyedValues2D();
+        this.data = new KeyedObjects2D();
+        // FIXME: will need to remove this later, because it should be optional
+        setSelectionState(this);
     }
 
     /**
@@ -110,7 +117,14 @@ public class DefaultCategoryDataset extends AbstractDataset
      * @see #removeValue(Comparable, Comparable)
      */
     public Number getValue(int row, int column) {
-        return this.data.getValue(row, column);
+        SelectableValue sv = (SelectableValue) this.data.getObject(row, 
+                column);
+        if (sv == null) {
+            return null;
+        }
+        else {
+            return sv.getValue();
+        }
     }
 
     /**
@@ -204,7 +218,14 @@ public class DefaultCategoryDataset extends AbstractDataset
      * @see #addValue(Number, Comparable, Comparable)
      */
     public Number getValue(Comparable rowKey, Comparable columnKey) {
-        return this.data.getValue(rowKey, columnKey);
+        SelectableValue sv = (SelectableValue) this.data.getObject(rowKey,
+                columnKey);
+        if (sv != null) {
+            return sv.getValue();
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -219,8 +240,9 @@ public class DefaultCategoryDataset extends AbstractDataset
      */
     public void addValue(Number value, Comparable rowKey,
                          Comparable columnKey) {
-        this.data.addValue(value, rowKey, columnKey);
-        fireDatasetChanged();
+        this.data.addObject(new SelectableValue(value), rowKey, columnKey);
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in real change details
     }
 
     /**
@@ -249,8 +271,9 @@ public class DefaultCategoryDataset extends AbstractDataset
      */
     public void setValue(Number value, Comparable rowKey,
                          Comparable columnKey) {
-        this.data.setValue(value, rowKey, columnKey);
-        fireDatasetChanged();
+        this.data.setObject(new SelectableValue(value), rowKey, columnKey);
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in real change details
     }
 
     /**
@@ -293,14 +316,17 @@ public class DefaultCategoryDataset extends AbstractDataset
      * Removes a value from the dataset and sends a {@link DatasetChangeEvent}
      * to all registered listeners.
      *
-     * @param rowKey  the row key.
-     * @param columnKey  the column key.
+     * @param rowKey  the row key (<code>null</code> not permitted).
+     * @param columnKey  the column key (<code>null</code> not permitted).
      *
      * @see #addValue(Number, Comparable, Comparable)
+     *
+     * @throws UnknownKeyException if either key is not in the dataset.
      */
     public void removeValue(Comparable rowKey, Comparable columnKey) {
-        this.data.removeValue(rowKey, columnKey);
-        fireDatasetChanged();
+        this.data.removeObject(rowKey, columnKey);
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in real change details
     }
 
     /**
@@ -313,7 +339,8 @@ public class DefaultCategoryDataset extends AbstractDataset
      */
     public void removeRow(int rowIndex) {
         this.data.removeRow(rowIndex);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in real change details
     }
 
     /**
@@ -326,7 +353,8 @@ public class DefaultCategoryDataset extends AbstractDataset
      */
     public void removeRow(Comparable rowKey) {
         this.data.removeRow(rowKey);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in real change details
     }
 
     /**
@@ -339,7 +367,8 @@ public class DefaultCategoryDataset extends AbstractDataset
      */
     public void removeColumn(int columnIndex) {
         this.data.removeColumn(columnIndex);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in real change details
     }
 
     /**
@@ -355,7 +384,8 @@ public class DefaultCategoryDataset extends AbstractDataset
      */
     public void removeColumn(Comparable columnKey) {
         this.data.removeColumn(columnKey);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in real change details
     }
 
     /**
@@ -364,7 +394,8 @@ public class DefaultCategoryDataset extends AbstractDataset
      */
     public void clear() {
         this.data.clear();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in real change details
     }
 
     /**
@@ -426,8 +457,42 @@ public class DefaultCategoryDataset extends AbstractDataset
      */
     public Object clone() throws CloneNotSupportedException {
         DefaultCategoryDataset clone = (DefaultCategoryDataset) super.clone();
-        clone.data = (DefaultKeyedValues2D) this.data.clone();
+        clone.data = (KeyedObjects2D) this.data.clone();
         return clone;
+    }
+
+    public boolean isSelected(int row, int column) {
+        SelectableValue sv = (SelectableValue) this.data.getObject(row, column);
+        return sv.isSelected();
+    }
+
+    public void setSelected(int row, int column, boolean selected) {
+        setSelected(row, column, selected, true);
+    }
+
+    public void setSelected(int row, int column, boolean selected,
+            boolean notify) {
+        SelectableValue sv = (SelectableValue) this.data.getObject(row, column);
+        sv.setSelected(selected);
+        if (notify) {
+            fireSelectionEvent();
+        }
+    }
+
+    public void clearSelection() {
+        int rowCount = getRowCount();
+        int colCount = getColumnCount();
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < colCount; c++) {
+                setSelected(r, c, false, false);
+            }
+        }
+        fireSelectionEvent();
+    }
+
+    public void fireSelectionEvent() {
+        // TODO: this should be a separate event type I think
+        fireDatasetChanged(new DatasetChangeInfo());
     }
 
 }

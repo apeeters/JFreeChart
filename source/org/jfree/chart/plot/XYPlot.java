@@ -274,6 +274,7 @@ import org.jfree.chart.axis.TickType;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.axis.ValueTick;
 import org.jfree.chart.event.ChartChangeEventType;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.event.RendererChangeListener;
@@ -1418,7 +1419,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
         }
 
         // send a dataset change event to self...
-        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset);
+        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset,
+                new DatasetChangeInfo());
+        // TODO:  fill in correct dataset change info
         datasetChanged(event);
     }
 
@@ -1483,7 +1486,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
         Integer key = new Integer(index);
         this.datasetToDomainAxesMap.put(key, new ArrayList(axisIndices));
         // fake a dataset change event to update axes...
-        datasetChanged(new DatasetChangeEvent(this, getDataset(index)));
+        datasetChanged(new DatasetChangeEvent(this, getDataset(index), 
+                new DatasetChangeInfo()));
+        // TODO: fill in real dataset change info
     }
 
     /**
@@ -1519,7 +1524,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
         Integer key = new Integer(index);
         this.datasetToRangeAxesMap.put(key, new ArrayList(axisIndices));
         // fake a dataset change event to update axes...
-        datasetChanged(new DatasetChangeEvent(this, getDataset(index)));
+        datasetChanged(new DatasetChangeEvent(this, getDataset(index), 
+                new DatasetChangeInfo()));
+        // TODO:  fill in real dataset change info
     }
 
     /**
@@ -5731,8 +5738,12 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
     /**
      * Selects a single point.
      *
-     * @param xx
-     * @param yy
+     * @param xx  the x coordinate in Java 2D space.
+     * @param yy  the y coordinate in Java 2D space.
+     * @param dataArea  the data area.
+     * @param source  the rendering source (can be used to locate the
+     *         appropriate selection state).
+     *
      * @since 1.2.0
      */
     public void select(double xx, double yy, Rectangle2D dataArea,
@@ -5748,16 +5759,20 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
             if (state == null) {
                 continue;
             }
+            Graphics2D g2 = source.createGraphics2D();
             XYItemRenderer renderer = getRendererForDataset(dataset);
+            XYItemRendererState rs = renderer.initialise(
+                    source.createGraphics2D(), dataArea, this, dataset, null);
             int seriesCount = dataset.getSeriesCount();
             for (int s = 0; s < seriesCount; s++) {
                 int itemCount = dataset.getItemCount(s);
                 for (int i = 0; i < itemCount; i++) {
                     // TODO:  we should probably ask the renderer to specify
                     // whether or not the item is contained in the path
-                    if (renderer.hitTest(xx, yy, null, dataArea, this,
+                    if (renderer.hitTest(xx, yy, g2, dataArea, this,
                             getDomainAxisForDataset(d),
-                            getRangeAxisForDataset(d), dataset, s, i, false)) {
+                            getRangeAxisForDataset(d), dataset, s, i, rs,
+                            false)) {
                         state.setSelected(s, i, !state.isSelected(s, i));
                     }
                 }
@@ -5881,8 +5896,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
         for (int d = 0; d < datasetCount; d++) {
             XYDataset dataset = (XYDataset) this.datasets.get(d);
             if (dataset instanceof AbstractXYDataset) {
-                // TODO: we could add an interface that *any* dataset could
-                // implement if it provides a selection state
+                // FIXME:  actually, we need to get the selection state
+                // taking into account the rendering source
                 AbstractXYDataset axyd = (AbstractXYDataset) dataset;
                 if (axyd.getSelectionState() != null) {
                     XYDatasetSelectionState selState = axyd.getSelectionState();

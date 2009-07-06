@@ -117,6 +117,7 @@ import java.util.ResourceBundle;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PaintUtilities;
@@ -447,7 +448,9 @@ public class ThermometerPlot extends Plot implements ValueAxisPlot,
         }
 
         // send a dataset change event to self...
-        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset);
+        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset,
+                new DatasetChangeInfo());
+        // TODO: fill in change type
         datasetChanged(event);
 
     }

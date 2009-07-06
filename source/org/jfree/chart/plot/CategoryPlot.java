@@ -188,6 +188,7 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -209,6 +210,7 @@ import java.util.TreeMap;
 
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.RenderingSource;
 import org.jfree.chart.annotations.CategoryAnnotation;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.AxisCollection;
@@ -221,10 +223,10 @@ import org.jfree.chart.axis.TickType;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.axis.ValueTick;
 import org.jfree.chart.event.ChartChangeEventType;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.event.RendererChangeListener;
-import org.jfree.chart.renderer.category.AbstractCategoryItemRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRendererState;
 import org.jfree.chart.util.Layer;
@@ -240,6 +242,8 @@ import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.SortOrder;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.CategoryDatasetSelectionState;
+import org.jfree.data.category.SelectableCategoryDataset;
 import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
@@ -249,8 +253,8 @@ import org.jfree.data.general.DatasetUtilities;
  * renders each data item using a {@link CategoryItemRenderer}.
  */
 public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
-        Zoomable, RendererChangeListener, Cloneable, PublicCloneable,
-        Serializable {
+        Selectable, Zoomable, RendererChangeListener, Cloneable,
+        PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -3537691700434728188L;
@@ -1336,7 +1340,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         }
 
         // send a dataset change event to self...
-        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset);
+        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset,
+                new DatasetChangeInfo());
+        // TODO: fill in real dataset change info
         datasetChanged(event);
 
     }
@@ -1405,7 +1411,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         Integer key = new Integer(index);
         this.datasetToDomainAxesMap.put(key, new ArrayList(axisIndices));
         // fake a dataset change event to update axes...
-        datasetChanged(new DatasetChangeEvent(this, getDataset(index)));
+        datasetChanged(new DatasetChangeEvent(this, getDataset(index),
+                new DatasetChangeInfo()));
+        // TODO: fill in real dataset change info
     }
 
     /**
@@ -1500,7 +1508,10 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         Integer key = new Integer(index);
         this.datasetToRangeAxesMap.put(key, new ArrayList(axisIndices));
         // fake a dataset change event to update axes...
-        datasetChanged(new DatasetChangeEvent(this, getDataset(index)));
+        datasetChanged(new DatasetChangeEvent(this, getDataset(index),
+                new DatasetChangeInfo()));
+
+        // TODO: fill in real dataset change info
     }
 
     /**
@@ -3864,7 +3875,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
 
             foundData = true;
             CategoryItemRendererState state = renderer.initialise(g2, dataArea,
-                    this, index, info);
+                    this, currentDataset, info);
+            CategoryDatasetSelectionState selectionState = state.getSelectionState();
             state.setCrosshairState(crosshairState);
             int columnCount = currentDataset.getColumnCount();
             int rowCount = currentDataset.getRowCount();
@@ -3874,16 +3886,26 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
                     for (int column = 0; column < columnCount; column++) {
                         if (this.rowRenderingOrder == SortOrder.ASCENDING) {
                             for (int row = 0; row < rowCount; row++) {
+                                boolean selected = false;
+                                if (selectionState != null) {
+                                    selected = selectionState.isSelected(row,
+                                            column);
+                                }
                                 renderer.drawItem(g2, state, dataArea, this,
                                         domainAxis, rangeAxis, currentDataset,
-                                        row, column, false, pass);
+                                        row, column, selected, pass);
                             }
                         }
                         else {
                             for (int row = rowCount - 1; row >= 0; row--) {
+                                boolean selected = false;
+                                if (selectionState != null) {
+                                    selected = selectionState.isSelected(row,
+                                            column);
+                                }
                                 renderer.drawItem(g2, state, dataArea, this,
                                         domainAxis, rangeAxis, currentDataset,
-                                        row, column, false, pass);
+                                        row, column, selected, pass);
                             }
                         }
                     }
@@ -3892,16 +3914,26 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
                     for (int column = columnCount - 1; column >= 0; column--) {
                         if (this.rowRenderingOrder == SortOrder.ASCENDING) {
                             for (int row = 0; row < rowCount; row++) {
+                                boolean selected = false;
+                                if (selectionState != null) {
+                                    selected = selectionState.isSelected(row,
+                                            column);
+                                }
                                 renderer.drawItem(g2, state, dataArea, this,
                                         domainAxis, rangeAxis, currentDataset,
-                                        row, column, false, pass);
+                                        row, column, selected, pass);
                             }
                         }
                         else {
                             for (int row = rowCount - 1; row >= 0; row--) {
+                                boolean selected = false;
+                                if (selectionState != null) {
+                                    selected = selectionState.isSelected(row,
+                                            column);
+                                }
                                 renderer.drawItem(g2, state, dataArea, this,
                                         domainAxis, rangeAxis, currentDataset,
-                                        row, column, false, pass);
+                                        row, column, selected, pass);
                             }
                         }
                     }
@@ -5107,4 +5139,133 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
 
     }
 
+    /**
+     * Returns <code>true</code> if the plot supports selection by point,
+     * and <code>false</code> otherwise.
+     *
+     * @return A boolean.
+     *
+     * @since 1.2.0
+     */
+    public boolean canSelectByPoint() {
+        return true;
+    }
+
+    /**
+     * Returns <code>true</code> if the plot supports selection by region,
+     * and <code>false</code> otherwise.
+     *
+     * @return A boolean.
+     *
+     * @since 1.2.0
+     */
+    public boolean canSelectByRegion() {
+        return true;
+    }
+
+    /**
+     * Perform a select for the item(s) at the specified (x, y) coordinates
+     * in Java2D space.
+     *
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * @param dataArea  the data area.
+     * @param source  the rendering source.
+     *
+     * @since 1.2.0
+     */
+    public void select(double x, double y, Rectangle2D dataArea,
+            RenderingSource source) {
+
+        int datasetCount = this.datasets.size();
+        for (int d = 0; d < datasetCount; d++) {
+            CategoryDataset dataset = (CategoryDataset) this.datasets.get(d);
+            if (dataset == null) {
+                continue;
+            }
+            CategoryDatasetSelectionState state = findSelectionStateForDataset(
+                    dataset, source);
+            if (state == null) {
+                continue;
+            }
+            Graphics2D g2 = source.createGraphics2D();
+            CategoryItemRenderer renderer = getRendererForDataset(dataset);
+            CategoryItemRendererState rs = renderer.initialise(g2, dataArea,
+                    this, dataset, null);
+            int rowCount = dataset.getRowCount();
+            int columnCount = dataset.getColumnCount();
+            for (int r = 0; r < rowCount; r++) {
+                for (int c = 0; c < columnCount; c++) {
+                    if (renderer.hitTest(x, y, null, dataArea, this,
+                            getDomainAxisForDataset(d),
+                            getRangeAxisForDataset(d), dataset, r, c, false,
+                            rs)) {
+                        state.setSelected(r, c, !state.isSelected(r, c));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Perform a select for the item(s) within the specified region
+     * in Java2D space.
+     *
+     * @param region  the region.
+     * @param dataArea  the data area.
+     * @param source  the rendering source.
+     *
+     * @since 1.2.0
+     */
+    public void select(GeneralPath region, Rectangle2D dataArea,
+            RenderingSource source) {
+        System.out.println(region);
+        System.out.println("Select a region...");
+    }
+
+    /**
+     * Clears the selection.
+     *
+     * @since 1.2.0
+     */
+    public void clearSelection() {
+        // cycle through the datasets and clear the selection state
+        int datasetCount = this.datasets.size();
+        for (int d = 0; d < datasetCount; d++) {
+            CategoryDataset dataset = (CategoryDataset) this.datasets.get(d);
+            if (dataset instanceof SelectableCategoryDataset) {
+                // FIXME:  actually, we need to get the selection state
+                // taking into account the rendering source
+                SelectableCategoryDataset scd
+                        = (SelectableCategoryDataset) dataset;
+                if (scd.getSelectionState() != null) {
+                    CategoryDatasetSelectionState selState
+                            = scd.getSelectionState();
+                    selState.clearSelection();
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Returns the selection state for the specified dataset.  This could be
+     * <code>null</code> if the dataset hasn't been set up to support
+     * selections.
+     *
+     * @param dataset  the dataset.
+     * @param source  the selection source.
+     *
+     * @return The selection state (possibly <code>null</code>).
+     */
+    private CategoryDatasetSelectionState findSelectionStateForDataset(
+            CategoryDataset dataset, Object source) {
+        if (dataset instanceof SelectableCategoryDataset) {
+            SelectableCategoryDataset sd = (SelectableCategoryDataset) dataset;
+            CategoryDatasetSelectionState s = sd.getSelectionState();
+            return s;
+        }
+        throw new RuntimeException();
+        //return null;  // TODO: implement
+    }
 }

@@ -136,7 +136,7 @@ public class PiePlot3DTests extends TestCase {
     public void testDrawWithNullDataset() {
         JFreeChart chart = ChartFactory.createPieChart3D("Test", null, true,
                 false, false);
-        boolean success = false;
+        boolean success = false; 
         try {
             BufferedImage image = new BufferedImage(200 , 100,
                     BufferedImage.TYPE_INT_RGB);

@@ -47,6 +47,7 @@ package org.jfree.data.time.ohlc;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.general.DatasetChangeEvent;
@@ -104,7 +105,8 @@ public class OHLCSeriesCollection extends AbstractXYDataset
             throw new IllegalArgumentException("Null 'anchor' argument.");
         }
         this.xPosition = anchor;
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -119,7 +121,8 @@ public class OHLCSeriesCollection extends AbstractXYDataset
         }
         this.data.add(series);
         series.addChangeListener(this);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -404,7 +407,8 @@ public class OHLCSeriesCollection extends AbstractXYDataset
         boolean removed = this.data.remove(series);
         if (removed) {
             series.removeChangeListener(this);
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
         return removed;
     }
@@ -430,7 +434,8 @@ public class OHLCSeriesCollection extends AbstractXYDataset
 
         // remove all the series from the collection and notify listeners.
         this.data.clear();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
 
     }
 

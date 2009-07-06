@@ -125,6 +125,8 @@
 
 package org.jfree.data.general;
 
+import org.jfree.data.pie.PieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

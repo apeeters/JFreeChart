@@ -57,7 +57,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.chart.util.PublicCloneable;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
 
 /**
  * Tests for the {@link StandardPieURLGenerator} class.

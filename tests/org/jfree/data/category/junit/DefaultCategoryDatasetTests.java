@@ -273,7 +273,17 @@ public class DefaultCategoryDatasetTests extends TestCase {
      */
     public void testRemoveValue() {
         DefaultCategoryDataset d = new DefaultCategoryDataset();
-        d.removeValue("R1", "C1");
+
+        // if we try removing with unknown keys, we expect an exception
+        boolean pass = false;
+        try {
+            d.removeValue("R1", "C1");
+        }
+        catch (UnknownKeyException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+
         d.addValue(new Double(1.0), "R1", "C1");
         d.removeValue("R1", "C1");
         assertEquals(0, d.getRowCount());
@@ -284,7 +294,7 @@ public class DefaultCategoryDatasetTests extends TestCase {
         d.removeValue("R1", "C1");
         assertEquals(new Double(2.0), d.getValue(0, 0));
 
-        boolean pass = false;
+        pass = false;
         try {
             d.removeValue(null, "C1");
         }

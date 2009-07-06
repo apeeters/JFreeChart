@@ -58,7 +58,7 @@ import java.io.Serializable;
 
 import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.ObjectUtilities;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A chart entity that represents one section within a pie plot.

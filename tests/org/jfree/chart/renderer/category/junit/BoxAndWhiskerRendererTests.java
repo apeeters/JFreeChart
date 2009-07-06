@@ -66,6 +66,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.jfree.chart.BufferedImageRenderingSource;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItem;
@@ -262,9 +263,13 @@ public class BoxAndWhiskerRendererTests extends TestCase {
         try {
             BufferedImage image = new BufferedImage(200 , 100,
                     BufferedImage.TYPE_INT_RGB);
+            BufferedImageRenderingSource birs 
+                    = new BufferedImageRenderingSource(image);
+            ChartRenderingInfo info = new ChartRenderingInfo();
+            info.setRenderingSource(birs);
             Graphics2D g2 = image.createGraphics();
             chart.draw(g2, new Rectangle2D.Double(0, 0, 200, 100), null,
-                    new ChartRenderingInfo());
+                    info);
             g2.dispose();
             success = true;
         }
@@ -305,9 +310,13 @@ public class BoxAndWhiskerRendererTests extends TestCase {
         try {
             BufferedImage image = new BufferedImage(200 , 100,
                     BufferedImage.TYPE_INT_RGB);
+            BufferedImageRenderingSource birs
+                    = new BufferedImageRenderingSource(image);
+            ChartRenderingInfo info = new ChartRenderingInfo();
+            info.setRenderingSource(birs);
             Graphics2D g2 = image.createGraphics();
             chart.draw(g2, new Rectangle2D.Double(0, 0, 200, 100), null,
-                    new ChartRenderingInfo());
+                    info);
             g2.dispose();
             success = true;
         }
@@ -388,6 +397,7 @@ public class BoxAndWhiskerRendererTests extends TestCase {
         }
         catch (Exception e) {
             success = false;
+            e.printStackTrace();
         }
         assertTrue(success);
     }

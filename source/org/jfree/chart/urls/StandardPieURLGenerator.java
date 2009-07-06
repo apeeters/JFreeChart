@@ -57,7 +57,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.jfree.chart.util.ObjectUtilities;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A URL generator for pie charts.  Instances of this class are immutable.

@@ -181,12 +181,12 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      * @return The renderer state.
      */
     public CategoryItemRendererState initialise(Graphics2D g2,
-            Rectangle2D dataArea, CategoryPlot plot, int rendererIndex,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryDataset dataset,
             PlotRenderingInfo info) {
 
         CategoryItemRendererState state = super.initialise(g2, dataArea, plot,
-                rendererIndex, info);
-        calculateItemWidth(plot, dataArea, rendererIndex, state);
+                dataset, info);
+        calculateItemWidth(plot, dataArea, dataset, state);
         return state;
 
     }
@@ -196,15 +196,14 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      *
      * @param plot  the plot.
      * @param dataArea  the data area.
-     * @param rendererIndex  the renderer index.
+     * @param dataset  the dataset.
      * @param state  the renderer state.
      */
     protected void calculateItemWidth(CategoryPlot plot,
-            Rectangle2D dataArea, int rendererIndex,
+            Rectangle2D dataArea, CategoryDataset dataset,
             CategoryItemRendererState state) {
 
-        CategoryAxis domainAxis = getDomainAxis(plot, rendererIndex);
-        CategoryDataset dataset = plot.getDataset(rendererIndex);
+        CategoryAxis domainAxis = getDomainAxis(plot, dataset);
         if (dataset != null) {
             int columns = dataset.getColumnCount();
             int rows = state.getVisibleSeriesCount() >= 0

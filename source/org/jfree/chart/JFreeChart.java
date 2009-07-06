@@ -1406,6 +1406,9 @@ public class JFreeChart implements Drawable,
                                              int imageType,
                                              ChartRenderingInfo info) {
         BufferedImage image = new BufferedImage(width, height, imageType);
+        if (info != null) {
+            info.setRenderingSource(new BufferedImageRenderingSource(image));
+        }
         Graphics2D g2 = image.createGraphics();
         draw(g2, new Rectangle2D.Double(0, 0, width, height), null, info);
         g2.dispose();

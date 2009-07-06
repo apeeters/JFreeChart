@@ -403,7 +403,6 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
      * @param g2  the graphics device.
      * @param dataArea  the area in which the data is to be plotted.
      * @param plot  the plot.
-     * @param rendererIndex  the renderer index.
      * @param info  collects chart rendering information for return to caller.
      *
      * @return The renderer state.
@@ -411,15 +410,14 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
     public CategoryItemRendererState initialise(Graphics2D g2,
                                                 Rectangle2D dataArea,
                                                 CategoryPlot plot,
-                                                int rendererIndex,
+                                                CategoryDataset dataset,
                                                 PlotRenderingInfo info) {
 
         CategoryItemRendererState state = super.initialise(g2, dataArea, plot,
-                rendererIndex, info);
+                dataset, info);
 
         // calculate the box width
-        CategoryAxis domainAxis = getDomainAxis(plot, rendererIndex);
-        CategoryDataset dataset = plot.getDataset(rendererIndex);
+        CategoryAxis domainAxis = getDomainAxis(plot, dataset);
         if (dataset != null) {
             int columns = dataset.getColumnCount();
             int rows = dataset.getRowCount();

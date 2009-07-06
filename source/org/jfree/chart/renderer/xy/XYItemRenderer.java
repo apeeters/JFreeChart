@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------
  * XYItemRenderer.java
  * -------------------
- * (C) Copyright 2001-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2001-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Mark Watson (www.markwatson.com);
@@ -110,6 +110,7 @@ import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.RenderAttributes;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.chart.util.Layer;
 import org.jfree.data.Range;
@@ -1852,13 +1853,15 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param dataset  the dataset.
      * @param series  the series index (zero-based).
      * @param item  the item index (zero-based).
+     * @param state  the renderer state.
      * @param selected  is the item selected?
      * 
      * @return A shape equal to the hot spot for a data item.
      */
     public Shape createHotSpotShape(Graphics2D g2, Rectangle2D dataArea, 
             XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis, 
-            XYDataset dataset, int series, int item, boolean selected);
+            XYDataset dataset, int series, int item,
+            XYItemRendererState state, boolean selected);
 
     /**
      * Returns the rectangular bounds for the hot spot for an item drawn by
@@ -1875,13 +1878,15 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param series
      * @param item
      * @param selected
+     * @param state
      * @param result
+     * 
      * @return
      */
     public Rectangle2D createHotSpotBounds(Graphics2D g2, Rectangle2D dataArea, 
             XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis, 
             XYDataset dataset, int series, int item, boolean selected,
-            Rectangle2D result);
+            XYItemRendererState state, Rectangle2D result);
     
     /**
      * Returns <code>true</code> if the specified point (xx, yy) in Java2D
@@ -1907,7 +1912,7 @@ public interface XYItemRenderer extends LegendItemSource {
     public boolean hitTest(double xx, double yy, Graphics2D g2,
             Rectangle2D dataArea, XYPlot plot, ValueAxis domainAxis,
             ValueAxis rangeAxis, XYDataset dataset, int series, int item,
-            boolean selected);
+            XYItemRendererState state, boolean selected);
 
     /**
      * Draws a line perpendicular to the domain axis.
@@ -1990,5 +1995,15 @@ public interface XYItemRenderer extends LegendItemSource {
      */
     public void fillRangeGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
             Rectangle2D dataArea, double start, double end);
+
+    /**
+     * Returns the selected item attributes.
+     *
+     * @return The selected item attributes (possibly <code>null</code>).
+     *
+     * @since 1.2.0
+     */
+    public RenderAttributes getSelectedItemAttributes();
+
 
 }

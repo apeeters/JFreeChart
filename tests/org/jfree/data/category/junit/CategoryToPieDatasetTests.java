@@ -56,7 +56,7 @@ import junit.framework.TestSuite;
 import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.CategoryToPieDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
 
 /**
  * Tests for the {@link CategoryToPieDataset} class.

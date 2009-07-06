@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainOrder;
 import org.jfree.data.general.DatasetChangeEvent;
@@ -273,7 +274,8 @@ public class DefaultXYDataset extends AbstractXYDataset
             this.seriesList.remove(seriesIndex);
             this.seriesList.add(seriesIndex, data);
         }
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -288,7 +290,8 @@ public class DefaultXYDataset extends AbstractXYDataset
         if (seriesIndex >= 0) {
             this.seriesKeys.remove(seriesIndex);
             this.seriesList.remove(seriesIndex);
-            notifyListeners(new DatasetChangeEvent(this, this));
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 

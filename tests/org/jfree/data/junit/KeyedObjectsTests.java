@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ----------------------
  * KeyedObjectsTests.java
  * ----------------------
- * (C) Copyright 2004-2008, by Object Refinery Limited.
+ * (C) Copyright 2004-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -37,6 +37,7 @@
  * 27-Jan-2004 : Version 1 (DG);
  * 28-Sep-2007 : Added testCloning2() (DG);
  * 03-Oct-2007 : New tests (DG);
+ * 01-Jul-2009 : Added tests for sorting (DG);
  *
  */
 
@@ -54,9 +55,11 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.jfree.chart.util.SortOrder;
+import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.KeyedObjects;
 import org.jfree.data.UnknownKeyException;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
 
 /**
  * Tests for the {@link KeyedObjects} class.
@@ -101,7 +104,7 @@ public class KeyedObjectsTests extends TestCase {
             ko2 = (KeyedObjects) ko1.clone();
         }
         catch (CloneNotSupportedException e) {
-            System.err.println("Failed to clone.");
+            e.printStackTrace();
         }
         assertTrue(ko1 != ko2);
         assertTrue(ko1.getClass() == ko2.getClass());
@@ -411,6 +414,130 @@ public class KeyedObjectsTests extends TestCase {
             pass = true;
         }
         assertTrue(pass);
+    }
+
+    /**
+     * Tests sorting of data by key (ascending).
+     */
+    public void testSortByKeyAscending() {
+        KeyedObjects data = new KeyedObjects();
+        data.addObject("C", new Double(1.0));
+        data.addObject("B", null);
+        data.addObject("D", new Double(3.0));
+        data.addObject("A", new Double(2.0));
+
+        data.sortByKeys(SortOrder.ASCENDING);
+
+        // check key order
+        assertEquals("A", data.getKey(0));
+        assertEquals("B", data.getKey(1));
+        assertEquals("C", data.getKey(2));
+        assertEquals("D", data.getKey(3));
+
+        // check retrieve value by key
+        assertEquals(data.getObject("A"), new Double(2.0));
+        assertEquals(data.getObject("B"), null);
+        assertEquals(data.getObject("C"), new Double(1.0));
+        assertEquals(data.getObject("D"), new Double(3.0));
+
+        // check retrieve value by index
+        assertEquals(data.getObject(0), new Double(2.0));
+        assertEquals(data.getObject(1), null);
+        assertEquals(data.getObject(2), new Double(1.0));
+        assertEquals(data.getObject(3), new Double(3.0));
+    }
+
+    /**
+     * Tests sorting of data by key (descending).
+     */
+    public void testSortByKeyDescending() {
+        KeyedObjects data = new KeyedObjects();
+        data.addObject("C", new Double(1.0));
+        data.addObject("B", null);
+        data.addObject("D", new Double(3.0));
+        data.addObject("A", new Double(2.0));
+
+        data.sortByKeys(SortOrder.DESCENDING);
+
+        // check key order
+        assertEquals(data.getKey(0), "D");
+        assertEquals(data.getKey(1), "C");
+        assertEquals(data.getKey(2), "B");
+        assertEquals(data.getKey(3), "A");
+
+        // check retrieve value by key
+        assertEquals(data.getObject("A"), new Double(2.0));
+        assertEquals(data.getObject("B"), null);
+        assertEquals(data.getObject("C"), new Double(1.0));
+        assertEquals(data.getObject("D"), new Double(3.0));
+
+        // check retrieve value by index
+        assertEquals(data.getObject(0), new Double(3.0));
+        assertEquals(data.getObject(1), new Double(1.0));
+        assertEquals(data.getObject(2), null);
+        assertEquals(data.getObject(3), new Double(2.0));
+    }
+
+    /**
+     * Tests sorting of data by value (ascending).
+     */
+    public void testSortByValueAscending() {
+        KeyedObjects data = new KeyedObjects();
+        data.addObject("C", new Double(1.0));
+        data.addObject("B", null);
+        data.addObject("D", new Double(3.0));
+        data.addObject("A", new Double(2.0));
+
+        data.sortByObjects(SortOrder.ASCENDING);
+
+        // check key order
+        assertEquals(data.getKey(0), "C");
+        assertEquals(data.getKey(1), "A");
+        assertEquals(data.getKey(2), "D");
+        assertEquals(data.getKey(3), "B");
+
+        // check retrieve value by key
+        assertEquals(data.getObject("A"), new Double(2.0));
+        assertEquals(data.getObject("B"), null);
+        assertEquals(data.getObject("C"), new Double(1.0));
+        assertEquals(data.getObject("D"), new Double(3.0));
+
+        // check retrieve value by index
+        assertEquals(data.getObject(0), new Double(1.0));
+        assertEquals(data.getObject(1), new Double(2.0));
+        assertEquals(data.getObject(2), new Double(3.0));
+        assertEquals(data.getObject(3), null);
+    }
+
+    /**
+     * Tests sorting of data by key (descending).
+     */
+    public void testSortByValueDescending() {
+        KeyedObjects data = new KeyedObjects();
+        data.addObject("C", new Double(1.0));
+        data.addObject("B", null);
+        data.addObject("D", new Double(3.0));
+        data.addObject("A", new Double(2.0));
+
+        data.sortByObjects(SortOrder.DESCENDING);
+
+        // check key order
+        assertEquals(data.getKey(0), "D");
+        assertEquals(data.getKey(1), "A");
+        assertEquals(data.getKey(2), "C");
+        assertEquals(data.getKey(3), "B");
+
+        // check retrieve value by key
+        assertEquals(data.getObject("A"), new Double(2.0));
+        assertEquals(data.getObject("B"), null);
+        assertEquals(data.getObject("C"), new Double(1.0));
+        assertEquals(data.getObject("D"), new Double(3.0));
+
+        // check retrieve value by index
+        assertEquals(data.getObject(0), new Double(3.0));
+        assertEquals(data.getObject(1), new Double(2.0));
+        assertEquals(data.getObject(2), new Double(1.0));
+        assertEquals(data.getObject(3), null);
     }
 
 }

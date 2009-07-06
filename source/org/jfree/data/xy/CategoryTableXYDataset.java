@@ -48,6 +48,7 @@
 
 package org.jfree.data.xy;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DefaultKeyedValues2D;
 import org.jfree.data.DomainInfo;
@@ -113,7 +114,8 @@ public class CategoryTableXYDataset extends AbstractIntervalXYDataset
     public void add(Number x, Number y, String seriesName, boolean notify) {
         this.values.addValue(y, (Comparable) x, seriesName);
         if (notify) {
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 
@@ -137,7 +139,8 @@ public class CategoryTableXYDataset extends AbstractIntervalXYDataset
     public void remove(Number x, String seriesName, boolean notify) {
         this.values.removeValue((Comparable) x, seriesName);
         if (notify) {
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 
@@ -316,7 +319,8 @@ public class CategoryTableXYDataset extends AbstractIntervalXYDataset
      */
     public void setIntervalPositionFactor(double d) {
         this.intervalDelegate.setIntervalPositionFactor(d);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -336,7 +340,8 @@ public class CategoryTableXYDataset extends AbstractIntervalXYDataset
      */
     public void setIntervalWidth(double d) {
         this.intervalDelegate.setFixedIntervalWidth(d);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -356,7 +361,8 @@ public class CategoryTableXYDataset extends AbstractIntervalXYDataset
      */
     public void setAutoWidth(boolean b) {
         this.intervalDelegate.setAutoWidth(b);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

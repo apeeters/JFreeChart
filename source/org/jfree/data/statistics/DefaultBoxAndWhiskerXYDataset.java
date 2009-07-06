@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.Range;
 import org.jfree.data.RangeInfo;
@@ -242,7 +243,8 @@ public class DefaultBoxAndWhiskerXYDataset extends AbstractXYDataset
         }
         this.rangeBounds = new Range(this.minimumRangeValue.doubleValue(),
                 this.maximumRangeValue.doubleValue());
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

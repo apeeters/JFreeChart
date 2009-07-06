@@ -110,7 +110,7 @@ import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.labels.PieToolTipGenerator;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A plot that displays data in the form of a 3D pie chart, using data from
@@ -462,9 +462,9 @@ public class PiePlot3D extends PiePlot implements Serializable {
                 continue;
             }
             Comparable key = getSectionKey(categoryIndex);
-            paint = lookupSectionPaint(key);
-            outlinePaint = lookupSectionOutlinePaint(key);
-            outlineStroke = lookupSectionOutlineStroke(key);
+            paint = lookupSectionPaint(key, false);
+            outlinePaint = lookupSectionOutlinePaint(key, false);
+            outlineStroke = lookupSectionOutlineStroke(key, false);
             g2.setPaint(paint);
             g2.fill(arc);
             g2.setPaint(outlinePaint);
@@ -500,9 +500,9 @@ public class PiePlot3D extends PiePlot implements Serializable {
             Arc2D segment = (Arc2D) iterator.next();
             if (segment != null) {
                 Comparable key = getSectionKey(cat);
-                paint = lookupSectionPaint(key);
-                outlinePaint = lookupSectionOutlinePaint(key);
-                outlineStroke = lookupSectionOutlineStroke(key);
+                paint = lookupSectionPaint(key, false);
+                outlinePaint = lookupSectionOutlinePaint(key, false);
+                outlineStroke = lookupSectionOutlineStroke(key, false);
                 drawSide(g2, pieArea, segment, front, back, paint,
                         outlinePaint, outlineStroke, false, true);
             }
@@ -516,9 +516,9 @@ public class PiePlot3D extends PiePlot implements Serializable {
             Arc2D segment = (Arc2D) iterator.next();
             if (segment != null) {
                 Comparable key = getSectionKey(cat);
-                paint = lookupSectionPaint(key);
-                outlinePaint = lookupSectionOutlinePaint(key);
-                outlineStroke = lookupSectionOutlineStroke(key);
+                paint = lookupSectionPaint(key, false);
+                outlinePaint = lookupSectionOutlinePaint(key, false);
+                outlineStroke = lookupSectionOutlineStroke(key, false);
                 drawSide(g2, pieArea, segment, front, back, paint,
                         outlinePaint, outlineStroke, true, false);
             }
@@ -541,8 +541,8 @@ public class PiePlot3D extends PiePlot implements Serializable {
 
             Comparable currentKey = (Comparable) sectionKeys.get(sectionIndex);
             paint = lookupSectionPaint(currentKey, true);
-            outlinePaint = lookupSectionOutlinePaint(currentKey);
-            outlineStroke = lookupSectionOutlineStroke(currentKey);
+            outlinePaint = lookupSectionOutlinePaint(currentKey, false);
+            outlineStroke = lookupSectionOutlineStroke(currentKey, false);
             g2.setPaint(paint);
             g2.fill(upperArc);
             g2.setStroke(outlineStroke);

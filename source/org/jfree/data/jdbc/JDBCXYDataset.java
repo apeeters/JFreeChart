@@ -82,9 +82,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.data.Range;
 import org.jfree.data.RangeInfo;
-import org.jfree.data.general.Dataset;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.XYDataset;
@@ -388,7 +388,8 @@ public class JDBCXYDataset extends AbstractXYDataset
                 }
             }
 
-            fireDatasetChanged(); // Tell the listeners a new table has arrived.
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
         finally {
             if (resultSet != null) {

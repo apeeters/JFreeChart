@@ -267,14 +267,14 @@ public class BarRenderer3D extends BarRenderer
     public CategoryItemRendererState initialise(Graphics2D g2,
                                                 Rectangle2D dataArea,
                                                 CategoryPlot plot,
-                                                int rendererIndex,
+                                                CategoryDataset dataset,
                                                 PlotRenderingInfo info) {
 
         Rectangle2D adjusted = new Rectangle2D.Double(dataArea.getX(),
                 dataArea.getY() + getYOffset(), dataArea.getWidth()
                 - getXOffset(), dataArea.getHeight() - getYOffset());
         CategoryItemRendererState state = super.initialise(g2, adjusted, plot,
-                rendererIndex, info);
+                dataset, info);
         return state;
 
     }
@@ -679,7 +679,8 @@ public class BarRenderer3D extends BarRenderer
 
         double barW0 = calculateBarW0(plot, orientation, adjusted, domainAxis,
                 state, row, column);
-        double[] barL0L1 = calculateBarL0L1(value);
+        double[] barL0L1 = calculateBarL0L1(value, rangeAxis.getLowerBound(),
+                rangeAxis.getUpperBound());
         if (barL0L1 == null) {
             return;  // the bar is not visible
         }

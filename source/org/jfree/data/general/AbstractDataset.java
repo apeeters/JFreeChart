@@ -68,6 +68,7 @@ import java.util.EventListener;
 import java.util.List;
 
 import javax.swing.event.EventListenerList;
+import org.jfree.chart.event.DatasetChangeInfo;
 
 /**
  * An abstract implementation of the {@link Dataset} interface, containing a
@@ -162,10 +163,15 @@ public abstract class AbstractDataset implements Dataset, Cloneable,
     /**
      * Notifies all registered listeners that the dataset has changed.
      *
+     * @param info  information about the change (<code>null</code> not
+     *         permitted).
+     *
      * @see #addChangeListener(DatasetChangeListener)
+     *
+     * @since 1.2.0
      */
-    protected void fireDatasetChanged() {
-        notifyListeners(new DatasetChangeEvent(this, this));
+    protected void fireDatasetChanged(DatasetChangeInfo info) {
+        notifyListeners(new DatasetChangeEvent(this, this, info));
     }
 
     /**
@@ -178,7 +184,6 @@ public abstract class AbstractDataset implements Dataset, Cloneable,
      * @see #removeChangeListener(DatasetChangeListener)
      */
     protected void notifyListeners(DatasetChangeEvent event) {
-
         Object[] listeners = this.listenerList.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == DatasetChangeListener.class) {
@@ -186,7 +191,6 @@ public abstract class AbstractDataset implements Dataset, Cloneable,
                         event);
             }
         }
-
     }
 
     /**
@@ -250,7 +254,8 @@ public abstract class AbstractDataset implements Dataset, Cloneable,
      * @exception InvalidObjectException If the object cannot validate itself.
      */
     public void validateObject() throws InvalidObjectException {
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO:  fill in real dataset change info (maybe NEW_DATASET?)
     }
 
 }

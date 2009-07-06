@@ -97,6 +97,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.DomainOrder;
@@ -222,7 +223,8 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
             throw new IllegalArgumentException("Null 'anchor' argument.");
         }
         this.xPosition = anchor;
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in change details
     }
 
     /**
@@ -321,7 +323,8 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         }
         this.data.add(series);
         series.addChangeListener(this);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // fill in real change details
     }
 
     /**
@@ -336,7 +339,8 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         }
         this.data.remove(series);
         series.removeChangeListener(this);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // fill in real change details
     }
 
     /**
@@ -366,7 +370,8 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
 
         // remove all the series from the collection and notify listeners.
         this.data.clear();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // fill in real change details
 
     }
 
@@ -544,7 +549,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         TimeSeriesDataItem i = s.getRawDataItem(item);
         i.setSelected(selected);
         if (notify) {
-            fireDatasetChanged();
+            fireSelectionEvent();
         }
     }
 
@@ -570,7 +575,8 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
      * @since 1.2.0
      */
     public void fireSelectionEvent() {
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // fill in real change details
     }
 
     /**

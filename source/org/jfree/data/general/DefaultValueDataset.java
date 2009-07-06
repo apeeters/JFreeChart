@@ -47,6 +47,7 @@ package org.jfree.data.general;
 
 import java.io.Serializable;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 
@@ -107,7 +108,8 @@ public class DefaultValueDataset extends AbstractDataset
      */
     public void setValue(Number value) {
         this.value = value;
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

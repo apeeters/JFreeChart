@@ -68,6 +68,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainInfo;
@@ -154,7 +155,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
         updateXPoints(series);
         this.data.add(series);
         series.addChangeListener(this);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -360,7 +362,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
         // Remove all the series from the collection and notify listeners.
         this.data.clear();
         this.xPoints.clear();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -383,7 +386,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
             if (this.data.size() == 0) {
                 this.xPoints.clear();
             }
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
 
     }
@@ -411,7 +415,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
         else if (this.autoPrune) {
             prune();
         }
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
 
     }
 
@@ -432,7 +437,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
         }
         this.propagateEvents = savedState;
         this.xPoints.remove(x);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -477,7 +483,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
     public void seriesChanged(SeriesChangeEvent event) {
         if (this.propagateEvents) {
             updateXPoints();
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 
@@ -613,7 +620,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
      */
     public void setIntervalPositionFactor(double d) {
         this.intervalDelegate.setIntervalPositionFactor(d);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -633,7 +641,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
      */
     public void setIntervalWidth(double d) {
         this.intervalDelegate.setFixedIntervalWidth(d);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -654,7 +663,8 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
      */
     public void setAutoWidth(boolean b) {
         this.intervalDelegate.setAutoWidth(b);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
 }

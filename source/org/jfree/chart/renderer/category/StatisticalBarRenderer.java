@@ -292,8 +292,8 @@ public class StatisticalBarRenderer extends BarRenderer
         }
         double value = meanValue.doubleValue();
         double base = 0.0;
-        double lclip = getLowerClip();
-        double uclip = getUpperClip();
+        double lclip = rangeAxis.getLowerBound();
+        double uclip = rangeAxis.getUpperBound();
 
         if (uclip <= 0.0) {  // cases 1, 2, 3 and 4
             if (value >= uclip) {
@@ -318,7 +318,7 @@ public class StatisticalBarRenderer extends BarRenderer
             if (value <= lclip) {
                 return; // bar is not visible
             }
-            base = getLowerClip();
+            base = rangeAxis.getLowerBound();
             if (value >= uclip) {
                value = uclip;
             }
@@ -452,8 +452,8 @@ public class StatisticalBarRenderer extends BarRenderer
 
         double value = meanValue.doubleValue();
         double base = 0.0;
-        double lclip = getLowerClip();
-        double uclip = getUpperClip();
+        double lclip = rangeAxis.getLowerBound();
+        double uclip = rangeAxis.getUpperBound();
 
         if (uclip <= 0.0) {  // cases 1, 2, 3 and 4
             if (value >= uclip) {
@@ -478,7 +478,7 @@ public class StatisticalBarRenderer extends BarRenderer
             if (value <= lclip) {
                 return; // bar is not visible
             }
-            base = getLowerClip();
+            base = rangeAxis.getLowerBound();
             if (value >= uclip) {
                value = uclip;
             }

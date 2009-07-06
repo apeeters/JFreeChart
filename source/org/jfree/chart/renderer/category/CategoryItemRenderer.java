@@ -128,6 +128,7 @@ import org.jfree.chart.plot.CategoryMarker;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.renderer.RenderAttributes;
 import org.jfree.chart.urls.CategoryURLGenerator;
 import org.jfree.chart.util.Layer;
 import org.jfree.chart.util.RectangleEdge;
@@ -1852,14 +1853,14 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param g2  the graphics device.
      * @param dataArea  the area inside the axes.
      * @param plot  the plot.
-     * @param rendererIndex  the renderer index.
+     * @param dataset  the dataset.
      * @param info  collects chart rendering information for return to caller.
      *
      * @return A state object (maintains state information relevant to one
      *         chart drawing).
      */
     public CategoryItemRendererState initialise(Graphics2D g2,
-            Rectangle2D dataArea, CategoryPlot plot, int rendererIndex,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryDataset dataset,
             PlotRenderingInfo info);
 
     /**
@@ -1988,5 +1989,85 @@ public interface CategoryItemRenderer extends LegendItemSource {
     public double getItemMiddle(Comparable rowKey, Comparable columnKey,
             CategoryDataset dataset, CategoryAxis axis, Rectangle2D area,
             RectangleEdge edge);
+
+    /**
+     * Returns the selected item attributes.
+     * 
+     * @return The selected item attributes (possibly <code>null</code>).
+     * 
+     * @since 1.2.0
+     */
+    public RenderAttributes getSelectedItemAttributes();
+
+    /**
+     * Returns a shape that can be used for hit testing on a data item drawn
+     * by the renderer.
+     *
+     * @param g2  the graphics device.
+     * @param dataArea  the area within which the data is being rendered.
+     * @param plot  the plot (can be used to obtain standard color
+     *              information etc).
+     * @param domainAxis  the domain axis.
+     * @param rangeAxis  the range axis.
+     * @param dataset  the dataset.
+     * @param row  the row index (zero-based).
+     * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
+     *
+     * @return A shape equal to the hot spot for a data item.
+     */
+    public Shape createHotSpotShape(Graphics2D g2, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            CategoryDataset dataset, int row, int column, boolean selected,
+            CategoryItemRendererState state);
+
+    /**
+     * Returns the rectangular bounds for the hot spot for an item drawn by
+     * this renderer.  This is intended to provide a quick test for
+     * eliminating data points before more accurate testing against the
+     * shape returned by createHotSpotShape().
+     *
+     * @param g2
+     * @param dataArea
+     * @param plot
+     * @param domainAxis
+     * @param rangeAxis
+     * @param dataset
+     * @param series
+     * @param item
+     * @param selected
+     * @param result
+     * @return
+     */
+    public Rectangle2D createHotSpotBounds(Graphics2D g2, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            CategoryDataset dataset, int series, int item, boolean selected,
+            CategoryItemRendererState state, Rectangle2D result);
+
+    /**
+     * Returns <code>true</code> if the specified point (xx, yy) in Java2D
+     * space falls within the "hot spot" for the specified data item, and
+     * <code>false</code> otherwise.
+     *
+     * @param xx
+     * @param yy
+     * @param g2
+     * @param dataArea
+     * @param plot
+     * @param domainAxis
+     * @param rangeAxis
+     * @param dataset
+     * @param series
+     * @param item
+     * @param selected
+     *
+     * @return
+     *
+     * @since 1.2.0
+     */
+    public boolean hitTest(double xx, double yy, Graphics2D g2,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int series, int item,
+            boolean selected, CategoryItemRendererState state);
 
 }

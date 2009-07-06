@@ -57,12 +57,12 @@ package org.jfree.data.statistics;
 
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.KeyedObjects2D;
 import org.jfree.data.Range;
 import org.jfree.data.RangeInfo;
 import org.jfree.data.general.AbstractDataset;
-import org.jfree.data.general.DatasetChangeEvent;
 
 /**
  * A convenience class that provides a default implementation of the
@@ -413,7 +413,8 @@ public class DefaultStatisticalCategoryDataset extends AbstractDataset
                 }
             }
         }
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -448,7 +449,8 @@ public class DefaultStatisticalCategoryDataset extends AbstractDataset
             updateBounds();
         }
 
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
 
@@ -465,7 +467,8 @@ public class DefaultStatisticalCategoryDataset extends AbstractDataset
     public void removeRow(int rowIndex) {
         this.data.removeRow(rowIndex);
         updateBounds();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -481,7 +484,8 @@ public class DefaultStatisticalCategoryDataset extends AbstractDataset
     public void removeRow(Comparable rowKey) {
         this.data.removeRow(rowKey);
         updateBounds();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -497,7 +501,8 @@ public class DefaultStatisticalCategoryDataset extends AbstractDataset
     public void removeColumn(int columnIndex) {
         this.data.removeColumn(columnIndex);
         updateBounds();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -513,7 +518,8 @@ public class DefaultStatisticalCategoryDataset extends AbstractDataset
     public void removeColumn(Comparable columnKey) {
         this.data.removeColumn(columnKey);
         updateBounds();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -525,7 +531,8 @@ public class DefaultStatisticalCategoryDataset extends AbstractDataset
     public void clear() {
         this.data.clear();
         updateBounds();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

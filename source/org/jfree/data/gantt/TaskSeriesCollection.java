@@ -55,6 +55,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.AbstractSeriesDataset;
@@ -264,7 +265,8 @@ public class TaskSeriesCollection extends AbstractSeriesDataset
                 this.keys.add(key);
             }
         }
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -281,7 +283,8 @@ public class TaskSeriesCollection extends AbstractSeriesDataset
         if (this.data.contains(series)) {
             series.removeChangeListener(this);
             this.data.remove(series);
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 
@@ -302,7 +305,8 @@ public class TaskSeriesCollection extends AbstractSeriesDataset
         TaskSeries ts = (TaskSeries) this.data.get(series);
         ts.removeChangeListener(this);
         this.data.remove(series);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
 
     }
 
@@ -323,7 +327,8 @@ public class TaskSeriesCollection extends AbstractSeriesDataset
 
         // remove all the series from the collection and notify listeners.
         this.data.clear();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
 
     }
 
@@ -617,7 +622,8 @@ public class TaskSeriesCollection extends AbstractSeriesDataset
      */
     public void seriesChanged(SeriesChangeEvent event) {
         refreshKeys();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

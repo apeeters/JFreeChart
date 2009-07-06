@@ -48,6 +48,7 @@ package org.jfree.chart.renderer.category;
 import org.jfree.chart.plot.CategoryCrosshairState;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.renderer.RendererState;
+import org.jfree.data.category.CategoryDatasetSelectionState;
 
 /**
  * An object that retains temporary state information for a
@@ -71,6 +72,13 @@ public class CategoryItemRendererState extends RendererState {
      * @since 1.0.11
      */
     private CategoryCrosshairState crosshairState;
+
+    /**
+     * The selection state for the dataset, or <code>null</code>.
+     *
+     * @since 1.2.0
+     */
+    private CategoryDatasetSelectionState selectionState;
 
     /**
      * Creates a new object for recording temporary state information for a
@@ -223,6 +231,28 @@ public class CategoryItemRendererState extends RendererState {
      */
     public void setVisibleSeriesArray(int[] visibleSeries) {
         this.visibleSeries = visibleSeries;
+    }
+
+    /**
+     * Returns the selection state.
+     *
+     * @return The selection state (possibly <code>null</code>).
+     *
+     * @since 1.2.0
+     */
+    public CategoryDatasetSelectionState getSelectionState() {
+        return this.selectionState;
+    }
+
+    /**
+     * Sets the selection state.
+     *
+     * @param state  the selection state (<code>null</code> permitted).
+     *
+     * @since 1.2.0
+     */
+    public void setSelectionState(CategoryDatasetSelectionState state) {
+        this.selectionState = state;
     }
 
 }

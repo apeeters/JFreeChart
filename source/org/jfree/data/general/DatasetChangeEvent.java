@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * DatasetChangeEvent.java
  * -----------------------
- * (C) Copyright 2000-2008, by Object Refinery Limited.
+ * (C) Copyright 2000-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -42,10 +42,14 @@
  *               Updated Javadocs (DG);
  * 04-Oct-2002 : Fixed errors reported by Checkstyle (DG);
  * 05-Oct-2004 : Minor Javadoc updates (DG);
+ * 01-Jul-2009 : Added dataset change info field (DG);
  *
  */
 
 package org.jfree.data.general;
+
+import org.jfree.chart.event.DatasetChangeInfo;
+import org.jfree.chart.plot.Plot;
 
 /**
  * A change event that encapsulates information about a change to a dataset.
@@ -58,18 +62,33 @@ public class DatasetChangeEvent extends java.util.EventObject {
     private Dataset dataset;
 
     /**
+     * Some details of the change.
+     * 
+     * @since 1.2.0
+     */
+    private DatasetChangeInfo info;
+
+    /**
      * Constructs a new event.  The source is either the dataset or the
-     * {@link org.jfree.chart.plot.Plot} class.  The dataset can be
-     * <code>null</code> (in this case the source will be the
-     * {@link org.jfree.chart.plot.Plot} class).
+     * {@link Plot} class.  The dataset can be <code>null</code> (in this case
+     * the source will be the {@link Plot} class).
      *
      * @param source  the source of the event.
      * @param dataset  the dataset that generated the event (<code>null</code>
      *                 permitted).
+     * @param info  information about the change (<code>null</code> not
+     *         permitted).
+     *
+     * @since 1.2.0
      */
-    public DatasetChangeEvent(Object source, Dataset dataset) {
+    public DatasetChangeEvent(Object source, Dataset dataset,
+            DatasetChangeInfo info) {
         super(source);
+        if (info == null) {
+            throw new IllegalArgumentException("Null 'info' argument.");
+        }
         this.dataset = dataset;
+        this.info = info;
     }
 
     /**
@@ -81,6 +100,17 @@ public class DatasetChangeEvent extends java.util.EventObject {
      */
     public Dataset getDataset() {
         return this.dataset;
+    }
+
+    /**
+     * Returns the dataset change info.
+     *
+     * @return The dataset change info.
+     *
+     * @since 1.2.0
+     */
+    public DatasetChangeInfo getInfo() {
+        return this.info;
     }
 
 }

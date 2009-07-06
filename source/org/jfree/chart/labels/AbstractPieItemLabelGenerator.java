@@ -50,7 +50,7 @@ import java.text.NumberFormat;
 
 import org.jfree.chart.util.HashUtilities;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A base class used for generating pie chart item labels.

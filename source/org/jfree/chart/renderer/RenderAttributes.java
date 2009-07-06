@@ -316,7 +316,7 @@ public class RenderAttributes implements Cloneable, Serializable {
     }
 
     public Stroke getSeriesOutlineStroke(int series) {
-        return this.strokeList.getStroke(series);
+        return this.outlineStrokeList.getStroke(series);
     }
 
     public void setSeriesOutlineStroke(int series, Stroke stroke) {
@@ -423,7 +423,7 @@ public class RenderAttributes implements Cloneable, Serializable {
     }
 
     public Paint getDefaultLabelPaint() {
-        return this.defaultFillPaint;
+        return this.defaultLabelPaint;
     }
 
     public void setDefaultLabelPaint(Paint paint) {

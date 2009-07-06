@@ -66,8 +66,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
+import org.jfree.chart.event.DatasetChangeInfo;
+import org.jfree.data.pie.DefaultPieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A {@link PieDataset} that reads data from a database via JDBC.
@@ -212,7 +213,8 @@ public class JDBCPieDataset extends DefaultPieDataset {
                 }
             }
 
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
 
         }
         finally {

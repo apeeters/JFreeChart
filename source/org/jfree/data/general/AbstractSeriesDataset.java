@@ -45,6 +45,7 @@
 package org.jfree.data.general;
 
 import java.io.Serializable;
+import org.jfree.chart.event.DatasetChangeInfo;
 
 /**
  * An abstract implementation of the {@link SeriesDataset} interface,
@@ -107,7 +108,9 @@ public abstract class AbstractSeriesDataset extends AbstractDataset
      * @param event  information about the change.
      */
     public void seriesChanged(SeriesChangeEvent event) {
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in change details - might need to override this method
+        // in each subclass to get details
     }
 
 }

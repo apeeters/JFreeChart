@@ -270,18 +270,17 @@ public class StackedBarRenderer3D extends BarRenderer3D
      *
      * @param plot  the plot.
      * @param dataArea  the data area.
-     * @param rendererIndex  the renderer index.
+     * @param dataset  the dataset.
      * @param state  the renderer state.
      */
     protected void calculateBarWidth(CategoryPlot plot,
                                      Rectangle2D dataArea,
-                                     int rendererIndex,
+                                     CategoryDataset dataset,
                                      CategoryItemRendererState state) {
 
         // calculate the bar width
-        CategoryAxis domainAxis = getDomainAxis(plot, rendererIndex);
-        CategoryDataset data = plot.getDataset(rendererIndex);
-        if (data != null) {
+        CategoryAxis domainAxis = getDomainAxis(plot, dataset);
+        if (dataset != null) {
             PlotOrientation orientation = plot.getOrientation();
             double space = 0.0;
             if (orientation == PlotOrientation.HORIZONTAL) {
@@ -291,7 +290,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
                 space = dataArea.getWidth();
             }
             double maxWidth = space * getMaximumBarWidth();
-            int columns = data.getColumnCount();
+            int columns = dataset.getColumnCount();
             double categoryMargin = 0.0;
             if (columns > 1) {
                 categoryMargin = domainAxis.getCategoryMargin();

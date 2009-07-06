@@ -40,8 +40,8 @@
 
 package org.jfree.data.xml;
 
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
+import org.jfree.data.pie.PieDataset;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

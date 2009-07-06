@@ -113,6 +113,7 @@ import java.util.ResourceBundle;
 
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.text.TextAnchor;
 import org.jfree.chart.text.TextUtilities;
@@ -725,7 +726,9 @@ public class MeterPlot extends Plot implements Serializable, Cloneable {
         }
 
         // send a dataset change event to self...
-        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset);
+        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset,
+                new DatasetChangeInfo());
+        // TODO: fill in change type
         datasetChanged(event);
 
     }

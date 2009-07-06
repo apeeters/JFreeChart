@@ -50,7 +50,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.event.ChartChangeEvent;
 import org.jfree.chart.event.ChartChangeListener;
 import org.jfree.chart.plot.PiePlot;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
 
 /**
  * Tests for a pie chart.

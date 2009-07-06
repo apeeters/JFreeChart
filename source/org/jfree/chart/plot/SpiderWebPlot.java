@@ -100,6 +100,7 @@ import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.entity.CategoryItemEntity;
 import org.jfree.chart.entity.EntityCollection;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
@@ -369,7 +370,9 @@ public class SpiderWebPlot extends Plot implements Cloneable, Serializable {
         }
 
         // send a dataset change event to self to trigger plot change event
-        datasetChanged(new DatasetChangeEvent(this, dataset));
+        datasetChanged(new DatasetChangeEvent(this, dataset, 
+                new DatasetChangeInfo()));
+        // TODO:  fill in real dataset change type
     }
 
     /**

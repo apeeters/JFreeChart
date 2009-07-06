@@ -52,7 +52,7 @@ import java.util.Set;
 
 import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.chart.util.PublicCloneable;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A custom URL generator for pie charts.

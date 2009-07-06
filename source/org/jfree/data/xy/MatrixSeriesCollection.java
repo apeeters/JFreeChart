@@ -50,6 +50,7 @@ package org.jfree.data.xy;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 
@@ -220,7 +221,8 @@ public class MatrixSeriesCollection extends AbstractXYZDataset
         // add the series...
         this.seriesList.add(series);
         series.addChangeListener(this);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
 
@@ -287,7 +289,8 @@ public class MatrixSeriesCollection extends AbstractXYZDataset
 
         // Remove all the series from the collection and notify listeners.
         this.seriesList.clear();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
 
@@ -311,7 +314,8 @@ public class MatrixSeriesCollection extends AbstractXYZDataset
         if (this.seriesList.contains(series)) {
             series.removeChangeListener(this);
             this.seriesList.remove(series);
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 
@@ -335,7 +339,8 @@ public class MatrixSeriesCollection extends AbstractXYZDataset
         MatrixSeries series = (MatrixSeries) this.seriesList.get(seriesIndex);
         series.removeChangeListener(this);
         this.seriesList.remove(seriesIndex);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
 }

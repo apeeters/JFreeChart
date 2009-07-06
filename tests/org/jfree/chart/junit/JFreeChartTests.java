@@ -77,7 +77,7 @@ import org.jfree.chart.util.Align;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;

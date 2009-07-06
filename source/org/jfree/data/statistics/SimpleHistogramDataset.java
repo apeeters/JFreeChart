@@ -51,6 +51,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainOrder;
@@ -124,7 +125,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      */
     public void setAdjustForBinSize(boolean adjust) {
         this.adjustForBinSize = adjust;
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change details
     }
 
     /**
@@ -224,7 +226,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
             throw new RuntimeException("No bin.");
         }
         if (notify) {
-            notifyListeners(new DatasetChangeEvent(this, this));
+            fireDatasetChanged(new DatasetChangeInfo());
+            // TODO: fill in real change details
         }
     }
 
@@ -240,7 +243,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
         for (int i = 0; i < values.length; i++) {
             addObservation(values[i], false);
         }
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change details
     }
 
     /**
@@ -258,7 +262,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
             SimpleHistogramBin bin = (SimpleHistogramBin) iterator.next();
             bin.setItemCount(0);
         }
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change details
     }
 
     /**
@@ -271,7 +276,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      */
     public void removeAllBins() {
         this.bins = new ArrayList();
-        notifyListeners(new DatasetChangeEvent(this, this));
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change details
     }
 
     /**
@@ -477,7 +483,7 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
         SimpleHistogramBin bin = (SimpleHistogramBin) this.bins.get(item);
         bin.setSelected(selected);
         if (notify) {
-            fireDatasetChanged();
+            fireSelectionEvent();
         }
     }
 
@@ -498,7 +504,7 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
             }
         }
         if (changed) {
-            fireDatasetChanged();
+            fireSelectionEvent();
         }
     }
 
@@ -509,7 +515,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      * @since 1.2.0
      */
     public void fireSelectionEvent() {
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change info
     }
     
     /**

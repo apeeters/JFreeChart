@@ -475,7 +475,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * Returns the set of attributes that will override the standard
      * attributes for selected items.
      *
-     * @return The attributes.
+     * @return The attributes (never <code>null</code>).
      *
      * @since 1.2.0
      */

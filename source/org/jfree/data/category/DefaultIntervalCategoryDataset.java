@@ -52,6 +52,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.data.DataUtilities;
 import org.jfree.data.UnknownKeyException;
@@ -284,7 +285,8 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
                     "The number of series keys does not match the data.");
         }
         this.seriesKeys = seriesKeys;
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change details
     }
 
     /**
@@ -349,7 +351,8 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
             }
         }
         this.categoryKeys = categoryKeys;
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change details
     }
 
     /**
@@ -525,7 +528,8 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
 
         // update the data...
         this.startData[series][categoryIndex] = value;
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change details
 
     }
 
@@ -558,7 +562,8 @@ public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
 
         // update the data...
         this.endData[series][categoryIndex] = value;
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change details
 
     }
 

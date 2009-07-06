@@ -41,6 +41,7 @@
 package org.jfree.data.general;
 
 import java.io.Serializable;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DataUtilities;
 
@@ -262,7 +263,8 @@ public class DefaultHeatMapDataset extends AbstractDataset
     public void setZValue(int xIndex, int yIndex, double z, boolean notify) {
         this.zValues[xIndex][yIndex] = z;
         if (notify) {
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 

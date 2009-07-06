@@ -43,6 +43,7 @@ package org.jfree.data.gantt;
 import java.util.Date;
 
 import org.jfree.chart.axis.SymbolAxis;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
@@ -120,7 +121,8 @@ public class XYTaskDataset extends AbstractXYDataset
             throw new IllegalArgumentException("Requires 'w' > 0.0.");
         }
         this.seriesWidth = w;
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -148,7 +150,8 @@ public class XYTaskDataset extends AbstractXYDataset
      */
     public void setTransposed(boolean transposed) {
         this.transposed = transposed;
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -415,7 +418,8 @@ public class XYTaskDataset extends AbstractXYDataset
      * @param event  the event.
      */
     public void datasetChanged(DatasetChangeEvent event) {
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

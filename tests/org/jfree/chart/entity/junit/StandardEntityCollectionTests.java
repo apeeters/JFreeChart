@@ -54,7 +54,7 @@ import junit.framework.TestSuite;
 
 import org.jfree.chart.entity.PieSectionEntity;
 import org.jfree.chart.entity.StandardEntityCollection;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.pie.DefaultPieDataset;
 
 /**
  * Tests for the {@link StandardEntityCollection} class.

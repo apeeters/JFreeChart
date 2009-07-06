@@ -55,6 +55,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
@@ -181,7 +182,8 @@ public class TimePeriodValuesCollection extends AbstractIntervalXYDataset
 
         this.data.add(series);
         series.addChangeListener(this);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
 
     }
 
@@ -197,7 +199,8 @@ public class TimePeriodValuesCollection extends AbstractIntervalXYDataset
         }
         this.data.remove(series);
         series.removeChangeListener(this);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
 
     }
 

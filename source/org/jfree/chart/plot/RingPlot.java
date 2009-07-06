@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------
  * RingPlot.java
  * -------------
- * (C) Copyright 2004-2008, by Object Refinery Limited.
+ * (C) Copyright 2004-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limtied);
  * Contributor(s):   Christoph Beck (bug 2121818);
@@ -77,7 +77,7 @@ import org.jfree.chart.util.Rotation;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.UnitType;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A customised pie plot that leaves a hole in the middle.
@@ -409,11 +409,11 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
                 }
             }
             else if (currentPass == 1) {
-                Paint paint = lookupSectionPaint(key);
+                Paint paint = lookupSectionPaint(key, false);
                 g2.setPaint(paint);
                 g2.fill(path);
-                Paint outlinePaint = lookupSectionOutlinePaint(key);
-                Stroke outlineStroke = lookupSectionOutlineStroke(key);
+                Paint outlinePaint = lookupSectionOutlinePaint(key, false);
+                Stroke outlineStroke = lookupSectionOutlineStroke(key, false);
                 if (outlinePaint != null && outlineStroke != null) {
                     g2.setPaint(outlinePaint);
                     g2.setStroke(outlineStroke);

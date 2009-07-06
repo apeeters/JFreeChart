@@ -44,6 +44,7 @@ package org.jfree.data.general;
 
 import java.io.Serializable;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.DefaultKeyedValue;
 import org.jfree.data.KeyedValue;
@@ -135,7 +136,8 @@ public class DefaultKeyedValueDataset extends AbstractDataset
      */
     public void setValue(Comparable key, Number value) {
         this.data = new DefaultKeyedValue(key, value);
-        notifyListeners(new DatasetChangeEvent(this, this));
+        this.fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

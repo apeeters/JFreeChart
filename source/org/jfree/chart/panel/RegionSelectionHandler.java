@@ -176,19 +176,26 @@ public class RegionSelectionHandler extends AbstractMouseHandler {
      */
     public void mousePressed(MouseEvent e) {
         ChartPanel panel = (ChartPanel) e.getSource();
+        JFreeChart chart = panel.getChart();
+        if (chart == null) {
+            return;
+        }
+        if (!(chart.getPlot() instanceof Selectable)) {
+            return;
+        }
+        Selectable s = (Selectable) chart.getPlot();
+        if (!s.canSelectByRegion()) {
+            return;
+        }
         Rectangle2D dataArea = panel.getScreenDataArea();
         if (dataArea.contains(e.getPoint())) {
-            JFreeChart chart = panel.getChart();
-            if (chart.getPlot() instanceof Selectable) {
-                Selectable s = (Selectable) chart.getPlot();
-                if (!e.isShiftDown()) {
-                    s.clearSelection();
-                    chart.setNotify(true);
-                }
-                Point pt = e.getPoint();
-                this.selection.moveTo((float) pt.getX(), (float) pt.getY());
-                this.lastPoint = new Point(pt);
+            if (!e.isShiftDown()) {
+                s.clearSelection();
+                chart.setNotify(true);
             }
+            Point pt = e.getPoint();
+            this.selection.moveTo((float) pt.getX(), (float) pt.getY());
+            this.lastPoint = new Point(pt);
         }
     }
 
@@ -251,6 +258,7 @@ public class RegionSelectionHandler extends AbstractMouseHandler {
      * @param e  the event.
      */
     public void mouseClicked(MouseEvent e) {
+        System.out.println("mouseClicked(): " + e);
         ChartPanel panel = (ChartPanel) e.getSource();
         Rectangle2D dataArea = panel.getScreenDataArea();
         if (dataArea.contains(e.getPoint())) {

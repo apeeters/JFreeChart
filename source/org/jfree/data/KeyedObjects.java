@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------
  * KeyedObjects.java
  * -----------------
- * (C) Copyright 2003-2008, by Object Refinery Limited.
+ * (C) Copyright 2003-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -39,16 +39,21 @@
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 28-Sep-2007 : Clean up equals() method (DG);
  * 03-Oct-2007 : Make method behaviour consistent with DefaultKeyedValues (DG);
+ * 01-Jul-2009 : Added sorting methods (DG);
  *
  */
 
 package org.jfree.data;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
 import org.jfree.chart.util.PublicCloneable;
+import org.jfree.chart.util.SortOrder;
 
 /**
  * A collection of (key, object) pairs.
@@ -156,8 +161,7 @@ public class KeyedObjects implements Cloneable, PublicCloneable, Serializable {
     }
 
     /**
-     * Returns the object for a given key. If the key is not recognised, the
-     * method should return <code>null</code>.
+     * Returns the object for a given key.
      *
      * @param key  the key.
      *
@@ -278,6 +282,34 @@ public class KeyedObjects implements Cloneable, PublicCloneable, Serializable {
      */
     public void clear() {
         this.data.clear();
+    }
+
+    /**
+     * Sorts the items in the list by key.
+     *
+     * @param order  the sort order (<code>null</code> not permitted).
+     *
+     * @since 1.2.0
+     */
+    public void sortByKeys(SortOrder order) {
+        Comparator comparator = new KeyedObjectComparator(
+                KeyedObjectComparatorType.BY_KEY, order);
+        Collections.sort(this.data, comparator);
+    }
+
+    /**
+     * Sorts the items in the list by value.  If the list contains
+     * <code>null</code> values, they will sort to the end of the list,
+     * irrespective of the sort order.
+     *
+     * @param order  the sort order (<code>null</code> not permitted).
+     *
+     * @since 1.2.0
+     */
+    public void sortByObjects(SortOrder order) {
+        Comparator comparator = new KeyedObjectComparator(
+                KeyedObjectComparatorType.BY_VALUE, order);
+        Collections.sort(this.data, comparator);
     }
 
     /**

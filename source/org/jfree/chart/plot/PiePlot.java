@@ -181,6 +181,7 @@ import java.awt.Stroke;
 import java.awt.geom.Arc2D;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
@@ -197,6 +198,7 @@ import java.util.TreeMap;
 
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.RenderingSource;
 import org.jfree.chart.util.PaintMap;
 import org.jfree.chart.util.StrokeMap;
 import org.jfree.chart.entity.EntityCollection;
@@ -225,7 +227,11 @@ import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.KeyedValues;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
+import org.jfree.data.pie.PieDatasetChangeInfo;
+import org.jfree.data.pie.PieDatasetChangeType;
+import org.jfree.data.pie.PieDatasetSelectionState;
+import org.jfree.data.pie.SelectablePieDataset;
 
 /**
  * A plot that displays data in the form of a pie chart, using data from any
@@ -243,7 +249,8 @@ import org.jfree.data.general.PieDataset;
  * @see Plot
  * @see PieDataset
  */
-public class PiePlot extends Plot implements Cloneable, Serializable {
+public class PiePlot extends Plot implements Selectable, Cloneable,
+        Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -795612466005590431L;
@@ -504,6 +511,13 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                     "org.jfree.chart.plot.LocalizationBundle");
 
     /**
+     * Override attributes for selected items.
+     *
+     * @since 1.2.0
+     */
+    private PieSelectionAttributes selectedItemAttributes;
+
+    /**
      * This debug flag controls whether or not an outline is drawn showing the
      * interior of the plot region.  This is drawn as a lightGray rectangle
      * showing the padding provided by the 'interiorGap' setting.
@@ -588,6 +602,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
 
         this.ignoreNullValues = false;
         this.ignoreZeroValues = false;
+        this.selectedItemAttributes = new PieSelectionAttributes();
     }
 
     /**
@@ -624,7 +639,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         }
 
         // send a dataset change event to self...
-        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset);
+        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset,
+                new PieDatasetChangeInfo(PieDatasetChangeType.UPDATE, -1, -1));
         datasetChanged(event);
     }
 
@@ -847,15 +863,24 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * <code>lookupSectionPaint(section, getAutoPopulateSectionPaint())</code>.
      *
      * @param key  the section key.
+     * @param selected  is the section selected?
      *
      * @return The paint for the specified section.
      *
-     * @since 1.0.3
+     * @since 1.2.0
      *
      * @see #lookupSectionPaint(Comparable, boolean)
      */
-    protected Paint lookupSectionPaint(Comparable key) {
-        return lookupSectionPaint(key, getAutoPopulateSectionPaint());
+    protected Paint lookupSectionPaint(Comparable key, boolean selected) {
+        Paint result = null;
+        if (selected) {
+            result = this.selectedItemAttributes.lookupSectionPaint(key);
+        }
+        if (result == null) {
+            result = lookupSectionPaint(key, selected,
+                    getAutoPopulateSectionPaint());
+        }
+        return result;
     }
 
     /**
@@ -877,9 +902,14 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      *
      * @return The paint.
      *
-     * @since 1.0.3
+     * @since 1.2.0
      */
-    protected Paint lookupSectionPaint(Comparable key, boolean autoPopulate) {
+    protected Paint lookupSectionPaint(Comparable key, boolean selected, 
+            boolean autoPopulate) {
+
+        if (selected) {
+          //  return Color.WHITE;
+        }
         Paint result = null;
 
         // is a paint defined for the specified key
@@ -946,10 +976,13 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      *
      * @see #setSectionPaint(Comparable, Paint)
      *
-     * @since 1.0.3
+     * @since 1.2.0
      */
-    public Paint getSectionPaint(Comparable key) {
+    public Paint getSectionPaint(Comparable key, boolean selected) {
         // null argument check delegated...
+        if (selected) {
+            return Color.white;
+        }
         return this.sectionPaintMap.getPaint(key);
     }
 
@@ -1081,16 +1114,25 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * getAutoPopulateSectionOutlinePaint())</code>.
      *
      * @param key  the section key.
+     * @param selected  is the section selected?
      *
      * @return The paint for the specified section.
      *
-     * @since 1.0.3
+     * @since 1.2.0
      *
      * @see #lookupSectionOutlinePaint(Comparable, boolean)
      */
-    protected Paint lookupSectionOutlinePaint(Comparable key) {
-        return lookupSectionOutlinePaint(key,
+    protected Paint lookupSectionOutlinePaint(Comparable key,
+            boolean selected) {
+        Paint result = null;
+        if (selected) {
+            result = this.selectedItemAttributes.lookupSectionOutlinePaint(key);
+        }
+        if (result == null) {
+            result = lookupSectionOutlinePaint(key, selected,
                 getAutoPopulateSectionOutlinePaint());
+        }
+        return result;
     }
 
     /**
@@ -1107,18 +1149,22 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * </ul>
      *
      * @param key  the section key.
+     * @param selected  is the section selected?
      * @param autoPopulate  a flag that controls whether the drawing supplier
      *     is used to auto-populate the section outline paint settings.
      *
      * @return The paint.
      *
-     * @since 1.0.3
+     * @since 1.2.0
      */
-    protected Paint lookupSectionOutlinePaint(Comparable key,
+    protected Paint lookupSectionOutlinePaint(Comparable key, boolean selected,
             boolean autoPopulate) {
 
         Paint result = null;
 
+        if (selected) {
+            return Color.WHITE;
+        }
         // is a paint defined for the specified key
         result = this.sectionOutlinePaintMap.getPaint(key);
         if (result != null) {
@@ -1264,16 +1310,25 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * getAutoPopulateSectionOutlineStroke())</code>.
      *
      * @param key  the section key.
+     * @param selected  is the section selected?
      *
      * @return The stroke for the specified section.
      *
-     * @since 1.0.3
+     * @since 1.2.0
      *
      * @see #lookupSectionOutlineStroke(Comparable, boolean)
      */
-    protected Stroke lookupSectionOutlineStroke(Comparable key) {
-        return lookupSectionOutlineStroke(key,
+    protected Stroke lookupSectionOutlineStroke(Comparable key, 
+            boolean selected) {
+        Stroke s = null;
+        if (selected) {
+            s = this.selectedItemAttributes.lookupSectionOutlineStroke(key);
+        }
+        if (s == null) {
+            s = lookupSectionOutlineStroke(key, selected,
                 getAutoPopulateSectionOutlineStroke());
+        }
+        return s;
     }
 
     /**
@@ -1290,15 +1345,16 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * </ul>
      *
      * @param key  the section key.
+     * @param selected  is the section selected?
      * @param autoPopulate  a flag that controls whether the drawing supplier
      *     is used to auto-populate the section outline stroke settings.
      *
      * @return The stroke.
      *
-     * @since 1.0.3
+     * @since 1.2.0
      */
     protected Stroke lookupSectionOutlineStroke(Comparable key,
-            boolean autoPopulate) {
+            boolean selected, boolean autoPopulate) {
 
         Stroke result = null;
 
@@ -2344,17 +2400,10 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
 
     }
 
-    /**
-     * Draws the pie.
-     *
-     * @param g2  the graphics device.
-     * @param plotArea  the plot area.
-     * @param info  chart rendering info.
-     */
-    protected void drawPie(Graphics2D g2, Rectangle2D plotArea,
-                           PlotRenderingInfo info) {
+    private Rectangle2D[] calculateLinkAndExplodeAreas(Graphics2D g2,
+            Rectangle2D plotArea) {
 
-        PiePlotState state = initialise(g2, plotArea, this, null, info);
+        Rectangle2D[] result = new Rectangle2D[2];
 
         // adjust the plot area for interior spacing and labels...
         double labelReserve = 0.0;
@@ -2364,7 +2413,6 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         double gapHorizontal = plotArea.getWidth() * (this.interiorGap
                 + labelReserve) * 2.0;
         double gapVertical = plotArea.getHeight() * this.interiorGap * 2.0;
-
 
         if (DEBUG_DRAW_INTERIOR) {
             double hGap = plotArea.getWidth() * this.interiorGap;
@@ -2397,7 +2445,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         // the labels
         Rectangle2D linkArea = new Rectangle2D.Double(linkX, linkY, linkW,
                 linkH);
-        state.setLinkArea(linkArea);
+        result[0] = linkArea;
 
         if (DEBUG_DRAW_LINK_AREA) {
             g2.setPaint(Color.blue);
@@ -2418,7 +2466,26 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         double vv = linkArea.getHeight() * lm * 2.0;
         Rectangle2D explodeArea = new Rectangle2D.Double(linkX + hh / 2.0,
                 linkY + vv / 2.0, linkW - hh, linkH - vv);
+        result[1] = explodeArea;
+        return result;
+    }
 
+    /**
+     * Draws the pie.
+     *
+     * @param g2  the graphics device.
+     * @param plotArea  the plot area.
+     * @param info  chart rendering info.
+     */
+    protected void drawPie(Graphics2D g2, Rectangle2D plotArea,
+                           PlotRenderingInfo info) {
+
+        PiePlotState state = initialise(g2, plotArea, this, null, info);
+
+        Rectangle2D[] areas = calculateLinkAndExplodeAreas(g2, plotArea);
+        Rectangle2D linkArea = areas[0];
+        Rectangle2D explodeArea = areas[1];
+        state.setLinkArea(linkArea);
         state.setExplodedPieArea(explodeArea);
 
         // the pie area defines the circle/ellipse for regular pie sections.
@@ -2446,6 +2513,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         // plot the data (unless the dataset is null)...
         if ((this.dataset != null) && (this.dataset.getKeys().size() > 0)) {
 
+            PieDatasetSelectionState ss = findSelectionStateForDataset(
+                    this.dataset, state);
             List keys = this.dataset.getKeys();
             double totalValue = DatasetUtilities.calculatePieDatasetTotal(
                     this.dataset);
@@ -2459,7 +2528,12 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                         double value = n.doubleValue();
                         if (value > 0.0) {
                             runningTotal += value;
-                            drawItem(g2, section, explodeArea, state, pass);
+                            boolean selected = false;
+                            if (ss != null) {
+                                selected = ss.isSelected(this.dataset.getKey(section));
+                            }
+                            drawItem(g2, section, selected, explodeArea, state,
+                                    pass);
                         }
                     }
                 }
@@ -2483,12 +2557,13 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      *
      * @param g2  the graphics device (<code>null</code> not permitted).
      * @param section  the section index.
+     * @param selected  is the item selected?
      * @param dataArea  the data plot area.
      * @param state  state information for one chart.
      * @param currentPass  the current pass index.
      */
-    protected void drawItem(Graphics2D g2, int section, Rectangle2D dataArea,
-                            PiePlotState state, int currentPass) {
+    protected void drawItem(Graphics2D g2, int section, boolean selected, 
+            Rectangle2D dataArea, PiePlotState state, int currentPass) {
 
         Number n = this.dataset.getValue(section);
         if (n == null) {
@@ -2533,17 +2608,21 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
             }
             else if (currentPass == 1) {
                 Comparable key = getSectionKey(section);
-                Paint paint = lookupSectionPaint(key);
+                Paint paint = lookupSectionPaint(key, selected);
+                Shape savedClip = g2.getClip();
+                g2.clip(arc);
                 g2.setPaint(paint);
                 g2.fill(arc);
 
-                Paint outlinePaint = lookupSectionOutlinePaint(key);
-                Stroke outlineStroke = lookupSectionOutlineStroke(key);
+                Paint outlinePaint = lookupSectionOutlinePaint(key, selected);
+                Stroke outlineStroke = lookupSectionOutlineStroke(key,
+                        selected);
                 if (this.sectionOutlinesVisible) {
                     g2.setPaint(outlinePaint);
                     g2.setStroke(outlineStroke);
                     g2.draw(arc);
                 }
+                g2.setClip(savedClip);
 
                 // update the linking line target for later
                 // add an entity for the pie section
@@ -2896,9 +2975,10 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                         urlText = this.legendLabelURLGenerator.generateURL(
                                 this.dataset, key, this.pieIndex);
                     }
-                    Paint paint = lookupSectionPaint(key);
-                    Paint outlinePaint = lookupSectionOutlinePaint(key);
-                    Stroke outlineStroke = lookupSectionOutlineStroke(key);
+                    Paint paint = lookupSectionPaint(key, false);
+                    Paint outlinePaint = lookupSectionOutlinePaint(key, false);
+                    Stroke outlineStroke = lookupSectionOutlineStroke(key,
+                            false);
                     LegendItem item = new LegendItem(label, description,
                             toolTipText, urlText, true, shape, true, paint,
                             true, outlinePaint, outlineStroke,
@@ -3068,6 +3148,226 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     }
 
     /**
+     * Returns the selection state for the specified dataset.  This could be
+     * <code>null</code> if the dataset hasn't been set up to support
+     * selections.
+     *
+     * @param dataset  the dataset.
+     * @param source  the selection source.
+     *
+     * @return The selection state (possibly <code>null</code>).
+     */
+    private PieDatasetSelectionState findSelectionStateForDataset(
+            PieDataset dataset, Object source) {
+        if (dataset instanceof SelectablePieDataset) {
+            SelectablePieDataset sd = (SelectablePieDataset) dataset;
+            PieDatasetSelectionState s = sd.getSelectionState();
+            return s;
+        }
+        throw new RuntimeException();
+        //return null;  // TODO: implement
+    }
+
+    /**
+     * Returns <code>true</code> to indicate that the plot supports selection
+     * by clicking on a point.
+     *
+     * @return <code>true</code>.
+     *
+     * @since 1.2.0
+     */
+    public boolean canSelectByPoint() {
+        return true;
+    }
+
+    /**
+     * Returns <code>false</code> to indicate that the plot does not support
+     * selection by region.
+     *
+     * @return <code>false</code>.
+     *
+     * @since 1.2.0
+     */
+    public boolean canSelectByRegion() {
+        return false;
+    }
+
+    /**
+     * Selects a data item.
+     * 
+     * @param x
+     * @param y
+     * @param dataArea
+     * @param source
+     */
+    public void select(double x, double y, Rectangle2D dataArea,
+            RenderingSource source) {
+
+        System.out.println("select " + x + ", " + y);
+
+        PieDatasetSelectionState state = findSelectionStateForDataset(
+                dataset, source);
+        if (state == null) {
+            return;
+        }
+
+        Rectangle2D[] areas = calculateLinkAndExplodeAreas(null, dataArea);
+        Rectangle2D linkArea = areas[0];
+        Rectangle2D explodeArea = areas[1];
+
+        // the pie area defines the circle/ellipse for regular pie sections.
+        // it is defined by shrinking the explodeArea by the explodeMargin
+        // factor.
+        double maximumExplodePercent = getMaximumExplodePercent();
+        double percent = maximumExplodePercent / (1.0 + maximumExplodePercent);
+
+        double h1 = explodeArea.getWidth() * percent;
+        double v1 = explodeArea.getHeight() * percent;
+        Rectangle2D pieArea = new Rectangle2D.Double(explodeArea.getX()
+                + h1 / 2.0, explodeArea.getY() + v1 / 2.0,
+                explodeArea.getWidth() - h1, explodeArea.getHeight() - v1);
+
+        // plot the data (unless the dataset is null)...
+        if ((this.dataset != null) && (this.dataset.getKeys().size() > 0)) {
+
+
+            List keys = this.dataset.getKeys();
+            double total = DatasetUtilities.calculatePieDatasetTotal(
+                    this.dataset);
+            double runningTotal = 0.0;
+            for (int section = 0; section < keys.size(); section++) {
+                Number n = this.dataset.getValue(section);
+                if (n == null) {
+                    continue;
+                }
+                double value = n.doubleValue();
+                if (value > 0.0) {
+                    double angle0 = calculateAngleForValue(runningTotal,
+                            total);
+                    double angle1 = calculateAngleForValue(runningTotal
+                            + value, total);
+                    runningTotal += value;
+                    System.out.println(this.dataset.getValue(section));
+                    System.out.println(angle0);
+                    System.out.println(angle1);
+                    double angle = (angle1 - angle0);
+                    if (Math.abs(angle) > getMinimumArcAngleToDraw()) {
+                        double ep = 0.0;
+                        double mep = getMaximumExplodePercent();
+                        if (mep > 0.0) {
+                            ep = getExplodePercent(getSectionKey(section)) / mep;
+                        }
+                        Rectangle2D arcBounds = getArcBounds(pieArea,
+                                explodeArea, angle0, angle, ep);
+                        Arc2D.Double arc = new Arc2D.Double(arcBounds,
+                                angle0, angle, Arc2D.PIE);
+                        if (arc.contains(x, y)) {
+                            Comparable key = this.dataset.getKey(section);
+                            state.setSelected(key, !state.isSelected(key));
+                            System.out.println(key + " is " + state.isSelected(key));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private double calculateAngleForValue(double value, double total) {
+        if (this.direction == Rotation.CLOCKWISE) {
+            return this.startAngle - (value / total * 360.0);
+        }
+        else if (this.direction == Rotation.ANTICLOCKWISE) {
+            return this.startAngle + (value / total * 360.0);
+        }
+        throw new RuntimeException("Unrecognised Rotation type.");
+    }
+
+    /**
+     * This method does nothing, because this plot does not support
+     * selection by region.
+     *
+     * @param region  ignored.
+     * @param dataArea  ignored.
+     * @param source  ignored.
+     *
+     * @see #canSelectByRegion()
+     *
+     * @since 1.2.0
+     */
+    public void select(GeneralPath region, Rectangle2D dataArea,
+            RenderingSource source) {
+        // operation not supported
+    }
+
+    /**
+     * Clears the selection.
+     *
+     * @since 1.2.0
+     */
+    public void clearSelection() {
+        System.out.println("Clear selection.");
+    }
+
+    /**
+     * Returns a shape representing the hotspot for a pie section.
+     *
+     * @param g2  the graphics device.
+     * @param dataArea  the area within which the data is being rendered.
+     * @param selected  is the item selected?
+     *
+     * @return A shape equal to the hot spot for a data item.
+     */
+    public Shape createHotSpotShape(Graphics2D g2, Rectangle2D dataArea,
+            int section, boolean selected) {
+
+        Number n = this.dataset.getValue(section);
+        if (n == null) {
+            return null;
+        }
+        double value = n.doubleValue();
+        double angle1 = 0.0;
+        double angle2 = 0.0;
+
+        double total = DatasetUtilities.calculatePieDatasetTotal(this.dataset);
+        double lead = 0.0;
+        if (this.direction == Rotation.CLOCKWISE) {
+            for (int i = 0; i < section; i++) {
+                n = this.dataset.getValue(i);
+                if (n != null) {
+                    value = n.doubleValue();
+                    if (value >= 0.0) {
+                        lead = lead + value;
+                    }
+                }
+            }
+            angle1 = getStartAngle() - lead / total * 360.0;
+            angle2 = angle1 - value / total * 360.0;
+        }
+        else if (this.direction == Rotation.ANTICLOCKWISE) {
+            angle1 = getStartAngle() + lead / total * 360.0;
+            angle2 = angle1 + value / total * 360.0;
+        }
+        else {
+            throw new IllegalStateException("Rotation type not recognised.");
+        }
+
+        double angle = (angle2 - angle1);
+        if (Math.abs(angle) > getMinimumArcAngleToDraw()) {
+            double ep = 0.0;
+            double mep = getMaximumExplodePercent();
+            if (mep > 0.0) {
+                ep = getExplodePercent(getSectionKey(section)) / mep;
+            }
+            Rectangle2D arcBounds = getArcBounds(dataArea,
+                    dataArea, angle1, angle, ep);
+            Arc2D.Double arc = new Arc2D.Double(arcBounds, angle1, angle,
+                    Arc2D.PIE);
+            return arc;
+        }
+        return null;
+    }
+
+    /**
      * Tests this plot for equality with an arbitrary object.  Note that the
      * plot's dataset is NOT included in the test for equality.
      *
@@ -3122,9 +3422,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                 that.sectionOutlinePaintMap)) {
             return false;
         }
-        if (!PaintUtilities.equal(
-            this.baseSectionOutlinePaint, that.baseSectionOutlinePaint
-        )) {
+        if (!PaintUtilities.equal(this.baseSectionOutlinePaint,
+                that.baseSectionOutlinePaint)) {
             return false;
         }
         if (!ObjectUtilities.equal(this.sectionOutlineStrokeMap,
@@ -3327,4 +3626,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         this.legendItemShape = SerialUtilities.readShape(stream);
     }
 
+    public PieSelectionAttributes getSelectedItemAttributes() {
+        return this.selectedItemAttributes;
+    }
 }

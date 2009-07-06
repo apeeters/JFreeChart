@@ -80,6 +80,7 @@ import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.util.ObjectUtilities;
@@ -93,7 +94,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CategoryToPieDataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset; 
 
 /**
  * A plot that displays multiple pie plots using data from a
@@ -205,7 +206,9 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
         }
 
         // send a dataset change event to self to trigger plot change event
-        datasetChanged(new DatasetChangeEvent(this, dataset));
+        datasetChanged(new DatasetChangeEvent(this, dataset,
+                new DatasetChangeInfo()));
+        // TODO: fill in real dataset change type
     }
 
     /**
@@ -525,7 +528,7 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
             // column keys provide potential keys for individual pies
             for (int c = 0; c < this.dataset.getColumnCount(); c++) {
                 Comparable key = this.dataset.getColumnKey(c);
-                Paint p = piePlot.getSectionPaint(key);
+                Paint p = piePlot.getSectionPaint(key, false);
                 if (p == null) {
                     p = (Paint) this.sectionPaints.get(key);
                     if (p == null) {
@@ -539,7 +542,7 @@ public class MultiplePiePlot extends Plot implements Cloneable, Serializable {
             // row keys provide potential keys for individual pies
             for (int r = 0; r < this.dataset.getRowCount(); r++) {
                 Comparable key = this.dataset.getRowKey(r);
-                Paint p = piePlot.getSectionPaint(key);
+                Paint p = piePlot.getSectionPaint(key, false);
                 if (p == null) {
                     p = (Paint) this.sectionPaints.get(key);
                     if (p == null) {

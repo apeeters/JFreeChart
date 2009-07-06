@@ -249,14 +249,6 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     private ItemLabelPosition negativeItemLabelPositionFallback;
 
-    /** The upper clip (axis) value for the axis. */
-    private double upperClip;
-    // TODO:  this needs to move into the renderer state
-
-    /** The lower clip (axis) value for the axis. */
-    private double lowerClip;
-    // TODO:  this needs to move into the renderer state
-
     /** The base value for the bars (defaults to 0.0). */
     private double base;
 
@@ -711,28 +703,6 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     }
 
     /**
-     * Returns the lower clip value.  This value is recalculated in the
-     * initialise() method.
-     *
-     * @return The value.
-     */
-    public double getLowerClip() {
-        // TODO:  this attribute should be transferred to the renderer state.
-        return this.lowerClip;
-    }
-
-    /**
-     * Returns the upper clip value.  This value is recalculated in the
-     * initialise() method.
-     *
-     * @return The value.
-     */
-    public double getUpperClip() {
-        // TODO:  this attribute should be transferred to the renderer state.
-        return this.upperClip;
-    }
-
-    /**
      * Initialises the renderer and returns a state object that will be passed
      * to subsequent calls to the drawItem method.  This method gets called
      * once at the start of the process of drawing a chart.
@@ -740,30 +710,21 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * @param g2  the graphics device.
      * @param dataArea  the area in which the data is to be plotted.
      * @param plot  the plot.
-     * @param rendererIndex  the renderer index.
+     * @param dataset  the dataset.
      * @param info  collects chart rendering information for return to caller.
      *
      * @return The renderer state.
      */
-    public CategoryItemRendererState initialise(Graphics2D g2,
-                                                Rectangle2D dataArea,
-                                                CategoryPlot plot,
-                                                int rendererIndex,
-                                                PlotRenderingInfo info) {
+    public CategoryItemRendererState initialise(Graphics2D g2, 
+            Rectangle2D dataArea, CategoryPlot plot, CategoryDataset dataset,
+            PlotRenderingInfo info) {
 
         CategoryItemRendererState state = super.initialise(g2, dataArea, plot,
-                rendererIndex, info);
-
-        // get the clipping values...
-        ValueAxis rangeAxis = plot.getRangeAxisForDataset(rendererIndex);
-        this.lowerClip = rangeAxis.getRange().getLowerBound();
-        this.upperClip = rangeAxis.getRange().getUpperBound();
+                dataset, info);
 
         // calculate the bar width
-        calculateBarWidth(plot, dataArea, rendererIndex, state);
-
+        calculateBarWidth(plot, dataArea, dataset, state);
         return state;
-
     }
 
     /**
@@ -771,16 +732,15 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      *
      * @param plot  the plot.
      * @param dataArea  the data area.
-     * @param rendererIndex  the renderer index.
+     * @param dataset  the dataset.
      * @param state  the renderer state.
      */
     protected void calculateBarWidth(CategoryPlot plot,
                                      Rectangle2D dataArea,
-                                     int rendererIndex,
+                                     CategoryDataset dataset,
                                      CategoryItemRendererState state) {
 
-        CategoryAxis domainAxis = getDomainAxis(plot, rendererIndex);
-        CategoryDataset dataset = plot.getDataset(rendererIndex);
+        CategoryAxis domainAxis = getDomainAxis(plot, dataset);
         if (dataset != null) {
             int columns = dataset.getColumnCount();
             int rows = state.getVisibleSeriesCount() >= 0
@@ -869,23 +829,23 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      * Calculates the coordinates for the length of a single bar.
      *
      * @param value  the value represented by the bar.
+     * @param min  the minimum data value that would be visible.
+     * @param max  the maximum data value that would be visible.
      *
      * @return The coordinates for each end of the bar (or <code>null</code> if
      *         the bar is not visible for the current axis range).
      */
-    protected double[] calculateBarL0L1(double value) {
-        double lclip = getLowerClip();
-        double uclip = getUpperClip();
+    protected double[] calculateBarL0L1(double value, double min, double max) {
         double barLow = Math.min(this.base, value);
         double barHigh = Math.max(this.base, value);
-        if (barHigh < lclip) {  // bar is not visible
+        if (barHigh < min) {  // bar is not visible
             return null;
         }
-        if (barLow > uclip) {   // bar is not visible
+        if (barLow > max) {   // bar is not visible
             return null;
         }
-        barLow = Math.max(barLow, lclip);
-        barHigh = Math.min(barHigh, uclip);
+        barLow = Math.max(barLow, min);
+        barHigh = Math.min(barHigh, max);
         return new double[] {barLow, barHigh};
     }
 
@@ -1009,7 +969,8 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         PlotOrientation orientation = plot.getOrientation();
         double barW0 = calculateBarW0(plot, orientation, dataArea, domainAxis,
                 state, visibleRow, column);
-        double[] barL0L1 = calculateBarL0L1(value);
+        double[] barL0L1 = calculateBarL0L1(value, rangeAxis.getLowerBound(),
+                rangeAxis.getUpperBound());
         if (barL0L1 == null) {
             return;  // the bar is not visible
         }
@@ -1407,6 +1368,89 @@ public class BarRenderer extends AbstractCategoryItemRenderer
             throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.shadowPaint = SerialUtilities.readPaint(stream);
+    }
+
+    public Rectangle2D createHotSpotBounds(Graphics2D g2, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            CategoryDataset dataset, int row, int column, boolean selected,
+            CategoryItemRendererState state, Rectangle2D result) {
+
+        // nothing is drawn if the row index is not included in the list with
+        // the indices of the visible rows...
+        int visibleRow = state.getVisibleSeriesIndex(row);
+        if (visibleRow < 0) {
+            return null;
+        }
+        if (!this.getItemVisible(row, column)) {
+            return null;
+        }
+        // nothing is drawn for null values...
+        Number dataValue = dataset.getValue(row, column);
+        if (dataValue == null) {
+            return null;
+        }
+
+        final double value = dataValue.doubleValue();
+        PlotOrientation orientation = plot.getOrientation();
+        double barW0 = calculateBarW0(plot, orientation, dataArea, domainAxis,
+                state, visibleRow, column);
+        double[] barL0L1 = calculateBarL0L1(value, rangeAxis.getLowerBound(),
+                rangeAxis.getUpperBound());
+        if (barL0L1 == null) {
+            return null;  // the bar is not visible
+        }
+
+        RectangleEdge edge = plot.getRangeAxisEdge();
+        double transL0 = rangeAxis.valueToJava2D(barL0L1[0], dataArea, edge);
+        double transL1 = rangeAxis.valueToJava2D(barL0L1[1], dataArea, edge);
+
+        // in the following code, barL0 is (in Java2D coordinates) the LEFT
+        // end of the bar for a horizontal bar chart, and the TOP end of the
+        // bar for a vertical bar chart.  Whether this is the BASE of the bar
+        // or not depends also on (a) whether the data value is 'negative'
+        // relative to the base value and (b) whether or not the range axis is
+        // inverted.  This only matters if/when we apply the minimumBarLength
+        // attribute, because we should extend the non-base end of the bar
+        boolean positive = (value >= this.base);
+        boolean inverted = rangeAxis.isInverted();
+        double barL0 = Math.min(transL0, transL1);
+        double barLength = Math.abs(transL1 - transL0);
+        double barLengthAdj = 0.0;
+        if (barLength > 0.0 && barLength < getMinimumBarLength()) {
+            barLengthAdj = getMinimumBarLength() - barLength;
+        }
+        double barL0Adj = 0.0;
+        RectangleEdge barBase;
+        if (orientation == PlotOrientation.HORIZONTAL) {
+            if (positive && inverted || !positive && !inverted) {
+                barL0Adj = barLengthAdj;
+                barBase = RectangleEdge.RIGHT;
+            }
+            else {
+                barBase = RectangleEdge.LEFT;
+            }
+        }
+        else {
+            if (positive && !inverted || !positive && inverted) {
+                barL0Adj = barLengthAdj;
+                barBase = RectangleEdge.BOTTOM;
+            }
+            else {
+                barBase = RectangleEdge.TOP;
+            }
+        }
+
+        // draw the bar...
+        Rectangle2D bar = null;
+        if (orientation == PlotOrientation.HORIZONTAL) {
+            bar = new Rectangle2D.Double(barL0 - barL0Adj, barW0,
+                    barLength + barLengthAdj, state.getBarWidth());
+        }
+        else {
+            bar = new Rectangle2D.Double(barW0, barL0 - barL0Adj,
+                    state.getBarWidth(), barLength + barLengthAdj);
+        }
+        return bar;
     }
 
 }

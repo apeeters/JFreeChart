@@ -69,6 +69,7 @@ import org.jfree.chart.event.PlotChangeListener;
 import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * Some tests for the {@link MultiplePiePlot} class.

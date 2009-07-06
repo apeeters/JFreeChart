@@ -60,6 +60,7 @@ import java.io.Serializable;
 import java.util.ResourceBundle;
 
 import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.event.RendererChangeListener;
@@ -199,7 +200,9 @@ public class WaferMapPlot extends Plot implements RendererChangeListener,
         }
 
         // send a dataset change event to self to trigger plot change event
-        datasetChanged(new DatasetChangeEvent(this, dataset));
+        datasetChanged(new DatasetChangeEvent(this, dataset, 
+                new DatasetChangeInfo()));
+        // TODO: fill in real change details
     }
 
     /**

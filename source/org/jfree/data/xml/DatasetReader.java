@@ -50,7 +50,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 import org.xml.sax.SAXException;
 
 /**

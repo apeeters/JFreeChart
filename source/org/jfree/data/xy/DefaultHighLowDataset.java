@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -51,6 +51,7 @@ package org.jfree.data.xy;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 
 /**
@@ -59,7 +60,8 @@ import org.jfree.chart.util.PublicCloneable;
  * that is very similar.
  */
 public class DefaultHighLowDataset extends AbstractXYDataset
-        implements OHLCDataset, PublicCloneable {
+        implements OHLCDataset, SelectableXYDataset, XYDatasetSelectionState,
+        PublicCloneable {
 
     /** The series key. */
     private Comparable seriesKey;
@@ -81,6 +83,8 @@ public class DefaultHighLowDataset extends AbstractXYDataset
 
     /** Storage for the volume values. */
     private Number[] volume;
+
+    private boolean[] selected;
 
     /**
      * Constructs a new high/low/open/close dataset.
@@ -109,12 +113,14 @@ public class DefaultHighLowDataset extends AbstractXYDataset
         }
         this.seriesKey = seriesKey;
         this.date = date;
+        this.selected = new boolean[this.date.length];
         this.high = createNumberArray(high);
         this.low = createNumberArray(low);
         this.open = createNumberArray(open);
         this.close = createNumberArray(close);
         this.volume = createNumberArray(volume);
 
+        setSelectionState(this);
     }
 
     /**
@@ -207,9 +213,9 @@ public class DefaultHighLowDataset extends AbstractXYDataset
      */
     public double getHighValue(int series, int item) {
         double result = Double.NaN;
-        Number high = getHigh(series, item);
-        if (high != null) {
-            result = high.doubleValue();
+        Number n = getHigh(series, item);
+        if (n != null) {
+            result = n.doubleValue();
         }
         return result;
     }
@@ -425,6 +431,34 @@ public class DefaultHighLowDataset extends AbstractXYDataset
             result[i] = new Double(data[i]);
         }
         return result;
+    }
+
+    public boolean isSelected(int series, int item) {
+        return this.selected[item];
+    }
+
+    public void setSelected(int series, int item, boolean selected) {
+        setSelected(series, item, selected, true);
+    }
+
+    public void setSelected(int series, int item, boolean selected,
+            boolean notify) {
+        if (series != 0) {
+            throw new IllegalArgumentException("Invalid series: " + series);
+        }
+        this.selected[item] = selected;
+        if (notify) {
+            fireSelectionEvent();
+        }
+    }
+
+    public void fireSelectionEvent() {
+        fireDatasetChanged(new DatasetChangeInfo());
+    }
+
+    public void clearSelection() {
+        Arrays.fill(this.selected, false);
+        fireSelectionEvent();
     }
 
 }

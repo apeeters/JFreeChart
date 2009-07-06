@@ -155,7 +155,7 @@ public class RingPlotTests extends TestCase {
     /**
      * Serialize an instance, restore it, and check for equality.
      */
-    public void testSerialization() {
+    public void testSerialization() { 
 
         RingPlot p1 = new RingPlot(null);
         GradientPaint gp = new GradientPaint(1.0f, 2.0f, Color.yellow,

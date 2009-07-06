@@ -72,6 +72,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -293,7 +294,8 @@ public class JDBCCategoryDataset extends DefaultCategoryDataset {
                 }
             }
 
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
         finally {
             if (resultSet != null) {

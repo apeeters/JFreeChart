@@ -49,6 +49,7 @@ package org.jfree.data.xy;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.DatasetChangeEvent;
@@ -85,7 +86,8 @@ public class XYIntervalSeriesCollection extends AbstractIntervalXYDataset
         }
         this.data.add(series);
         series.addChangeListener(this);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -305,7 +307,8 @@ public class XYIntervalSeriesCollection extends AbstractIntervalXYDataset
         XYIntervalSeries ts = (XYIntervalSeries) this.data.get(series);
         ts.removeChangeListener(this);
         this.data.remove(series);
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**
@@ -323,7 +326,8 @@ public class XYIntervalSeriesCollection extends AbstractIntervalXYDataset
         if (this.data.contains(series)) {
             series.removeChangeListener(this);
             this.data.remove(series);
-            fireDatasetChanged();
+            fireDatasetChanged(new DatasetChangeInfo());
+            //TODO: fill in real change info
         }
     }
 
@@ -341,7 +345,8 @@ public class XYIntervalSeriesCollection extends AbstractIntervalXYDataset
           series.removeChangeListener(this);
         }
         this.data.clear();
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        //TODO: fill in real change info
     }
 
     /**

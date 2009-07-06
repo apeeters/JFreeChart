@@ -81,6 +81,7 @@ import org.jfree.chart.axis.NumberTick;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.axis.TickUnit;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.event.RendererChangeListener;
@@ -349,15 +350,17 @@ public class PolarPlot extends Plot implements ValueAxisPlot, Zoomable,
             existing.removeChangeListener(this);
         }
 
-        // set the new m_Dataset, and register the chart as a change listener...
+        // set the new dataset, and register the chart as a change listener...
         this.dataset = dataset;
         if (this.dataset != null) {
             setDatasetGroup(this.dataset.getGroup());
             this.dataset.addChangeListener(this);
         }
 
-        // send a m_Dataset change event to self...
-        DatasetChangeEvent event = new DatasetChangeEvent(this, this.dataset);
+        // send a dataset change event to self...
+        DatasetChangeEvent event = new DatasetChangeEvent(this, this.dataset,
+                new DatasetChangeInfo());
+        // TODO: fill in real dataset change type
         datasetChanged(event);
     }
 

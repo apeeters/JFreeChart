@@ -119,6 +119,7 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
@@ -130,8 +131,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.RenderingSource;
 import org.jfree.chart.annotations.CategoryAnnotation;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
@@ -166,6 +169,8 @@ import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.CategoryDatasetSelectionState;
+import org.jfree.data.category.SelectableCategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
 
 /**
@@ -817,41 +822,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @since 1.0.5
      */
     protected CategoryItemRendererState createState(PlotRenderingInfo info) {
-        return new CategoryItemRendererState(info);
-    }
-
-    /**
-     * Initialises the renderer and returns a state object that will be used
-     * for the remainder of the drawing process for a single chart.  The state
-     * object allows for the fact that the renderer may be used simultaneously
-     * by multiple threads (each thread will work with a separate state object).
-     *
-     * @param g2  the graphics device.
-     * @param dataArea  the data area.
-     * @param plot  the plot.
-     * @param rendererIndex  the renderer index.
-     * @param info  an object for returning information about the structure of
-     *              the plot (<code>null</code> permitted).
-     *
-     * @return The renderer state.
-     */
-    public CategoryItemRendererState initialise(Graphics2D g2,
-                                                Rectangle2D dataArea,
-                                                CategoryPlot plot,
-                                                int rendererIndex,
-                                                PlotRenderingInfo info) {
-
-        setPlot(plot);
-        CategoryDataset data = plot.getDataset(rendererIndex);
-        if (data != null) {
-            this.rowCount = data.getRowCount();
-            this.columnCount = data.getColumnCount();
-        }
-        else {
-            this.rowCount = 0;
-            this.columnCount = 0;
-        }
-        CategoryItemRendererState state = createState(info);
+        CategoryItemRendererState state = new CategoryItemRendererState(info);
         int[] visibleSeriesTemp = new int[this.rowCount];
         int visibleSeriesCount = 0;
         for (int row = 0; row < this.rowCount; row++) {
@@ -864,6 +835,56 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         System.arraycopy(visibleSeriesTemp, 0, visibleSeries, 0,
                 visibleSeriesCount);
         state.setVisibleSeriesArray(visibleSeries);
+        return state;
+    }
+
+    /**
+     * Initialises the renderer and returns a state object that will be used
+     * for the remainder of the drawing process for a single chart.  The state
+     * object allows for the fact that the renderer may be used simultaneously
+     * by multiple threads (each thread will work with a separate state object).
+     *
+     * @param g2  the graphics device.
+     * @param dataArea  the data area.
+     * @param plot  the plot.
+     * @param info  an object for returning information about the structure of
+     *              the plot (<code>null</code> permitted).
+     *
+     * @return The renderer state.
+     */
+    public CategoryItemRendererState initialise(Graphics2D g2,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryDataset dataset,
+            PlotRenderingInfo info) {
+
+        setPlot(plot);
+        if (dataset != null) {
+            this.rowCount = dataset.getRowCount();
+            this.columnCount = dataset.getColumnCount();
+        }
+        else {
+            this.rowCount = 0;
+            this.columnCount = 0;
+        }
+        CategoryItemRendererState state = createState(info);
+
+        // determine if there is any selection state for the dataset
+        CategoryDatasetSelectionState selectionState = null;
+        if (dataset instanceof SelectableCategoryDataset) {
+            SelectableCategoryDataset scd = (SelectableCategoryDataset) dataset;
+            selectionState = scd.getSelectionState();
+        }
+        // if the selection state is still null, go to the selection source
+        // and ask if it has state...
+        if (selectionState == null && info != null) {
+            ChartRenderingInfo cri = info.getOwner();
+            if (cri != null) {
+                RenderingSource rs = cri.getRenderingSource();
+                selectionState = (CategoryDatasetSelectionState)
+                        rs.getSelectionState(dataset);
+            }
+        }
+        state.setSelectionState(selectionState);
+
         return state;
     }
 
@@ -1728,19 +1749,17 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     }
 
     /**
-     * Returns a domain axis for a plot.
+     * Returns the domain axis that is used for the specified dataset.
      *
-     * @param plot  the plot.
-     * @param index  the axis index.
+     * @param plot  the plot (<code>null</code> not permitted).
+     * @param dataset  the dataset (<code>null</code> not permitted).
      *
      * @return A domain axis.
      */
-    protected CategoryAxis getDomainAxis(CategoryPlot plot, int index) {
-        CategoryAxis result = plot.getDomainAxis(index);
-        if (result == null) {
-            result = plot.getDomainAxis();
-        }
-        return result;
+    protected CategoryAxis getDomainAxis(CategoryPlot plot, 
+            CategoryDataset dataset) {
+        int datasetIndex = plot.indexOf(dataset);
+        return plot.getDomainAxisForDataset(datasetIndex);
     }
 
     /**
@@ -1860,4 +1879,103 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         entities.add(entity);
     }
 
+        /**
+     * Returns a shape that can be used for hit testing on a data item drawn
+     * by the renderer.
+     *
+     * @param g2  the graphics device.
+     * @param dataArea  the area within which the data is being rendered.
+     * @param plot  the plot (can be used to obtain standard color
+     *              information etc).
+     * @param domainAxis  the domain axis.
+     * @param rangeAxis  the range axis.
+     * @param dataset  the dataset.
+     * @param row  the row index (zero-based).
+     * @param column  the column index (zero-based).
+     * @param selected  is the item selected?
+     *
+     * @return A shape equal to the hot spot for a data item.
+     */
+    public Shape createHotSpotShape(Graphics2D g2, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            CategoryDataset dataset, int row, int column, boolean selected,
+            CategoryItemRendererState state) {
+        throw new RuntimeException("Not implemented.");
+    }
+
+    /**
+     * Returns the rectangular bounds for the hot spot for an item drawn by
+     * this renderer.  This is intended to provide a quick test for
+     * eliminating data points before more accurate testing against the
+     * shape returned by createHotSpotShape().
+     *
+     * @param g2
+     * @param dataArea
+     * @param plot
+     * @param domainAxis
+     * @param rangeAxis
+     * @param dataset
+     * @param row
+     * @param column
+     * @param selected
+     * @param result
+     * @return
+     */
+    public Rectangle2D createHotSpotBounds(Graphics2D g2, Rectangle2D dataArea,
+            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+            CategoryDataset dataset, int row, int column, boolean selected,
+            CategoryItemRendererState state, Rectangle2D result) {
+        if (result == null) {
+            result = new Rectangle();
+        }
+        Comparable key = dataset.getColumnKey(column);
+        Number y = dataset.getValue(row, column);
+        if (y == null) {
+            return null;
+        }
+        double xx = domainAxis.getCategoryMiddle(key,
+                plot.getCategoriesForAxis(domainAxis),
+                dataArea, plot.getDomainAxisEdge());
+        double yy = rangeAxis.valueToJava2D(y.doubleValue(), dataArea,
+                plot.getRangeAxisEdge());
+        result.setRect(xx - 2, yy - 2, 4, 4);
+        return result;
+    }
+
+    /**
+     * Returns <code>true</code> if the specified point (xx, yy) in Java2D
+     * space falls within the "hot spot" for the specified data item, and
+     * <code>false</code> otherwise.
+     *
+     * @param xx
+     * @param yy
+     * @param g2
+     * @param dataArea
+     * @param plot
+     * @param domainAxis
+     * @param rangeAxis
+     * @param dataset
+     * @param row
+     * @param column
+     * @param selected
+     *
+     * @return
+     *
+     * @since 1.2.0
+     */
+    public boolean hitTest(double xx, double yy, Graphics2D g2,
+            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+            boolean selected, CategoryItemRendererState state) {
+        Rectangle2D bounds = createHotSpotBounds(g2, dataArea, plot,
+                domainAxis, rangeAxis, dataset, row, column, selected,
+                state, null);
+        if (bounds == null) {
+            return false;
+        }
+        // FIXME:  if the following test passes, we should then do the more
+        // expensive test against the hotSpotShape
+        return bounds.contains(xx, yy);
+    }
+    
 }

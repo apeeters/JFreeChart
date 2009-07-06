@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------
  * CategoryToPieDataset.java
  * -------------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited.
+ * (C) Copyright 2003-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Christian W. Zuckschwerdt;
@@ -44,6 +44,7 @@
  *               for source, and added getSource(), getExtractType() and
  *               getExtractIndex() methods - see feature request 1477915 (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
+ * 01-Jul-2009 : Now extends AbstractPieDataset (DG);
  *
  */
 
@@ -52,17 +53,18 @@ package org.jfree.data.category;
 import java.util.Collections;
 import java.util.List;
 
+import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.TableOrder;
-import org.jfree.data.general.AbstractDataset;
+import org.jfree.data.pie.AbstractPieDataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
-import org.jfree.data.general.PieDataset;
+import org.jfree.data.pie.PieDataset;
 
 /**
  * A {@link PieDataset} implementation that obtains its data from one row or
  * column of a {@link CategoryDataset}.
  */
-public class CategoryToPieDataset extends AbstractDataset
+public class CategoryToPieDataset extends AbstractPieDataset
         implements PieDataset, DatasetChangeListener {
 
     /** For serialization. */
@@ -281,7 +283,8 @@ public class CategoryToPieDataset extends AbstractDataset
      *     source is sent to the listeners).
      */
     public void datasetChanged(DatasetChangeEvent event) {
-        fireDatasetChanged();
+        fireDatasetChanged(new DatasetChangeInfo());
+        // TODO: fill in real change details
     }
 
     /**

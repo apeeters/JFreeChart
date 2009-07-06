@@ -101,7 +101,7 @@ public class XYItemRendererState extends RendererState {
     /**
      * The selection state for the dataset, or <code>null</code>.
      *
-     * @since 1.0.14
+     * @since 1.2.0
      */
     private XYDatasetSelectionState selectionState;
 
@@ -215,6 +215,7 @@ public class XYItemRendererState extends RendererState {
     public void setSelectionState(XYDatasetSelectionState state) {
         this.selectionState = state;
     }
+
     /**
      * This method is called by the {@link XYPlot} when it starts a pass
      * through the (visible) items in a series.  The default implementation

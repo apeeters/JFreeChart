@@ -130,20 +130,19 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
      *
      * @param plot  the plot.
      * @param dataArea  the data area.
-     * @param rendererIndex  the renderer index.
+     * @param dataset  the dataset.
      * @param state  the renderer state.
      */
     protected void calculateBarWidth(CategoryPlot plot,
                                      Rectangle2D dataArea,
-                                     int rendererIndex,
+                                     CategoryDataset dataset,
                                      CategoryItemRendererState state) {
 
         // calculate the bar width - this calculation differs from the
         // BarRenderer calculation because the bars are layered on top of one
         // another, so there is effectively only one bar per category for
         // the purpose of the bar width calculation
-        CategoryAxis domainAxis = getDomainAxis(plot, rendererIndex);
-        CategoryDataset dataset = plot.getDataset(rendererIndex);
+        CategoryAxis domainAxis = getDomainAxis(plot, dataset);
         if (dataset != null) {
             int columns = dataset.getColumnCount();
             int rows = dataset.getRowCount();
@@ -233,8 +232,8 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
         // X
         double value = dataValue.doubleValue();
         double base = 0.0;
-        double lclip = getLowerClip();
-        double uclip = getUpperClip();
+        double lclip = rangeAxis.getLowerBound();
+        double uclip = rangeAxis.getUpperBound();
         if (uclip <= 0.0) {  // cases 1, 2, 3 and 4
             if (value >= uclip) {
                 return; // bar is not visible
@@ -364,8 +363,8 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
         // BAR Y
         double value = dataValue.doubleValue();
         double base = 0.0;
-        double lclip = getLowerClip();
-        double uclip = getUpperClip();
+        double lclip = rangeAxis.getLowerBound();
+        double uclip = rangeAxis.getUpperBound();
 
         if (uclip <= 0.0) {  // cases 1, 2, 3 and 4
             if (value >= uclip) {
@@ -390,7 +389,7 @@ public class LayeredBarRenderer extends BarRenderer implements Serializable {
             if (value <= lclip) {
                 return; // bar is not visible
             }
-            base = getLowerClip();
+            base = rangeAxis.getLowerBound();
             if (value >= uclip) {
                value = uclip;
             }
