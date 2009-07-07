@@ -101,7 +101,7 @@ import java.util.TimeZone;
 
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.general.Series;
-import org.jfree.data.general.SeriesChangeEvent;
+import org.jfree.data.event.SeriesChangeEvent;
 import org.jfree.data.general.SeriesException;
 
 /**

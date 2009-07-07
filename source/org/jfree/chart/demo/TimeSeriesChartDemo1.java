@@ -92,14 +92,8 @@ public class TimeSeriesChartDemo1 extends ApplicationFrame {
     private static JFreeChart createChart(XYDataset dataset) {
 
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
-            "Legal & General Unit Trust Prices",  // title
-            "Date",             // x-axis label
-            "Price Per Unit",   // y-axis label
-            dataset,            // data
-            true,               // create legend?
-            true,               // generate tooltips?
-            false               // generate URLs?
-        );
+                "Legal & General Unit Trust Prices", "Date", "Price Per Unit",
+                dataset, true);
 
         chart.setBackgroundPaint(Color.white);
 

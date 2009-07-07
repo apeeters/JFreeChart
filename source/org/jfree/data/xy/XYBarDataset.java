@@ -52,8 +52,8 @@ package org.jfree.data.xy;
 
 import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
-import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.general.DatasetChangeListener;
+import org.jfree.data.event.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeListener;
 
 /**
  * A dataset wrapper class that converts a standard {@link XYDataset} into an

@@ -45,8 +45,8 @@ package org.jfree.data.time;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.jfree.data.general.SeriesChangeEvent;
-import org.jfree.data.general.SeriesChangeListener;
+import org.jfree.data.event.SeriesChangeEvent;
+import org.jfree.data.event.SeriesChangeListener;
 
 /**
  * Wrapper around a time series to convert it to a table model for use in
