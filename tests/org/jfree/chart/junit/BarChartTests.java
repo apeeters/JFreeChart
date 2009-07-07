@@ -201,15 +201,8 @@ public class BarChartTests extends TestCase {
                 "C", data);
 
         // create the chart...
-        return ChartFactory.createBarChart(
-            "Bar Chart",
-            "Domain", "Range",
-            dataset,
-            PlotOrientation.HORIZONTAL,
-            true,     // include legend
-            true,
-            true
-        );
+        return ChartFactory.createBarChart("Bar Chart", "Domain", "Range",
+                dataset, true);
 
     }
 

@@ -639,8 +639,7 @@ public class PiePlotTests extends TestCase {
         DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("L1", 12.0);
         dataset.setValue("L2", 11.0);
-        JFreeChart chart = ChartFactory.createPieChart("Test", dataset, true,
-                false, false);
+        JFreeChart chart = ChartFactory.createPieChart("Test", dataset, true);
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setLegendLabelGenerator(new NullLegendLabelGenerator());
         boolean success = false;

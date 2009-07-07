@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * XYBarRendererTests.java
  * -----------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -291,8 +291,7 @@ public class XYBarRendererTests extends TestCase {
         XYSeriesCollection dataset
                 = RendererXYPackageTests.createTestXYSeriesCollection();
         JFreeChart chart = ChartFactory.createXYBarChart("Test Chart", "X",
-                false, "Y", dataset, PlotOrientation.VERTICAL, false, false,
-                false);
+                false, "Y", dataset, false);
         XYPlot plot = (XYPlot) chart.getPlot();
         NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
         domainAxis.setAutoRangeIncludesZero(false);

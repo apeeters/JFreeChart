@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------
  * SubCategoryAxisTests.java
  * -------------------------
- * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -176,8 +176,7 @@ public class SubCategoryAxisTests extends TestCase {
      */
     public void test2275695() {
         JFreeChart chart = ChartFactory.createStackedBarChart("Test",
-                "Category", "Value", null, PlotOrientation.VERTICAL,
-                true, false, false);
+                "Category", "Value", null, true);
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
         plot.setDomainAxis(new SubCategoryAxis("SubCategoryAxis"));
         boolean success = false;

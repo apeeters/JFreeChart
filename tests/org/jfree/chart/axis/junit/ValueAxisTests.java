@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------
  * ValueAxisTests.java
  * -------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -232,9 +232,7 @@ public class ValueAxisTests extends TestCase {
         XYSeriesCollection dataset = new XYSeriesCollection(series);
         dataset.setIntervalWidth(0.0);
         JFreeChart chart = ChartFactory.createScatterPlot(
-            "Title", "X", "Y", dataset, PlotOrientation.VERTICAL,
-            false, false, false
-        );
+            "Title", "X", "Y", dataset, false);
         ValueAxis domainAxis = ((XYPlot) chart.getPlot()).getDomainAxis();
         Range r = domainAxis.getRange();
         assertEquals(110.0, r.getLength(), EPSILON);

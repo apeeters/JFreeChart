@@ -196,15 +196,8 @@ public class LineChart3DTests extends TestCase {
                 "C", data);
 
         // create the chart...
-        return ChartFactory.createLineChart3D(
-            "Line Chart",
-            "Domain", "Range",
-            dataset,
-            PlotOrientation.HORIZONTAL,
-            true,     // include legend
-            true,
-            true
-        );
+        return ChartFactory.createLineChart3D("Line Chart", "Domain", "Range",
+                dataset, true);
 
     }
 

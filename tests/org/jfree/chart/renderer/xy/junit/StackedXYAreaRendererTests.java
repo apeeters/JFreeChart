@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -------------------------------
  * StackedXYAreaRendererTests.java
  * -------------------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -188,8 +188,7 @@ public class StackedXYAreaRendererTests extends TestCase {
         TableXYDataset dataset
                 = RendererXYPackageTests.createTestTableXYDataset();
         JFreeChart chart = ChartFactory.createStackedXYAreaChart(
-                "Test Chart", "X", "Y", dataset, PlotOrientation.VERTICAL,
-                false, false, false);
+                "Test Chart", "X", "Y", dataset, false);
         XYPlot plot = (XYPlot) chart.getPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         Range bounds = rangeAxis.getRange();

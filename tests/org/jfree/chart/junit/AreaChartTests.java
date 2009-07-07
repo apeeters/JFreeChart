@@ -186,7 +186,7 @@ public class AreaChartTests extends TestCase {
         CategoryDataset dataset = DatasetUtilities.createCategoryDataset("S",
                 "C", data);
         return ChartFactory.createAreaChart("Area Chart", "Domain", "Range",
-                dataset, PlotOrientation.HORIZONTAL, true, true, true);
+                dataset, true);
 
     }
 

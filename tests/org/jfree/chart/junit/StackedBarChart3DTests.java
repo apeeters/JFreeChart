@@ -196,15 +196,8 @@ public class StackedBarChart3DTests extends TestCase {
                 "C", data);
 
         // create the chart...
-        return ChartFactory.createStackedBarChart3D(
-            "Stacked Bar Chart 3D",  // chart title
-            "Domain", "Range",
-            dataset,      // data
-            PlotOrientation.HORIZONTAL,
-            true,         // include legend
-            true,
-            true
-        );
+        return ChartFactory.createStackedBarChart3D("Stacked Bar Chart 3D", 
+                "Domain", "Range", dataset, true);
 
     }
 

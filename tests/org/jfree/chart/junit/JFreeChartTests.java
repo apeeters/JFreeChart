@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * --------------------
  * JFreeChartTests.java
  * --------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited.
+ * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -113,22 +113,12 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
      * Common test setup.
      */
     protected void setUp() {
-
-        // create a dataset...
-        DefaultPieDataset data = new DefaultPieDataset();
-        data.setValue("Java", new Double(43.2));
-        data.setValue("Visual Basic", new Double(0.0));
-        data.setValue("C/C++", new Double(17.5));
-
-        // create the chart...
-        this.pieChart = ChartFactory.createPieChart(
-            "Pie Chart",  // chart title
-            data,         // data
-            true,         // include legend
-            true,
-            false
-        );
-
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue("Java", new Double(43.2));
+        dataset.setValue("Visual Basic", new Double(0.0));
+        dataset.setValue("C/C++", new Double(17.5));
+        this.pieChart = ChartFactory.createPieChart("Pie Chart", dataset,
+                true);
     }
 
     /**
@@ -252,8 +242,7 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
      */
     public void testGetSubtitle() {
         DefaultPieDataset dataset = new DefaultPieDataset();
-        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true,
-                false, false);
+        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true);
         Title t = chart.getSubtitle(0);
         assertTrue(t instanceof LegendTitle);
 
@@ -295,8 +284,7 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
         data.setValue("Type 2", 23.9);
         data.setValue("Type 3", 45.8);
 
-        JFreeChart c1 = ChartFactory.createPieChart("Test", data, true, true,
-                true);
+        JFreeChart c1 = ChartFactory.createPieChart("Test", data, true);
         JFreeChart c2 = null;
 
         try {
@@ -328,8 +316,7 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
         data.setValue("Type 2", 23.9);
         data.setValue("Type 3", 45.8);
 
-        JFreeChart c1 = ChartFactory.createPieChart3D("Test", data, true, true,
-                true);
+        JFreeChart c1 = ChartFactory.createPieChart3D("Test", data, true);
         JFreeChart c2 = null;
 
         try {
@@ -401,19 +388,10 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
         dataset.addValue(3.0, series3, category8);
 
         // create the chart...
-        JFreeChart c1 = ChartFactory.createBarChart(
-            "Vertical Bar Chart",      // chart title
-            "Category",                // domain axis label
-            "Value",                   // range axis label
-            dataset,                   // data
-            PlotOrientation.VERTICAL,  // orientation
-            true,                      // include legend
-            true,
-            false
-        );
+        JFreeChart c1 = ChartFactory.createBarChart("Vertical Bar Chart", 
+                "Category", "Value", dataset, true);
 
         JFreeChart c2 = null;
-
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(buffer);
@@ -446,7 +424,7 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
         dataset.addSeries(series);
 
         JFreeChart c1 = ChartFactory.createTimeSeriesChart("Test", "Date",
-                "Value", dataset, true, true, true);
+                "Value", dataset, true);
         JFreeChart c2 = null;
 
         try {
@@ -472,8 +450,7 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
      */
     public void testAddSubtitle() {
         DefaultPieDataset dataset = new DefaultPieDataset();
-        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true,
-                false, false);
+        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true);
 
         TextTitle t0 = new TextTitle("T0");
         chart.addSubtitle(0, t0);
@@ -516,8 +493,7 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
      */
     public void testGetSubtitles() {
         DefaultPieDataset dataset = new DefaultPieDataset();
-        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true,
-                false, false);
+        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true);
         List subtitles = chart.getSubtitles();
 
         assertEquals(1, chart.getSubtitleCount());
@@ -532,8 +508,7 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
      */
     public void testLegendEvents() {
         DefaultPieDataset dataset = new DefaultPieDataset();
-        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true,
-                false, false);
+        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true);
         chart.addChangeListener(this);
         this.lastChartChangeEvent = null;
         LegendTitle legend = chart.getLegend();
@@ -546,8 +521,7 @@ public class JFreeChartTests extends TestCase implements ChartChangeListener {
      */
     public void testTitleChangeEvent() {
         DefaultPieDataset dataset = new DefaultPieDataset();
-        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true,
-                false, false);
+        JFreeChart chart = ChartFactory.createPieChart("title", dataset, true);
         chart.addChangeListener(this);
         this.lastChartChangeEvent = null;
         TextTitle t = chart.getTitle();

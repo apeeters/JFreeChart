@@ -188,17 +188,8 @@ public class GanttChartTests extends TestCase {
      * @return The chart.
      */
     private static JFreeChart createGanttChart() {
-
-        // create the chart...
-        return ChartFactory.createGanttChart(
-            "Gantt Chart",
-            "Domain", "Range",
-            null,
-            true,     // include legend
-            true,
-            true
-        );
-
+        return ChartFactory.createGanttChart("Gantt Chart", "Domain", "Range",
+                null, true);
     }
 
     /**

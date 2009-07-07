@@ -50,8 +50,8 @@ import java.io.ObjectOutputStream;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.general.DatasetChangeListener;
+import org.jfree.data.event.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeListener;
 
 /**
  * Somes tests for the {@link DefaultHeatMapDataset} class.

@@ -186,7 +186,6 @@ public class LineChartTests extends TestCase {
      */
     private static JFreeChart createLineChart() {
 
-        // create a dataset...
         Number[][] data = new Integer[][]
             {{new Integer(-3), new Integer(-2)},
              {new Integer(-1), new Integer(1)},
@@ -194,17 +193,8 @@ public class LineChartTests extends TestCase {
 
         CategoryDataset dataset = DatasetUtilities.createCategoryDataset("S",
                 "C", data);
-
-        // create the chart...
-        return ChartFactory.createLineChart(
-            "Line Chart",
-            "Domain", "Range",
-            dataset,
-            PlotOrientation.HORIZONTAL,
-            true,     // include legend
-            true,
-            true
-        );
+        return ChartFactory.createLineChart("Line Chart", "Domain", "Range",
+                dataset, true);
 
     }
 

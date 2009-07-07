@@ -164,17 +164,8 @@ public class WaterfallChartTests extends TestCase {
 
         CategoryDataset dataset = DatasetUtilities.createCategoryDataset("S",
                 "C", data);
-
-        // create the chart...
-        return ChartFactory.createWaterfallChart(
-            "Waterfall Chart",
-            "Domain", "Range",
-            dataset,
-            PlotOrientation.HORIZONTAL,
-            true,     // include legend
-            true,
-            true
-        );
+        return ChartFactory.createWaterfallChart("Waterfall Chart", "Domain",
+                "Range", dataset, true);
 
     }
 

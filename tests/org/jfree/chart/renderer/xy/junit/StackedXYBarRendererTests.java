@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -177,9 +177,8 @@ public class StackedXYBarRendererTests extends TestCase {
     public void testFindDomainBounds() {
         TableXYDataset dataset
                 = RendererXYPackageTests.createTestTableXYDataset();
-        JFreeChart chart = ChartFactory.createStackedXYAreaChart(
-                "Test Chart", "X", "Y", dataset,
-                PlotOrientation.VERTICAL, false, false, false);
+        JFreeChart chart = ChartFactory.createStackedXYAreaChart("Test Chart",
+                "X", "Y", dataset, false);
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setRenderer(new StackedXYBarRenderer());
         NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
@@ -197,9 +196,8 @@ public class StackedXYBarRendererTests extends TestCase {
     public void testFindRangeBounds() {
         TableXYDataset dataset
                 = RendererXYPackageTests.createTestTableXYDataset();
-        JFreeChart chart = ChartFactory.createStackedXYAreaChart(
-                "Test Chart", "X", "Y", dataset,
-                PlotOrientation.VERTICAL, false, false, false);
+        JFreeChart chart = ChartFactory.createStackedXYAreaChart("Test Chart",
+                "X", "Y", dataset, false);
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setRenderer(new StackedXYBarRenderer());
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();

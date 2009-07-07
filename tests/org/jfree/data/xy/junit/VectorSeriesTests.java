@@ -53,8 +53,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jfree.data.general.SeriesChangeEvent;
-import org.jfree.data.general.SeriesChangeListener;
+import org.jfree.data.event.SeriesChangeEvent;
+import org.jfree.data.event.SeriesChangeListener;
 import org.jfree.data.xy.VectorSeries;
 import org.jfree.data.xy.XYCoordinate;
 

@@ -178,16 +178,8 @@ public class XYBarChartTests extends TestCase {
                 series1), 1.0);
 
         // create the chart...
-        return ChartFactory.createXYBarChart(
-            "XY Bar Chart",  // chart title
-            "Domain", false,
-            "Range",
-            dataset,         // data
-            PlotOrientation.VERTICAL,
-            true,            // include legend
-            true,            // tooltips
-            true             // urls
-        );
+        return ChartFactory.createXYBarChart("XY Bar Chart", "Domain", false,
+                "Range", dataset, true);
 
     }
 

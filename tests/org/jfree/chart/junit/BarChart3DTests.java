@@ -198,7 +198,7 @@ public class BarChart3DTests extends TestCase {
 
         // create the chart...
         return ChartFactory.createBarChart3D("Bar Chart 3D", "Domain", "Range",
-                dataset, PlotOrientation.HORIZONTAL, true, true, true);
+                dataset, true);
 
     }
 

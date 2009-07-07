@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -267,8 +267,7 @@ public class XYLineAndShapeRendererTests extends TestCase {
         XYSeriesCollection dataset
                 = RendererXYPackageTests.createTestXYSeriesCollection();
         JFreeChart chart = ChartFactory.createXYLineChart(
-                "Test Chart", "X", "Y", dataset, PlotOrientation.VERTICAL,
-                false, false, false);
+                "Test Chart", "X", "Y", dataset, false);
         XYPlot plot = (XYPlot) chart.getPlot();
         NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
         domainAxis.setAutoRangeIncludesZero(false);
@@ -285,9 +284,8 @@ public class XYLineAndShapeRendererTests extends TestCase {
     public void testFindRangeBounds() {
         TableXYDataset dataset
                 = RendererXYPackageTests.createTestTableXYDataset();
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                "Test Chart", "X", "Y", dataset, PlotOrientation.VERTICAL,
-                false, false, false);
+        JFreeChart chart = ChartFactory.createXYLineChart("Test Chart", 
+                "X", "Y", dataset, false);
         XYPlot plot = (XYPlot) chart.getPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setAutoRangeIncludesZero(false);

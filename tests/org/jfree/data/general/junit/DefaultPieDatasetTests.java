@@ -53,8 +53,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.general.DatasetChangeListener;
+import org.jfree.data.event.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeListener;
 import org.jfree.data.pie.DefaultPieDataset;
 
 /**

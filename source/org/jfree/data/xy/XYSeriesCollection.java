@@ -79,7 +79,7 @@ import org.jfree.data.DomainOrder;
 import org.jfree.data.Range;
 import org.jfree.data.RangeInfo;
 import org.jfree.data.UnknownKeyException;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 
 /**
  * Represents a collection of {@link XYSeries} objects that can be used as a

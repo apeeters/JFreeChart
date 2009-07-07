@@ -185,27 +185,14 @@ public class StackedAreaChartTests extends TestCase {
      * @return The chart.
      */
     private static JFreeChart createChart() {
-
-        // create a dataset...
         Number[][] data = new Integer[][]
             {{new Integer(-3), new Integer(-2)},
              {new Integer(-1), new Integer(1)},
              {new Integer(2), new Integer(3)}};
-
         CategoryDataset dataset = DatasetUtilities.createCategoryDataset("S",
                 "C", data);
-
-        // create the chart...
-        return ChartFactory.createStackedAreaChart(
-            "Stacked Area Chart",  // chart title
-            "Domain", "Range",
-            dataset,      // data
-            PlotOrientation.HORIZONTAL,
-            true,         // include legend
-            true,
-            true
-        );
-
+        return ChartFactory.createStackedAreaChart("Stacked Area Chart",
+                "Domain", "Range", dataset, true);
     }
 
     /**
