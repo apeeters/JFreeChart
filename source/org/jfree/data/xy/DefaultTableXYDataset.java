@@ -73,9 +73,9 @@ import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.data.general.SeriesChangeEvent;
+import org.jfree.data.event.SeriesChangeEvent;
 
 /**
  * An {@link XYDataset} where every series shares the same x-values (required

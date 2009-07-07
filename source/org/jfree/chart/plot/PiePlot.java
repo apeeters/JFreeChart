@@ -225,7 +225,7 @@ import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.UnitType;
 import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.KeyedValues;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.pie.PieDataset;
 import org.jfree.data.pie.PieDatasetChangeInfo;

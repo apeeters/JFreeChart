@@ -51,7 +51,7 @@ import java.util.List;
 import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainOrder;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 
 /**
  * A default implementation of the {@link XYDataset} interface that stores

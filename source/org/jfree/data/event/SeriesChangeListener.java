@@ -24,39 +24,37 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * --------------------------
- * DatasetChangeListener.java
- * --------------------------
- * (C) Copyright 2000-2008, by Object Refinery Limited.
+ * -------------------------
+ * SeriesChangeListener.java
+ * -------------------------
+ * (C) Copyright 2001-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
  *
- * Changes (from 24-Aug-2001)
- * --------------------------
- * 24-Aug-2001 : Added standard source header. Fixed DOS encoding problem (DG);
- * 15-Oct-2001 : Moved to new package (com.jrefinery.data.*) (DG);
- * 22-Oct-2001 : Renamed DataSource.java --> Dataset.java etc. (DG);
- * 07-Aug-2002 : Now extends EventListener (DG);
- * 04-Oct-2002 : Fixed errors reported by Checkstyle (DG);
+ * Changes
+ * -------
+ * 15-Nov-2001 : Version 1 (DG);
+ * 26-Jun-2003 : Now extends EventListener so we can use the EventListenerList
+ *               mechanism (DG);
  *
  */
 
-package org.jfree.data.general;
+package org.jfree.data.event;
 
+import org.jfree.data.event.SeriesChangeEvent;
 import java.util.EventListener;
 
 /**
- * The interface that must be supported by classes that wish to receive
- * notification of changes to a dataset.
+ * Methods for receiving notification of changes to a data series.
  */
-public interface DatasetChangeListener extends EventListener {
+public interface SeriesChangeListener extends EventListener {
 
     /**
-     * Receives notification of an dataset change event.
+     * Called when an observed series changes in some way.
      *
-     * @param event  information about the event.
+     * @param event  information about the change.
      */
-    public void datasetChanged(DatasetChangeEvent event);
+    public void seriesChanged(SeriesChangeEvent event);
 
 }

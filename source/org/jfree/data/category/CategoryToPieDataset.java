@@ -56,8 +56,8 @@ import java.util.List;
 import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.TableOrder;
 import org.jfree.data.pie.AbstractPieDataset;
-import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.general.DatasetChangeListener;
+import org.jfree.data.event.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeListener;
 import org.jfree.data.pie.PieDataset;
 
 /**

@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------
  * ChartFactory.java
  * -----------------
- * (C) Copyright 2001-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2001-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Serge V. Grachov;
@@ -123,7 +123,9 @@
  * 23-Oct-2008 : Check for legacy theme in setChartTheme() and reset default
  *               bar painters (DG);
  * 20-Dec-2008 : In createStackedAreaChart(), set category margin to 0.0 (DG);
- *
+ * 07-Jul-2009 : Simplified API by removing orientation, tooltips and url
+ *               arguments (DG);
+ * 
  */
 
 package org.jfree.chart;
@@ -198,16 +200,9 @@ import org.jfree.chart.renderer.xy.XYStepAreaRenderer;
 import org.jfree.chart.renderer.xy.XYStepRenderer;
 import org.jfree.chart.text.TextAnchor;
 import org.jfree.chart.title.TextTitle;
-import org.jfree.chart.urls.PieURLGenerator;
-import org.jfree.chart.urls.StandardCategoryURLGenerator;
-import org.jfree.chart.urls.StandardPieURLGenerator;
-import org.jfree.chart.urls.StandardXYURLGenerator;
-import org.jfree.chart.urls.StandardXYZURLGenerator;
-import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.chart.util.Layer;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
-import org.jfree.chart.util.SortOrder;
 import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.IntervalCategoryDataset;
@@ -216,6 +211,7 @@ import org.jfree.data.pie.PieDataset;
 import org.jfree.data.general.WaferMapDataset;
 import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
 import org.jfree.data.statistics.BoxAndWhiskerXYDataset;
+import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.OHLCDataset;
 import org.jfree.data.xy.TableXYDataset;
@@ -279,35 +275,18 @@ public abstract class ChartFactory {
     }
 
     /**
-     * Creates a pie chart with default settings.
-     * <P>
-     * The chart object returned by this method uses a {@link PiePlot} instance
-     * as the plot.
+     * Creates a pie chart with default settings.  The chart object returned
+     * by this method uses a {@link PiePlot} instance as the plot.
      *
      * @param title  the chart title (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param locale  the locale (<code>null</code> not permitted).
      *
      * @return A pie chart.
-     *
-     * @since 1.0.7
      */
     public static JFreeChart createPieChart(String title, PieDataset dataset,
-            boolean legend, boolean tooltips, Locale locale) {
-
-        PiePlot plot = new PiePlot(dataset);
-        plot.setLabelGenerator(new StandardPieSectionLabelGenerator(locale));
-        plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-        if (tooltips) {
-            plot.setToolTipGenerator(new StandardPieToolTipGenerator(locale));
-        }
-        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
-                plot, legend);
-        currentTheme.apply(chart);
-        return chart;
-
+            boolean legend) {
+        return createPieChart(title, dataset, legend, Locale.getDefault());
     }
 
     /**
@@ -319,30 +298,24 @@ public abstract class ChartFactory {
      * @param title  the chart title (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
+     * @param locale  the locale (<code>null</code> not permitted).
      *
      * @return A pie chart.
+     *
+     * @since 1.0.7
      */
-    public static JFreeChart createPieChart(String title,
-                                            PieDataset dataset,
-                                            boolean legend,
-                                            boolean tooltips,
-                                            boolean urls) {
+    public static JFreeChart createPieChart(String title, PieDataset dataset,
+            boolean legend, Locale locale) {
 
         PiePlot plot = new PiePlot(dataset);
-        plot.setLabelGenerator(new StandardPieSectionLabelGenerator());
+        plot.setLabelGenerator(new StandardPieSectionLabelGenerator(locale));
         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-        if (tooltips) {
-            plot.setToolTipGenerator(new StandardPieToolTipGenerator());
-        }
-        if (urls) {
-            plot.setURLGenerator(new StandardPieURLGenerator());
-        }
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator(locale));
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
         return chart;
+
     }
 
     /**
@@ -375,7 +348,6 @@ public abstract class ChartFactory {
      * @param greenForIncrease  an increase since previousDataset will be
      *                          displayed in green (decrease red) if true.
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
      * @param locale  the locale (<code>null</code> not permitted).
      * @param subTitle displays a subtitle with colour scheme if true
      * @param showDifference  create a new dataset that will show the %
@@ -387,16 +359,13 @@ public abstract class ChartFactory {
      */
     public static JFreeChart createPieChart(String title, PieDataset dataset,
             PieDataset previousDataset, int percentDiffForMaxScale,
-            boolean greenForIncrease, boolean legend, boolean tooltips,
-            Locale locale, boolean subTitle, boolean showDifference) {
+            boolean greenForIncrease, boolean legend, Locale locale,
+            boolean subTitle, boolean showDifference) {
 
         PiePlot plot = new PiePlot(dataset);
         plot.setLabelGenerator(new StandardPieSectionLabelGenerator(locale));
         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-
-        if (tooltips) {
-            plot.setToolTipGenerator(new StandardPieToolTipGenerator(locale));
-        }
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator(locale));
 
         List keys = dataset.getKeys();
         DefaultPieDataset series = null;
@@ -494,36 +463,22 @@ public abstract class ChartFactory {
      * @param greenForIncrease  an increase since previousDataset will be
      *                          displayed in green (decrease red) if true.
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      * @param subTitle displays a subtitle with colour scheme if true
      * @param showDifference  create a new dataset that will show the %
      *                        difference between the two datasets.
      *
      * @return A pie chart.
      */
-    public static JFreeChart createPieChart(String title,
-                                            PieDataset dataset,
-                                            PieDataset previousDataset,
-                                            int percentDiffForMaxScale,
-                                            boolean greenForIncrease,
-                                            boolean legend,
-                                            boolean tooltips,
-                                            boolean urls,
-                                            boolean subTitle,
-                                            boolean showDifference) {
+    public static JFreeChart createPieChart(String title, PieDataset dataset,
+            PieDataset previousDataset, int percentDiffForMaxScale,
+            boolean greenForIncrease, boolean legend, boolean subTitle,
+            boolean showDifference) {
 
         PiePlot plot = new PiePlot(dataset);
         plot.setLabelGenerator(new StandardPieSectionLabelGenerator());
         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-
-        if (tooltips) {
-            plot.setToolTipGenerator(new StandardPieToolTipGenerator());
-        }
-        if (urls) {
-            plot.setURLGenerator(new StandardPieURLGenerator());
-        }
-
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator());
+        
         List keys = dataset.getKeys();
         DefaultPieDataset series = null;
         if (showDifference) {
@@ -591,34 +546,20 @@ public abstract class ChartFactory {
     }
 
     /**
-     * Creates a ring chart with default settings.
-     * <P>
-     * The chart object returned by this method uses a {@link RingPlot}
-     * instance as the plot.
+     * Creates a ring chart with default settings. The chart object returned by
+     * this method uses a {@link RingPlot} instance as the plot.
      *
      * @param title  the chart title (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param locale  the locale (<code>null</code> not permitted).
      *
      * @return A ring chart.
-     *
-     * @since 1.0.7
      */
     public static JFreeChart createRingChart(String title, PieDataset dataset,
-            boolean legend, boolean tooltips, Locale locale) {
+            boolean legend) {
 
-        RingPlot plot = new RingPlot(dataset);
-        plot.setLabelGenerator(new StandardPieSectionLabelGenerator(locale));
-        plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-        if (tooltips) {
-            plot.setToolTipGenerator(new StandardPieToolTipGenerator(locale));
-        }
-        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
-                plot, legend);
-        currentTheme.apply(chart);
-        return chart;
+        return createRingChart(title, dataset, legend, Locale.getDefault());
+
     }
 
     /**
@@ -630,31 +571,23 @@ public abstract class ChartFactory {
      * @param title  the chart title (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
+     * @param locale  the locale (<code>null</code> not permitted).
      *
      * @return A ring chart.
+     *
+     * @since 1.0.7
      */
-    public static JFreeChart createRingChart(String title,
-                                             PieDataset dataset,
-                                             boolean legend,
-                                             boolean tooltips,
-                                             boolean urls) {
+    public static JFreeChart createRingChart(String title, PieDataset dataset,
+            boolean legend, Locale locale) {
 
         RingPlot plot = new RingPlot(dataset);
-        plot.setLabelGenerator(new StandardPieSectionLabelGenerator());
+        plot.setLabelGenerator(new StandardPieSectionLabelGenerator(locale));
         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-        if (tooltips) {
-            plot.setToolTipGenerator(new StandardPieToolTipGenerator());
-        }
-        if (urls) {
-            plot.setURLGenerator(new StandardPieURLGenerator());
-        }
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator(locale));
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
         return chart;
-
     }
 
     /**
@@ -667,17 +600,11 @@ public abstract class ChartFactory {
      * @param order  the order that the data is extracted (by row or by column)
      *               (<code>null</code> not permitted).
      * @param legend  include a legend?
-     * @param tooltips  generate tooltips?
-     * @param urls  generate URLs?
      *
      * @return A chart.
      */
     public static JFreeChart createMultiplePieChart(String title,
-                                                    CategoryDataset dataset,
-                                                    TableOrder order,
-                                                    boolean legend,
-                                                    boolean tooltips,
-                                                    boolean urls) {
+            CategoryDataset dataset, TableOrder order, boolean legend) {
 
         if (order == null) {
             throw new IllegalArgumentException("Null 'order' argument.");
@@ -686,20 +613,10 @@ public abstract class ChartFactory {
         plot.setDataExtractOrder(order);
         plot.setBackgroundPaint(null);
         plot.setOutlineStroke(null);
-
-        if (tooltips) {
-            PieToolTipGenerator tooltipGenerator
+        PieToolTipGenerator tooltipGenerator
                 = new StandardPieToolTipGenerator();
-            PiePlot pp = (PiePlot) plot.getPieChart().getPlot();
-            pp.setToolTipGenerator(tooltipGenerator);
-        }
-
-        if (urls) {
-            PieURLGenerator urlGenerator = new StandardPieURLGenerator();
-            PiePlot pp = (PiePlot) plot.getPieChart().getPlot();
-            pp.setURLGenerator(urlGenerator);
-        }
-
+        PiePlot pp = (PiePlot) plot.getPieChart().getPlot();
+        pp.setToolTipGenerator(tooltipGenerator);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -715,7 +632,6 @@ public abstract class ChartFactory {
      * @param title  the chart title (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
      * @param locale  the locale (<code>null</code> not permitted).
      *
      * @return A pie chart.
@@ -723,13 +639,11 @@ public abstract class ChartFactory {
      * @since 1.0.7
      */
     public static JFreeChart createPieChart3D(String title, PieDataset dataset,
-            boolean legend, boolean tooltips, Locale locale) {
+            boolean legend, Locale locale) {
 
         PiePlot3D plot = new PiePlot3D(dataset);
         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-        if (tooltips) {
-            plot.setToolTipGenerator(new StandardPieToolTipGenerator(locale));
-        }
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator(locale));
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -745,25 +659,15 @@ public abstract class ChartFactory {
      * @param title  the chart title (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A pie chart.
      */
-    public static JFreeChart createPieChart3D(String title,
-                                              PieDataset dataset,
-                                              boolean legend,
-                                              boolean tooltips,
-                                              boolean urls) {
+    public static JFreeChart createPieChart3D(String title, PieDataset dataset,
+            boolean legend) {
 
         PiePlot3D plot = new PiePlot3D(dataset);
         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-        if (tooltips) {
-            plot.setToolTipGenerator(new StandardPieToolTipGenerator());
-        }
-        if (urls) {
-            plot.setURLGenerator(new StandardPieURLGenerator());
-        }
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator());
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -781,17 +685,11 @@ public abstract class ChartFactory {
      * @param order  the order that the data is extracted (by row or by column)
      *               (<code>null</code> not permitted).
      * @param legend  include a legend?
-     * @param tooltips  generate tooltips?
-     * @param urls  generate URLs?
      *
      * @return A chart.
      */
     public static JFreeChart createMultiplePieChart3D(String title,
-                                                      CategoryDataset dataset,
-                                                      TableOrder order,
-                                                      boolean legend,
-                                                      boolean tooltips,
-                                                      boolean urls) {
+            CategoryDataset dataset, TableOrder order, boolean legend) {
 
         if (order == null) {
             throw new IllegalArgumentException("Null 'order' argument.");
@@ -810,19 +708,10 @@ public abstract class ChartFactory {
         pieChart.setBackgroundPaint(null);
         plot.setPieChart(pieChart);
 
-        if (tooltips) {
-            PieToolTipGenerator tooltipGenerator
+        PieToolTipGenerator tooltipGenerator
                 = new StandardPieToolTipGenerator();
-            PiePlot pp = (PiePlot) plot.getPieChart().getPlot();
-            pp.setToolTipGenerator(tooltipGenerator);
-        }
-
-        if (urls) {
-            PieURLGenerator urlGenerator = new StandardPieURLGenerator();
-            PiePlot pp = (PiePlot) plot.getPieChart().getPlot();
-            pp.setURLGenerator(urlGenerator);
-        }
-
+        PiePlot pp = (PiePlot) plot.getPieChart().getPlot();
+        pp.setToolTipGenerator(tooltipGenerator);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -842,57 +731,27 @@ public abstract class ChartFactory {
      * @param valueAxisLabel  the label for the value axis
      *                        (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> not permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A bar chart.
      */
     public static JFreeChart createBarChart(String title,
-                                            String categoryAxisLabel,
-                                            String valueAxisLabel,
-                                            CategoryDataset dataset,
-                                            PlotOrientation orientation,
-                                            boolean legend,
-                                            boolean tooltips,
-                                            boolean urls) {
+            String categoryAxisLabel, String valueAxisLabel,
+            CategoryDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         CategoryAxis categoryAxis = new CategoryAxis(categoryAxisLabel);
         ValueAxis valueAxis = new NumberAxis(valueAxisLabel);
-
         BarRenderer renderer = new BarRenderer();
-        if (orientation == PlotOrientation.HORIZONTAL) {
-            ItemLabelPosition position1 = new ItemLabelPosition(
-                    ItemLabelAnchor.OUTSIDE3, TextAnchor.CENTER_LEFT);
-            renderer.setBasePositiveItemLabelPosition(position1);
-            ItemLabelPosition position2 = new ItemLabelPosition(
-                    ItemLabelAnchor.OUTSIDE9, TextAnchor.CENTER_RIGHT);
-            renderer.setBaseNegativeItemLabelPosition(position2);
-         }
-        else if (orientation == PlotOrientation.VERTICAL) {
-            ItemLabelPosition position1 = new ItemLabelPosition(
-                    ItemLabelAnchor.OUTSIDE12, TextAnchor.BOTTOM_CENTER);
-            renderer.setBasePositiveItemLabelPosition(position1);
-            ItemLabelPosition position2 = new ItemLabelPosition(
-                    ItemLabelAnchor.OUTSIDE6, TextAnchor.TOP_CENTER);
-            renderer.setBaseNegativeItemLabelPosition(position2);
-        }
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(
-                    new StandardCategoryToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
-
+        ItemLabelPosition position1 = new ItemLabelPosition(
+                ItemLabelAnchor.OUTSIDE12, TextAnchor.BOTTOM_CENTER);
+        renderer.setBasePositiveItemLabelPosition(position1);
+        ItemLabelPosition position2 = new ItemLabelPosition(
+                ItemLabelAnchor.OUTSIDE6, TextAnchor.TOP_CENTER);
+        renderer.setBaseNegativeItemLabelPosition(position2);
+        renderer.setBaseToolTipGenerator(
+                new StandardCategoryToolTipGenerator());
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
-        plot.setOrientation(orientation);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -913,42 +772,21 @@ public abstract class ChartFactory {
      * @param rangeAxisLabel  the label for the value axis
      *                        (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the orientation of the chart (horizontal or
-     *                     vertical) (<code>null</code> not permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A stacked bar chart.
      */
     public static JFreeChart createStackedBarChart(String title,
-                                                   String domainAxisLabel,
-                                                   String rangeAxisLabel,
-                                                   CategoryDataset dataset,
-                                                   PlotOrientation orientation,
-                                                   boolean legend,
-                                                   boolean tooltips,
-                                                   boolean urls) {
-
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
+            String domainAxisLabel, String rangeAxisLabel,
+            CategoryDataset dataset, boolean legend) {
 
         CategoryAxis categoryAxis = new CategoryAxis(domainAxisLabel);
         ValueAxis valueAxis = new NumberAxis(rangeAxisLabel);
-
         StackedBarRenderer renderer = new StackedBarRenderer();
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(
+        renderer.setBaseToolTipGenerator(
                     new StandardCategoryToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
-
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
-        plot.setOrientation(orientation);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -968,49 +806,22 @@ public abstract class ChartFactory {
      * @param valueAxisLabel  the label for the value axis (<code>null</code>
      *                        permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> not permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A bar chart with a 3D effect.
      */
     public static JFreeChart createBarChart3D(String title,
-                                              String categoryAxisLabel,
-                                              String valueAxisLabel,
-                                              CategoryDataset dataset,
-                                              PlotOrientation orientation,
-                                              boolean legend,
-                                              boolean tooltips,
-                                              boolean urls) {
+            String categoryAxisLabel, String valueAxisLabel,
+            CategoryDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         CategoryAxis categoryAxis = new CategoryAxis3D(categoryAxisLabel);
         ValueAxis valueAxis = new NumberAxis3D(valueAxisLabel);
-
         BarRenderer3D renderer = new BarRenderer3D();
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(
-                    new StandardCategoryToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
-
+        renderer.setBaseToolTipGenerator(
+                new StandardCategoryToolTipGenerator());
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
-        plot.setOrientation(orientation);
-        if (orientation == PlotOrientation.HORIZONTAL) {
-            // change rendering order to ensure that bar overlapping is the
-            // right way around
-            plot.setRowRenderingOrder(SortOrder.DESCENDING);
-            plot.setColumnRenderingOrder(SortOrder.DESCENDING);
-        }
         plot.setForegroundAlpha(0.75f);
-
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1031,50 +842,21 @@ public abstract class ChartFactory {
      * @param valueAxisLabel  the label for the value axis (<code>null</code>
      *                        permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the orientation (horizontal or vertical)
-     *                     (<code>null</code> not permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A stacked bar chart with a 3D effect.
      */
     public static JFreeChart createStackedBarChart3D(String title,
-                                                    String categoryAxisLabel,
-                                                    String valueAxisLabel,
-                                                    CategoryDataset dataset,
-                                                    PlotOrientation orientation,
-                                                    boolean legend,
-                                                    boolean tooltips,
-                                                    boolean urls) {
+            String categoryAxisLabel, String valueAxisLabel,
+            CategoryDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         CategoryAxis categoryAxis = new CategoryAxis3D(categoryAxisLabel);
         ValueAxis valueAxis = new NumberAxis3D(valueAxisLabel);
-
-        // create the renderer...
         CategoryItemRenderer renderer = new StackedBarRenderer3D();
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(
-                    new StandardCategoryToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
-
-        // create the plot...
+        renderer.setBaseToolTipGenerator(
+                new StandardCategoryToolTipGenerator());
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
-        plot.setOrientation(orientation);
-        if (orientation == PlotOrientation.HORIZONTAL) {
-            // change rendering order to ensure that bar overlapping is the
-            // right way around
-            plot.setColumnRenderingOrder(SortOrder.DESCENDING);
-        }
-
-        // create the chart...
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1094,43 +876,22 @@ public abstract class ChartFactory {
      * @param valueAxisLabel  the label for the value axis (<code>null</code>
      *                        permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (<code>null</code> not
-     *                     permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return An area chart.
      */
     public static JFreeChart createAreaChart(String title,
-                                             String categoryAxisLabel,
-                                             String valueAxisLabel,
-                                             CategoryDataset dataset,
-                                             PlotOrientation orientation,
-                                             boolean legend,
-                                             boolean tooltips,
-                                             boolean urls) {
+            String categoryAxisLabel, String valueAxisLabel,
+            CategoryDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         CategoryAxis categoryAxis = new CategoryAxis(categoryAxisLabel);
         categoryAxis.setCategoryMargin(0.0);
-
         ValueAxis valueAxis = new NumberAxis(valueAxisLabel);
-
         AreaRenderer renderer = new AreaRenderer();
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(
-                    new StandardCategoryToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
-
+        renderer.setBaseToolTipGenerator(
+                new StandardCategoryToolTipGenerator());
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
-        plot.setOrientation(orientation);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1151,38 +912,22 @@ public abstract class ChartFactory {
      * @param valueAxisLabel  the label for the value axis (<code>null</code>
      *                        permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> not permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A stacked area chart.
      */
     public static JFreeChart createStackedAreaChart(String title,
             String categoryAxisLabel, String valueAxisLabel,
-            CategoryDataset dataset, PlotOrientation orientation,
-            boolean legend, boolean tooltips, boolean urls) {
+            CategoryDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         CategoryAxis categoryAxis = new CategoryAxis(categoryAxisLabel);
         categoryAxis.setCategoryMargin(0.0);
         ValueAxis valueAxis = new NumberAxis(valueAxisLabel);
-
         StackedAreaRenderer renderer = new StackedAreaRenderer();
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(
+        renderer.setBaseToolTipGenerator(
                     new StandardCategoryToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
-
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
-        plot.setOrientation(orientation);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1202,40 +947,21 @@ public abstract class ChartFactory {
      * @param valueAxisLabel  the label for the value axis (<code>null</code>
      *                        permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the chart orientation (horizontal or vertical)
-     *                     (<code>null</code> not permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A line chart.
      */
     public static JFreeChart createLineChart(String title,
-                                             String categoryAxisLabel,
-                                             String valueAxisLabel,
-                                             CategoryDataset dataset,
-                                             PlotOrientation orientation,
-                                             boolean legend,
-                                             boolean tooltips,
-                                             boolean urls) {
+            String categoryAxisLabel, String valueAxisLabel,
+            CategoryDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         CategoryAxis categoryAxis = new CategoryAxis(categoryAxisLabel);
         ValueAxis valueAxis = new NumberAxis(valueAxisLabel);
-
         LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, false);
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(
+        renderer.setBaseToolTipGenerator(
                     new StandardCategoryToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
-        plot.setOrientation(orientation);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1255,40 +981,22 @@ public abstract class ChartFactory {
      * @param valueAxisLabel  the label for the value axis (<code>null</code>
      *                        permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the chart orientation (horizontal or vertical)
-     *                     (<code>null</code> not permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A line chart.
      */
     public static JFreeChart createLineChart3D(String title,
-                                               String categoryAxisLabel,
-                                               String valueAxisLabel,
-                                               CategoryDataset dataset,
-                                               PlotOrientation orientation,
-                                               boolean legend,
-                                               boolean tooltips,
-                                               boolean urls) {
+            String categoryAxisLabel, String valueAxisLabel,
+            CategoryDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         CategoryAxis categoryAxis = new CategoryAxis3D(categoryAxisLabel);
         ValueAxis valueAxis = new NumberAxis3D(valueAxisLabel);
 
         LineRenderer3D renderer = new LineRenderer3D();
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(
-                    new StandardCategoryToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
+        renderer.setBaseToolTipGenerator(
+                new StandardCategoryToolTipGenerator());
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
-        plot.setOrientation(orientation);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1310,32 +1018,19 @@ public abstract class ChartFactory {
      *                       (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A Gantt chart.
      */
     public static JFreeChart createGanttChart(String title,
-                                              String categoryAxisLabel,
-                                              String dateAxisLabel,
-                                              IntervalCategoryDataset dataset,
-                                              boolean legend,
-                                              boolean tooltips,
-                                              boolean urls) {
+            String categoryAxisLabel, String dateAxisLabel,
+            IntervalCategoryDataset dataset, boolean legend) {
 
         CategoryAxis categoryAxis = new CategoryAxis(categoryAxisLabel);
         DateAxis dateAxis = new DateAxis(dateAxisLabel);
-
         CategoryItemRenderer renderer = new GanttRenderer();
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(
+        renderer.setBaseToolTipGenerator(
                     new IntervalCategoryToolTipGenerator(
                     "{3} - {4}", DateFormat.getDateInstance()));
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
-
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, dateAxis,
                 renderer);
         plot.setOrientation(PlotOrientation.HORIZONTAL);
@@ -1358,62 +1053,32 @@ public abstract class ChartFactory {
      * @param valueAxisLabel  the label for the value axis (<code>null</code>
      *                        permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A waterfall chart.
      */
     public static JFreeChart createWaterfallChart(String title,
-                                                  String categoryAxisLabel,
-                                                  String valueAxisLabel,
-                                                  CategoryDataset dataset,
-                                                  PlotOrientation orientation,
-                                                  boolean legend,
-                                                  boolean tooltips,
-                                                  boolean urls) {
+            String categoryAxisLabel, String valueAxisLabel,
+            CategoryDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         CategoryAxis categoryAxis = new CategoryAxis(categoryAxisLabel);
         categoryAxis.setCategoryMargin(0.0);
-
         ValueAxis valueAxis = new NumberAxis(valueAxisLabel);
-
         WaterfallBarRenderer renderer = new WaterfallBarRenderer();
-        if (orientation == PlotOrientation.HORIZONTAL) {
-            ItemLabelPosition position = new ItemLabelPosition(
-                    ItemLabelAnchor.CENTER, TextAnchor.CENTER,
-                    TextAnchor.CENTER, Math.PI / 2.0);
-            renderer.setBasePositiveItemLabelPosition(position);
-            renderer.setBaseNegativeItemLabelPosition(position);
-         }
-        else if (orientation == PlotOrientation.VERTICAL) {
-            ItemLabelPosition position = new ItemLabelPosition(
-                    ItemLabelAnchor.CENTER, TextAnchor.CENTER,
-                    TextAnchor.CENTER, 0.0);
-            renderer.setBasePositiveItemLabelPosition(position);
-            renderer.setBaseNegativeItemLabelPosition(position);
-        }
-        if (tooltips) {
-            StandardCategoryToolTipGenerator generator
+        ItemLabelPosition position = new ItemLabelPosition(
+                ItemLabelAnchor.CENTER, TextAnchor.CENTER,
+                TextAnchor.CENTER, 0.0);
+        renderer.setBasePositiveItemLabelPosition(position);
+        renderer.setBaseNegativeItemLabelPosition(position);
+        StandardCategoryToolTipGenerator generator
                 = new StandardCategoryToolTipGenerator();
-            renderer.setBaseToolTipGenerator(generator);
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
-        }
-
+        renderer.setBaseToolTipGenerator(generator);
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
         plot.clearRangeMarkers();
         Marker baseline = new ValueMarker(0.0);
         baseline.setPaint(Color.black);
         plot.addRangeMarker(baseline, Layer.FOREGROUND);
-        plot.setOrientation(orientation);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1430,16 +1095,11 @@ public abstract class ChartFactory {
      * @param title  the chart title (<code>null</code> permitted).
      * @param dataset  the dataset (<code>null</code> permitted).
      * @param legend  legend required?
-     * @param tooltips  tooltips required?
-     * @param urls  URLs required?
      *
      * @return A chart.
      */
-    public static JFreeChart createPolarChart(String title,
-                                              XYDataset dataset,
-                                              boolean legend,
-                                              boolean tooltips,
-                                              boolean urls) {
+    public static JFreeChart createPolarChart(String title, XYDataset dataset,
+            boolean legend) {
 
         PolarPlot plot = new PolarPlot();
         plot.setDataset(dataset);
@@ -1467,43 +1127,21 @@ public abstract class ChartFactory {
      * @param xAxisLabel  a label for the X-axis (<code>null</code> permitted).
      * @param yAxisLabel  a label for the Y-axis (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A scatter plot.
      */
     public static JFreeChart createScatterPlot(String title, String xAxisLabel,
-            String yAxisLabel, XYDataset dataset, PlotOrientation orientation,
-            boolean legend, boolean tooltips, boolean urls) {
+            String yAxisLabel, XYDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         NumberAxis yAxis = new NumberAxis(yAxisLabel);
         yAxis.setAutoRangeIncludesZero(false);
-
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, null);
-
-        XYToolTipGenerator toolTipGenerator = null;
-        if (tooltips) {
-            toolTipGenerator = new StandardXYToolTipGenerator();
-        }
-
-        XYURLGenerator urlGenerator = null;
-        if (urls) {
-            urlGenerator = new StandardXYURLGenerator();
-        }
         XYItemRenderer renderer = new XYLineAndShapeRenderer(false, true);
-        renderer.setBaseToolTipGenerator(toolTipGenerator);
-        renderer.setBaseURLGenerator(urlGenerator);
+        renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         plot.setRenderer(renderer);
-        plot.setOrientation(orientation);
-
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1524,27 +1162,14 @@ public abstract class ChartFactory {
      * @param dateAxis  make the domain axis display dates?
      * @param yAxisLabel  a label for the Y-axis (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return An XY bar chart.
      */
-    public static JFreeChart createXYBarChart(String title,
-                                              String xAxisLabel,
-                                              boolean dateAxis,
-                                              String yAxisLabel,
-                                              IntervalXYDataset dataset,
-                                              PlotOrientation orientation,
-                                              boolean legend,
-                                              boolean tooltips,
-                                              boolean urls) {
+    public static JFreeChart createXYBarChart(String title, String xAxisLabel,
+            boolean dateAxis, String yAxisLabel, IntervalXYDataset dataset,
+            boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         ValueAxis domainAxis = null;
         if (dateAxis) {
             domainAxis = new DateAxis(xAxisLabel);
@@ -1557,23 +1182,16 @@ public abstract class ChartFactory {
         ValueAxis valueAxis = new NumberAxis(yAxisLabel);
 
         XYBarRenderer renderer = new XYBarRenderer();
-        if (tooltips) {
-            XYToolTipGenerator tt;
-            if (dateAxis) {
-                tt = StandardXYToolTipGenerator.getTimeSeriesInstance();
-            }
-            else {
-                tt = new StandardXYToolTipGenerator();
-            }
-            renderer.setBaseToolTipGenerator(tt);
+        XYToolTipGenerator tt;
+        if (dateAxis) {
+            tt = StandardXYToolTipGenerator.getTimeSeriesInstance();
         }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardXYURLGenerator());
+        else {
+            tt = new StandardXYToolTipGenerator();
         }
+        renderer.setBaseToolTipGenerator(tt);
 
         XYPlot plot = new XYPlot(dataset, domainAxis, valueAxis, renderer);
-        plot.setOrientation(orientation);
-
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1593,45 +1211,21 @@ public abstract class ChartFactory {
      * @param xAxisLabel  a label for the X-axis (<code>null</code> permitted).
      * @param yAxisLabel  a label for the Y-axis (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return An XY area chart.
      */
-    public static JFreeChart createXYAreaChart(String title,
-                                               String xAxisLabel,
-                                               String yAxisLabel,
-                                               XYDataset dataset,
-                                               PlotOrientation orientation,
-                                               boolean legend,
-                                               boolean tooltips,
-                                               boolean urls) {
+    public static JFreeChart createXYAreaChart(String title, String xAxisLabel,
+            String yAxisLabel, XYDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         NumberAxis yAxis = new NumberAxis(yAxisLabel);
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, null);
-        plot.setOrientation(orientation);
         plot.setForegroundAlpha(0.5f);
-
-        XYToolTipGenerator tipGenerator = null;
-        if (tooltips) {
-            tipGenerator = new StandardXYToolTipGenerator();
-        }
-
-        XYURLGenerator urlGenerator = null;
-        if (urls) {
-            urlGenerator = new StandardXYURLGenerator();
-        }
-
-        plot.setRenderer(new XYAreaRenderer(XYAreaRenderer.AREA, tipGenerator,
-                urlGenerator));
+        XYAreaRenderer renderer = new XYAreaRenderer(XYAreaRenderer.AREA);
+        renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
+        plot.setRenderer(renderer);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1649,48 +1243,25 @@ public abstract class ChartFactory {
      * @param xAxisLabel  a label for the X-axis (<code>null</code> permitted).
      * @param yAxisLabel  a label for the Y-axis (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
+
      *
      * @return A stacked XY area chart.
      */
     public static JFreeChart createStackedXYAreaChart(String title,
-                                                    String xAxisLabel,
-                                                    String yAxisLabel,
-                                                    TableXYDataset dataset,
-                                                    PlotOrientation orientation,
-                                                    boolean legend,
-                                                    boolean tooltips,
-                                                    boolean urls) {
+            String xAxisLabel, String yAxisLabel, TableXYDataset dataset,
+            boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         xAxis.setLowerMargin(0.0);
         xAxis.setUpperMargin(0.0);
         NumberAxis yAxis = new NumberAxis(yAxisLabel);
-        XYToolTipGenerator toolTipGenerator = null;
-        if (tooltips) {
-            toolTipGenerator = new StandardXYToolTipGenerator();
-        }
-
-        XYURLGenerator urlGenerator = null;
-        if (urls) {
-            urlGenerator = new StandardXYURLGenerator();
-        }
-        StackedXYAreaRenderer2 renderer = new StackedXYAreaRenderer2(
-                toolTipGenerator, urlGenerator);
+        StackedXYAreaRenderer2 renderer = new StackedXYAreaRenderer2();
+        renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         renderer.setOutline(true);
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
-        plot.setOrientation(orientation);
-
         plot.setRangeAxis(yAxis);  // forces recalculation of the axis range
-
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1706,39 +1277,19 @@ public abstract class ChartFactory {
      * @param xAxisLabel  a label for the X-axis (<code>null</code> permitted).
      * @param yAxisLabel  a label for the Y-axis (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return The chart.
      */
-    public static JFreeChart createXYLineChart(String title,
-                                               String xAxisLabel,
-                                               String yAxisLabel,
-                                               XYDataset dataset,
-                                               PlotOrientation orientation,
-                                               boolean legend,
-                                               boolean tooltips,
-                                               boolean urls) {
+    public static JFreeChart createXYLineChart(String title, String xAxisLabel,
+            String yAxisLabel, XYDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         NumberAxis yAxis = new NumberAxis(yAxisLabel);
         XYItemRenderer renderer = new XYLineAndShapeRenderer(true, false);
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
-        plot.setOrientation(orientation);
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardXYURLGenerator());
-        }
-
+        renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1753,45 +1304,20 @@ public abstract class ChartFactory {
      * @param xAxisLabel  a label for the X-axis (<code>null</code> permitted).
      * @param yAxisLabel  a label for the Y-axis (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A chart.
      */
-    public static JFreeChart createXYStepChart(String title,
-                                               String xAxisLabel,
-                                               String yAxisLabel,
-                                               XYDataset dataset,
-                                               PlotOrientation orientation,
-                                               boolean legend,
-                                               boolean tooltips,
-                                               boolean urls) {
+    public static JFreeChart createXYStepChart(String title, String xAxisLabel,
+            String yAxisLabel, XYDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         DateAxis xAxis = new DateAxis(xAxisLabel);
         NumberAxis yAxis = new NumberAxis(yAxisLabel);
         yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-
-        XYToolTipGenerator toolTipGenerator = null;
-        if (tooltips) {
-            toolTipGenerator = new StandardXYToolTipGenerator();
-        }
-
-        XYURLGenerator urlGenerator = null;
-        if (urls) {
-            urlGenerator = new StandardXYURLGenerator();
-        }
-        XYItemRenderer renderer
-            = new XYStepRenderer(toolTipGenerator, urlGenerator);
-
+        XYItemRenderer renderer = new XYStepRenderer();
+        renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, null);
         plot.setRenderer(renderer);
-        plot.setOrientation(orientation);
         plot.setDomainCrosshairVisible(false);
         plot.setRangeCrosshairVisible(false);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
@@ -1808,46 +1334,22 @@ public abstract class ChartFactory {
      * @param xAxisLabel  a label for the X-axis (<code>null</code> permitted).
      * @param yAxisLabel  a label for the Y-axis (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A chart.
      */
-    public static JFreeChart createXYStepAreaChart(String title,
-                                                   String xAxisLabel,
-                                                   String yAxisLabel,
-                                                   XYDataset dataset,
-                                                   PlotOrientation orientation,
-                                                   boolean legend,
-                                                   boolean tooltips,
-                                                   boolean urls) {
+    public static JFreeChart createXYStepAreaChart(String title, 
+            String xAxisLabel, String yAxisLabel, XYDataset dataset,
+            boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         NumberAxis yAxis = new NumberAxis(yAxisLabel);
-
-        XYToolTipGenerator toolTipGenerator = null;
-        if (tooltips) {
-            toolTipGenerator = new StandardXYToolTipGenerator();
-        }
-
-        XYURLGenerator urlGenerator = null;
-        if (urls) {
-            urlGenerator = new StandardXYURLGenerator();
-        }
         XYItemRenderer renderer = new XYStepAreaRenderer(
-                XYStepAreaRenderer.AREA_AND_SHAPES, toolTipGenerator,
-                urlGenerator);
-
+                XYStepAreaRenderer.AREA_AND_SHAPES);
+        renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, null);
         plot.setRenderer(renderer);
-        plot.setOrientation(orientation);
         plot.setDomainCrosshairVisible(false);
         plot.setRangeCrosshairVisible(false);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
@@ -1860,10 +1362,8 @@ public abstract class ChartFactory {
      * Creates and returns a time series chart.  A time series chart is an
      * {@link XYPlot} with a {@link DateAxis} for the x-axis and a
      * {@link NumberAxis} for the y-axis.  The default renderer is an
-     * {@link XYLineAndShapeRenderer}.
-     * <P>
-     * A convenient dataset to use with this chart is a
-     * {@link org.jfree.data.time.TimeSeriesCollection}.
+     * {@link XYLineAndShapeRenderer}. A convenient dataset to use with this
+     * chart is a {@link TimeSeriesCollection}.
      *
      * @param title  the chart title (<code>null</code> permitted).
      * @param timeAxisLabel  a label for the time axis (<code>null</code>
@@ -1872,18 +1372,12 @@ public abstract class ChartFactory {
      *                        permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A time series chart.
      */
     public static JFreeChart createTimeSeriesChart(String title,
-                                                   String timeAxisLabel,
-                                                   String valueAxisLabel,
-                                                   XYDataset dataset,
-                                                   boolean legend,
-                                                   boolean tooltips,
-                                                   boolean urls) {
+            String timeAxisLabel, String valueAxisLabel, XYDataset dataset,
+            boolean legend) {
 
         ValueAxis timeAxis = new DateAxis(timeAxisLabel);
         timeAxis.setLowerMargin(0.02);  // reduce the default margins
@@ -1891,24 +1385,12 @@ public abstract class ChartFactory {
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
         valueAxis.setAutoRangeIncludesZero(false);  // override default
         XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, null);
-
         XYToolTipGenerator toolTipGenerator = null;
-        if (tooltips) {
-            toolTipGenerator
-                = StandardXYToolTipGenerator.getTimeSeriesInstance();
-        }
-
-        XYURLGenerator urlGenerator = null;
-        if (urls) {
-            urlGenerator = new StandardXYURLGenerator();
-        }
-
+        toolTipGenerator = StandardXYToolTipGenerator.getTimeSeriesInstance();
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,
                 false);
         renderer.setBaseToolTipGenerator(toolTipGenerator);
-        renderer.setBaseURLGenerator(urlGenerator);
         plot.setRenderer(renderer);
-
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -1930,10 +1412,8 @@ public abstract class ChartFactory {
      * @return A candlestick chart.
      */
     public static JFreeChart createCandlestickChart(String title,
-                                                    String timeAxisLabel,
-                                                    String valueAxisLabel,
-                                                    OHLCDataset dataset,
-                                                    boolean legend) {
+            String timeAxisLabel, String valueAxisLabel, OHLCDataset dataset,
+            boolean legend) {
 
         ValueAxis timeAxis = new DateAxis(timeAxisLabel);
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
@@ -1960,10 +1440,8 @@ public abstract class ChartFactory {
      * @return A high-low-open-close chart.
      */
     public static JFreeChart createHighLowChart(String title,
-                                                String timeAxisLabel,
-                                                String valueAxisLabel,
-                                                OHLCDataset dataset,
-                                                boolean legend) {
+            String timeAxisLabel, String valueAxisLabel, OHLCDataset dataset,
+            boolean legend) {
 
         ValueAxis timeAxis = new DateAxis(timeAxisLabel);
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
@@ -1995,12 +1473,9 @@ public abstract class ChartFactory {
      *
      * @return A high-low-open-close chart.
      */
-    public static JFreeChart createHighLowChart(String title,
-                                                String timeAxisLabel,
-                                                String valueAxisLabel,
-                                                OHLCDataset dataset,
-                                                Timeline timeline,
-                                                boolean legend) {
+    public static JFreeChart createHighLowChart(String title, 
+            String timeAxisLabel, String valueAxisLabel,
+            OHLCDataset dataset, Timeline timeline, boolean legend) {
 
         DateAxis timeAxis = new DateAxis(timeAxisLabel);
         timeAxis.setTimeline(timeline);
@@ -2025,44 +1500,22 @@ public abstract class ChartFactory {
      * @param xAxisLabel  a label for the X-axis (<code>null</code> permitted).
      * @param yAxisLabel  a label for the Y-axis (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
-     * @param orientation  the orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  a flag specifying whether or not a legend is required.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A bubble chart.
      */
-    public static JFreeChart createBubbleChart(String title,
-                                               String xAxisLabel,
-                                               String yAxisLabel,
-                                               XYZDataset dataset,
-                                               PlotOrientation orientation,
-                                               boolean legend,
-                                               boolean tooltips,
-                                               boolean urls) {
+    public static JFreeChart createBubbleChart(String title, String xAxisLabel,
+            String yAxisLabel, XYZDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         NumberAxis yAxis = new NumberAxis(yAxisLabel);
         yAxis.setAutoRangeIncludesZero(false);
-
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, null);
-
         XYItemRenderer renderer = new XYBubbleRenderer(
                 XYBubbleRenderer.SCALE_ON_RANGE_AXIS);
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(new StandardXYZToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardXYZURLGenerator());
-        }
+        renderer.setBaseToolTipGenerator(new StandardXYZToolTipGenerator());
         plot.setRenderer(renderer);
-        plot.setOrientation(orientation);
-
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -2079,40 +1532,19 @@ public abstract class ChartFactory {
      * @param xAxisLabel  the x axis label (<code>null</code> permitted).
      * @param yAxisLabel  the y axis label (<code>null</code> permitted).
      * @param dataset  the dataset (<code>null</code> permitted).
-     * @param orientation  the orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted).
      * @param legend  create a legend?
-     * @param tooltips  display tooltips?
-     * @param urls  generate URLs?
      *
      * @return The chart.
      */
-    public static JFreeChart createHistogram(String title,
-                                             String xAxisLabel,
-                                             String yAxisLabel,
-                                             IntervalXYDataset dataset,
-                                             PlotOrientation orientation,
-                                             boolean legend,
-                                             boolean tooltips,
-                                             boolean urls) {
+    public static JFreeChart createHistogram(String title, String xAxisLabel,
+            String yAxisLabel, IntervalXYDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         ValueAxis yAxis = new NumberAxis(yAxisLabel);
-
         XYItemRenderer renderer = new XYBarRenderer();
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardXYURLGenerator());
-        }
-
+        renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
-        plot.setOrientation(orientation);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
@@ -2169,10 +1601,8 @@ public abstract class ChartFactory {
      * @return A box and whisker chart.
      */
     public static JFreeChart createBoxAndWhiskerChart(String title,
-                                                 String timeAxisLabel,
-                                                 String valueAxisLabel,
-                                                 BoxAndWhiskerXYDataset dataset,
-                                                 boolean legend) {
+            String timeAxisLabel, String valueAxisLabel,
+            BoxAndWhiskerXYDataset dataset, boolean legend) {
 
         ValueAxis timeAxis = new DateAxis(timeAxisLabel);
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
@@ -2194,31 +1624,20 @@ public abstract class ChartFactory {
      * @param yAxisLabel  a label for the y-axis (<code>null</code> permitted).
      * @param dataset  the dataset for the chart (<code>null</code> permitted).
      * @param legend  a flag that controls whether or not a legend is created.
-     * @param tooltips  configure chart to generate tool tips?
-     * @param urls  configure chart to generate URLs?
      *
      * @return A wind plot.
-     *
      */
     public static JFreeChart createWindPlot(String title,
-                                            String xAxisLabel,
-                                            String yAxisLabel,
-                                            WindDataset dataset,
-                                            boolean legend,
-                                            boolean tooltips,
-                                            boolean urls) {
+            String xAxisLabel, String yAxisLabel, WindDataset dataset,
+            boolean legend) {
 
         ValueAxis xAxis = new DateAxis(xAxisLabel);
         ValueAxis yAxis = new NumberAxis(yAxisLabel);
         yAxis.setRange(-12.0, 12.0);
 
         WindItemRenderer renderer = new WindItemRenderer();
-        if (tooltips) {
-            renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setBaseURLGenerator(new StandardXYURLGenerator());
-        }
+        renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
+        
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
@@ -2232,32 +1651,21 @@ public abstract class ChartFactory {
      *
      * @param title  the chart title (<code>null</code> permitted).
      * @param dataset  the dataset (<code>null</code> permitted).
-     * @param orientation  the plot orientation (horizontal or vertical)
-     *                     (<code>null</code> NOT permitted.
      * @param legend  display a legend?
-     * @param tooltips  generate tooltips?
-     * @param urls  generate URLs?
      *
      * @return A wafer map chart.
      */
     public static JFreeChart createWaferMapChart(String title,
-                                                 WaferMapDataset dataset,
-                                                 PlotOrientation orientation,
-                                                 boolean legend,
-                                                 boolean tooltips,
-                                                 boolean urls) {
+            WaferMapDataset dataset, boolean legend) {
 
-        if (orientation == null) {
-            throw new IllegalArgumentException("Null 'orientation' argument.");
-        }
         WaferMapPlot plot = new WaferMapPlot(dataset);
         WaferMapRenderer renderer = new WaferMapRenderer();
         plot.setRenderer(renderer);
-
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
                 plot, legend);
         currentTheme.apply(chart);
         return chart;
+        
     }
 
 }

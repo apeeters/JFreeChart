@@ -177,8 +177,8 @@ import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.SerialUtilities;
-import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.general.DatasetChangeListener;
+import org.jfree.data.event.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
 
 /**

@@ -40,8 +40,9 @@
  *
  */
 
-package org.jfree.data.general;
+package org.jfree.data.event;
 
+import org.jfree.data.general.*;
 import java.io.Serializable;
 import java.util.EventObject;
 

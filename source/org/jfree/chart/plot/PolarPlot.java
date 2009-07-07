@@ -95,7 +95,7 @@ import org.jfree.chart.util.RectangleInsets;
 import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.data.Range;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.XYDataset;
 

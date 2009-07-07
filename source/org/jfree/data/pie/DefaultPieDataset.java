@@ -69,7 +69,7 @@ import org.jfree.chart.util.SortOrder;
 import org.jfree.data.KeyedObjects;
 import org.jfree.data.KeyedValues;
 import org.jfree.data.UnknownKeyException;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 
 /**
  * A default implementation of the {@link PieDataset} interface.

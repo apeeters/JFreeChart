@@ -46,8 +46,9 @@
  *
  */
 
-package org.jfree.data.general;
+package org.jfree.data.event;
 
+import org.jfree.data.general.*;
 import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.plot.Plot;
 

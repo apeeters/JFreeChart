@@ -55,7 +55,7 @@ import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DomainOrder;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractIntervalXYDataset;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.SelectableXYDataset;

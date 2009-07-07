@@ -47,7 +47,7 @@ import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.UnknownKeyException;
 import org.jfree.data.general.AbstractDataset;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 
 /**
  * A {@link GanttCategoryDataset} implementation that presents a subset of the

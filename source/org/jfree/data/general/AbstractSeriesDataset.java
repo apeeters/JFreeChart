@@ -44,6 +44,8 @@
 
 package org.jfree.data.general;
 
+import org.jfree.data.event.SeriesChangeListener;
+import org.jfree.data.event.SeriesChangeEvent;
 import java.io.Serializable;
 import org.jfree.chart.event.DatasetChangeInfo;
 

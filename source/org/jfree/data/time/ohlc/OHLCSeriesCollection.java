@@ -50,7 +50,7 @@ import java.util.List;
 import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.ObjectUtilities;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimePeriodAnchor;
 import org.jfree.data.xy.AbstractXYDataset;

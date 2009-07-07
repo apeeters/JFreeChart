@@ -57,7 +57,7 @@ import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.KeyedObjects2D;
 import org.jfree.data.SelectableValue;
 import org.jfree.data.UnknownKeyException;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 
 /**
  * A default implementation of the {@link CategoryDataset} interface.

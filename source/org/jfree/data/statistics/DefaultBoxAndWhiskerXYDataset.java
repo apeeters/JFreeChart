@@ -68,7 +68,7 @@ import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.data.Range;
 import org.jfree.data.RangeInfo;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractXYDataset;
 
 /**

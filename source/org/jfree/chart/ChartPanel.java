@@ -547,6 +547,13 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     private ZoomHandler zoomHandler;
 
     /**
+     * A list of {@link DatasetAndSelection} objects.
+     *
+     * @since 1.2.0
+     */
+    private List selectionStates = new java.util.ArrayList();
+
+    /**
      * The selection shape (may be <code>null</code>).
      *
      * @since 1.2.0
@@ -1302,11 +1309,9 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
         if (flag && this.mouseWheelHandler == null) {
             this.mouseWheelHandler = new MouseWheelHandler(this);
         }
-        else {
-            if (this.mouseWheelHandler != null) {
-                removeMouseWheelListener(this.mouseWheelHandler);
-                this.mouseWheelHandler = null;
-            }
+        else if (!flag && this.mouseWheelHandler != null) {
+            removeMouseWheelListener(this.mouseWheelHandler);
+            this.mouseWheelHandler = null;
         }
     }
 
@@ -3072,11 +3077,6 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
     }
 
     /**
-     * A list of {@link DatasetAndSelection} objects.
-     */
-    private List selectionStates = new java.util.ArrayList();
-
-    /**
      * Returns the selection state for the specified dataset, if any.
      *
      * @param dataset  the dataset (<code>null</code> not permitted).
@@ -3093,6 +3093,7 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
                 return das.getSelection();
             }
         }
+        // we didn't find a selection state for the dataset...
         return null;
     }
 
@@ -3106,10 +3107,19 @@ public class ChartPanel extends JPanel implements ChartChangeListener,
      *
      * @since 1.2.0
      */
-    public void putSelectionState(Dataset dataset, DatasetSelectionState state) {
+    public void putSelectionState(Dataset dataset,
+            DatasetSelectionState state) {
         this.selectionStates.add(new DatasetAndSelection(dataset, state));
     }
 
+    /**
+     * Returns a graphics context that a renderer can use to calculate
+     * selection bounds.
+     *
+     * @return A graphics context.
+     *
+     * @since 1.2.0
+     */
     public Graphics2D createGraphics2D() {
         return (Graphics2D) getGraphics().create();
     }

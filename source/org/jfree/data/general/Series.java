@@ -55,6 +55,8 @@
 
 package org.jfree.data.general;
 
+import org.jfree.data.event.SeriesChangeListener;
+import org.jfree.data.event.SeriesChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;

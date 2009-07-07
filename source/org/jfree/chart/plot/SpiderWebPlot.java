@@ -116,7 +116,7 @@ import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.StrokeList;
 import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 
 /**

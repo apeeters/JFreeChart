@@ -50,7 +50,7 @@ import java.util.List;
 
 import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.PublicCloneable;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 
 /**
  * A dataset that defines a range (interval) for both the x-values and the

@@ -92,7 +92,7 @@ import org.jfree.chart.util.ShapeUtilities;
 import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CategoryToPieDataset;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.pie.PieDataset; 
 

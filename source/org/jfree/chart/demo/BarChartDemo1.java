@@ -133,24 +133,8 @@ public class BarChartDemo1 extends ApplicationFrame {
      */
     private static JFreeChart createChart(CategoryDataset dataset) {
 
-        // create the chart...
-        JFreeChart chart = ChartFactory.createBarChart(
-            "Bar Chart Demo 1",       // chart title
-            "Category",               // domain axis label
-            "Value",                  // range axis label
-            dataset,                  // data
-            PlotOrientation.VERTICAL, // orientation
-            true,                     // include legend
-            true,                     // tooltips?
-            false                     // URLs?
-        );
-
-        // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
-
-        // set the background color for the chart...
-        chart.setBackgroundPaint(Color.white);
-
-        // get a reference to the plot for further customisation...
+        JFreeChart chart = ChartFactory.createBarChart("Bar Chart Demo 1",
+                "Category", "Value", dataset, true);                   
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
 
         // ******************************************************************
@@ -184,7 +168,6 @@ public class BarChartDemo1 extends ApplicationFrame {
         domainAxis.setCategoryLabelPositions(
                 CategoryLabelPositions.createUpRotationLabelPositions(
                         Math.PI / 6.0));
-        // OPTIONAL CUSTOMISATION COMPLETED.
 
         return chart;
 

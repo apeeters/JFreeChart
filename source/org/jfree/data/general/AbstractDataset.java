@@ -57,6 +57,8 @@
 
 package org.jfree.data.general;
 
+import org.jfree.data.event.DatasetChangeListener;
+import org.jfree.data.event.DatasetChangeEvent;
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;

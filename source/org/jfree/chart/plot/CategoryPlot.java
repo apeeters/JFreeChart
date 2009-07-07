@@ -245,7 +245,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CategoryDatasetSelectionState;
 import org.jfree.data.category.SelectableCategoryDataset;
 import org.jfree.data.general.Dataset;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.general.DatasetUtilities;
 
 /**

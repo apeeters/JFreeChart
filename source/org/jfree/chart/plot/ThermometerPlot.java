@@ -127,7 +127,7 @@ import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.chart.util.SerialUtilities;
 import org.jfree.chart.util.UnitType;
 import org.jfree.data.Range;
-import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.event.DatasetChangeEvent;
 import org.jfree.data.general.DefaultValueDataset;
 import org.jfree.data.general.ValueDataset;
 

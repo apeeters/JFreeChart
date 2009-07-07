@@ -59,7 +59,7 @@ import org.jfree.chart.event.DatasetChangeInfo;
 import org.jfree.chart.util.ObjectUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.general.AbstractSeriesDataset;
-import org.jfree.data.general.SeriesChangeEvent;
+import org.jfree.data.event.SeriesChangeEvent;
 import org.jfree.data.time.TimePeriod;
 
 /**
