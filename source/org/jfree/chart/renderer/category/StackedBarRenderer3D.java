@@ -109,6 +109,7 @@ import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.HashUtilities;
 import org.jfree.chart.util.PublicCloneable;
 import org.jfree.data.DataUtilities;
 import org.jfree.data.Range;
@@ -137,7 +138,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
      * A flag that controls whether or not zero values are drawn by the
      * renderer.
      *
-     * @since 1.2.0
+     * @since 1.0.14
      */
     private boolean ignoreZeroValues;
 
@@ -225,7 +226,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
      *
      * @return A boolean.
      *
-     * @since 1.2.0
+     * @since 1.0.14
      */
     public boolean getIgnoreZeroValues() {
         return this.ignoreZeroValues;
@@ -238,7 +239,7 @@ public class StackedBarRenderer3D extends BarRenderer3D
      *
      * @param ignore  the new flag value.
      *
-     * @since 1.2.0
+     * @since 1.0.14
      */
     public void setIgnoreZeroValues(boolean ignore) {
         this.ignoreZeroValues = ignore;
@@ -842,6 +843,18 @@ public class StackedBarRenderer3D extends BarRenderer3D
             return false;
         }
         return super.equals(obj);
+    }
+
+    /**
+     * Returns a hash code for this instance.
+     *
+     * @return A hash code.
+     */
+    public int hashCode() {
+        int hash = super.hashCode();
+        hash = HashUtilities.hashCode(hash, this.renderAsPercentages);
+        hash = HashUtilities.hashCode(hash, this.ignoreZeroValues);
+        return hash;
     }
 
 }
