@@ -5574,7 +5574,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
             XYItemRenderer renderer2 = (XYItemRenderer) this.renderers.get(i);
             if (renderer2 instanceof PublicCloneable) {
                 PublicCloneable pc = (PublicCloneable) renderer2;
-                clone.renderers.set(i, pc.clone());
+                XYItemRenderer rc = (XYItemRenderer) pc.clone();
+                clone.renderers.set(i, rc);
+                rc.setPlot(clone);
+                rc.addChangeListener(clone);
             }
         }
         clone.foregroundDomainMarkers = (Map) ObjectUtilities.clone(

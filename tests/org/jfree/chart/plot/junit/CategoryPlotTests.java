@@ -27,7 +27,7 @@
  * ----------------------
  * CategoryPlotTests.java
  * ----------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -502,6 +502,10 @@ public class CategoryPlotTests extends TestCase {
         CategoryPlot p1 = new CategoryPlot();
         p1.setRangeCrosshairPaint(new GradientPaint(1.0f, 2.0f, Color.white,
                 3.0f, 4.0f, Color.yellow));
+        p1.setRangeMinorGridlinePaint(new GradientPaint(2.0f, 3.0f, Color.white,
+                4.0f, 5.0f, Color.red));
+        p1.setRangeZeroBaselinePaint(new GradientPaint(3.0f, 4.0f, Color.red,
+                5.0f, 6.0f, Color.white));
         CategoryPlot p2 = null;
         try {
             p2 = (CategoryPlot) p1.clone();
@@ -607,10 +611,33 @@ public class CategoryPlotTests extends TestCase {
     }
 
     /**
+     * Renderers that belong to the plot are being cloned but they are
+     * retaining a reference to the original plot.
+     */
+    public void testBug2817504() {
+        CategoryPlot p1 = new CategoryPlot();
+        LineAndShapeRenderer r1 = new LineAndShapeRenderer();
+        p1.setRenderer(r1);
+        CategoryPlot p2 = null;
+        try {
+            p2 = (CategoryPlot) p1.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        assertTrue(p1 != p2);
+        assertTrue(p1.getClass() == p2.getClass());
+        assertTrue(p1.equals(p2));
+
+        // check for independence
+        LineAndShapeRenderer r2 = (LineAndShapeRenderer) p2.getRenderer();
+        assertTrue(r2.getPlot() == p2);
+    }
+
+    /**
      * Serialize an instance, restore it, and check for equality.
      */
     public void testSerialization() {
-
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         CategoryAxis domainAxis = new CategoryAxis("Domain");
         NumberAxis rangeAxis = new NumberAxis("Range");
@@ -967,7 +994,7 @@ public class CategoryPlotTests extends TestCase {
         boolean pass = false;
         try {
             plot.getDomainAxisForDataset(-1);
-}
+        }
         catch (IllegalArgumentException e) {
             pass = true;
         }

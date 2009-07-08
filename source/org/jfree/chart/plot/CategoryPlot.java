@@ -4529,6 +4529,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      *
      * @return A boolean.
      *
+     * @see #isRangePannable()
+     *
      * @since 1.0.13
      */
     public boolean isDomainPannable() {
@@ -4541,6 +4543,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      *
      * @return A boolean.
      *
+     * @see #setRangePannable(boolean)
+     * @see #isDomainPannable()
+     *
      * @since 1.0.13
      */
     public boolean isRangePannable() {
@@ -4552,6 +4557,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * the range axes.
      *
      * @param pannable  the new flag value.
+     *
+     * @see #isRangePannable()
      *
      * @since 1.0.13
      */
@@ -5010,6 +5017,17 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         clone.datasetToRangeAxesMap.putAll(this.datasetToRangeAxesMap);
 
         clone.renderers = (ObjectList) this.renderers.clone();
+        for (int i = 0; i < this.renderers.size(); i++) {
+            CategoryItemRenderer renderer2 = (CategoryItemRenderer)
+                    this.renderers.get(i);
+            if (renderer2 instanceof PublicCloneable) {
+                PublicCloneable pc = (PublicCloneable) renderer2;
+                CategoryItemRenderer rc = (CategoryItemRenderer) pc.clone();
+                clone.renderers.set(i, rc);
+                rc.setPlot(clone);
+                rc.addChangeListener(clone);
+            }
+        }
         if (this.fixedDomainAxisSpace != null) {
             clone.fixedDomainAxisSpace = (AxisSpace) ObjectUtilities.clone(
                     this.fixedDomainAxisSpace);
