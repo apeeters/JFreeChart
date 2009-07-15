@@ -701,6 +701,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
     public static TickUnitSource createStandardTickUnits() {
 
         TickUnits units = new TickUnits();
+        DecimalFormat df000 = new DecimalFormat("0.0000000000");
+        DecimalFormat df00 = new DecimalFormat("0.000000000");
         DecimalFormat df0 = new DecimalFormat("0.00000000");
         DecimalFormat df1 = new DecimalFormat("0.0000000");
         DecimalFormat df2 = new DecimalFormat("0.000000");
@@ -715,6 +717,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
 
         // we can add the units in any order, the TickUnits collection will
         // sort them...
+        units.add(new NumberTickUnit(0.000000001, df00, 2));
+        units.add(new NumberTickUnit(0.00000001, df0, 2));
         units.add(new NumberTickUnit(0.0000001, df1, 2));
         units.add(new NumberTickUnit(0.000001, df2, 2));
         units.add(new NumberTickUnit(0.00001, df3, 2));
@@ -735,6 +739,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
         units.add(new NumberTickUnit(10000000000.0, df10, 2));
         units.add(new NumberTickUnit(100000000000.0, df10, 2));
 
+        units.add(new NumberTickUnit(0.0000000025, df000, 5));
+        units.add(new NumberTickUnit(0.000000025, df00, 5));
         units.add(new NumberTickUnit(0.00000025, df0, 5));
         units.add(new NumberTickUnit(0.0000025, df1, 5));
         units.add(new NumberTickUnit(0.000025, df2, 5));
@@ -755,6 +761,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
         units.add(new NumberTickUnit(25000000000.0, df10, 5));
         units.add(new NumberTickUnit(250000000000.0, df10, 5));
 
+        units.add(new NumberTickUnit(0.000000005, df00, 5));
+        units.add(new NumberTickUnit(0.00000005, df0, 5));
         units.add(new NumberTickUnit(0.0000005, df1, 5));
         units.add(new NumberTickUnit(0.000005, df2, 5));
         units.add(new NumberTickUnit(0.00005, df3, 5));
@@ -1226,13 +1234,13 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
                 Tick tick = new NumberTick(new Double(currentTickValue),
                         tickLabel, anchor, rotationAnchor, angle);
                 result.add(tick);
-                double nextTickValue = lowestTickValue + ((i + 1)* size);
+                double nextTickValue = lowestTickValue + ((i + 1) * size);
                 for (int minorTick = 1; minorTick < minorTickSpaces;
                         minorTick++) {
                     double minorTickValue = currentTickValue
                             + (nextTickValue - currentTickValue)
                             * minorTick / minorTickSpaces;
-                    if (getRange().contains(minorTickValue)){
+                    if (getRange().contains(minorTickValue)) {
                         result.add(new NumberTick(TickType.MINOR,
                                 minorTickValue, "", TextAnchor.TOP_CENTER,
                                 TextAnchor.CENTER, 0.0));
@@ -1276,10 +1284,10 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             if (minorTickSpaces <= 0) {
                 minorTickSpaces = tu.getMinorTickCount();
             }
-            for (int minorTick = 1; minorTick < minorTickSpaces; minorTick++){
+            for (int minorTick = 1; minorTick < minorTickSpaces; minorTick++) {
                 double minorTickValue = lowestTickValue
                         - size * minorTick / minorTickSpaces;
-                if (getRange().contains(minorTickValue)){
+                if (getRange().contains(minorTickValue)) {
                     result.add(new NumberTick(TickType.MINOR, minorTickValue,
                             "", TextAnchor.TOP_CENTER, TextAnchor.CENTER,
                             0.0));
@@ -1327,13 +1335,13 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
                         tickLabel, anchor, rotationAnchor, angle);
                 result.add(tick);
 
-                double nextTickValue = lowestTickValue + ((i + 1)* size);
+                double nextTickValue = lowestTickValue + ((i + 1) * size);
                 for (int minorTick = 1; minorTick < minorTickSpaces;
-                        minorTick++){
+                        minorTick++) {
                     double minorTickValue = currentTickValue
                             + (nextTickValue - currentTickValue)
                             * minorTick / minorTickSpaces;
-                    if (getRange().contains(minorTickValue)){
+                    if (getRange().contains(minorTickValue)) {
                         result.add(new NumberTick(TickType.MINOR,
                                 minorTickValue, "", TextAnchor.TOP_CENTER,
                                 TextAnchor.CENTER, 0.0));
