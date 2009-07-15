@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------
  * PiePlotTests.java
  * -----------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -40,7 +40,8 @@
  * 23-Nov-2006 : Additional equals() and clone() tests (DG);
  * 17-Apr-2007 : Added check for label generator that returns a null label (DG);
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
- * 31-Mar-2008 : Updated testEquals();
+ * 31-Mar-2008 : Updated testEquals() (DG);
+ * 10-Jul-2009 : Updated testEquals() (DG);
  *
  */
 
@@ -62,11 +63,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.text.AttributedString;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItemCollection;
@@ -77,6 +76,7 @@ import org.jfree.chart.plot.PieLabelLinkStyle;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.urls.CustomPieURLGenerator;
 import org.jfree.chart.urls.StandardPieURLGenerator;
+import org.jfree.chart.util.DefaultShadowGenerator;
 import org.jfree.chart.util.Rotation;
 import org.jfree.data.pie.DefaultPieDataset;
 import org.jfree.data.pie.PieDataset;
@@ -413,6 +413,19 @@ public class PiePlotTests extends TestCase {
         plot1.setAutoPopulateSectionOutlineStroke(true);
         assertFalse(plot1.equals(plot2));
         plot2.setAutoPopulateSectionOutlineStroke(true);
+        assertTrue(plot1.equals(plot2));
+
+        // shadowGenerator
+        plot1.setShadowGenerator(new DefaultShadowGenerator(5, Color.gray,
+                0.6f, 4, -Math.PI / 4));
+        assertFalse(plot1.equals(plot2));
+        plot2.setShadowGenerator(new DefaultShadowGenerator(5, Color.gray,
+                0.6f, 4, -Math.PI / 4));
+        assertTrue(plot1.equals(plot2));
+
+        plot1.setShadowGenerator(null);
+        assertFalse(plot1.equals(plot2));
+        plot2.setShadowGenerator(null);
         assertTrue(plot1.equals(plot2));
     }
 
