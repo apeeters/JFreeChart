@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * -----------------------
  * CategoryAnnotation.java
  * -----------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited.
+ * (C) Copyright 2003-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -38,6 +38,7 @@
  * 02-Jul-2003 : Eliminated Annotation base interface (DG);
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 06-Jul-2007 : Added PlotRenderingInfo parameter to draw() method (DG);
+ * 24-Jun-2009 : Now extends Annotation (see patch 2809117 by PK) (DG);
  *
  */
 
@@ -55,7 +56,7 @@ import org.jfree.chart.plot.PlotRenderingInfo;
  * The interface that must be supported by annotations that are to be added to
  * a {@link CategoryPlot}.
  */
-public interface CategoryAnnotation {
+public interface CategoryAnnotation extends Annotation {
 
     /**
      * Draws the annotation.

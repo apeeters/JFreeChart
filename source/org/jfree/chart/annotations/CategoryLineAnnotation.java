@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,10 +27,10 @@
  * ---------------------------
  * CategoryLineAnnotation.java
  * ---------------------------
- * (C) Copyright 2005-2008, by Object Refinery Limited.
+ * (C) Copyright 2005-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
+ * Contributor(s):   Peter Kolb (patch 2809117);
  *
  * Changes:
  * --------
@@ -40,6 +40,7 @@
  * 21-Jun-2007 : Removed JCommon dependencies (DG);
  * 06-Jul-2007 : Updated for changes to CategoryAnnotation interface (DG);
  * 23-Apr-2008 : Implemented PublicCloneable (DG);
+ * 24-Jun-2009 : Now extends AbstractAnnotation (see patch 2809117 by PK) (DG);
  *
  */
 
@@ -74,8 +75,9 @@ import org.jfree.data.category.CategoryDataset;
 /**
  * A line annotation that can be placed on a {@link CategoryPlot}.
  */
-public class CategoryLineAnnotation implements CategoryAnnotation,
-        Cloneable, PublicCloneable, Serializable {
+public class CategoryLineAnnotation extends AbstractAnnotation
+        implements CategoryAnnotation, Cloneable, PublicCloneable,
+        Serializable {
 
     /** For serialization. */
     static final long serialVersionUID = 3477740483341587984L;
@@ -112,6 +114,7 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
     public CategoryLineAnnotation(Comparable category1, double value1,
                                   Comparable category2, double value2,
                                   Paint paint, Stroke stroke) {
+        super();
         if (category1 == null) {
             throw new IllegalArgumentException("Null 'category1' argument.");
         }
@@ -144,7 +147,8 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
     }
 
     /**
-     * Sets the category for the start of the line.
+     * Sets the category for the start of the line and sends an
+     * {@link AnnotationChangeEvent} to all registered listeners.
      *
      * @param category  the category (<code>null</code> not permitted).
      *
@@ -155,6 +159,7 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
             throw new IllegalArgumentException("Null 'category' argument.");
         }
         this.category1 = category;
+        fireAnnotationChanged();
     }
 
     /**
@@ -169,7 +174,8 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
     }
 
     /**
-     * Sets the y-value for the start of the line.
+     * Sets the y-value for the start of the line and sends an
+     * {@link AnnotationChangeEvent} to all registered listeners.
      *
      * @param value  the value.
      *
@@ -177,6 +183,7 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
      */
     public void setValue1(double value) {
         this.value1 = value;
+        fireAnnotationChanged();
     }
 
     /**
@@ -191,7 +198,8 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
     }
 
     /**
-     * Sets the category for the end of the line.
+     * Sets the category for the end of the line and sends an
+     * {@link AnnotationChangeEvent} to all registered listeners.
      *
      * @param category  the category (<code>null</code> not permitted).
      *
@@ -202,6 +210,7 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
             throw new IllegalArgumentException("Null 'category' argument.");
         }
         this.category2 = category;
+        fireAnnotationChanged();
     }
 
     /**
@@ -216,7 +225,8 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
     }
 
     /**
-     * Sets the y-value for the end of the line.
+     * Sets the y-value for the end of the line and sends an
+     * {@link AnnotationChangeEvent} to all registered listeners.
      *
      * @param value  the value.
      *
@@ -224,6 +234,7 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
      */
     public void setValue2(double value) {
         this.value2 = value;
+        fireAnnotationChanged();
     }
 
     /**
@@ -238,7 +249,8 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
     }
 
     /**
-     * Sets the paint used to draw the connecting line.
+     * Sets the paint used to draw the connecting line and sends an
+     * {@link AnnotationChangeEvent} to all registered listeners.
      *
      * @param paint  the paint (<code>null</code> not permitted).
      *
@@ -249,6 +261,7 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.paint = paint;
+        fireAnnotationChanged();
     }
 
     /**
@@ -263,7 +276,8 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
     }
 
     /**
-     * Sets the stroke used to draw the connecting line.
+     * Sets the stroke used to draw the connecting line and sends an
+     * {@link AnnotationChangeEvent} to all registered listeners.
      *
      * @param stroke  the stroke (<code>null</code> not permitted).
      *
@@ -274,6 +288,7 @@ public class CategoryLineAnnotation implements CategoryAnnotation,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.stroke = stroke;
+        fireAnnotationChanged();
     }
 
     /**

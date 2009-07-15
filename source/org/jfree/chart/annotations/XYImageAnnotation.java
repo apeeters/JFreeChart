@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,10 +27,11 @@
  * ----------------------
  * XYImageAnnotation.java
  * ----------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Mike Harris;
+ *                   Peter Kolb (patch 2809117);
  *
  * Changes:
  * --------
@@ -121,6 +122,7 @@ public class XYImageAnnotation extends AbstractXYAnnotation
      */
     public XYImageAnnotation(double x, double y, Image image,
             RectangleAnchor anchor) {
+        super();
         if (image == null) {
             throw new IllegalArgumentException("Null 'image' argument.");
         }

@@ -37,7 +37,7 @@
  *                   Nicolas Brodu;
  *                   Michal Krause;
  *                   Richard West, Advanced Micro Devices, Inc.;
- *                   Peter Kolb - patch 2603321;
+ *                   Peter Kolb - patches 2603321, 2809117;
  *
  * Changes (from 21-Jun-2001)
  * --------------------------
@@ -156,9 +156,12 @@ import javax.swing.event.EventListenerList;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.LegendItemSource;
+import org.jfree.chart.annotations.Annotation;
 import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.entity.PlotEntity;
+import org.jfree.chart.event.AnnotationChangeEvent;
+import org.jfree.chart.event.AnnotationChangeListener;
 import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.event.AxisChangeListener;
 import org.jfree.chart.event.ChartChangeEventType;
@@ -187,8 +190,8 @@ import org.jfree.data.general.DatasetGroup;
  * provides facilities common to most plot types.
  */
 public abstract class Plot implements AxisChangeListener,
-        DatasetChangeListener, MarkerChangeListener, LegendItemSource,
-        PublicCloneable, Cloneable, Serializable {
+        DatasetChangeListener, AnnotationChangeListener, MarkerChangeListener,
+        LegendItemSource, PublicCloneable, Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -8831571430103671324L;
@@ -1158,15 +1161,15 @@ public abstract class Plot implements AxisChangeListener,
      *
      *  @since 1.0.13
      */
- 	protected void createAndAddEntity(Rectangle2D dataArea,
-            PlotRenderingInfo plotState, String toolTip, String urlText){
-		if (plotState != null && plotState.getOwner() != null) {
-			EntityCollection e = plotState.getOwner().getEntityCollection();
-			if (e != null) {
+    protected void createAndAddEntity(Rectangle2D dataArea,
+            PlotRenderingInfo plotState, String toolTip, String urlText) {
+        if (plotState != null && plotState.getOwner() != null) {
+            EntityCollection e = plotState.getOwner().getEntityCollection();
+            if (e != null) {
                 e.add(new PlotEntity(dataArea, this, toolTip, urlText));
             }
-		}
-	}
+        }
+    }
 
     /**
      * Handles a 'click' on the plot.  Since the plot does not maintain any
@@ -1190,6 +1193,18 @@ public abstract class Plot implements AxisChangeListener,
      */
     public void zoom(double percent) {
         // do nothing by default.
+    }
+
+    /**
+     * Receives notification of a change to an {@link Annotation} added to
+     * this plot.
+     *
+     * @param event  information about the event (not used here).
+     *
+     * @since 1.0.14
+     */
+    public void annotationChanged(AnnotationChangeEvent event) {
+        fireChangeEvent();
     }
 
     /**

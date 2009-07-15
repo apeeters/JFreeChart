@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,10 +27,10 @@
  * ---------------------------
  * CategoryTextAnnotation.java
  * ---------------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited.
+ * (C) Copyright 2003-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
+ * Contributor(s):   Peter Kolb (patch 2809117);
  *
  * Changes:
  * --------
@@ -46,6 +46,7 @@
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 06-Jul-2007 : Updated for changes to CategoryAnnotation interface (DG);
  * 23-Apr-2008 : Implemented PublicCloneable (DG);
+ * 24-Jun-2009 : Fire change events (see patch 2809117 by PK) (DG);
  *
  */
 
@@ -141,7 +142,8 @@ public class CategoryTextAnnotation extends TextAnnotation
     }
 
     /**
-     * Sets the category anchor point.
+     * Sets the category anchor point and sends an
+     * {@link AnnotationChangeEvent} to all registered listeners.
      *
      * @param anchor  the anchor point (<code>null</code> not permitted).
      *
@@ -152,6 +154,7 @@ public class CategoryTextAnnotation extends TextAnnotation
             throw new IllegalArgumentException("Null 'anchor' argument.");
         }
         this.categoryAnchor = anchor;
+        fireAnnotationChanged();
     }
 
     /**
@@ -166,7 +169,8 @@ public class CategoryTextAnnotation extends TextAnnotation
     }
 
     /**
-     * Sets the value.
+     * Sets the value and sends an
+     * {@link AnnotationChangeEvent} to all registered listeners.
      *
      * @param value  the value.
      *
@@ -174,6 +178,7 @@ public class CategoryTextAnnotation extends TextAnnotation
      */
     public void setValue(double value) {
         this.value = value;
+        fireAnnotationChanged();
     }
 
     /**
