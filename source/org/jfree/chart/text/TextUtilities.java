@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ------------------
  * TextUtilities.java
  * ------------------
- * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2004-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   -;
@@ -51,6 +51,7 @@
  *               parade item 6183356 (DG);
  * 06-Jan-2006 : Reformatted (DG);
  * 21-Jun-2007 : Copied from JCommon (DG);
+ * 27-Jul-2009 : Use AttributedString in drawRotatedString() (DG);
  *
  */
 
@@ -66,6 +67,7 @@ import java.awt.font.LineMetrics;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.text.AttributedString;
 import java.text.BreakIterator;
 
 import org.jfree.chart.util.ObjectUtilities;
@@ -245,9 +247,6 @@ public class TextUtilities {
             newline = Integer.MAX_VALUE;
         }
         while (((end = iterator.next()) != BreakIterator.DONE)) {
-            if (end > newline) {
-                return newline;
-            }
             x += measurer.getStringWidth(text, current, end);
             if (x > width) {
                 if (firstWord) {
@@ -262,6 +261,11 @@ public class TextUtilities {
                 else {
                     end = iterator.previous();
                     return end;
+                }
+            }
+            else {
+                if (end > newline) {
+                    return newline;
                 }
             }
             // we found at least one word that fits ...
@@ -491,8 +495,9 @@ public class TextUtilities {
             tl.draw(g2, textX, textY);
         }
         else {
-            // replaces this code...
-            g2.drawString(text, textX, textY);
+            AttributedString as = new AttributedString(text,
+                    g2.getFont().getAttributes());
+        	g2.drawString(as.getIterator(), textX, textY);
         }
         g2.setTransform(saved);
 
