@@ -1952,8 +1952,9 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         }
         while (iterator.hasNext()) {
             XYAnnotation annotation = (XYAnnotation) iterator.next();
+            int index = this.plot.getIndexOf(this);
             annotation.draw(g2, this.plot, dataArea, domainAxis, rangeAxis,
-                    0, info);
+                    index, info);
         }
 
     }
