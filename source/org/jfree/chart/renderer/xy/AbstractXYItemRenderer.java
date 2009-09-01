@@ -113,7 +113,11 @@
  * 01-Apr-2009 : Moved defaultEntityRadius up to superclass (DG);
  * 28-Apr-2009 : Updated getLegendItem() method to observe new
  *               'treatLegendShapeAsLine' flag (DG);
+ * 24-Jun-2009 : Added support for annotation events - see patch 2809117
+ *               by PK (DG);
  * 29-Jun-2009 : Added attributes for selection (DG);
+ * 01-Sep-2009 : Bug 2840132 - set renderer index when drawing
+ *               annotations (DG);
  *
  */
 
@@ -146,6 +150,8 @@ import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.entity.XYItemEntity;
+import org.jfree.chart.event.AnnotationChangeEvent;
+import org.jfree.chart.event.AnnotationChangeListener;
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.labels.StandardXYSeriesLabelGenerator;
@@ -183,7 +189,8 @@ import org.jfree.data.xy.XYDatasetSelectionState;
  * implementations.
  */
 public abstract class AbstractXYItemRenderer extends AbstractRenderer
-        implements XYItemRenderer, Cloneable, Serializable {
+        implements XYItemRenderer, AnnotationChangeListener,
+        Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 8019124836026607990L;
@@ -700,10 +707,12 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         }
         if (layer.equals(Layer.FOREGROUND)) {
             this.foregroundAnnotations.add(annotation);
+            annotation.addChangeListener(this);
             fireChangeEvent();
         }
         else if (layer.equals(Layer.BACKGROUND)) {
             this.backgroundAnnotations.add(annotation);
+            annotation.addChangeListener(this);
             fireChangeEvent();
         }
         else {
@@ -724,6 +733,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public boolean removeAnnotation(XYAnnotation annotation) {
         boolean removed = this.foregroundAnnotations.remove(annotation);
         removed = removed & this.backgroundAnnotations.remove(annotation);
+        annotation.removeChangeListener(this);
         fireChangeEvent();
         return removed;
     }
@@ -733,8 +743,30 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      * to all registered listeners.
      */
     public void removeAnnotations() {
+        for(int i = 0; i < this.foregroundAnnotations.size(); i++){
+            XYAnnotation annotation
+                    = (XYAnnotation) this.foregroundAnnotations.get(i);
+            annotation.removeChangeListener(this);
+        }
+         for(int i = 0; i < this.backgroundAnnotations.size(); i++){
+            XYAnnotation annotation
+                    = (XYAnnotation) this.backgroundAnnotations.get(i);
+            annotation.removeChangeListener(this);
+        }
         this.foregroundAnnotations.clear();
         this.backgroundAnnotations.clear();
+        fireChangeEvent();
+    }
+
+    /**
+     * Receives notification of a change to an {@link Annotation} added to
+     * this renderer.
+     *
+     * @param event  information about the event (not used here).
+     *
+     * @since 1.0.14
+     */
+    public void annotationChanged(AnnotationChangeEvent event) {
         fireChangeEvent();
     }
 
