@@ -39,8 +39,8 @@
  *                   Andreas Schroeder (very minor);
  *                   Christoph Beck (bug 2121818);
  *
- * Changes (from 21-Jun-2001)
- * --------------------------
+ * Changes
+ * -------
  * 21-Jun-2001 : Removed redundant JFreeChart parameter from constructors (DG);
  * 18-Sep-2001 : Updated header (DG);
  * 15-Oct-2001 : Data source classes moved to com.jrefinery.data.* (DG);
@@ -166,6 +166,8 @@
  *               Jess Thrysoee (DG);
  * 29-Jun-2009 : Moved PaintMap and StrokeMap to org.jfree.chart.util.* (DG);
  * 10-Jul-2009 : Added optional drop shadow generator (DG);
+ * 03-Sep-2009 : Fixed bug where sinmpleLabelOffset is ignored (DG);
+ * 04-Nov-2009 : Add mouse wheel rotation support (DG);
  *
  */
 
@@ -2360,7 +2362,7 @@ public class PiePlot extends Plot implements Selectable, Cloneable,
     /**
      * Sets the shadow generator for the plot and sends a
      * {@link PlotChangeEvent} to all registered listeners.  Note that this is
-     * a btmap drop-shadow generation facility and is separate from the
+     * a bitmap drop-shadow generation facility and is separate from the
      * vector based show option that is controlled via the
      * {@link setShadowPaint()} method.
      *
@@ -2371,6 +2373,18 @@ public class PiePlot extends Plot implements Selectable, Cloneable,
     public void setShadowGenerator(ShadowGenerator generator) {
         this.shadowGenerator = generator;
         fireChangeEvent();
+    }
+
+    /**
+     * Handles a mouse wheel rotation (this method is intended for use by the
+     * {@link MouseWheelHandler} class).
+     *
+     * @param rotateClicks  the number of rotate clicks on the the mouse wheel.
+     *
+     * @since 1.0.14
+     */
+    public void handleMouseWheelRotation(int rotateClicks) {
+        setStartAngle(this.startAngle + rotateClicks * 4.0);
     }
 
     /**
@@ -2740,9 +2754,8 @@ public class PiePlot extends Plot implements Selectable, Cloneable,
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
                 1.0f));
 
-        RectangleInsets labelInsets = new RectangleInsets(UnitType.RELATIVE,
-                0.18, 0.18, 0.18, 0.18);
-        Rectangle2D labelsArea = labelInsets.createInsetRectangle(pieArea);
+        Rectangle2D labelsArea = this.simpleLabelOffset.createInsetRectangle(
+                pieArea);
         double runningTotal = 0.0;
         Iterator iterator = keys.iterator();
         while (iterator.hasNext()) {
@@ -2981,7 +2994,12 @@ public class PiePlot extends Plot implements Selectable, Cloneable,
                 labelBox.setBackgroundPaint(this.labelBackgroundPaint);
                 labelBox.setOutlinePaint(this.labelOutlinePaint);
                 labelBox.setOutlineStroke(this.labelOutlineStroke);
-                labelBox.setShadowPaint(this.labelShadowPaint);
+                if (this.shadowGenerator == null) {
+                    labelBox.setShadowPaint(this.labelShadowPaint);
+                }
+                else {
+                    labelBox.setShadowPaint(null);
+                }
                 labelBox.setInteriorGap(this.labelPadding);
                 double theta = Math.toRadians(keys.getValue(i).doubleValue());
                 double baseY = state.getPieCenterY()
