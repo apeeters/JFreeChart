@@ -93,6 +93,7 @@ import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.util.DefaultShadowGenerator;
 import org.jfree.chart.util.Layer;
 import org.jfree.chart.util.RectangleInsets;
 import org.jfree.data.time.Day;
@@ -437,6 +438,19 @@ public class XYPlotTests extends TestCase {
         assertFalse(plot1.equals(plot2));
         plot2.mapDatasetToRangeAxes(0, axisIndices);
         assertTrue(plot1.equals(plot2));
+
+        // shadowGenerator
+        plot1.setShadowGenerator(new DefaultShadowGenerator(5, Color.gray,
+                0.6f, 4, -Math.PI / 4));
+        assertFalse(plot1.equals(plot2));
+        plot2.setShadowGenerator(new DefaultShadowGenerator(5, Color.gray,
+                0.6f, 4, -Math.PI / 4));
+        assertTrue(plot1.equals(plot2));
+
+        plot1.setShadowGenerator(null);
+        assertFalse(plot1.equals(plot2));
+        plot2.setShadowGenerator(null);
+        assertTrue(plot1.equals(plot2));
     }
 
     /**
@@ -503,6 +517,30 @@ public class XYPlotTests extends TestCase {
         // verify independence of fixed legend item collection
         c1.add(new LegendItem("X"));
         assertFalse(p1.equals(p2));
+    }
+
+    /**
+     * Tests cloning to ensure that the cloned plot is registered as a listener
+     * on the cloned renderer.
+     */
+    public void testCloning4() {
+        XYLineAndShapeRenderer r1 = new XYLineAndShapeRenderer();
+        XYPlot p1 = new XYPlot(null, new NumberAxis("Domain Axis"),
+                new NumberAxis("Range Axis"), r1);
+        XYPlot p2 = null;
+        try {
+            p2 = (XYPlot) p1.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        assertTrue(p1 != p2);
+        assertTrue(p1.getClass() == p2.getClass());
+        assertTrue(p1.equals(p2));
+
+        // verify that the plot is listening to the cloned renderer
+        XYLineAndShapeRenderer r2 = (XYLineAndShapeRenderer) p2.getRenderer();
+        assertTrue(r2.hasListener(p2));
     }
 
     /**
