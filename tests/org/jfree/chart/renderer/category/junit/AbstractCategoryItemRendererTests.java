@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2010, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -40,6 +40,7 @@
  * 26-Jun-2007 : Added testGetSeriesItemLabelGenerator() and
  *               testGetSeriesURLGenerator() (DG);
  * 25-Nov-2008 : Added testFindRangeBounds() (DG);
+ * 09-Feb-2010 : Added test2947660() (DG);
  *
  */
 
@@ -51,11 +52,13 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.annotations.CategoryTextAnnotation;
 import org.jfree.chart.labels.IntervalCategoryItemLabelGenerator;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.labels.StandardCategorySeriesLabelGenerator;
 import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.AbstractCategoryItemRenderer;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
@@ -385,6 +388,26 @@ public class AbstractCategoryItemRendererTests extends TestCase {
 
         dataset.addValue(null, "R1", "C3");
         assertEquals(new Range(-2.0, 1.0), r.findRangeBounds(dataset));
+    }
+
+    /**
+     * A test that reproduces the problem reported in bug 2947660.
+     */
+    public void test2947660() {
+        AbstractCategoryItemRenderer r = new LineAndShapeRenderer();
+        assertNotNull(r.getLegendItems());
+        assertEquals(0, r.getLegendItems().getItemCount());
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        CategoryPlot plot = new CategoryPlot();
+        plot.setDataset(dataset);
+        plot.setRenderer(r);
+        assertEquals(0, r.getLegendItems().getItemCount());
+
+        dataset.addValue(1.0, "S1", "C1");
+        LegendItemCollection lic = r.getLegendItems();
+        assertEquals(1, lic.getItemCount());
+        assertEquals("S1", lic.get(0).getLabel());
     }
 
 }
