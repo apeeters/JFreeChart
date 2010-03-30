@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2010, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,10 +27,10 @@
  * ------------------------------
  * CategoryPointerAnnotation.java
  * ------------------------------
- * (C) Copyright 2006-2009, by Object Refinery Limited.
+ * (C) Copyright 2006-2010, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
+ * Contributor(s):   Peter Kolb (patch 2809117);
  *
  * Changes:
  * --------
@@ -38,6 +38,7 @@
  * 06-Mar-2007 : Implemented hashCode() (DG);
  * 20-Jun-2007 : Removed JCommon dependencies (DG);
  * 24-Jun-2009 : Fire change events (see patch 2809117 by PK) (DG);
+ * 30-Mar-2010 : Correct calculation of pointer line (see patch 2954302) (DG);
  *
  */
 
@@ -276,6 +277,7 @@ public class CategoryPointerAnnotation extends CategoryTextAnnotation
      */
     public void setArrowLength(double length) {
         this.arrowLength = length;
+        fireAnnotationChanged();
     }
 
     /**
@@ -411,7 +413,7 @@ public class CategoryPointerAnnotation extends CategoryTextAnnotation
 
         g2.setStroke(this.arrowStroke);
         g2.setPaint(this.arrowPaint);
-        Line2D line = new Line2D.Double(startX, startY, endX, endY);
+        Line2D line = new Line2D.Double(startX, startY, arrowBaseX, arrowBaseY);
         g2.draw(line);
         g2.fill(arrow);
 
